@@ -7,6 +7,9 @@ export function DataCalculator() {
   const [expression, setExpression] = useState("");
 
   const handleClick = (value: string) => {
+    // Map display operators to eval-safe operators
+    const exprValue = value === "×" ? "*" : value === "÷" ? "/" : value;
+
     if (value === "C") {
       setDisplay("0");
       setExpression("");
@@ -27,10 +30,10 @@ export function DataCalculator() {
 
     if (display === "0" && value !== ".") {
       setDisplay(value);
-      setExpression(value);
+      setExpression(exprValue);
     } else {
       setDisplay((prev) => prev + value);
-      setExpression((prev) => prev + value);
+      setExpression((prev) => prev + exprValue);
     }
   };
 
