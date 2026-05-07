@@ -4,13 +4,29 @@ import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { GlassCard } from "./GlassCard";
 import type { Command } from "@/lib/types";
 
+const BANNER = [
+  "███╗   ███╗██╗███████╗███████╗██╗ ██████╗ ███╗   ██╗",
+  "████╗ ████║██║██╔════╝██╔════╝██║██╔═══██╗████╗  ██║",
+  "██╔████╔██║██║███████╗███████╗██║██║   ██║██╔██╗ ██║",
+  "██║╚██╔╝██║██║╚════██║╚════██║██║██║   ██║██║╚██╗██║",
+  "██║ ╚═╝ ██║██║███████║███████║██║╚██████╔╝██║ ╚████║",
+  "╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝",
+  "",
+  "  CONTROL TERMINAL v2.0 ◆ Samuel Andrade ◆ Type 'help'",
+  "",
+].join("\n");
+
+const COMMANDS = ["help", "whoami", "ls projects", "skills", "contact", "clear", "date", "neofetch", "matrix"];
+
 export function Terminal() {
   const [input, setInput] = useState("");
   const [history, setHistory] = useState<Command[]>([
-    { cmd: "", output: "🛰️ MISSION CONTROL TERMINAL v1.0\nType 'help' for available commands.\n" },
+    { cmd: "", output: BANNER },
   ]);
   const inputRef = useRef<HTMLInputElement>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const commandHistoryRef = useRef<string[]>([]);
+  const [historyIndex, setHistoryIndex] = useState(-1);
 
   useEffect(() => {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
@@ -29,7 +45,9 @@ export function Terminal() {
   skills        — Technical skills
   contact       — Contact information
   clear         — Clear terminal
-  date          — Current mission time`;
+  date          — Current mission time
+  neofetch      — System information
+  matrix        — Enter the Matrix`;
         break;
 
       case "whoami":
@@ -73,6 +91,31 @@ MISSION: Transformar dados em decisão`;
         output = `MISSION TIME: ${new Date().toLocaleString("pt-BR")}`;
         break;
 
+      case "neofetch": {
+        const uptime = Math.floor(process.uptime());
+        const hours = Math.floor(uptime / 3600);
+        const minutes = Math.floor((uptime % 3600) / 60);
+        output = `         ▄▄▄▄▄▄▄▄      OS: MISSION CONTROL v2.0
+      ▄████████████▄   HOST: Vercel Edge Network
+    ▄████████████████▄  KERNEL: Next.js 16.2.5
+   ██████████████████   UPTIME: ${hours}h ${minutes}m
+  ████████████████████  SHELL: zsh (emulated)
+  ████████████████████  CPU: AMD Ryzen 5 5600 + RTX 3060
+  ███████▀    ▀███████  MEMORY: 32GB DDR4
+  ██████▀      ▀██████  STORAGE: 1TB NVMe SSD
+   █████▄    ▄█████    LLM: Ollama (Mistral, Llama 3)
+    ▀████████████▀     IDE:  Cursor / VS Code`;
+        break;
+      }
+
+      case "matrix": {
+        const chars = "ｦｧｨｩｪｫｬｭｮｯｱｲｳｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789";
+        output = Array.from({ length: 15 }, () =>
+          Array.from({ length: 40 }, () => chars[Math.floor(Math.random() * chars.length)]).join("")
+        ).join("\n");
+        break;
+      }
+
       default:
         output = `COMMAND NOT FOUND: '${trimmed}'\nType 'help' for available commands.`;
     }
@@ -82,8 +125,44 @@ MISSION: Transformar dados em decisão`;
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" && input.trim()) {
+      commandHistoryRef.current.push(input);
+      setHistoryIndex(-1);
       executeCommand(input);
       setInput("");
+      return;
+    }
+
+    if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (commandHistoryRef.current.length === 0) return;
+      const newIndex = historyIndex === -1
+        ? commandHistoryRef.current.length - 1
+        : Math.max(0, historyIndex - 1);
+      setHistoryIndex(newIndex);
+      setInput(commandHistoryRef.current[newIndex]);
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (commandHistoryRef.current.length === 0) return;
+      if (historyIndex === -1) return;
+      const newIndex = historyIndex + 1;
+      if (newIndex >= commandHistoryRef.current.length) {
+        setHistoryIndex(-1);
+        setInput("");
+      } else {
+        setHistoryIndex(newIndex);
+        setInput(commandHistoryRef.current[newIndex]);
+      }
+      return;
+    }
+
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const currentInput = input.trim().toLowerCase();
+      const match = COMMANDS.find((c) => c.startsWith(currentInput));
+      if (match) setInput(match);
     }
   };
 
