@@ -5,6 +5,7 @@ import { Navbar } from "@/components/Navbar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import { Footer } from "@/components/Footer";
+import { SkipLink } from "@/components/SkipLink";
 import "./globals.css";
 
 export const metadata: Metadata = {

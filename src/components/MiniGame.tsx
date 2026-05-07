@@ -1,78 +1,111 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useCallback } from "react";
 
 export function MiniGame() {
-  const [target, setTarget] = useState(0);
-  const [guess, setGuess] = useState("");
-  const [attempts, setAttempts] = useState(0);
-  const [message, setMessage] = useState("");
-  const [won, setWon] = useState(false);
+  const [sequence, setSequence] = useState<number[]>([]);
+  const [playerSequence, setPlayerSequence] = useState<number[]>([]);
+  const [isShowing, setIsShowing] = useState(false);
+  const [activeButton, setActiveButton] = useState<number | null>(null);
+  const [score, setScore] = useState(0);
+  const [message, setMessage] = useState("Pressione INICIAR para jogar");
+  const [gameOver, setGameOver] = useState(false);
+  const [started, setStarted] = useState(false);
 
-  useEffect(() => {
-    newGame();
+  const playSequence = useCallback(async (seq: number[]) => {
+    setIsShowing(true);
+    setActiveButton(null);
+    for (let i = 0; i < seq.length; i++) {
+      await new Promise(r => setTimeout(r, 500));
+      setActiveButton(seq[i]);
+      await new Promise(r => setTimeout(r, 300));
+      setActiveButton(null);
+    }
+    setIsShowing(false);
+    setMessage("Sua vez! Repita a sequência.");
   }, []);
 
-  const newGame = () => {
-    setTarget(Math.floor(Math.random() * 100) + 1);
-    setGuess("");
-    setAttempts(0);
-    setMessage("Adivinhe um número entre 1 e 100");
-    setWon(false);
-  };
+  const startGame = useCallback(() => {
+    const first = [Math.floor(Math.random() * 4) + 1];
+    setSequence(first);
+    setPlayerSequence([]);
+    setScore(0);
+    setGameOver(false);
+    setStarted(true);
+    setMessage("Observe a sequência...");
+    playSequence(first);
+  }, [playSequence]);
 
-  const handleGuess = () => {
-    const num = parseInt(guess);
-    if (isNaN(num) || num < 1 || num > 100) {
-      setMessage("⚠ Entrada inválida. Digite 1-100.");
+  const handleButtonClick = useCallback((num: number) => {
+    if (isShowing || gameOver) return;
+    const newPlayer = [...playerSequence, num];
+    setPlayerSequence(newPlayer);
+
+    // Check if correct so far
+    const idx = newPlayer.length - 1;
+    if (newPlayer[idx] !== sequence[idx]) {
+      setMessage(`❌ ERRADO! Sequência correta: ${sequence.join(" ")}. Score: ${score}`);
+      setGameOver(true);
       return;
     }
 
-    setAttempts((a) => a + 1);
-
-    if (num === target) {
-      setMessage(`🎯 ACERTOU em ${attempts + 1} tentativas!`);
-      setWon(true);
-    } else if (num < target) {
-      setMessage(`📈 ${num} é muito BAIXO. Tente maior.`);
-    } else {
-      setMessage(`📉 ${num} é muito ALTO. Tente menor.`);
+    // Check if completed
+    if (newPlayer.length === sequence.length) {
+      const newScore = score + 1;
+      setScore(newScore);
+      setMessage(`✅ CORRETO! Pontuação: ${newScore}`);
+      const next = [...sequence, Math.floor(Math.random() * 4) + 1];
+      setTimeout(() => {
+        setSequence(next);
+        setPlayerSequence([]);
+        playSequence(next);
+      }, 1000);
     }
-    setGuess("");
-  };
+  }, [isShowing, gameOver, playerSequence, sequence, score, playSequence]);
+
+  const buttons = [
+    { num: 1, label: "1", position: "top-left" },
+    { num: 2, label: "2", position: "top-right" },
+    { num: 3, label: "3", position: "bottom-left" },
+    { num: 4, label: "4", position: "bottom-right" },
+  ];
 
   return (
     <div className="py-2">
-      <h3 className="font-mono text-sm text-[var(--accent)] mb-4 text-center">🎮 LÓGICA: ADIVINHE</h3>
+      <h3 className="font-mono text-sm text-[var(--accent)] mb-4 text-center">
+        🧠 SEQUÊNCIA LÓGICA
+      </h3>
 
-      <div className="bg-black/30 rounded-lg p-4 mb-4 text-center">
-        <p className="font-mono text-sm text-[var(--accent)]">{message}</p>
-        {attempts > 0 && !won && (
-          <p className="font-mono text-xs text-[var(--text-secondary)] mt-2">
-            Tentativas: {attempts}
-          </p>
-        )}
+      <div className="text-center mb-4">
+        <p className="font-mono text-sm text-[var(--text-secondary)]">{message}</p>
+        {started && <p className="font-mono text-xs text-[var(--accent)] mt-1">Score: {score}</p>}
       </div>
 
-      <div className="flex gap-2">
-        <input
-          type="number"
-          value={guess}
-          onChange={(e) => setGuess(e.target.value)}
-          onKeyDown={(e) => e.key === "Enter" && handleGuess()}
-          className="flex-1 bg-black/30 border border-[var(--border)] rounded-lg px-3 py-2 font-mono text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)]"
-          placeholder="1-100"
-          min={1}
-          max={100}
-          disabled={won}
-        />
+      {!started || gameOver ? (
         <button
-          onClick={won ? newGame : handleGuess}
-          className="glass px-4 py-2 rounded-lg font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors"
+          onClick={startGame}
+          className="w-full glass py-3 rounded-lg font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10"
         >
-          {won ? "NOVO" : "GO"}
+          {started ? "🔄 REINICIAR" : "🚀 INICIAR"}
         </button>
-      </div>
+      ) : (
+        <div className="grid grid-cols-2 gap-3">
+          {buttons.map(({ num, label }) => (
+            <button
+              key={num}
+              onClick={() => handleButtonClick(num)}
+              disabled={isShowing}
+              className={`p-6 rounded-lg font-mono text-2xl transition-all ${
+                activeButton === num
+                  ? "bg-[var(--accent)] text-black scale-105 shadow-[0_0_20px_var(--accent)]"
+                  : "bg-[var(--border)] text-[var(--text-primary)] hover:bg-[var(--accent)]/20"
+              } ${isShowing ? "opacity-50 cursor-not-allowed" : ""}`}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
