@@ -27,11 +27,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" content="#000000" />
       </head>
       <body className="relative min-h-screen antialiased">
+        <SkipLink />
         <ThemeProvider>
           <AnalyticsTracker />
           <ParallaxBackground />
           <Navbar />
-          <main><ErrorBoundary>{children}</ErrorBoundary></main>
+          <main id="main-content"><ErrorBoundary>{children}</ErrorBoundary></main>
           <Footer />
         </ThemeProvider>
       </body>
