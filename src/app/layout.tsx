@@ -9,6 +9,8 @@ import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
+const basePath = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" ? "/mission-control" : "";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://samuelandrade.dev"),
   title: "Mission Control | Samuel Andrade",
@@ -22,10 +24,10 @@ export const metadata: Metadata = {
     type: "website",
   },
   icons: {
-    icon: "/icon.svg",
-    apple: "/icon.svg",
+    icon: `${basePath}/icon.svg`,
+    apple: `${basePath}/icon.svg`,
   },
-  manifest: "/manifest.webmanifest",
+  manifest: `${basePath}/manifest.webmanifest`,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
