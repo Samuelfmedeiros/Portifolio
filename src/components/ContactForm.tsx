@@ -35,6 +35,12 @@ export function ContactForm() {
     lastSentRef.current = now;
     setStatus("sending");
 
+    if (!supabase) {
+      setStatus("error");
+      setErrorMessage("⚠ Banco de dados indisponível.");
+      return;
+    }
+
     const { error } = await supabase.from("messages").insert({
       name,
       email,

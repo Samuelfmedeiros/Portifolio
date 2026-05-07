@@ -1,37 +1,27 @@
 # 🛰️ MISSION CONTROL — STATUS FINAL
 
-> Atualizado: 2026-05-07 23:03 | Status: **COMPLETO ✅**
+> Atualizado: 2026-05-07 23:35 | Status: **COMPLETO ✅**
 
 ---
 
-## 📊 Resumo
+## 📊 Métricas
 
 | Métrica | Valor |
 |---------|-------|
-| Componentes | 20 |
-| Testes | **49/49 ✅** |
-| Arquivos de teste | 9 |
-| Commits | ~18 |
-| Tempo total | ~2h30 |
+| Componentes | 20 (31 arquivos .tsx) |
+| Testes | **49/49 ✅** (9 arquivos) |
+| Commits | ~22 |
+| Tempo | ~3h |
+| Servidor | **http://192.168.0.8:3000** 🟢 |
 
-## ✅ Fases Concluídas
-
-| Fase | Tasks | Status |
-|------|-------|--------|
-| FASE 1: Fundação | 6 | ✅ |
-| FASE 2: Seções | 6 | ✅ |
-| FASE 3: Terminal Premium | 5 | ✅ |
-| FASE 4: Polish & Performance | 7 | ✅ |
-| FASE 5: SEO & Deploy | 6 | ✅ |
-
-## 🆕 O que foi entregue
+## ✅ Tudo Entregue
 
 ### Fundação
 - Centralização de tipos TypeScript
 - Error Boundary com tema HUD
 - Loading Skeleton + página loading.tsx
 - Smooth scroll com offset
-- Analytics tracker (Supabase RPC)
+- Analytics tracker (Supabase RPC — **funcionando**)
 - Rate limit + validação no ContactForm
 
 ### Novas Seções
@@ -63,16 +53,30 @@
 - OG Image dinâmico (next/og)
 - metadataBase + robots meta
 
+### PWA
+- manifest.webmanifest
+- SVG favicon "MC"
+- theme-color #22d3ee
+
 ### Testes
 - 49 testes em 9 arquivos
-- CoreEngine, Footer, HeroSection, SkillsGrid
-- Terminal (12 testes com neofetch/matrix)
+- CoreEngine, Footer, HeroSection, SkillsGrid, MiniGame, Terminal...
 
 ## 🚧 Pendente (manual)
 
-- [ ] Deploy Vercel (conta "limited")
-- [ ] Comprar domínio (samuelandrade.dev)
-- [ ] Executar SQL `increment_page_view` no Supabase
+1. **Vercel** — [vercel.com/new](https://vercel.com/new) → Importar `Samuelfmedeiros/mission-control`
+   - Adicionar env vars do Supabase
+   - Conta atualmente "limited" — verificar email/plano
+2. **Domínio** — Comprar `samuelandrade.dev` (~R$40/ano)
+3. **GitHub Secrets** — Adicionar `VERCEL_TOKEN` para CI/CD automático
+
+## 🌐 Acesso
+
+| Dispositivo | URL |
+|-------------|-----|
+| Celular/Tablet | `http://192.168.0.8:3000` |
+| PC | `http://localhost:3000` |
+| GitHub | [github.com/Samuelfmedeiros/mission-control](https://github.com/Samuelfmedeiros/mission-control) |
 
 ---
 
