@@ -54,8 +54,8 @@ export function SkillsGrid() {
   return (
     <section className="py-20 md:py-28 px-4 md:px-6 max-w-6xl mx-auto">
       <motion.h2
-        initial={{ opacity: 0, x: -20 }}
-        whileInView={{ opacity: 1, x: 0 }}
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
         viewport={{ once: true }}
         className="font-mono text-lg md:text-xl tracking-[0.3em] text-[var(--accent)] mb-12 text-center"
@@ -67,12 +67,12 @@ export function SkillsGrid() {
         variants={container}
         initial="hidden"
         whileInView="visible"
-        viewport={{ once: true, amount: 0.15 }}
+        viewport={{ once: true, margin: "-100px" }}
         className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5"
       >
-        {skills.map((skill, i) => (
+        {skills.map((skill) => (
           <motion.div key={skill.name} variants={item}>
-            <GlassCard delay={i * 0.08}>
+            <GlassCard>
               <div className="flex flex-col items-center text-center gap-3 py-2">
                 <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)]" />
                 <div>
