@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, FormEvent } from "react";
+import { useState, useRef, FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Radio, Send, CheckCircle } from "lucide-react";
 import { GlassCard } from "./GlassCard";
@@ -12,9 +12,27 @@ export function ContactForm() {
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
+  const [errorMessage, setErrorMessage] = useState("");
+  const lastSentRef = useRef<number>(0);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    const now = Date.now();
+    if (now - lastSentRef.current < 30_000) {
+      setStatus("error");
+      setErrorMessage("⚠ Aguarde 30 segundos entre envios.");
+      return;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      setStatus("error");
+      setErrorMessage("⚠ Formato de email inválido.");
+      return;
+    }
+
+    lastSentRef.current = now;
     setStatus("sending");
 
     const { error } = await supabase.from("messages").insert({
@@ -57,7 +75,7 @@ export function ContactForm() {
             <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-400" />
             <p className="font-mono text-sm text-[var(--accent)]">TRANSMISSÃO ENVIADA COM SUCESSO</p>
             <button
-              onClick={() => setStatus("idle")}
+              onClick={() => { setStatus("idle"); setErrorMessage(""); }}
               className="mt-4 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)]"
             >
               [NOVA TRANSMISSÃO]
@@ -123,7 +141,7 @@ export function ContactForm() {
 
             {status === "error" && (
               <p className="text-xs font-mono text-red-400 text-center">
-                ERRO NA TRANSMISSÃO. Tente novamente.
+                {errorMessage || "ERRO NA TRANSMISSÃO. Tente novamente."}
               </p>
             )}
           </form>
