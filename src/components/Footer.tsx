@@ -1,4 +1,3 @@
-import Link from "next/link";
 import { Mail, Heart } from "lucide-react";
 
 function GithubIcon({ className }: { className?: string }) {
