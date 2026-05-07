@@ -20,7 +20,10 @@ CREATE POLICY "allow_anon_upsert_analytics" ON analytics
   FOR INSERT TO anon
   WITH CHECK (true);
 
--- Analytics: increment page view counter
+-- Analytics: ensure unique constraint on page_path
+ALTER TABLE analytics ADD CONSTRAINT IF NOT EXISTS analytics_page_path_unique UNIQUE (page_path);
+
+-- Analytics: increment page view counter (SECURITY DEFINER bypasses RLS)
 CREATE OR REPLACE FUNCTION increment_page_view(page text)
 RETURNS void AS $$
 BEGIN
@@ -29,4 +32,4 @@ BEGIN
   ON CONFLICT (page_path)
   DO UPDATE SET view_count = analytics.view_count + 1, last_access = NOW();
 END;
-$$ LANGUAGE plpgsql;
+$$ LANGUAGE plpgsql SECURITY DEFINER;
