@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { ParallaxBackground } from "@/components/ParallaxBackground";
 import { Navbar } from "@/components/Navbar";
+import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { AnalyticsTracker } from "@/components/AnalyticsTracker";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -24,9 +26,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body className="relative min-h-screen antialiased">
         <ThemeProvider>
+          <AnalyticsTracker />
           <ParallaxBackground />
           <Navbar />
-          <main>{children}</main>
+          <main><ErrorBoundary>{children}</ErrorBoundary></main>
           <footer className="text-center py-8 font-mono text-xs text-[var(--text-secondary)]">
             <p>© {new Date().getFullYear()} MISSION CONTROL — Samuel Andrade</p>
             <p className="mt-1 opacity-50">TODOS OS SISTEMAS OPERACIONAIS</p>
