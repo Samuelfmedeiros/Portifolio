@@ -1,6 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Code, Star, GitFork } from "lucide-react";
 import { GlassCard } from "./GlassCard";
@@ -8,25 +7,12 @@ import type { Repo } from "@/lib/types";
 
 const FEATURED = ["DogWalk", "mission-control"];
 
-export function ProjectHangar() {
-  const [repos, setRepos] = useState<Repo[]>([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    fetch("https://api.github.com/users/Samuelfmedeiros/repos?per_page=20&sort=updated")
-      .then((r) => r.json())
-      .then((data) => {
-        setRepos(data.filter((r: Repo) => !r.name.includes("test")));
-        setLoading(false);
-      })
-      .catch(() => setLoading(false));
-  }, []);
-
-  if (loading) {
+export function ProjectHangar({ repos }: { repos: Repo[] }) {
+  if (!repos || repos.length === 0) {
     return (
       <section id="projects" className="py-20 px-6">
         <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center">
-          ▸ LOADING HANGAR DATA...
+          ▸ HANGAR VAZIO — NENHUM PROJETO ENCONTRADO
         </h2>
       </section>
     );
