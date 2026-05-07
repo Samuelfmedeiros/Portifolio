@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
   ...(process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" && {
     output: "export",
     images: { unoptimized: true },
+    basePath: "/mission-control",
+    assetPrefix: "/mission-control",
   }),
 };
 
