@@ -1,4 +1,4 @@
-# 🛰️ Mission Control | Samuel Andrade Portfolio
+Portfolio
 
 [![CI](https://github.com/Samuelfmedeiros/mission-control/actions/workflows/ci.yml/badge.svg)](https://github.com/Samuelfmedeiros/mission-control/actions)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
