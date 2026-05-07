@@ -5,12 +5,13 @@ import { motion } from "framer-motion";
 import { Radio, Send, CheckCircle } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { supabase } from "@/lib/supabase";
+import type { FormStatus } from "@/lib/types";
 
 export function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
-  const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">("idle");
+  const [status, setStatus] = useState<FormStatus>("idle");
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();

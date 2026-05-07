@@ -7,8 +7,7 @@ import { GlassCard } from "./GlassCard";
 import { MissionClock } from "./MissionClock";
 import { DataCalculator } from "./DataCalculator";
 import { MiniGame } from "./MiniGame";
-
-type Widget = "clock" | "calculator" | "game" | null;
+import type { Widget } from "@/lib/types";
 
 export function UtilityDeck() {
   const [activeWidget, setActiveWidget] = useState<Widget>(null);

@@ -5,10 +5,4 @@ const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export type Message = {
-  id: number;
-  created_at: string;
-  name: string;
-  email: string;
-  content: string;
-};
+export type { Message } from "@/lib/types";
