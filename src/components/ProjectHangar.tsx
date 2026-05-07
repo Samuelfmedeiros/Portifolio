@@ -4,18 +4,7 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import { ExternalLink, Code, Star, GitFork } from "lucide-react";
 import { GlassCard } from "./GlassCard";
-
-interface Repo {
-  id: number;
-  name: string;
-  description: string | null;
-  html_url: string;
-  homepage: string | null;
-  stargazers_count: number;
-  forks_count: number;
-  language: string | null;
-  topics: string[];
-}
+import type { Repo } from "@/lib/types";
 
 const FEATURED = ["DogWalk", "mission-control"];
 

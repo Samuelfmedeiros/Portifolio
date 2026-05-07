@@ -2,11 +2,7 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { GlassCard } from "./GlassCard";
-
-interface Command {
-  cmd: string;
-  output: string;
-}
+import type { Command } from "@/lib/types";
 
 export function Terminal() {
   const [input, setInput] = useState("");

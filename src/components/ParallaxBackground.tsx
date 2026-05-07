@@ -1,14 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-
-interface Star {
-  x: number;
-  y: number;
-  size: number;
-  opacity: number;
-  speed: number;
-}
+import type { Star } from "@/lib/types";
 
 export function ParallaxBackground() {
   const [stars, setStars] = useState<Star[]>([]);
