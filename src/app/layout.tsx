@@ -21,13 +21,18 @@ export const metadata: Metadata = {
     description: "Analista de Dados & Produto — Portfólio Interativo",
     type: "website",
   },
+  icons: {
+    icon: "/icon.svg",
+    apple: "/icon.svg",
+  },
+  manifest: "/manifest.webmanifest",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#22d3ee" />
         <JsonLd />
       </head>
       <body className="relative min-h-screen antialiased">
