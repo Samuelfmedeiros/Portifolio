@@ -10,7 +10,7 @@ export function ThemeToggle() {
     <button
       onClick={toggle}
       className="glass p-2 rounded-full transition-all hover:scale-110"
-      aria-label="Toggle theme"
+      aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
     >
       {theme === "dark" ? (
         <Sun className="w-5 h-5 text-[var(--accent)]" />

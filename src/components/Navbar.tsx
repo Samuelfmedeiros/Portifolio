@@ -31,7 +31,7 @@ export function Navbar() {
           </Link>
 
           {/* Desktop links */}
-          <div className="hidden md:flex items-center gap-6">
+          <div className="hidden md:flex items-center gap-6" role="navigation" aria-label="Navegação principal">
             {NAV_ITEMS.map((item) => (
               <a
                 key={item.id}
@@ -52,6 +52,7 @@ export function Navbar() {
               onClick={() => setOpen(!open)}
               className="glass p-2 rounded-lg transition-all"
               aria-label="Toggle menu"
+              aria-expanded={open}
             >
               {open ? (
                 <X className="w-5 h-5 text-[var(--accent)]" />
@@ -84,6 +85,8 @@ export function Navbar() {
               exit={{ x: "100%" }}
               transition={{ type: "spring", damping: 25, stiffness: 200 }}
               className="fixed top-0 right-0 z-50 h-full w-72 glass border-l border-[var(--border)] md:hidden"
+              role="navigation"
+              aria-label="Navegação principal"
             >
               {/* Drawer header */}
               <div className="flex items-center justify-between p-4 border-b border-[var(--border)]">
