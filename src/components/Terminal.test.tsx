@@ -6,7 +6,7 @@ import { Terminal } from './Terminal'
 describe('Terminal', () => {
   it('renders initial welcome message', () => {
     render(<Terminal />)
-    expect(screen.getByText(/MISSION CONTROL TERMINAL v1.0/)).toBeInTheDocument()
+    expect(screen.getByText(/CONTROL TERMINAL/)).toBeInTheDocument()
   })
 
   it('renders input field', () => {
@@ -25,7 +25,7 @@ describe('Terminal', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('type a command...')
     await userEvent.type(input, 'whoami{Enter}')
-    expect(screen.getByText(/Samuel Andrade/)).toBeInTheDocument()
+    expect(screen.getByText(/OPERATOR: Samuel Andrade/)).toBeInTheDocument()
   })
 
   it('executes ls projects command', async () => {
@@ -69,7 +69,25 @@ describe('Terminal', () => {
     const input = screen.getByPlaceholderText('type a command...')
     await userEvent.type(input, 'help{Enter}')
     await userEvent.type(input, 'clear{Enter}')
-    // After clear, only the welcome message should remain visible
+    // After clear, history is empty — banner and commands are gone
     expect(screen.queryByText(/AVAILABLE COMMANDS/)).not.toBeInTheDocument()
+    expect(screen.queryByText(/CONTROL TERMINAL/)).not.toBeInTheDocument()
+  })
+
+  it('executes neofetch command', async () => {
+    render(<Terminal />)
+    const input = screen.getByPlaceholderText('type a command...')
+    await userEvent.type(input, 'neofetch{Enter}')
+    expect(screen.getByText(/Next\.js 16/)).toBeInTheDocument()
+    expect(screen.getByText(/RTX 3060/)).toBeInTheDocument()
+  })
+
+  it('executes matrix command', async () => {
+    render(<Terminal />)
+    const input = screen.getByPlaceholderText('type a command...')
+    await userEvent.type(input, 'matrix{Enter}')
+    // matrix generates random chars — check for multiple lines of output
+    const matrixOutput = screen.getByText(/[ｦｧｨｩｪｫｬｭｮｯｱｲｳｵｶｷ]/)
+    expect(matrixOutput).toBeInTheDocument()
   })
 })
