@@ -42,7 +42,8 @@ Portal interativo de demonstração técnica, desenvolvido com estética de inte
 
 ## 🔍 SEO & Performance
 
-- **Metadata:** OpenGraph, robots, sitemap.xml, JsonLd (Schema.org Person)
+- **OG Image:** Geração dinâmica com `next/og` (1200×630, tema Mission Control com scanlines)
+- **Metadata:** OpenGraph, robots.txt, sitemap.xml, JsonLd (Schema.org Person)
 - **ISR:** Dados do GitHub cacheados por 1 hora (`revalidate: 3600`)
 - **Code Splitting:** Lazy loading com `next/dynamic` + skeletons
 - **Error Boundary:** Fallback estilizado para erros de renderização
