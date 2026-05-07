@@ -1,0 +1,89 @@
+@import "tailwindcss";
+
+:root {
+  --glass-bg: rgba(255, 255, 255, 0.05);
+  --glass-border: rgba(255, 255, 255, 0.1);
+  --cyan-neon: #22d3ee;
+  --indigo-deep: #6366f1;
+}
+
+/* ========== NIGHT VISION (Dark) ========== */
+.theme-dark {
+  --bg-primary: #000000;
+  --bg-secondary: #0a0a0f;
+  --bg-card: rgba(10, 10, 20, 0.6);
+  --text-primary: #e2e8f0;
+  --text-secondary: #94a3b8;
+  --accent: #22d3ee;
+  --accent-alt: #6366f1;
+  --border: rgba(34, 211, 238, 0.15);
+  --hud-line: rgba(34, 211, 238, 0.3);
+}
+
+/* ========== DAYLIGHT OPS (Light) ========== */
+.theme-light {
+  --bg-primary: #f8fafc;
+  --bg-secondary: #e2e8f0;
+  --bg-card: rgba(255, 255, 255, 0.8);
+  --text-primary: #0f172a;
+  --text-secondary: #475569;
+  --accent: #1e3a5f;
+  --accent-alt: #0f172a;
+  --border: rgba(30, 58, 95, 0.15);
+  --hud-line: rgba(30, 58, 95, 0.2);
+}
+
+body {
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+/* Glassmorphism utility */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--glass-border);
+}
+
+/* HUD flicker animation */
+@keyframes hud-flicker {
+  0%, 100% { opacity: 1; }
+  92% { opacity: 1; }
+  93% { opacity: 0.8; }
+  94% { opacity: 1; }
+  96% { opacity: 0.9; }
+  97% { opacity: 1; }
+}
+
+.hud-text {
+  animation: hud-flicker 4s infinite;
+}
+
+/* Scanline effect */
+@keyframes scanline {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+.scanline::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--hud-line);
+  opacity: 0.1;
+  animation: scanline 8s linear infinite;
+  pointer-events: none;
+  z-index: 9999;
+}
+
+/* Grid pattern for HUD */
+.hud-grid {
+  background-image:
+    linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+}

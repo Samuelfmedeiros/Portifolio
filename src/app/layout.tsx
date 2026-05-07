@@ -1,0 +1,38 @@
+import type { Metadata } from "next";
+import { ThemeProvider } from "@/components/ThemeProvider";
+import { ParallaxBackground } from "@/components/ParallaxBackground";
+import { Navbar } from "@/components/Navbar";
+import "./globals.css";
+
+export const metadata: Metadata = {
+  title: "Mission Control | Samuel Andrade",
+  description: "Portfólio profissional — Analista de Dados & Produto. BI, SQL, Machine Learning.",
+  keywords: ["analista de dados", "BI", "SQL", "machine learning", "portfolio", "next.js"],
+  authors: [{ name: "Samuel Andrade" }],
+  openGraph: {
+    title: "Mission Control | Samuel Andrade",
+    description: "Analista de Dados & Produto — Portfólio Interativo",
+    type: "website",
+  },
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="pt-BR" suppressHydrationWarning>
+      <head>
+        <meta name="theme-color" content="#000000" />
+      </head>
+      <body className="relative min-h-screen antialiased">
+        <ThemeProvider>
+          <ParallaxBackground />
+          <Navbar />
+          <main>{children}</main>
+          <footer className="text-center py-8 font-mono text-xs text-[var(--text-secondary)]">
+            <p>© {new Date().getFullYear()} MISSION CONTROL — Samuel Andrade</p>
+            <p className="mt-1 opacity-50">TODOS OS SISTEMAS OPERACIONAIS</p>
+          </footer>
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}
