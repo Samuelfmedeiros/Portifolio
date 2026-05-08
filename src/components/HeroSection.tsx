@@ -80,13 +80,27 @@ export function HeroSection() {
           animate={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
         >
-          <h1 className="text-5xl sm:text-7xl md:text-9xl font-bold tracking-tighter mb-4">
-            <span className="text-[var(--text-primary)]">SAMUEL</span>{" "}
-            <span className="text-[var(--accent)]">ANDRADE</span>
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter mb-4">
+            <motion.span
+              className="text-[var(--text-primary)] inline-block"
+              initial={{ opacity: 0, y: 40 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }}
+            >
+              SAMUEL
+            </motion.span>
+            <motion.span
+              className="text-[var(--accent)] inline-block ml-2 md:ml-4"
+              initial={{ opacity: 0, y: 40, textShadow: "0 0 0px var(--accent)" }}
+              animate={{ opacity: 1, y: 0, textShadow: "0 0 30px var(--accent), 0 0 60px var(--accent), 0 0 90px rgba(34,211,238,0.3)" }}
+              transition={{ duration: 0.7, delay: 0.35, ease: [0.22, 1, 0.36, 1] }}
+            >
+              MEDEIROS
+            </motion.span>
           </h1>
           <div className="h-px w-24 md:w-32 mx-auto bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent mb-6" />
-          <p className="text-base sm:text-xl md:text-2xl font-mono text-[var(--text-secondary)] tracking-wider">
-            ANALISTA DE DADOS &amp; PRODUTO
+          <p className="text-sm sm:text-base md:text-lg font-mono text-[var(--text-secondary)] tracking-wide max-w-xl mx-auto">
+            Transformando dados em decisões. BI, SQL, Python, Machine Learning e IA Generativa.
           </p>
         </motion.div>
 
@@ -96,7 +110,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-10 md:mt-12 flex flex-wrap gap-2 md:gap-4 justify-center"
         >
-          {["BI & SQL", "Python", "Machine Learning", "Next.js", "LLMs Locais"].map((skill) => (
+          {["Power BI", "SQL", "Python", "ML", "Next.js", "LLMs", "Docker"].map((skill) => (
             <span
               key={skill}
               className="glass px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-mono text-[var(--accent)] border-[var(--border)]"

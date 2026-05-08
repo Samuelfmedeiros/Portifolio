@@ -52,7 +52,7 @@ const item = {
 
 export function SkillsGrid() {
   return (
-    <section className="py-20 md:py-28 px-4 md:px-6 max-w-6xl mx-auto">
+    <section className="py-12 md:py-16 px-4 md:px-6 max-w-6xl mx-auto">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
