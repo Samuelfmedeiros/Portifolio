@@ -21,7 +21,7 @@ export function ContactForm() {
     const now = Date.now();
     if (now - lastSentRef.current < 30_000) {
       setStatus("error");
-      setErrorMessage("⚠ Aguarde 30 segundos entre envios.");
+      setErrorMessage("Aguarde 30 segundos entre envios.");
       return;
     }
 
@@ -66,7 +66,7 @@ export function ContactForm() {
         viewport={{ once: true }}
         className="font-mono text-lg md:text-xl tracking-[0.3em] text-[var(--accent)] mb-8 text-center"
       >
-        ▸ TRANSMISSÃO
+        ▸ CONTATO
       </motion.h2>
 
       {/* Social contact bar */}
@@ -103,7 +103,7 @@ export function ContactForm() {
         <div className="flex items-center gap-3 mb-5">
           <Radio className="w-4 h-4 text-[var(--accent)] animate-pulse" />
           <span className="font-mono text-xs text-[var(--text-secondary)]">
-            CANAL DE COMUNICAÇÃO ABERTO
+            Entre em contato
           </span>
         </div>
 
@@ -114,19 +114,19 @@ export function ContactForm() {
             className="text-center py-8"
           >
             <CheckCircle className="w-12 h-12 mx-auto mb-4 text-green-400" />
-            <p className="font-mono text-sm text-[var(--accent)]">TRANSMISSÃO ENVIADA COM SUCESSO</p>
+            <p className="font-mono text-sm text-[var(--accent)]">Mensagem enviada</p>
             <button
               onClick={() => { setStatus("idle"); setErrorMessage(""); }}
               className="mt-4 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)]"
             >
-              [NOVA TRANSMISSÃO]
+              Enviar outra mensagem
             </button>
           </motion.div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
-                01 — OPERADOR
+                Nome
               </label>
               <input
                 type="text"
@@ -140,7 +140,7 @@ export function ContactForm() {
 
             <div>
               <label className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
-                02 — FREQUÊNCIA (EMAIL)
+                Email
               </label>
               <input
                 type="email"
@@ -154,7 +154,7 @@ export function ContactForm() {
 
             <div>
               <label className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
-                03 — MENSAGEM
+                Mensagem
               </label>
               <textarea
                 value={content}
@@ -172,10 +172,10 @@ export function ContactForm() {
               className="w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {status === "sending" ? (
-                "ENVIANDO..."
+                "Enviando..."
               ) : (
                 <>
-                  <Send className="w-4 h-4" /> INICIAR TRANSMISSÃO
+                  <Send className="w-4 h-4" /> Enviar mensagem
                 </>
               )}
             </button>
