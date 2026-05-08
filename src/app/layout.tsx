@@ -9,33 +9,61 @@ import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import "./globals.css";
 
-const basePath = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" ? "/mission-control" : "";
-
 export const metadata: Metadata = {
   metadataBase: new URL("https://samuelmedeiros.vercel.app"),
-  title: "Mission Control | Samuel Medeiros",
-  description: "Portfólio profissional — Analista de Dados & Produto. BI, SQL, Python, Machine Learning e IA Generativa.",
-  keywords: ["analista de dados", "BI", "SQL", "machine learning", "portfolio", "next.js", "python", "power bi"],
-  authors: [{ name: "Samuel Medeiros" }],
-  robots: { index: true, follow: true },
+  title: {
+    default: "Samuel Medeiros — Analista de Dados",
+    template: "%s | Samuel Medeiros",
+  },
+  description:
+    "Analista de Dados em Brasília. Power BI, SQL, Python, Machine Learning e ETL. Transformando dados em decisões estratégicas.",
+  keywords: [
+    "analista de dados",
+    "BI",
+    "SQL",
+    "machine learning",
+    "power bi",
+    "python",
+    "brasília",
+    "portfólio",
+    "data analyst",
+    "ETL",
+    "dashboard",
+    "IA",
+  ],
+  authors: [{ name: "Samuel Medeiros", url: "https://samuelmedeiros.vercel.app" }],
+  creator: "Samuel Medeiros",
   openGraph: {
-    title: "Mission Control | Samuel Medeiros",
-    description: "Analista de Dados & Produto — Portfólio Interativo",
     type: "website",
+    locale: "pt_BR",
+    url: "https://samuelmedeiros.vercel.app",
+    siteName: "Samuel Medeiros",
+    title: "Samuel Medeiros — Analista de Dados",
+    description:
+      "Analista de Dados em Brasília. Power BI, SQL, Python, Machine Learning e ETL.",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Samuel Medeiros — Analista de Dados",
+    description: "Dashboards, SQL, Python e Machine Learning.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: { index: true, follow: true, "max-image-preview": "large" },
   },
   icons: {
-    icon: `${basePath}/icon.svg`,
-    apple: `${basePath}/icon.svg`,
+    icon: "/icon.svg",
+    apple: "/icon.svg",
   },
-  manifest: `${basePath}/manifest.webmanifest`,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
       <head>
-        <meta name="theme-color" content="#22d3ee" />
-        <JsonLd />
+        <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
+        <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
       </head>
       <body className="relative min-h-screen antialiased">
         <SkipLink />
@@ -43,9 +71,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <AnalyticsTracker />
           <ParallaxBackground />
           <Navbar />
-          <main id="main-content"><ErrorBoundary>{children}</ErrorBoundary></main>
+          <main id="main-content">
+            <ErrorBoundary>{children}</ErrorBoundary>
+          </main>
           <Footer />
         </ThemeProvider>
+        <JsonLd />
       </body>
     </html>
   );

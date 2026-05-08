@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Cpu, BrainCircuit, Rocket } from "lucide-react";
+import { Cpu, BrainCircuit, TrendingUp } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 
 const container = {
@@ -24,29 +24,29 @@ const cardVariant = {
 const cards = [
   {
     icon: Cpu,
-    title: "HARDWARE",
+    title: "Ferramentas",
     items: [
-      "Ryzen 5 5600 + 32GB DDR4",
-      "RTX 3060 12GB VRAM",
-      "SSD NVMe 1TB",
+      "Power BI, DAX, Power Query",
+      "SQL Server, PostgreSQL",
+      "Python, Pandas, NumPy",
     ],
   },
   {
     icon: BrainCircuit,
-    title: "IA & LLMs",
+    title: "Inteligência Artificial",
     items: [
-      "Ollama (Mistral, Llama 3, Phi)",
-      "Scikit-learn, Pandas",
-      "Fine-tuning local com Unsloth",
+      "Machine Learning (scikit-learn)",
+      "LLMs e IA Generativa",
+      "Automação com Python",
     ],
   },
   {
-    icon: Rocket,
-    title: "TRAJETÓRIA",
+    icon: TrendingUp,
+    title: "Experiência",
     items: [
-      "Análise de Dados & BI (Power BI, SQL)",
-      "Desenvolvimento Full Stack (Next.js, Python)",
-      "Engenharia de IA (Machine Learning, LLMs locais)",
+      "ETL e transformação de dados",
+      "Dashboards para tomada de decisão",
+      "Suporte técnico e infraestrutura",
     ],
   },
 ];
@@ -58,9 +58,9 @@ export function CoreEngine() {
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
-        className="text-3xl font-mono text-[var(--accent)] mb-12 text-center"
+        className="font-mono text-lg md:text-xl tracking-[0.3em] text-[var(--accent)] mb-10 text-center"
       >
-        ▸ Ferramentas & Tecnologias
+        ▸ FERRAMENTAS
       </motion.h2>
 
       <motion.div
@@ -75,7 +75,6 @@ export function CoreEngine() {
           return (
             <motion.div key={card.title} variants={cardVariant}>
               <GlassCard className="flex flex-col gap-4">
-                {/* Header */}
                 <div className="flex items-center gap-3">
                   <Icon className="w-5 h-5 text-[var(--accent)]" />
                   <h3 className="font-mono text-sm font-bold text-[var(--text-primary)]">
@@ -83,7 +82,6 @@ export function CoreEngine() {
                   </h3>
                 </div>
 
-                {/* Details */}
                 <ul className="space-y-2">
                   {card.items.map((item) => (
                     <li
