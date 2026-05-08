@@ -29,13 +29,15 @@ html {
 .theme-light {
   --bg-primary: #f8fafc;
   --bg-secondary: #e2e8f0;
-  --bg-card: rgba(255, 255, 255, 0.8);
+  --bg-card: rgba(248, 250, 252, 0.85);
   --text-primary: #0f172a;
   --text-secondary: #475569;
-  --accent: #1e3a5f;
-  --accent-alt: #0f172a;
-  --border: rgba(30, 58, 95, 0.15);
-  --hud-line: rgba(30, 58, 95, 0.2);
+  --accent: #0f172a;
+  --accent-alt: #1e3a5f;
+  --border: rgba(15, 23, 42, 0.12);
+  --hud-line: rgba(15, 23, 42, 0.2);
+  --glass-bg: rgba(248, 250, 252, 0.75);
+  --glass-border: rgba(15, 23, 42, 0.1);
 }
 
 body {

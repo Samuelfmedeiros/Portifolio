@@ -60,7 +60,7 @@ export function SkillsGrid() {
         viewport={{ once: true }}
         className="font-mono text-lg md:text-xl tracking-[0.3em] text-[var(--accent)] mb-12 text-center"
       >
-        ▸ SKILLS MATRIX
+        ▸ HABILIDADES
       </motion.h2>
 
       <motion.div

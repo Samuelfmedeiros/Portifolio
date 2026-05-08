@@ -15,7 +15,7 @@ export function UtilityDeck() {
   return (
     <section id="utility" className="py-16 md:py-20 px-4 md:px-6">
       <h2 className="text-2xl md:text-3xl font-mono text-[var(--accent)] mb-8 md:mb-12 text-center">
-        ▸ UTILITY DECK
+        ▸ Utilitários
       </h2>
 
       <div className="max-w-xl mx-auto">

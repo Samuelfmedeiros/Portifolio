@@ -59,7 +59,7 @@ MISSION: Transformar dados em decisão`;
         break;
 
       case "ls projects":
-        output = `PROJECTS IN HANGAR:
+        output = `PROJETOS:`
   🐾 DogWalk        — Plataforma de passeio de cães (Next.js + Supabase)
   🛰️ Mission Control — Este portfólio (Next.js + Framer Motion)
   📊 ANA Dashboards  — Dashboards de dados (Power BI + SQL)
@@ -77,10 +77,10 @@ MISSION: Transformar dados em decisão`;
         break;
 
       case "contact":
-        output = `TRANSMISSION CHANNELS:
+        output = `CONTATO:
   📧 Email:  samuelandrademedeiros@gmail.com
   🐙 GitHub: github.com/Samuelfmedeiros
-  💼 LinkedIn: linkedin.com/in/samuelandrade`;
+  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros`;
         break;
 
       case "clear":
@@ -169,7 +169,7 @@ MISSION: Transformar dados em decisão`;
   return (
     <section id="terminal" className="py-20 px-6">
       <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center">
-        ▸ TERMINAL CENTRAL
+        ▸ TERMINAL
       </h2>
 
       <GlassCard className="max-w-3xl mx-auto font-mono text-sm">

@@ -12,7 +12,7 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
     return (
       <section id="projects" className="py-20 px-6">
         <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center">
-          ▸ HANGAR VAZIO — NENHUM PROJETO ENCONTRADO
+          ▸ Nenhum projeto encontrado
         </h2>
       </section>
     );
@@ -25,7 +25,7 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
         whileInView={{ opacity: 1 }}
         className="text-2xl font-mono text-[var(--accent)] mb-8 text-center"
       >
-        ▸ HANGAR DE PROJETOS
+        ▸ PROJETOS
       </motion.h2>
 
       <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">

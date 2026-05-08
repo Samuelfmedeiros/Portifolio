@@ -1,4 +1,4 @@
-import { Mail, Heart } from "lucide-react";
+import { Mail } from "lucide-react";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -32,17 +32,23 @@ export function Footer() {
           {/* Brand */}
           <div>
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
-              MISSION CONTROL
+              Samuel Medeiros
             </h3>
             <p className="text-xs font-mono text-[var(--text-secondary)]">
-              Portal de comando e controle — Samuel Medeiros.
+              Analista de Dados — Brasília/DF.
+            </p>
+            <p className="text-xs font-mono text-[var(--text-secondary)] mt-1">
+              samuelandrademedeiros@gmail.com
+            </p>
+            <p className="text-xs font-mono text-[var(--text-secondary)]">
+              (61) 99119-1722
             </p>
           </div>
 
           {/* Links */}
           <div>
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
-              CANAIS DE COMUNICAÇÃO
+              Redes
             </h3>
             <div className="flex gap-4">
               <a
@@ -55,7 +61,7 @@ export function Footer() {
                 <GithubIcon className="w-5 h-5" />
               </a>
               <a
-                href="https://linkedin.com/in/samuelandrade"
+                href="https://linkedin.com/in/samuelandrademedeiros"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
@@ -64,7 +70,7 @@ export function Footer() {
                 <LinkedinIcon className="w-5 h-5" />
               </a>
               <a
-                href="https://wa.me/5561999999999"
+                href="https://wa.me/556191191722"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-green-400 transition-colors"
@@ -82,26 +88,26 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Status */}
+          {/* Info */}
           <div>
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
-              STATUS DO SISTEMA
+              Currículo
             </h3>
-            <div className="flex items-center gap-2 text-xs font-mono text-green-400">
-              <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
-              TODOS OS SISTEMAS OPERACIONAIS
-            </div>
-            <p className="text-xs font-mono text-[var(--text-secondary)] mt-2">
-              v2.0 — Next.js 16 + Tailwind 4
-            </p>
+            <a
+              href="/Samuel_Andrade_2026.pdf"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
+            >
+              Download em PDF ↓
+            </a>
           </div>
         </div>
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] text-center">
           <p className="text-xs font-mono text-[var(--text-secondary)]/50">
-            © {new Date().getFullYear()} Samuel Medeiros — Desenvolvido com{" "}
-            <Heart className="w-3 h-3 inline text-red-400" /> usando Next.js
+            © {new Date().getFullYear()} Samuel Medeiros
           </p>
         </div>
       </div>
