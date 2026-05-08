@@ -12,14 +12,14 @@ import "./globals.css";
 const basePath = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" ? "/mission-control" : "";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://samuelandrade.dev"),
-  title: "Mission Control | Samuel Andrade",
-  description: "Portfólio profissional — Analista de Dados & Produto. BI, SQL, Machine Learning.",
-  keywords: ["analista de dados", "BI", "SQL", "machine learning", "portfolio", "next.js"],
-  authors: [{ name: "Samuel Andrade" }],
+  metadataBase: new URL("https://samuelmedeiros.vercel.app"),
+  title: "Mission Control | Samuel Medeiros",
+  description: "Portfólio profissional — Analista de Dados & Produto. BI, SQL, Python, Machine Learning e IA Generativa.",
+  keywords: ["analista de dados", "BI", "SQL", "machine learning", "portfolio", "next.js", "python", "power bi"],
+  authors: [{ name: "Samuel Medeiros" }],
   robots: { index: true, follow: true },
   openGraph: {
-    title: "Mission Control | Samuel Andrade",
+    title: "Mission Control | Samuel Medeiros",
     description: "Analista de Dados & Produto — Portfólio Interativo",
     type: "website",
   },

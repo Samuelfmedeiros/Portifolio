@@ -19,16 +19,16 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
   }
 
   return (
-    <section id="projects" className="py-20 px-6">
+    <section id="projects" className="py-12 px-6">
       <motion.h2
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        className="text-3xl font-mono text-[var(--accent)] mb-12 text-center"
+        className="text-2xl font-mono text-[var(--accent)] mb-8 text-center"
       >
         ▸ HANGAR DE PROJETOS
       </motion.h2>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
         {repos.map((repo, i) => {
           const isFeatured = FEATURED.includes(repo.name);
           return (

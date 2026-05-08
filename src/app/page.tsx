@@ -7,6 +7,7 @@ import { ProjectHangar } from "@/components/ProjectHangar";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
+import { AboutTimeline } from "@/components/AboutTimeline";
 
 const Terminal = dynamic(
   () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
@@ -34,6 +35,7 @@ export default function Home() {
       <HeroSection />
       <CoreEngine />
       <SkillsGrid />
+      <AboutTimeline />
       <Suspense fallback={<HangarSkeleton />}>
         <HangarWithData />
       </Suspense>
