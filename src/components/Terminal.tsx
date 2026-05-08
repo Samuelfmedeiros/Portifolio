@@ -5,18 +5,12 @@ import { GlassCard } from "./GlassCard";
 import type { Command } from "@/lib/types";
 
 const BANNER = [
-  "███╗   ███╗██╗███████╗███████╗██╗ ██████╗ ███╗   ██╗",
-  "████╗ ████║██║██╔════╝██╔════╝██║██╔═══██╗████╗  ██║",
-  "██╔████╔██║██║███████╗███████╗██║██║   ██║██╔██╗ ██║",
-  "██║╚██╔╝██║██║╚════██║╚════██║██║██║   ██║██║╚██╗██║",
-  "██║ ╚═╝ ██║██║███████║███████║██║╚██████╔╝██║ ╚████║",
-  "╚═╝     ╚═╝╚═╝╚══════╝╚══════╝╚═╝ ╚═════╝ ╚═╝  ╚═══╝",
-  "",
-  "  CONTROL TERMINAL v2.0 ◆ Samuel Andrade ◆ Type 'help'",
+  "Samuel Medeiros — Analista de Dados",
+  "Digite 'ajuda' para ver os comandos disponíveis.",
   "",
 ].join("\n");
 
-const COMMANDS = ["help", "whoami", "ls projects", "skills", "contact", "clear", "date", "neofetch", "matrix"];
+const COMMANDS = ["ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "hora"];
 
 export function Terminal() {
   const [input, setInput] = useState("");
@@ -37,89 +31,74 @@ export function Terminal() {
     let output = "";
 
     switch (trimmed) {
-      case "help":
-        output = `AVAILABLE COMMANDS:
-  help          — Show this message
-  whoami        — About Samuel Andrade
-  ls projects   — List featured projects
-  skills        — Technical skills
-  contact       — Contact information
-  clear         — Clear terminal
-  date          — Current mission time
-  neofetch      — System information
-  matrix        — Enter the Matrix`;
+      case "ajuda":
+        output = `COMANDOS DISPONÍVEIS:
+  ajuda         — Mostra esta mensagem
+  sobre         — Sobre Samuel
+  projetos      — Lista de projetos
+  habilidades   — Habilidades técnicas
+  contato       — Informações de contato
+  limpar        — Limpa o terminal
+  hora          — Hora atual`;
         break;
 
-      case "whoami":
-        output = `OPERATOR: Samuel Andrade
-ROLE: Analista de Dados & Produto
-SPECIALIZATION: BI, SQL, Machine Learning, LLMs
-LOCATION: Brasil 🇧🇷
-MISSION: Transformar dados em decisão`;
+      case "sobre":
+        output = `Samuel Medeiros
+Analista de Dados — Brasília/DF
+
+Especialidades:
+  • Power BI, SQL, DAX
+  • Python, Pandas, Machine Learning
+  • ETL e automação
+  • IA Generativa e LLMs
+
+Formação:
+  • Pós-graduação em Banco de Dados e BI — IESB
+  • Análise e Desenvolvimento de Sistemas — IESB
+
+Experiência:
+  • ANA (Agência Nacional de Águas)
+  • Global Hitss
+  • TRT 10ª Região`;
         break;
 
-      case "ls projects":
-        output = `PROJETOS:`
+      case "projetos":
+        output = `PROJETOS:
   🐾 DogWalk        — Plataforma de passeio de cães (Next.js + Supabase)
   🛰️ Mission Control — Este portfólio (Next.js + Framer Motion)
-  📊 ANA Dashboards  — Dashboards de dados (Power BI + SQL)
-  🤖 LLM Lab         — Experimentos com LLMs locais (RTX 3060)`;
+  📊 ANA Dashboards  — Dashboards de dados (Power BI + SQL)`;
         break;
 
-      case "skills":
-        output = `TECH STACK:
-  [LANGUAGES]    Python, SQL, TypeScript
-  [BI/ANALYTICS] Power BI, Excel, Pandas
-  [ML/AI]        Scikit-learn, LLMs locais, Ollama
-  [WEB]          Next.js, React, Tailwind CSS
-  [DB]           PostgreSQL, Supabase, MySQL
-  [HARDWARE]     RTX 3060 12GB, Docker, Linux`;
+      case "habilidades":
+        output = `HABILIDADES:
+  [Linguagens]    Python, SQL, TypeScript
+  [BI/Analytics] Power BI, Excel, Power Query, DAX
+  [ML/IA]         Scikit-learn, Pandas, LLMs
+  [Web]           Next.js, React, Tailwind CSS
+  [Banco]         PostgreSQL, Supabase, MySQL
+  [Ferramentas]   Docker, Git, Linux, Azure`;
         break;
 
-      case "contact":
+      case "contato":
         output = `CONTATO:
-  📧 Email:  samuelandrademedeiros@gmail.com
-  🐙 GitHub: github.com/Samuelfmedeiros
-  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros`;
+  📧 Email:    samuelandrademedeiros@gmail.com
+  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros
+  🐙 GitHub:   github.com/Samuelfmedeiros
+  📱 WhatsApp: wa.me/556191191722`;
         break;
 
-      case "clear":
+      case "limpar":
         setHistory([]);
         return;
 
-      case "date":
-        output = `MISSION TIME: ${new Date().toLocaleString("pt-BR")}`;
+      case "hora":
+        output = `Horário: ${new Date().toLocaleString("pt-BR")}`;
         break;
-
-      case "neofetch": {
-        const uptime = Math.floor(process.uptime());
-        const hours = Math.floor(uptime / 3600);
-        const minutes = Math.floor((uptime % 3600) / 60);
-        output = `         ▄▄▄▄▄▄▄▄      OS: MISSION CONTROL v2.0
-      ▄████████████▄   HOST: Vercel Edge Network
-    ▄████████████████▄  KERNEL: Next.js 16.2.5
-   ██████████████████   UPTIME: ${hours}h ${minutes}m
-  ████████████████████  SHELL: zsh (emulated)
-  ████████████████████  CPU: AMD Ryzen 5 5600 + RTX 3060
-  ███████▀    ▀███████  MEMORY: 32GB DDR4
-  ██████▀      ▀██████  STORAGE: 1TB NVMe SSD
-   █████▄    ▄█████    LLM: Ollama (Mistral, Llama 3)
-    ▀████████████▀     IDE:  Cursor / VS Code`;
-        break;
-      }
-
-      case "matrix": {
-        const chars = "ｦｧｨｩｪｫｬｭｮｯｱｲｳｵｶｷｸｹｺｻｼｽｾｿﾀﾁﾂﾃﾄﾅﾆﾇﾈﾉﾊﾋﾌﾍﾎﾏﾐﾑﾒﾓﾔﾕﾖﾗﾘﾙﾚﾛﾜﾝ0123456789";
-        output = Array.from({ length: 15 }, () =>
-          Array.from({ length: 40 }, () => chars[Math.floor(Math.random() * chars.length)]).join("")
-        ).join("\n");
-        break;
-      }
 
       default:
-        output = `COMMAND NOT FOUND: '${trimmed}'\nType 'help' for available commands.`;
+        output = `Comando não encontrado: '${trimmed}'
+Digite 'ajuda' para ver os comandos disponíveis.`;
     }
-
     setHistory((prev) => [...prev, { cmd, output }]);
   };
 
@@ -201,7 +180,7 @@ MISSION: Transformar dados em decisão`;
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
             className="flex-1 bg-transparent outline-none text-[var(--text-primary)] font-mono text-sm"
-            placeholder="type a command..."
+            placeholder="digite um comando..."
             autoFocus
           />
         </div>
