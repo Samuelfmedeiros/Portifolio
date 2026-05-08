@@ -8,7 +8,7 @@ export function JsonLd() {
     email: "samuelandrademedeiros@gmail.com",
     sameAs: [
       "https://github.com/Samuelfmedeiros",
-      "https://linkedin.com/in/samuelandrade",
+      "https://linkedin.com/in/samuelandrademedeiros",
     ],
     knowsAbout: [
       "Data Analysis",
