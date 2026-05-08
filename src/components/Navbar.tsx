@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { FolderKanban, Terminal, Gamepad2, Radio, Github, Linkedin, Mail } from "lucide-react";
+import { FolderKanban, Terminal, Gamepad2, Radio } from "lucide-react";
+import { Github, Linkedin, Mail } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_ITEMS = [
@@ -43,7 +44,7 @@ export function Navbar() {
               <a href="https://github.com/Samuelfmedeiros" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
                 <Github className="w-4 h-4" />
               </a>
-              <a href="https://linkedin.com/in/samuelandrademedeiros" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
+              <a href="https://linkedin.com/in/samuelfmedeiros" target="_blank" rel="noopener noreferrer" aria-label="LinkedIn" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
                 <Linkedin className="w-4 h-4" />
               </a>
               <a href="mailto:samuelandrademedeiros@gmail.com" aria-label="Email" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
