@@ -60,7 +60,7 @@ export function CoreEngine() {
         viewport={{ once: true }}
         className="text-3xl font-mono text-[var(--accent)] mb-12 text-center"
       >
-        ▸ CORE ENGINE
+        ▸ Ferramentas & Tecnologias
       </motion.h2>
 
       <motion.div

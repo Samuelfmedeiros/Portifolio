@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { Cpu, Wifi, Battery, Activity } from "lucide-react";
+import { Cpu, Activity } from "lucide-react";
 
 export function HeroSection() {
   const [scrollPercent, setScrollPercent] = useState(0);
@@ -30,38 +30,29 @@ export function HeroSection() {
 
   return (
     <section className="relative min-h-screen flex items-center justify-center pt-20 px-4 md:px-6">
-      {/* HUD Telemetry Bar */}
+      {/* Top bar */}
       <motion.div
         initial={{ opacity: 0, y: -10 }}
         animate={{ opacity: 1, y: 0 }}
         className="absolute top-20 md:top-24 left-3 right-3 md:left-6 md:right-6 glass rounded-lg px-3 md:px-6 py-2 md:py-3 flex items-center justify-between font-mono text-[10px] md:text-xs border-[var(--border)]"
       >
-        {/* Left: status */}
         <div className="flex items-center gap-2 md:gap-4">
           <span className="flex items-center gap-1 text-[var(--accent)]">
             <Cpu className="w-2.5 h-2.5 md:w-3 md:h-3" />
-            <span className="hidden sm:inline">SYS:ONLINE</span>
+            <span className="hidden sm:inline">Samuel Medeiros</span>
           </span>
           <span className="hidden sm:flex items-center gap-1 text-green-400">
-            <Activity className="w-2.5 h-2.5 md:w-3 md:h-3" /> NOMINAL
+            <Activity className="w-2.5 h-2.5 md:w-3 md:h-3" /> Analista de Dados
           </span>
         </div>
 
-        {/* Middle: network (hidden on mobile) */}
         <div className="hidden md:flex items-center gap-4">
-          <span className="flex items-center gap-1 text-[var(--text-secondary)]">
-            <Wifi className="w-3 h-3" /> LINK:STABLE
-          </span>
-          <span className="flex items-center gap-1 text-[var(--text-secondary)]">
-            <Battery className="w-3 h-3" /> 98%
-          </span>
-          <span className="text-[var(--accent)] tabular-nums">{time} UTC-3</span>
+          <span className="text-[var(--text-secondary)]">{time}</span>
         </div>
 
-        {/* Right: scroll indicator */}
         <div className="flex items-center gap-1.5 md:gap-2">
           <span className="text-[var(--accent)] tabular-nums md:hidden text-[10px]">{time}</span>
-          <span className="hidden sm:inline text-[var(--text-secondary)]">SCROLL</span>
+          <span className="hidden sm:inline text-[var(--text-secondary)]">Rolagem</span>
           <div className="w-10 md:w-20 h-1 md:h-1.5 bg-[var(--border)] rounded-full overflow-hidden">
             <motion.div
               className="h-full bg-[var(--accent)]"
@@ -100,7 +91,7 @@ export function HeroSection() {
           </h1>
           <div className="h-px w-24 md:w-32 mx-auto bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent mb-6" />
           <p className="text-sm sm:text-base md:text-lg font-mono text-[var(--text-secondary)] tracking-wide max-w-xl mx-auto">
-            Transformando dados em decisões. BI, SQL, Python, Machine Learning e IA Generativa.
+            Dashboards, SQL, Python e Machine Learning para transformar dados em decisões estratégicas.
           </p>
         </motion.div>
 
@@ -110,7 +101,7 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.8 }}
           className="mt-10 md:mt-12 flex flex-wrap gap-2 md:gap-4 justify-center"
         >
-          {["Power BI", "SQL", "Python", "ML", "Next.js", "LLMs", "Docker"].map((skill) => (
+          {["Power BI", "SQL", "Python", "Machine Learning", "ETL", "Azure"].map((skill) => (
             <span
               key={skill}
               className="glass px-3 md:px-4 py-1.5 md:py-2 rounded-full text-xs md:text-sm font-mono text-[var(--accent)] border-[var(--border)]"
@@ -127,7 +118,7 @@ export function HeroSection() {
           className="mt-12 md:mt-16"
         >
           <p className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)] tracking-widest">
-            ▼ SCROLL PARA INICIAR SCAN ▼
+            ▼ Role para começar ▼
           </p>
         </motion.div>
       </div>

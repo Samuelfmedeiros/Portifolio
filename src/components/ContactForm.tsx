@@ -182,7 +182,7 @@ export function ContactForm() {
 
             {status === "error" && (
               <p className="text-xs font-mono text-red-400 text-center">
-                {errorMessage || "ERRO NA TRANSMISSÃO. Tente novamente."}
+                {errorMessage || "Aguarde um momento e tente novamente."}
               </p>
             )}
           </form>

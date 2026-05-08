@@ -7,27 +7,48 @@ import { Briefcase, GraduationCap, Award } from "lucide-react";
 const experiences = [
   {
     icon: Briefcase,
-    period: "2023 — Atual",
-    title: "Analista de Dados & Produto",
-    company: "Setor Privado",
-    description: "Dashboards em Power BI, modelagem SQL, pipelines ETL e automação com Python.",
-    tags: ["Power BI", "SQL", "Python", "ETL"],
+    period: "2025",
+    title: "Analista de Dados — ANA (Agência Nacional de Águas)",
+    description: "Análise e tratamento de dados de sistemas hídricos. Dashboards em Power BI. Automação de rotinas com Python e SQL. Manipulação e consultas otimizadas em banco de dados. Suporte técnico às áreas internas.",
+    tags: ["Power BI", "Python", "SQL", "ETL"],
+  },
+  {
+    icon: Briefcase,
+    period: "2024 — 2025",
+    title: "Técnico de Suporte N1 — Global Hitss",
+    description: "Diagnóstico e solução de problemas em hardware, software e redes. Monitoramento de sistemas e processos de TI. Formatação, backup e manutenção de sistemas. Atendimento técnico via telefone, e-mail e chat. Microsoft Azure e Microsoft 365.",
+    tags: ["Azure", "Microsoft 365", "Suporte"],
+  },
+  {
+    icon: Briefcase,
+    period: "2017 — 2020",
+    title: "Auxiliar Técnico — TRT 10ª Região (CETEFE)",
+    description: "Digitalização e organização de documentos judiciais. Controle e logística de armazenamento digital. Verificação e conferência de conteúdos digitais. Criação e edição de documentos.",
+    tags: ["Gestão Documental", "Suporte"],
+  },
+  {
+    icon: GraduationCap,
+    period: "Em Andamento",
+    title: "Pós-graduação em Banco de Dados e BI",
+    company: "Centro Universitário IESB",
+    description: "SQL Server, PostgreSQL, Power BI, Power Query, DAX, ETL, transformação e integração de dados (JSON, XML).",
+    tags: ["SQL", "Power BI", "BI"],
   },
   {
     icon: GraduationCap,
     period: "2022 — 2024",
-    title: "Formação em Tecnologia",
-    company: "Área de Dados",
-    description: "Formação em análise de dados, SQL avançado e Business Intelligence.",
-    tags: ["Análise de Dados", "BI", "SQL"],
+    title: "Análise e Desenvolvimento de Sistemas — Data & ML",
+    company: "Centro Universitário IESB",
+    description: "Formação em análise de dados, desenvolvimento de sistemas, modelagem e Machine Learning. TensorFlow, R, PyTorch, Hadoop, Spark.",
+    tags: ["Python", "Machine Learning", "Data Science"],
   },
   {
     icon: Award,
-    period: "2024",
-    title: "Certificações & Especializações",
-    company: "Coursera / Udemy / Digital Innovation One",
-    description: "Machine Learning, LLMs, Docker, Git/GitHub, Power BI Avançado.",
-    tags: ["ML", "LLMs", "Docker", "Git"],
+    period: "2023 — 2025",
+    title: "Certificações e Especializações",
+    company: "Coursera / Udemy / DIO",
+    description: "Machine Learning, LLMs, Docker, Git/GitHub, CI/CD, Linux, Power BI Avançado, Power Query, DAX, Python para automação.",
+    tags: ["ML", "LLMs", "Docker", "Git", "Python"],
   },
 ];
 
@@ -41,7 +62,7 @@ export function AboutTimeline() {
         viewport={{ once: true }}
         className="font-mono text-lg md:text-xl tracking-[0.3em] text-[var(--accent)] mb-10 text-center"
       >
-        ▸ TRAJETÓRIA
+        ▸ EXPERIÊNCIA
       </motion.h2>
 
       <div className="max-w-4xl mx-auto space-y-6">
@@ -49,10 +70,10 @@ export function AboutTimeline() {
           const Icon = exp.icon;
           return (
             <motion.div
-              key={exp.title}
+              key={`${exp.title}-${i}`}
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: i * 0.15 }}
+              transition={{ duration: 0.5, delay: i * 0.1 }}
               viewport={{ once: true }}
               className="relative pl-8"
             >
@@ -76,13 +97,15 @@ export function AboutTimeline() {
                       <h3 className="font-semibold text-sm md:text-base text-[var(--text-primary)]">
                         {exp.title}
                       </h3>
-                      <span className="text-[10px] md:text-xs font-mono text-[var(--accent)] bg-[var(--accent)]/10 px-2 py-0.5 rounded">
+                      <span className="text-[10px] md:text-xs font-mono text-[var(--accent)] bg-[var(--accent)]/10 px-2 py-0.5 rounded whitespace-nowrap">
                         {exp.period}
                       </span>
                     </div>
-                    <p className="text-xs font-mono text-[var(--text-secondary)] mb-2">
-                      {exp.company}
-                    </p>
+                    {exp.company && (
+                      <p className="text-xs font-mono text-[var(--text-secondary)] mb-2">
+                        {exp.company}
+                      </p>
+                    )}
                     <p className="text-xs text-[var(--text-secondary)] mb-3">
                       {exp.description}
                     </p>
