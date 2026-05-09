@@ -30,8 +30,11 @@ jobs:
           corepack prepare pnpm@9.12.3 --activate
 
       - name: Install and build
+        env:
+          PNPM_ENABLE_PRE_POST_SCRIPTS: "true"
         run: |
-          pnpm install --no-frozen-lockfile
+          pnpm install --no-frozen-lockfile --ignore-scripts
+          pnpm rebuild
           pnpm build
 
       - name: Upload artifact
