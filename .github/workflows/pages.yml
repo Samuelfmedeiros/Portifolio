@@ -30,10 +30,6 @@ jobs:
           cache: 'pnpm'
 
       - name: Install and build
-        env:
-          NEXT_PUBLIC_STATIC_EXPORT: "true"
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
           pnpm install --no-frozen-lockfile
           pnpm build
