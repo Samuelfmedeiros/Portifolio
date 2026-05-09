@@ -1,83 +1,48 @@
 # 🛰️ MISSION CONTROL — STATUS FINAL
 
-> Atualizado: 2026-05-07 23:35 | Status: **COMPLETO ✅**
+> Atualizado: 2026-05-08 21:15 | Status: **DEPLOY PENDENTE** ⏳
 
 ---
 
 ## 📊 Métricas
 
 | Métrica | Valor |
-|---------|-------|
+|--------|-------|
 | Componentes | 20 (31 arquivos .tsx) |
 | Testes | **49/49 ✅** (9 arquivos) |
-| Commits | ~22 |
-| Tempo | ~3h |
+| Commits | ~23 |
 | Servidor | **http://192.168.0.8:3000** 🟢 |
 
-## ✅ Tudo Entregue
+## ✅ Alterações Recentes
 
-### Fundação
-- Centralização de tipos TypeScript
-- Error Boundary com tema HUD
-- Loading Skeleton + página loading.tsx
-- Smooth scroll com offset
-- Analytics tracker (Supabase RPC — **funcionando**)
-- Rate limit + validação no ContactForm
+### Correções Aplicadas
+1. **Theme Toggle**: Movido para desktop apenas (navbar), removido do mobile
+2. **Terminal**: Estilo Windows (`C:\Users\Visitor>`)
+3. **Hero Parallax**: Fundo com grid, círculos e pontos decorativos com scroll
+4. **GitHub Pages**: Configurado para static export (`out/`)
 
-### Novas Seções
-- **Core Engine**: Hardware, IA & LLMs, Trajetória
-- **Skills Grid**: 8 habilidades com ícones Lucide
-- **Footer expandido**: Links sociais, status do sistema
-- **404**: "SINAL PERDIDO" personalizada
+### Tema Light/Dark
+- Implementado via ThemeProvider + CSS variables
+- Footer usa variáveis CSS corretamente
+- Theme toggle funciona em ambos os modos
 
-### Terminal Premium
-- ASCII art banner "MISSION CONTROL"
-- Histórico de comandos (↑↓)
-- Autocomplete (Tab)
-- Comando `neofetch` (specs do sistema)
-- Comando `matrix` (chuva de caracteres)
+## 🚀 Deploy
 
-### Performance
-- Parallax via Canvas (120 divs → 1 canvas)
-- Lazy loading (next/dynamic) para seções abaixo da dobra
-- ProjectHangar server-side com ISR (1h cache)
+O último commit foi pushado. O GitHub Actions deve fazer o deploy para:
+- **URL**: https://samuelmedeiros.github.io/mission-control/
 
-### Acessibilidade
-- Skip link (teclado)
-- Aria-labels na navegação
-- Theme toggle com labels dinâmicos
+### Verificação Manual
+1. Acesse: https://github.com/Samuelfmedeiros/mission-control/actions
+2. Verifique se o workflow "Deploy GitHub Pages" está rodando
+3. Após deploy, teste:
+   - [ ] Tema light/dark (toque no sol/lua)
+   - [ ] Footer com cores corretas
+   - [ ] Terminal com prompt `C:\Users\Visitor>`
+   - [ ] Parallax no HeroSection
 
-### SEO
-- sitemap.xml + robots.txt
-- JSON-LD structured data (schema.org Person)
-- OG Image dinâmico (next/og)
-- metadataBase + robots meta
+## 🌐 Acesso Local
 
-### PWA
-- manifest.webmanifest
-- SVG favicon "MC"
-- theme-color #22d3ee
-
-### Testes
-- 49 testes em 9 arquivos
-- CoreEngine, Footer, HeroSection, SkillsGrid, MiniGame, Terminal...
-
-## 🚧 Pendente (manual)
-
-1. **Vercel** — [vercel.com/new](https://vercel.com/new) → Importar `Samuelfmedeiros/mission-control`
-   - Adicionar env vars do Supabase
-   - Conta atualmente "limited" — verificar email/plano
-2. **Domínio** — Comprar `samuelandrade.dev` (~R$40/ano)
-3. **GitHub Secrets** — Adicionar `VERCEL_TOKEN` para CI/CD automático
-
-## 🌐 Acesso
-
-| Dispositivo | URL |
-|-------------|-----|
-| Celular/Tablet | `http://192.168.0.8:3000` |
-| PC | `http://localhost:3000` |
-| GitHub | [github.com/Samuelfmedeiros/mission-control](https://github.com/Samuelfmedeiros/mission-control) |
-
----
-
-📁 Plano: `.hermes/plans/2026-05-07-mission-control-rebuild.md`
+```bash
+npm run dev
+# Acesse http://localhost:3000
+```
