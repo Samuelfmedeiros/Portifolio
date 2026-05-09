@@ -7,6 +7,9 @@ on:
     branches: [master, main]
   workflow_dispatch:
 
+env:
+  PNPM_ENABLE_PRE_POST_SCRIPTS: "true"
+
 jobs:
   test:
     name: Build + Lint + Test
@@ -19,18 +22,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Setup pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@9.12.3 --activate
-          pnpm --version
+      - name: Install pnpm v9
+        run: npm install -g pnpm@9.12.3
 
       - name: Install dependencies
-        env:
-          PNPM_ENABLE_PRE_POST_SCRIPTS: "true"
-        run: |
-          pnpm install --no-frozen-lockfile --ignore-scripts
-          pnpm rebuild
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Rebuild native deps
+        run: pnpm rebuild
 
       - name: Lint
         run: pnpm lint
@@ -65,17 +64,14 @@ jobs:
         with:
           node-version: 22
 
-      - name: Setup pnpm
-        run: |
-          corepack enable
-          corepack prepare pnpm@9.12.3 --activate
+      - name: Install pnpm v9
+        run: npm install -g pnpm@9.12.3
 
       - name: Install dependencies
-        env:
-          PNPM_ENABLE_PRE_POST_SCRIPTS: "true"
-        run: |
-          pnpm install --no-frozen-lockfile --ignore-scripts
-          pnpm rebuild
+        run: pnpm install --no-frozen-lockfile --ignore-scripts
+
+      - name: Rebuild native deps
+        run: pnpm rebuild
 
       - name: Deploy to Vercel
         env:
