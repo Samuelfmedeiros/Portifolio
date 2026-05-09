@@ -10,6 +10,8 @@ const BANNER = [
   "",
 ].join("\n");
 
+const PROMPT = "C:\\Users\\Visitor";
+
 const COMMANDS = ["ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "hora"];
 
 export function Terminal() {
@@ -160,7 +162,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
             <div key={i} className="mb-2">
               {entry.cmd && (
                 <div className="text-[var(--accent)]">
-                  <span className="text-[var(--text-secondary)]">visitor@mission-control:~$</span>{" "}
+                  <span className="text-[var(--accent)]">{PROMPT}&gt;</span>{" "}
                   {entry.cmd}
                 </div>
               )}
@@ -172,7 +174,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
         </div>
 
         <div className="flex items-center gap-2 text-[var(--accent)]">
-          <span className="text-[var(--text-secondary)] shrink-0">visitor@mission-control:~$</span>
+          <span className="text-[var(--accent)] shrink-0">{PROMPT}&gt;</span>
           <input
             ref={inputRef}
             type="text"
