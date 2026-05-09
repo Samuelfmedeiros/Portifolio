@@ -11,6 +11,7 @@ jobs:
   test:
     name: Build + Lint + Test
     runs-on: ubuntu-latest
+    timeout-minutes: 15
 
     steps:
       - uses: actions/checkout@v4
@@ -19,27 +20,12 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install pnpm v9
-        run: |
-          npm install -g pnpm@9.12.3
-          pnpm --version
-
-      - name: Debug env
-        run: |
-          echo "=== ENV ==="
-          node --version
-          npm --version
-          pnpm --version
-          echo "=== PKG ==="
-          cat package.json | head -5
-          echo "=== LOCKFILE HEADER ==="
-          head -5 pnpm-lock.yaml
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
-        run: |
-          echo "=== INSTALL START ==="
-          pnpm install --no-frozen-lockfile 2>&1 || true
-          echo "=== INSTALL DONE ==="
+        run: pnpm install --no-frozen-lockfile
 
       - name: Lint
         run: pnpm lint
@@ -66,6 +52,7 @@ jobs:
     needs: test
     if: github.event_name == 'push' && github.ref == 'refs/heads/master'
     runs-on: ubuntu-latest
+    timeout-minutes: 10
 
     steps:
       - uses: actions/checkout@v4
@@ -74,8 +61,9 @@ jobs:
         with:
           node-version: 22
 
-      - name: Install pnpm v9
-        run: npm install -g pnpm@9.12.3
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
 
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
