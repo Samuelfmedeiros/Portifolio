@@ -23,8 +23,14 @@ jobs:
         run: |
           corepack enable
           corepack prepare pnpm@9.12.3 --activate
+          pnpm --version
 
-      - run: pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        env:
+          PNPM_ENABLE_PRE_POST_SCRIPTS: "true"
+        run: |
+          pnpm install --no-frozen-lockfile --ignore-scripts
+          pnpm rebuild
 
       - name: Lint
         run: pnpm lint
@@ -64,7 +70,12 @@ jobs:
           corepack enable
           corepack prepare pnpm@9.12.3 --activate
 
-      - run: pnpm install --no-frozen-lockfile
+      - name: Install dependencies
+        env:
+          PNPM_ENABLE_PRE_POST_SCRIPTS: "true"
+        run: |
+          pnpm install --no-frozen-lockfile --ignore-scripts
+          pnpm rebuild
 
       - name: Deploy to Vercel
         env:
