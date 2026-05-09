@@ -86,3 +86,4 @@ lint → type-check → tests → build
 
 **Samuel Andrade** — Analista de Dados & Produto  
 BI · SQL · Python · Machine Learning · Next.js
+# update
