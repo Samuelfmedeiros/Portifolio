@@ -31,8 +31,7 @@ jobs:
 
       - name: Install and build
         run: |
-          pnpm install --no-frozen-lockfile --ignore-scripts
-          pnpm rebuild
+          pnpm install --no-frozen-lockfile
           pnpm build
 
       - name: Upload artifact
