@@ -1,10 +1,40 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
+import { useRef } from "react";
 
 export function HeroSection() {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end start"]
+  });
+
+  const y = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+
   return (
-    <section className="relative min-h-screen flex items-center justify-center px-4 md:px-6">
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center px-4 md:px-6 overflow-hidden">
+      {/* Fundo com Parallax */}
+      <motion.div 
+        style={{ y, opacity }}
+        className="absolute inset-0 z-0"
+      >
+        {/* Grid de fundo */}
+        <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-30" />
+        
+        {/* Círculo central decorativo */}
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full border border-[var(--accent)] opacity-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[400px] h-[400px] rounded-full border border-[var(--accent)] opacity-20" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[200px] h-[200px] rounded-full border border-[var(--accent)] opacity-30" />
+        
+        {/* Pontos decorativos */}
+        <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-[var(--accent)] rounded-full opacity-50" />
+        <div className="absolute top-1/3 right-1/4 w-2 h-2 bg-[var(--accent)] rounded-full opacity-30" />
+        <div className="absolute bottom-1/4 left-1/3 w-2 h-2 bg-[var(--accent)] rounded-full opacity-40" />
+        <div className="absolute bottom-1/3 right-1/3 w-2 h-2 bg-[var(--accent)] rounded-full opacity-20" />
+      </motion.div>
+
       <div className="text-center max-w-3xl mx-auto relative z-10">
         <motion.h1
           initial={{ opacity: 0, y: 30 }}
