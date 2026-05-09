@@ -33,7 +33,10 @@ jobs:
         run: |
           pnpm install --no-frozen-lockfile
           pnpm rebuild
-          pnpm build
+          echo "=== INSTALL DONE ==="
+          pnpm build --verbose 2>&1 || pnpm build 2>&1
+          echo "=== BUILD END ==="
+          ls -la out/ 2>/dev/null || ls -la .next/ 2>/dev/null
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
