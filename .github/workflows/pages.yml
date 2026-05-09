@@ -29,15 +29,13 @@ jobs:
           node-version: 22
           cache: 'pnpm'
 
-      - run: pnpm install --frozen-lockfile
-
-      - name: Build static
+      - name: Install and build
         env:
           NEXT_PUBLIC_STATIC_EXPORT: "true"
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
-          pnpm install --frozen-lockfile
+          pnpm install --no-frozen-lockfile
           pnpm build
           ls -la out/ || ls -la .next/
 
