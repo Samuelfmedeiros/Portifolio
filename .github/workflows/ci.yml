@@ -49,6 +49,42 @@ jobs:
           echo "✅ Build complete!"
           echo "📦 Build size: $(du -sh .next | cut -f1)"
 
+  e2e:
+    name: Playwright E2E
+    needs: build
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - uses: pnpm/action-setup@v3
+        with:
+          version: 9.12.3
+      - name: Install dependencies
+        run: pnpm install --no-frozen-lockfile
+      - name: Install Playwright browsers
+        run: npx playwright install --with-deps
+      - name: Start development server
+        id: dev-server
+        run: |
+          pnpm dev > /dev/null 2>&1 &
+          echo $! > /tmp/dev.pid
+          # Wait for server to be ready
+          for i in {1..30}; do
+            if curl -s http://localhost:3000 > /dev/null; then
+              echo "Server ready"
+              break
+            fi
+            sleep 1
+          done
+      - name: Run Playwright tests
+        run: npx playwright test
+      - name: Stop development server
+        if: always()
+        run: |
+          kill $(cat /tmp/dev.pid) || true
   deploy:
     name: Deploy to Vercel
     needs: test
