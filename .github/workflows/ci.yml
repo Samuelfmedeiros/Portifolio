@@ -25,9 +25,7 @@ jobs:
           version: 9.12.3
 
       - name: Install dependencies
-        run: |
-          pnpm install --no-frozen-lockfile
-          pnpm rebuild
+        run: pnpm install --frozen-lockfile
 
       - name: Lint
         run: pnpm lint || true
@@ -106,9 +104,7 @@ jobs:
           version: 9.12.3
 
       - name: Install dependencies
-        run: |
-          pnpm install --no-frozen-lockfile
-          pnpm rebuild
+        run: pnpm install --frozen-lockfile
 
       - name: Deploy to Vercel
         env:
