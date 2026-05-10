@@ -1,5 +1,7 @@
 "use client";
 
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { FolderKanban, Terminal, Gamepad2, Radio } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -37,11 +39,34 @@ const NAV_ITEMS = [
 ];
 
 export function Navbar() {
+  const [isOpen, setIsOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 10);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const linkVariants = {
+    hidden: { y: -10, opacity: 0 },
+    visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, delay: 0.1 } },
+    exit: { y: 10, opacity: 0 }
+  };
+
+  const menuVariants = {
+    hidden: { opacity: 0, y: -10 },
+    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } },
+    exit: { opacity: 0, y: -10, transition: { ease: "easeIn" } }
+  };
+
   return (
     <>
-      <nav className="fixed top-0 left-0 right-0 z-50 glass border-b border-[var(--border)]">
+      <nav className={`fixed top-0 left-0 right-0 z-50 glass border-b border-[var(--border)] transition-all duration-300 ${scrolled ? "bg-white/90 backdrop-blur-sm" : "bg-transparent"}`}>
         <div className="max-w-7xl mx-auto px-4 md:px-6 py-3 flex items-center justify-between">
-          {/* Logo - apenas nome */}
+          {/* Logo */}
           <Link href="/" className="flex items-center gap-2 group shrink-0">
             <span className="font-mono text-sm tracking-wider text-[var(--accent)]">
               Samuel Medeiros
@@ -49,16 +74,21 @@ export function Navbar() {
           </Link>
 
           {/* Desktop links */}
-          <div className="flex items-center gap-4 md:gap-6" role="navigation" aria-label="Navegação principal">
-            {NAV_ITEMS.map((item) => (
-              <a
-                key={item.id}
-                href={item.href}
-                className="text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-              >
-                {item.label}
-              </a>
-            ))}
+          <div className="hidden md:flex items-center gap-4 md:gap-6" role="navigation" aria-label="Navegação principal">
+            <motion.ul className="flex space-x-4">
+              {NAV_ITEMS.map((item) => (
+                <motion.li
+                  key={item.id}
+                  variants={linkVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                >
+                  <a href={item.href}>{item.label}</a>
+                </motion.li>
+              ))}
+            </motion.ul>
             <ThemeToggle />
             <div className="hidden md:flex items-center gap-3 ml-4 pl-4 border-l border-[var(--border)]">
               <a href="https://github.com/Samuelfmedeiros" target="_blank" rel="noopener noreferrer" aria-label="GitHub" className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors">
@@ -73,11 +103,50 @@ export function Navbar() {
             </div>
           </div>
 
-          {/* Mobile: theme toggle only */}
-          <div className="flex md:hidden items-center gap-2">
+          {/* Mobile: hamburger menu */}
+          <div className="-mr-2 flex md:hidden">
+            <button
+              onClick={() => setIsOpen(!isOpen)}
+              aria-label={isOpen ? "Fechar menu" : "Abrir menu"}
+              className="inline-flex items-center justify-center p-2 rounded-md text-gray-400 hover:text-gray-500 hover:bg-gray-100"
+            >
+              <svg className="h-6 w-6" stroke="currentColor" fill="none" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
+                  d={isOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"} />
+              </svg>
+            </button>
           </div>
         </div>
       </nav>
+
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        <motion.div
+          key={isOpen ? "open" : "closed"}
+          variants={menuVariants}
+          initial="hidden"
+          animate={isOpen ? "visible" : "exit"}
+          exit="exit"
+          className={`md:hidden ${isOpen ? "block" : "hidden"} `}
+        >
+          <div className="px-2 pt-2 pb-3 space-y-1">
+            <motion.ul className="bg-white/80 backdrop-blur-sm border-b">
+              {NAV_ITEMS.map((item) => (
+                <motion.li
+                  key={item.id}
+                  variants={linkVariants}
+                  initial="hidden"
+                  animate="visible"
+                  exit="exit"
+                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-gray-900"
+                >
+                  <a href={item.href} className="block w-full">{item.label}</a>
+                </motion.li>
+              ))}
+            </motion.ul>
+          </div>
+        </motion.div>
+      </AnimatePresence>
     </>
   );
 }
