@@ -109,5 +109,7 @@ jobs:
         run: |
           pnpm exec vercel deploy --prod --yes \
             --token "$VERCEL_TOKEN" \
+            --org "$VERCEL_ORG_ID" \
+            --project "$VERCEL_PROJECT_ID" \
             --env NEXT_PUBLIC_SUPABASE_URL=${{ secrets.SUPABASE_URL }} \
             --env NEXT_PUBLIC_SUPABASE_ANON_KEY=${{ secrets.SUPABASE_ANON_KEY }}
