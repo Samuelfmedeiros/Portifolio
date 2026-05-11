@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
 import { FolderKanban, Terminal, Gamepad2, Radio } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
@@ -50,13 +50,13 @@ export function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  const linkVariants = {
+  const linkVariants: Variants = {
     hidden: { y: -10, opacity: 0 },
     visible: { y: 0, opacity: 1, transition: { type: "spring", stiffness: 300, delay: 0.1 } },
     exit: { y: 10, opacity: 0 }
   };
 
-  const menuVariants = {
+  const menuVariants: Variants = {
     hidden: { opacity: 0, y: -10 },
     visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 260, damping: 20 } },
     exit: { opacity: 0, y: -10, transition: { ease: "easeIn" } }
