@@ -53,7 +53,7 @@ const cards = [
 
 export function CoreEngine() {
   return (
-    <section id="about" className="py-12 px-6">
+    <section id="ferramentas" className="py-12 px-6">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}

@@ -2,7 +2,7 @@
 
 import { useState, useRef, FormEvent } from "react";
 import { motion } from "framer-motion";
-import { Radio, Send, CheckCircle } from "lucide-react";
+import { Radio, Send, CheckCircle, Copy, Check } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { supabase } from "@/lib/supabase";
 import type { FormStatus } from "@/lib/types";
@@ -13,6 +13,7 @@ export function ContactForm() {
   const [content, setContent] = useState("");
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
+  const [copied, setCopied] = useState(false);
   const lastSentRef = useRef<number>(0);
 
   const handleSubmit = async (e: FormEvent) => {
@@ -106,13 +107,17 @@ export function ContactForm() {
           GitHub
         </a>
         <span className="text-[var(--border)]">|</span>
-        <a
-          href="mailto:samuelandrademedeiros@gmail.com"
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
+            setCopied(true);
+            setTimeout(() => setCopied(false), 2000);
+          }}
           className="flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
         >
-          <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
-          samuelandrademedeiros@gmail.com
-        </a>
+          {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4" />}
+          {copied ? "Copiado!" : "samuelandrademedeiros@gmail.com"}
+        </button>
       </div>
 
       <GlassCard className="max-w-lg mx-auto">
