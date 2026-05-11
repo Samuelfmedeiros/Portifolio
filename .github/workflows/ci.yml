@@ -11,7 +11,7 @@ jobs:
   test:
     name: Build + Lint + Test
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 20
 
     steps:
       - uses: actions/checkout@v4
@@ -19,8 +19,9 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
+          cache: 'pnpm'
 
-      - uses: pnpm/action-setup@v3
+      - uses: pnpm/action-setup@v4
         with:
           version: 9.12.3
 
@@ -51,13 +52,14 @@ jobs:
     name: Playwright E2E
     needs: test
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-      - uses: pnpm/action-setup@v3
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
         with:
           version: 9.12.3
       - name: Install dependencies
@@ -71,7 +73,6 @@ jobs:
         run: |
           pnpm start > /dev/null 2>&1 &
           echo $! > /tmp/prod.pid
-          # Wait for server to be ready
           for i in {1..30}; do
             if curl -s http://localhost:3000 > /dev/null; then
               echo "Server ready"
@@ -94,18 +95,15 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-node@v4
         with:
           node-version: "20"
-
-      - uses: pnpm/action-setup@v3
+          cache: 'pnpm'
+      - uses: pnpm/action-setup@v4
         with:
           version: 9.12.3
-
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
