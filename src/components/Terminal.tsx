@@ -6,7 +6,7 @@ import type { Command } from "@/lib/types";
 
 const BANNER = [
   "Samuel Medeiros — Analista de Dados",
-  "Digite 'ajuda' para ver os comandos disponíveis.",
+  "Digite 'ajuda' ou pressione Tab para autocompletar.",
   "",
 ].join("\n");
 
@@ -156,7 +156,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
       <GlassCard className="max-w-3xl mx-auto font-mono text-sm">
         <div
           ref={scrollRef}
-          className="h-80 overflow-y-auto mb-4 p-4 rounded-lg bg-black/30 text-[#e2e8f0]"
+          className="h-80 overflow-y-auto mb-4 p-4 rounded-lg bg-black/30 text-[#e2e8f0] scroll-smooth"
         >
           {history.map((entry, i) => (
             <div key={i} className="mb-2">
