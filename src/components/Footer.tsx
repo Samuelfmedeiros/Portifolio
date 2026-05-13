@@ -40,9 +40,6 @@ export function Footer() {
             <p className="text-xs font-mono text-[var(--text-secondary)] mt-1">
               samuelandrademedeiros@gmail.com
             </p>
-            <p className="text-xs font-mono text-[var(--text-secondary)]">
-              (61) 99119-1722
-            </p>
           </div>
 
           {/* Links */}
