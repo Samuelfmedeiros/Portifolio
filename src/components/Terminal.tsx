@@ -13,7 +13,7 @@ const BANNER = [
 
 const PROMPT = "C:\\Users\\Visitor";
 
-const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "hora", "whoami", "theme"];
+const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "hora", "whoami", "theme", "fix", "run", "matrix", "sudo"];
 
 export function Terminal() {
   const [input, setInput] = useState("");
@@ -46,7 +46,13 @@ export function Terminal() {
   limpar        — Limpa o terminal
   hora          — Hora atual
   whoami        — Nome do usuário
-  theme         — Alterna o tema`;
+  theme         — Alterna o tema
+
+⚡ EASTER EGGS (para devs):
+  fix path_variables        — Repara variáveis do Windows
+  run routine:lights_out    — Modo Noturno Máximo
+  matrix                     — Efeito Matrix
+  sudo rm -rf /             — ⚠️ Não faça isso`;
         break;
 
       case "sobre":
@@ -110,6 +116,83 @@ Experiência:
       case "theme":
         themeToggle();
         output = "Tema alternado com sucesso.";
+        break;
+
+      case "fix path_variables":
+        output = `> Iniciando reparo do PATH...
+> Escaneando variáveis de ambiente corrompidas...
+
+[OK] USERPROFILE = C:\\Users\\Samuel
+[OK] APPDATA = C:\\Users\\Samuel\\AppData\\Roaming
+[OK] PATH restaurado para valores padrão
+[WARN] NODE_PATH estava pointing para C:\\Python27
+[FIX] Corrigido NODE_PATH -> C:\\Program Files\\nodejs
+[OK] JAVA_HOME = C:\\Program Files\\Java\\jdk-17
+
+> Processando... 100%
+✅ PATH_variables reparado com sucesso!`;
+        break;
+
+      case "run routine:lights_out":
+        output = `> Executando rotina LIGHTS_OUT...
+> Simulando falha de energia...
+
+█▓▒░ ░▒▓█
+
+> WARNING: Todos os sistemas offline
+> BACKUP: Energia de emergência ativada
+> Modo Noturno Máximo ATIVADO
+
+✨ Screen brightness: 0%
+✨ Animations: disabled
+✨ Terminal: HIGH CONTRAST
+
+> Missão cumprida, operador.`;
+        // Trigger extreme dark mode via CSS class
+        document.documentElement.classList.add('lights-out');
+        setTimeout(() => document.documentElement.classList.remove('lights-out'), 5000);
+        break;
+
+      case "matrix":
+        output = `> Iniciando efeito MATRIX...
+> Conectando à fonte de dados...
+
+████████████████████████████
+██ 01001000 01100101 01101100 ██
+██ 01101100 01101111 00100000 ██
+██ 01010100 01100101 01100011 ██
+████████████████████████████
+
+> Acesso concedido.
+> Bem-vindo ao sistema, Sr. Anderson.`;
+        break;
+
+      case "sudo rm -rf /":
+        output = `> sudo: acesso root requerido
+> 
+> ⚠️ ALERTA DE SEGURANÇA ⚠️
+> Tentativa de deletar o universo detectada!
+> 
+> Bloqueando...
+> 
+> 🙃 Calma, visitante. 
+> Isso aqui é só um portfólio.
+> Não vou deixar você deletar minha carreira.`;
+        break;
+
+      case "fix":
+        output = `Uso: fix <componente>
+Exemplo: fix path_variables`;
+        break;
+
+      case "run":
+        output = `Uso: run routine:<nome>
+Exemplo: run routine:lights_out`;
+        break;
+
+      case "sudo":
+        output = `Acesso negado. Este terminal não tem privilégios de root.
+(Porque isso é um portfólio, não um servidor de produção.)`;
         break;
 
       default:
