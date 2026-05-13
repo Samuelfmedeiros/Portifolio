@@ -8,7 +8,6 @@ import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
 import { AboutTimeline } from "@/components/AboutTimeline";
-import { ChronoLogParallax } from "@/components/ChronoLogParallax";
 import { ContactForm } from "@/components/ContactForm";
 import { ScrollProgress } from "@/components/ScrollProgress";
 
@@ -32,9 +31,6 @@ export default function Home() {
         </section>
         <section id="engine" >
           <CoreEngine />
-        </section>
-        <section id="journey" >
-          <ChronoLogParallax />
         </section>
         <section id="about" >
           <AboutTimeline />
