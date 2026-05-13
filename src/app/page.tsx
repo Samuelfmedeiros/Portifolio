@@ -26,31 +26,31 @@ export default function Home() {
   return (
     <>
       <ScrollProgress />
-      <div className="scroll-snap-wrapper">
-        <section id="hero" className="scroll-snap-section">
+      <div className="section-wrapper">
+        <section id="hero" className="section-wrapper">
           <HeroSection />
         </section>
-        <section id="engine" className="scroll-snap-section">
+        <section id="engine" >
           <CoreEngine />
         </section>
-        <section id="journey" className="scroll-snap-section">
+        <section id="journey" >
           <ChronoLogParallax />
         </section>
-        <section id="about" className="scroll-snap-section">
+        <section id="about" >
           <AboutTimeline />
         </section>
-        <section id="skills" className="scroll-snap-section">
+        <section id="skills" >
           <SkillsGrid />
         </section>
-        <section id="projects" className="scroll-snap-section">
+        <section id="projects" >
           <Suspense fallback={<HangarSkeleton />}>
             <HangarWithData />
           </Suspense>
         </section>
-        <section id="terminal" className="scroll-snap-section">
+        <section id="terminal" >
           <Terminal />
         </section>
-        <section id="contact" className="scroll-snap-section">
+        <section id="contact" >
           <ContactForm />
         </section>
       </div>
