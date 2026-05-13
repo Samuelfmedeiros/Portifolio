@@ -60,7 +60,7 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-12 px-6">
+    <section id="contact" className="py-12 px-4 md:px-6">
       <motion.h2
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -120,7 +120,7 @@ export function ContactForm() {
         </button>
       </div>
 
-      <GlassCard className="max-w-lg mx-auto">
+      <GlassCard className="max-w-lg mx-auto text-sm md:text-base">
         <div className="flex items-center gap-3 mb-5">
           <Radio className="w-4 h-4 text-[var(--accent)] animate-pulse" />
           <span className="font-mono text-xs text-[var(--text-secondary)]">
