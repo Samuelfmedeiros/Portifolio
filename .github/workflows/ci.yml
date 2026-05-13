@@ -102,10 +102,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Link Vercel project
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+        run: |
+          pnpm exec vercel link --token "$VERCEL_TOKEN" --yes
+
       - name: Deploy to Vercel
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-          VERCEL_ORG_ID: team_VBYjSP8brO8wOODjpp78D1jG
-          VERCEL_PROJECT_ID: prj_w9taccr84PPPEFxAJxZHhLI2hfsB
         run: |
-          pnpm exec vercel deploy --prod --token "$VERCEL_TOKEN" --yes
+          pnpm exec vercel deploy --prod --token "$VERCEL_TOKEN"
