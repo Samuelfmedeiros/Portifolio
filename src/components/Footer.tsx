@@ -1,4 +1,7 @@
-import { Mail } from "lucide-react";
+"use client";
+
+import { useState } from "react";
+import { Mail, Copy, Check } from "lucide-react";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -25,6 +28,14 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function Footer() {
+  const [copied, setCopied] = useState(false);
+
+  const handleCopyEmail = () => {
+    navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
   return (
     <footer className="border-t border-[var(--border)] mt-20">
       <div className="max-w-7xl mx-auto px-6 py-12">
@@ -37,9 +48,22 @@ export function Footer() {
             <p className="text-xs font-mono text-[var(--text-secondary)]">
               Analista de Dados — Brasília/DF.
             </p>
-            <p className="text-xs font-mono text-[var(--text-secondary)] mt-1">
-              samuelandrademedeiros@gmail.com
-            </p>
+            <button
+              onClick={handleCopyEmail}
+              className="relative group flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+              aria-label="Copiar email"
+            >
+              {copied ? (
+                <Check className="w-3.5 h-3.5 text-green-400" />
+              ) : (
+                <Copy className="w-3.5 h-3.5" />
+              )}
+              <span>{copied ? "Copiado!" : "samuelandrademedeiros@gmail.com"}</span>
+              {/* Tooltip */}
+              <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-black/90 text-white whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+                {copied ? "✓ Copiado!" : "Clique para copiar"}
+              </span>
+            </button>
           </div>
 
           {/* Links */}

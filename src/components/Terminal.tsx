@@ -2,17 +2,18 @@
 
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { GlassCard } from "./GlassCard";
+import { useTheme } from "./ThemeProvider";
 import type { Command } from "@/lib/types";
 
 const BANNER = [
   "Samuel Medeiros — Analista de Dados",
-  "Digite 'ajuda' ou pressione Tab para autocompletar.",
+  "Digite 'help' ou pressione Tab para autocompletar.",
   "",
 ].join("\n");
 
 const PROMPT = "C:\\Users\\Visitor";
 
-const COMMANDS = ["ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "hora"];
+const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "hora", "whoami", "theme"];
 
 export function Terminal() {
   const [input, setInput] = useState("");
@@ -23,6 +24,7 @@ export function Terminal() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const commandHistoryRef = useRef<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const { toggle: themeToggle } = useTheme();
 
   useEffect(() => {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
@@ -33,6 +35,7 @@ export function Terminal() {
     let output = "";
 
     switch (trimmed) {
+      case "help":
       case "ajuda":
         output = `COMANDOS DISPONÍVEIS:
   ajuda         — Mostra esta mensagem
@@ -41,7 +44,9 @@ export function Terminal() {
   habilidades   — Habilidades técnicas
   contato       — Informações de contato
   limpar        — Limpa o terminal
-  hora          — Hora atual`;
+  hora          — Hora atual
+  whoami        — Nome do usuário
+  theme         — Alterna o tema`;
         break;
 
       case "sobre":
@@ -90,11 +95,21 @@ Experiência:
         break;
 
       case "limpar":
+      case "clear":
         setHistory([]);
         return;
 
       case "hora":
         output = `Horário: ${new Date().toLocaleString("pt-BR")}`;
+        break;
+
+      case "whoami":
+        output = "Samuel Medeiros";
+        break;
+
+      case "theme":
+        themeToggle();
+        output = "Tema alternado com sucesso.";
         break;
 
       default:
