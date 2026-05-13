@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { motion, AnimatePresence, type Variants } from "framer-motion";
 import Link from "next/link";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -30,11 +29,18 @@ function MailIcon({ className }: { className?: string }) {
   );
 }
 
-const NAV_ITEMS = [
+const NAV_ITEMS_DESKTOP = [
   { href: "#ferramentas", label: "Sobre", id: "nav-about" },
   { href: "#projects", label: "Projetos", id: "nav-projects" },
   { href: "#terminal", label: "Terminal", id: "nav-terminal" },
   { href: "#contact", label: "Contato", id: "nav-contact" },
+];
+
+const NAV_ITEMS_MOBILE = [
+  { href: "#ferramentas", icon: "☀", label: "Sobre", id: "nav-about" },
+  { href: "#projects", icon: "◎", label: "Projetos", id: "nav-projects" },
+  { href: "#terminal", icon: "$", label: "Terminal", id: "nav-terminal" },
+  { href: "#contact", icon: "✉", label: "Contato", id: "nav-contact" },
 ];
 
 export function Navbar() {
@@ -64,17 +70,35 @@ export function Navbar() {
           </span>
         </Link>
 
-        {/* Nav links — horizontal em todas telas */}
+        {/* Nav links — Desktop com texto, Mobile com ícones */}
         <div className="flex items-center gap-2 md:gap-4">
-          {NAV_ITEMS.map((item) => (
-            <a
-              key={item.id}
-              href={item.href}
-              className="text-[10px] md:text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
-            >
-              {item.label}
-            </a>
-          ))}
+          {/* Desktop nav (visible from md) */}
+          <div className="hidden md:flex items-center gap-4">
+            {NAV_ITEMS_DESKTOP.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                className="text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
+              >
+                {item.label}
+              </a>
+            ))}
+          </div>
+
+          {/* Mobile nav (visible below md) — ícones com tooltips */}
+          <div className="flex md:hidden items-center gap-1">
+            {NAV_ITEMS_MOBILE.map((item) => (
+              <a
+                key={item.id}
+                href={item.href}
+                title={item.label}
+                className="flex items-center justify-center w-8 h-8 text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 rounded transition-colors"
+                aria-label={item.label}
+              >
+                {item.icon}
+              </a>
+            ))}
+          </div>
         </div>
 
         {/* Social icons + theme — sempre visíveis */}
@@ -85,15 +109,17 @@ export function Navbar() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="GitHub"
+            title="GitHub"
             className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
           >
-            <GithubIcon className="w-4 h-4 md:w-4" />
+            <GithubIcon className="w-4 h-4" />
           </a>
           <a
             href="https://linkedin.com/in/samuelfmedeiros"
             target="_blank"
             rel="noopener noreferrer"
             aria-label="LinkedIn"
+            title="LinkedIn"
             className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors hidden sm:block"
           >
             <LinkedinIcon className="w-4 h-4" />
@@ -101,6 +127,7 @@ export function Navbar() {
           <a
             href="mailto:samuelandrademedeiros@gmail.com"
             aria-label="Email"
+            title="Email"
             className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
           >
             <MailIcon className="w-4 h-4" />
