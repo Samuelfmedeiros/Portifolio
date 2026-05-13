@@ -9,6 +9,7 @@ import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
 import { AboutTimeline } from "@/components/AboutTimeline";
 import { ContactForm } from "@/components/ContactForm";
+import { ScrollProgress } from "@/components/ScrollProgress";
 
 const Terminal = dynamic(
   () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
@@ -23,15 +24,32 @@ async function HangarWithData() {
 export default function Home() {
   return (
     <>
-      <HeroSection />
-      <CoreEngine />
-      <AboutTimeline />
-      <SkillsGrid />
-      <Suspense fallback={<HangarSkeleton />}>
-        <HangarWithData />
-      </Suspense>
-      <Terminal />
-      <ContactForm />
+      <ScrollProgress />
+      <div className="scroll-snap-wrapper">
+        <section id="hero" className="scroll-snap-section">
+          <HeroSection />
+        </section>
+        <section id="engine" className="scroll-snap-section">
+          <CoreEngine />
+        </section>
+        <section id="about" className="scroll-snap-section">
+          <AboutTimeline />
+        </section>
+        <section id="skills" className="scroll-snap-section">
+          <SkillsGrid />
+        </section>
+        <section id="projects" className="scroll-snap-section">
+          <Suspense fallback={<HangarSkeleton />}>
+            <HangarWithData />
+          </Suspense>
+        </section>
+        <section id="terminal" className="scroll-snap-section">
+          <Terminal />
+        </section>
+        <section id="contact" className="scroll-snap-section">
+          <ContactForm />
+        </section>
+      </div>
     </>
   );
 }

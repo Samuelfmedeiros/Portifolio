@@ -100,3 +100,29 @@ body {
     linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);
   background-size: 40px 40px;
 }
+
+/* ========== SCROLL SNAP SECTIONS ========== */
+.scroll-snap-wrapper {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+}
+
+.scroll-snap-section {
+  min-height: 100vh;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+}
+
+/* ========== SCROLL PROGRESS INDICATOR ========== */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, var(--cyan-neon), var(--indigo-deep));
+  z-index: 9998;
+  transform-origin: left;
+  transition: transform 0.1s ease-out;
+}
