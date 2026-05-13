@@ -101,18 +101,13 @@ body {
   background-size: 40px 40px;
 }
 
-/* ========== SCROLL SNAP SECTIONS ========== */
-.scroll-snap-wrapper {
-  height: 100vh;
-  overflow-y: scroll;
-  scroll-snap-type: y mandatory;
+/* ========== SMOOTH SCROLL SECTIONS ========== */
+html {
   scroll-behavior: smooth;
 }
 
-.scroll-snap-section {
+.section-wrapper {
   min-height: 100vh;
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
 }
 
 /* ========== SCROLL PROGRESS INDICATOR ========== */

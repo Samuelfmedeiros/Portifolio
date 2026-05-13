@@ -1,139 +1,181 @@
-"use client";
+"use client';
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
+import { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 
-function GithubIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
-    </svg>
-  );
-}
-
-function LinkedinIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
-      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/>
-    </svg>
-  );
-}
-
-function MailIcon({ className }: { className?: string }) {
-  return (
-    <svg className={className} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect width="20" height="16" x="2" y="4" rx="2"/>
-      <path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/>
-    </svg>
-  );
-}
-
-const NAV_ITEMS_DESKTOP = [
-  { href: "#ferramentas", label: "Sobre", id: "nav-about" },
-  { href: "#projects", label: "Projetos", id: "nav-projects" },
-  { href: "#terminal", label: "Terminal", id: "nav-terminal" },
-  { href: "#contact", label: "Contato", id: "nav-contact" },
-];
-
-const NAV_ITEMS_MOBILE = [
-  { href: "#ferramentas", icon: "☀", label: "Sobre", id: "nav-about" },
-  { href: "#projects", icon: "◎", label: "Projetos", id: "nav-projects" },
-  { href: "#terminal", icon: "$", label: "Terminal", id: "nav-terminal" },
-  { href: "#contact", icon: "✉", label: "Contato", id: "nav-contact" },
+const NAV_ITEMS = [
+  { href: "#hero", label: "Início" },
+  { href: "#about", label: "Sobre" },
+  { href: "#skills", label: "Habilidades" },
+  { href: "#projects", label: "Projetos" },
+  { href: "#terminal", label: "Terminal" },
+  { href: "#contact", label: "Contato" },
 ];
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false);
+  const [activeSection, setActiveSection] = useState("hero");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 10);
+      setScrolled(window.scrollY > 50);
     };
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
+  useEffect(() => {
+    const sections = NAV_ITEMS.map(item => item.href.replace("#", ""));
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      { threshold: 0.3 }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
+
+  const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    e.preventDefault();
+    const target = document.querySelector(href);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth" });
+      setMobileMenuOpen(false);
+    }
+  };
+
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-50 glass border-b border-[var(--border)] transition-all duration-300 scroll-smooth ${
-        scrolled ? "bg-white/90 backdrop-blur-sm" : "bg-transparent"
-      }`}
-      role="navigation"
-      aria-label="Navegação principal"
-    >
-      <div className="max-w-7xl mx-auto px-3 md:px-6 py-2 flex items-center justify-between gap-2">
-        {/* Logo */}
-        <Link href="/" className="flex items-center gap-2 group shrink-0">
-          <span className="font-mono text-xs md:text-sm tracking-wider text-[var(--accent)]">
-            SamuelMed
-          </span>
-        </Link>
+    <>
+      <motion.nav
+        initial={{ y: -100 }}
+        animate={{ y: 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
+        className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+          scrolled
+            ? "bg-slate-950/95 backdrop-blur-md border-b border-slate-800"
+            : "bg-transparent"
+        }`}
+        role="navigation"
+        aria-label="Navegação principal"
+      >
+        <div className="max-w-7xl mx-auto px-4 md:px-6">
+          <div className="flex items-center justify-between h-14 md:h-16">
+            
+            {/* Logo */}
+            <motion.a
+              href="#hero"
+              onClick={(e) => handleNavClick(e, "#hero")}
+              className="font-mono text-sm md:text-base tracking-wider text-[var(--accent)] hover:text-white transition-colors"
+              whileHover={{ scale: 1.02 }}
+            >
+              SamuelMed<span className="text-slate-400">.dev</span>
+            </motion.a>
 
-        {/* Nav links — Desktop com texto, Mobile com ícones */}
-        <div className="flex items-center gap-2 md:gap-4">
-          {/* Desktop nav (visible from md) */}
-          <div className="hidden md:flex items-center gap-4">
-            {NAV_ITEMS_DESKTOP.map((item) => (
-              <a
-                key={item.id}
-                href={item.href}
-                className="text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors whitespace-nowrap"
-              >
-                {item.label}
-              </a>
-            ))}
-          </div>
+            {/* Desktop Nav */}
+            <div className="hidden lg:flex items-center gap-6">
+              {NAV_ITEMS.map((item) => (
+                <motion.a
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={`relative text-sm font-medium transition-colors ${
+                    activeSection === item.href.replace("#", "")
+                      ? "text-[var(--accent)]"
+                      : "text-slate-400 hover:text-white"
+                  }`}
+                  whileHover={{ y: -2 }}
+                >
+                  {item.label}
+                  {activeSection === item.href.replace("#", "") && (
+                    <motion.div
+                      layoutId="navbar-indicator"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--accent)]"
+                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                    />
+                  )}
+                </motion.a>
+              ))}
+            </div>
 
-          {/* Mobile nav (visible below md) — ícones com tooltips */}
-          <div className="flex md:hidden items-center gap-1">
-            {NAV_ITEMS_MOBILE.map((item) => (
+            {/* Actions */}
+            <div className="flex items-center gap-3">
+              <ThemeToggle />
+              
               <a
-                key={item.id}
-                href={item.href}
-                title={item.label}
-                className="flex items-center justify-center w-8 h-8 text-sm font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] hover:bg-[var(--accent)]/10 rounded transition-colors"
-                aria-label={item.label}
+                href="https://github.com/Samuelfmedeiros"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="hidden sm:flex text-slate-400 hover:text-white transition-colors"
+                aria-label="GitHub"
               >
-                {item.icon}
+                <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
+                  <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                </svg>
               </a>
-            ))}
+
+              {/* Mobile menu button */}
+              <button
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+                aria-label="Menu"
+              >
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  {mobileMenuOpen ? (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  ) : (
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
+                  )}
+                </svg>
+              </button>
+            </div>
           </div>
         </div>
+      </motion.nav>
 
-        {/* Social icons + theme — sempre visíveis */}
-        <div className="flex items-center gap-2 md:gap-3">
-          <ThemeToggle />
-          <a
-            href="https://github.com/Samuelfmedeiros"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="GitHub"
-            title="GitHub"
-            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+      {/* Mobile Menu */}
+      <AnimatePresence>
+        {mobileMenuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -20 }}
+            transition={{ duration: 0.2 }}
+            className="fixed top-14 left-0 right-0 z-40 lg:hidden bg-slate-950/98 backdrop-blur-md border-b border-slate-800"
           >
-            <GithubIcon className="w-4 h-4" />
-          </a>
-          <a
-            href="https://linkedin.com/in/samuelfmedeiros"
-            target="_blank"
-            rel="noopener noreferrer"
-            aria-label="LinkedIn"
-            title="LinkedIn"
-            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors hidden sm:block"
-          >
-            <LinkedinIcon className="w-4 h-4" />
-          </a>
-          <a
-            href="mailto:samuelandrademedeiros@gmail.com"
-            aria-label="Email"
-            title="Email"
-            className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-          >
-            <MailIcon className="w-4 h-4" />
-          </a>
-        </div>
-      </div>
-    </nav>
+            <div className="px-4 py-4 space-y-1">
+              {NAV_ITEMS.map((item, i) => (
+                <motion.a
+                  key={item.href}
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: i * 0.05 }}
+                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                    activeSection === item.href.replace("#", "")
+                      ? "bg-[var(--accent)]/10 text-[var(--accent)]"
+                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                  }`}
+                >
+                  {item.label}
+                </motion.a>
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
