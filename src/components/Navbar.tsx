@@ -80,7 +80,7 @@ export function Navbar() {
               className="font-mono text-sm md:text-base tracking-wider text-[var(--accent)] hover:text-white transition-colors"
               whileHover={{ scale: 1.02 }}
             >
-              SamuelMed<span className="text-slate-400">.dev</span>
+              Samuel Medeiros
             </motion.a>
 
             {/* Desktop Nav */}
