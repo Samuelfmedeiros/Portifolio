@@ -40,7 +40,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-          className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-bold tracking-tight text-[var(--text-primary)] mb-4"
+          className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-4"
         >
           Samuel
           <motion.span
@@ -64,7 +64,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.6 }}
-          className="text-base md:text-lg text-[var(--text-secondary)] mb-2"
+          className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-2"
         >
           Analista de Dados — Brasília/DF
         </motion.p>
@@ -73,7 +73,7 @@ export function HeroSection() {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.7 }}
-          className="text-sm text-[var(--text-secondary)] mb-10"
+          className="text-xs sm:text-sm text-[var(--text-secondary)] mb-10"
         >
           Dashboards, SQL, Python e Machine Learning para transformar dados em decisões estratégicas.
         </motion.p>
