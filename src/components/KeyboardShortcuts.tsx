@@ -1,7 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { X, Command } from "lucide-react";
+import { useTheme } from "./ThemeProvider";
+
+const SECTIONS = ["hero", "engine", "about", "skills", "projects", "terminal", "contact"];
 
 interface Shortcut {
   key: string;
@@ -10,8 +13,10 @@ interface Shortcut {
 }
 
 const SHORTCUTS: Shortcut[] = [
-  { key: "G", description: "GitHub", action: "GitHub" },
-  { key: "T", description: "Terminal", action: "Terminal" },
+  { key: "J / ↓", description: "Próxima seção", action: "Next" },
+  { key: "K / ↑", description: "Seção anterior", action: "Prev" },
+  { key: "T", description: "Alternar tema", action: "Theme" },
+  { key: "G", description: "Ferramentas", action: "GitHub" },
   { key: "P", description: "Projetos", action: "Projects" },
   { key: "C", description: "Contato", action: "Contact" },
   { key: "?", description: "Atalhos", action: "Help" },
@@ -21,6 +26,30 @@ const SHORTCUTS: Shortcut[] = [
 export function KeyboardShortcuts() {
   const [showHints, setShowHints] = useState(false);
   const [visible, setVisible] = useState(false);
+  const { toggle: themeToggle } = useTheme();
+
+  const getCurrentSectionIndex = useCallback(() => {
+    const sectionIds = SECTIONS;
+    for (let i = sectionIds.length - 1; i >= 0; i--) {
+      const el = document.getElementById(sectionIds[i]);
+      if (el) {
+        const rect = el.getBoundingClientRect();
+        if (rect.top <= window.innerHeight / 2) return i;
+      }
+    }
+    return 0;
+  }, []);
+
+  const navigateToSection = useCallback((direction: "next" | "prev") => {
+    const currentIndex = getCurrentSectionIndex();
+    const nextIndex = direction === "next"
+      ? Math.min(currentIndex + 1, SECTIONS.length - 1)
+      : Math.max(currentIndex - 1, 0);
+    const target = document.getElementById(SECTIONS[nextIndex]);
+    if (target) {
+      target.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [getCurrentSectionIndex]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -34,20 +63,35 @@ export function KeyboardShortcuts() {
         return;
 
       switch (e.key) {
+        case "j":
+        case "J":
+        case "ArrowDown":
+          e.preventDefault();
+          navigateToSection("next");
+          break;
+        case "k":
+        case "K":
+        case "ArrowUp":
+          e.preventDefault();
+          navigateToSection("prev");
+          break;
+        case "t":
+        case "T":
+          e.preventDefault();
+          themeToggle();
+          break;
         case "g":
         case "G":
           window.location.href = "#ferramentas";
           break;
-        case "t":
-        case "T":
-          window.location.href = "#terminal";
-          break;
         case "p":
         case "P":
+          e.preventDefault();
           window.location.href = "#projects";
           break;
         case "c":
         case "C":
+          e.preventDefault();
           window.location.href = "#contact";
           break;
         case "?":
@@ -62,7 +106,7 @@ export function KeyboardShortcuts() {
 
     window.addEventListener("keydown", handleKeyDown);
     return () => window.removeEventListener("keydown", handleKeyDown);
-  }, []);
+  }, [themeToggle, navigateToSection]);
 
   // Show keyboard shortcut hints bar for mobile
   useEffect(() => {
