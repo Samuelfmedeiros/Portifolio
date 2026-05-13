@@ -32,8 +32,10 @@ jobs:
         env:
           NEXT_PUBLIC_STATIC_EXPORT: "true"
         run: |
+          echo "Node version: $(node --version)"
+          echo "pnpm version: $(pnpm --version)"
           pnpm install --frozen-lockfile
-          pnpm build
+          pnpm build 2>&1
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
