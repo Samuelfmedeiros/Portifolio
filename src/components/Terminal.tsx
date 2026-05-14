@@ -254,7 +254,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
       <GlassCard className="max-w-3xl mx-auto font-mono text-sm">
         <div
           ref={scrollRef}
-          className="h-48 sm:h-64 md:h-80 overflow-y-auto mb-4 p-4 rounded-lg bg-black/30 text-[#e2e8f0] scroll-smooth"
+          className="h-48 sm:h-64 md:h-80 overflow-y-auto mb-4 p-4 rounded-lg bg-[var(--bg-primary)]/30 text-[var(--text-primary)] scroll-smooth"
         >
           {history.map((entry, i) => (
             <div key={i} className="mb-2">

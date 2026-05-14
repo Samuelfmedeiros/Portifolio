@@ -64,7 +64,7 @@ export function Navbar() {
         transition={{ duration: 0.5, ease: "easeOut" }}
         className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
           scrolled
-            ? "bg-slate-950/95 backdrop-blur-md border-b border-slate-800"
+            ? "bg-[var(--bg-primary)]/95 backdrop-blur-md border-b border-[var(--border)]"
             : "bg-transparent"
         }`}
         role="navigation"
@@ -77,7 +77,7 @@ export function Navbar() {
             <motion.a
               href="#hero"
               onClick={(e) => handleNavClick(e, "#hero")}
-              className="font-mono text-sm md:text-base tracking-wider text-[var(--accent)] hover:text-white transition-colors"
+              className="font-mono text-sm md:text-base tracking-wider text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors"
               whileHover={{ scale: 1.02 }}
             >
               Samuel Medeiros
@@ -93,7 +93,7 @@ export function Navbar() {
                   className={`relative text-sm font-medium transition-colors ${
                     activeSection === item.href.replace("#", "")
                       ? "text-[var(--accent)]"
-                      : "text-slate-400 hover:text-white"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
                   }`}
                   whileHover={{ y: -2 }}
                 >
@@ -117,7 +117,7 @@ export function Navbar() {
                 href="https://github.com/Samuelfmedeiros"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="hidden sm:flex text-slate-400 hover:text-white transition-colors"
+                className="hidden sm:flex text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="GitHub"
               >
                 <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
@@ -128,7 +128,7 @@ export function Navbar() {
               {/* Mobile menu button */}
               <button
                 onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-                className="lg:hidden p-2 text-slate-400 hover:text-white transition-colors"
+                className="lg:hidden p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
                 aria-label="Menu"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -152,7 +152,7 @@ export function Navbar() {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
-            className="fixed top-14 left-0 right-0 z-40 lg:hidden bg-slate-950/98 backdrop-blur-md border-b border-slate-800"
+            className="fixed top-14 left-0 right-0 z-40 lg:hidden bg-[var(--bg-primary)]/98 backdrop-blur-md border-b border-[var(--border)]"
           >
             <div className="px-4 py-4 space-y-1">
               {NAV_ITEMS.map((item, i) => (
@@ -166,7 +166,7 @@ export function Navbar() {
                   className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
                     activeSection === item.href.replace("#", "")
                       ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                      : "text-slate-400 hover:bg-slate-800 hover:text-white"
+                      : "text-[var(--text-secondary)] hover:bg-[var(--border)] hover:text-[var(--text-primary)]"
                   }`}
                 >
                   {item.label}
