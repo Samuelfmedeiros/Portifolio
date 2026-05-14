@@ -3,7 +3,7 @@ export function JsonLd() {
     "@context": "https://schema.org",
     "@type": "Person",
     name: "Samuel Medeiros",
-    jobTitle: "Analista de Dados e Produto",
+    jobTitle: "Desenvolvedor Full Stack",
     url: "https://samuelmedeiros.vercel.app",
     email: "samuelandrademedeiros@gmail.com",
     sameAs: [
@@ -11,17 +11,24 @@ export function JsonLd() {
       "https://linkedin.com/in/samuelandrademedeiros",
     ],
     knowsAbout: [
-      "Data Analysis",
-      "Business Intelligence",
-      "SQL",
-      "Python",
-      "Machine Learning",
+      "React",
       "Next.js",
+      "TypeScript",
+      "Supabase",
+      "Tailwind",
+      "Framer Motion",
+      "Node.js",
+      "PostgreSQL",
+      "Cloudflare Workers",
       "IA Generativa",
       "LLMs Locais",
+      "Ollama",
+      "GitHub Actions",
+      "Vercel",
+      "CI/CD",
     ],
     description:
-      "Analista de Dados e Produto especializado em BI, SQL, Python, Machine Learning e IA Generativa. Portfólio profissional interativo.",
+      "Desenvolvedor Full Stack com 5+ anos de experiência. Especializado em React, Next.js, TypeScript, Supabase e Cloudflare. Portfólio profissional interativo.",
   };
 
   return (
