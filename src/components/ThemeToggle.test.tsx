@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
-import { ThemeToggle } from "../ThemeToggle";
-import { ThemeProvider, useTheme } from "../ThemeProvider";
+import { ThemeToggle } from "./ThemeToggle";
+import { ThemeProvider, useTheme } from "./ThemeProvider";
 import React from "react";
 
 // Test component to access theme context
