@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
 import { Navbar } from "../Navbar";
-
 describe("Navbar", () => {
   it("renders navigation", () => {
     render(<Navbar />);
@@ -16,7 +16,7 @@ describe("Navbar", () => {
 
   it("contains logo text", () => {
     render(<Navbar />);
-    const logo = screen.getByText(/SamuelMed/);
+    const logo = screen.getByText(/Samuel Medeiros/);
     expect(logo).toBeInTheDocument();
   });
 
