@@ -12,23 +12,80 @@ import {
   GitBranch,
 } from "lucide-react";
 import { GlassCard } from "@/components/GlassCard";
+import { Tooltip } from "@/components/Tooltip";
 
 interface Skill {
   icon: React.ComponentType<{ className?: string }>;
   name: string;
   category: string;
+  proficiency: "Expert" | "Advanced" | "Proficient";
+  description: string;
 }
 
 const skills: Skill[] = [
-  { icon: BarChart3, name: "Power BI", category: "BI & Analytics" },
-  { icon: Database, name: "SQL & PostgreSQL", category: "Data" },
-  { icon: Code2, name: "Python", category: "Backend" },
-  { icon: Brain, name: "Machine Learning", category: "AI" },
-  { icon: Globe, name: "Next.js & React", category: "Web" },
-  { icon: Bot, name: "LLMs Locais", category: "AI" },
-  { icon: Container, name: "Docker", category: "DevOps" },
-  { icon: GitBranch, name: "Git & GitHub", category: "Tools" },
+  {
+    icon: BarChart3,
+    name: "Power BI",
+    category: "BI & Analytics",
+    proficiency: "Expert",
+    description: "Interactive dashboards, DAX, data modeling",
+  },
+  {
+    icon: Database,
+    name: "SQL & PostgreSQL",
+    category: "Data",
+    proficiency: "Expert",
+    description: "Complex queries, optimization, ETL pipelines",
+  },
+  {
+    icon: Code2,
+    name: "Python",
+    category: "Backend",
+    proficiency: "Advanced",
+    description: "FastAPI, automation, data processing",
+  },
+  {
+    icon: Brain,
+    name: "Machine Learning",
+    category: "AI",
+    proficiency: "Advanced",
+    description: "Scikit-learn, model training, evaluation",
+  },
+  {
+    icon: Globe,
+    name: "Next.js & React",
+    category: "Web",
+    proficiency: "Advanced",
+    description: "Full-stack apps, SSR, responsive UI",
+  },
+  {
+    icon: Bot,
+    name: "LLMs Locais",
+    category: "AI",
+    proficiency: "Proficient",
+    description: "Ollama, prompt engineering, RAG systems",
+  },
+  {
+    icon: Container,
+    name: "Docker",
+    category: "DevOps",
+    proficiency: "Proficient",
+    description: "Containerization, docker-compose, CI/CD",
+  },
+  {
+    icon: GitBranch,
+    name: "Git & GitHub",
+    category: "Tools",
+    proficiency: "Advanced",
+    description: "Version control, branching strategies",
+  },
 ];
+
+const proficiencyColor = {
+  Expert: "text-emerald-400",
+  Advanced: "text-blue-400",
+  Proficient: "text-amber-400",
+};
 
 const container = {
   hidden: { opacity: 0 },
@@ -72,19 +129,35 @@ export function SkillsGrid() {
       >
         {skills.map((skill) => (
           <motion.div key={skill.name} variants={item}>
-            <GlassCard>
-              <div className="flex flex-col items-center text-center gap-3 py-2">
-                <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)]" />
-                <div>
-                  <h3 className="font-semibold text-sm md:text-base text-[var(--text-primary)]">
+            <Tooltip
+              content={
+                <div className="text-center">
+                  <p className="font-semibold text-xs text-[var(--text-primary)]">
                     {skill.name}
-                  </h3>
-                  <p className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)] mt-1">
-                    {skill.category}
+                  </p>
+                  <p className={`font-mono text-[10px] mt-1 ${proficiencyColor[skill.proficiency]}`}>
+                    {skill.proficiency}
+                  </p>
+                  <p className="font-mono text-[10px] text-[var(--text-secondary)] mt-1 leading-tight">
+                    {skill.description}
                   </p>
                 </div>
-              </div>
-            </GlassCard>
+              }
+            >
+              <GlassCard>
+                <div className="flex flex-col items-center text-center gap-3 py-2 cursor-default">
+                  <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)]" />
+                  <div>
+                    <h3 className="font-semibold text-sm md:text-base text-[var(--text-primary)]">
+                      {skill.name}
+                    </h3>
+                    <p className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)] mt-1">
+                      {skill.category}
+                    </p>
+                  </div>
+                </div>
+              </GlassCard>
+            </Tooltip>
           </motion.div>
         ))}
       </motion.div>
