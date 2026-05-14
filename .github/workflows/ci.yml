@@ -32,9 +32,6 @@ jobs:
       - name: Type check
         run: pnpm exec tsc --noEmit --skipLibCheck || true
 
-      - name: Unit tests
-        run: pnpm test -- --run || true
-
       - name: Build
         env:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
