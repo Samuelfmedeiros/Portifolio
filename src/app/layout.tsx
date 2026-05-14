@@ -15,62 +15,117 @@ import "./globals.css";
 export const metadata: Metadata = {
   metadataBase: new URL("https://samuelmedeiros.vercel.app"),
   title: {
-    default: "Samuel Medeiros — Desenvolvedor Full Stack",
+    default: "Samuel Medeiros — Analista de Dados",
     template: "%s | Samuel Medeiros",
   },
   description:
-    "Desenvolvedor Full Stack com 5+ anos de experiência. React, Next.js, TypeScript, Supabase, Cloudflare e integrações com IA.",
+    "Analista de Dados com 5+ anos de experiência em Brasília. Power BI, SQL, Python, Machine Learning para transformar dados em decisões estratégicas.",
   keywords: [
-    "desenvolvedor full stack",
-    "react",
-    "next.js",
-    "typescript",
-    "supabase",
-    "cloudflare",
-    "tailwind",
-    "framer motion",
-    "node.js",
-    "postgres",
-    "cloudflare workers",
-    "ia",
-    "llm",
+    "analista de dados",
+    "power bi",
+    "sql",
+    "python",
+    "machine learning",
+    "business intelligence",
+    "dashboards",
+    "data analysis",
     "brasília",
     "portfólio",
+    "bi",
+    "etl",
+    "postgresql",
+    "azure",
   ],
   authors: [{ name: "Samuel Medeiros", url: "https://samuelmedeiros.vercel.app" }],
   creator: "Samuel Medeiros",
+  publisher: "Samuel Medeiros",
   openGraph: {
     type: "website",
     locale: "pt_BR",
+    alternateLocale: "en_US",
     url: "https://samuelmedeiros.vercel.app",
     siteName: "Samuel Medeiros",
-    title: "Samuel Medeiros — Desenvolvedor Full Stack",
+    title: "Samuel Medeiros — Analista de Dados",
     description:
-      "Desenvolvedor Full Stack com 5+ anos de experiência. React, Next.js, TypeScript, Supabase, Cloudflare e integrações com IA.",
+      "Analista de Dados com 5+ anos de experiência em Brasília. Power BI, SQL, Python, Machine Learning.",
     images: [
       {
         url: "/og-image.png",
         width: 1200,
         height: 630,
-        alt: "Samuel Medeiros — Desenvolvedor Full Stack",
+        alt: "Samuel Medeiros — Analista de Dados",
+      },
+      {
+        url: "/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "Samuel Medeiros",
       },
     ],
+    videos: [],
+    emails: "samuelandrademedeiros@gmail.com",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Samuel Medeiros — Desenvolvedor Full Stack",
-    description: "Desenvolvedor Full Stack. React, Next.js, TypeScript, Supabase, Cloudflare.",
+    site: "@Samuelfmedeiros",
+    creator: "@Samuelfmedeiros",
+    title: "Samuel Medeiros — Analista de Dados",
+    description: "Analista de Dados. Power BI, SQL, Python, Machine Learning. Brasília/DF.",
     images: ["/og-image.png"],
   },
   robots: {
     index: true,
     follow: true,
-    googleBot: { index: true, follow: true, "max-image-preview": "large" },
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+    notAllowed: [],
+  },
+  alternates: {
+    canonical: "https://samuelmedeiros.vercel.app",
+    languages: {
+      "pt-BR": "https://samuelmedeiros.vercel.app",
+      "en-US": "https://samuelmedeiros.vercel.app/en",
+    },
+  },
+  verification: {
+    google: "google-site-verification-code",
+    yandex: "yandex-verification-code",
+    other: {
+      "msvalidate.01": "bing-site-verification-code",
+    },
+  },
+  metadataDatabase: {
+    issuer: "https://samuelmedeiros.vercel.app",
+  },
+  appLinks: {
+    ios: {
+      url: "https://samuelmedeiros.vercel.app",
+      app_store_id: "123456789",
+    },
+    android: {
+      package: "com.samuelmedeiros.portfolio",
+      app_name: "Samuel Medeiros",
+    },
+    web: {
+      url: "https://samuelmedeiros.vercel.app",
+      should_fallback: true,
+    },
+  },
+  other: {
+    "article:author": "https://samuelmedeiros.vercel.app",
+    "article:section": "Portfolio",
   },
   icons: {
     icon: "/icon.svg",
     apple: "/icon.svg",
+    shortcut: "/icon.svg",
   },
+  category: "technology",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
