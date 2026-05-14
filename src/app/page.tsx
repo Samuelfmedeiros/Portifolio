@@ -7,7 +7,7 @@ import { ProjectHangar } from "@/components/ProjectHangar";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
-import { STATIC_PROJECTS } from "@/components/ProjectHangar";
+import { STATIC_PROJECTS } from "@/lib/staticProjects";
 import { AboutTimeline } from "@/components/AboutTimeline";
 import { ContactForm } from "@/components/ContactForm";
 import { ScrollProgress } from "@/components/ScrollProgress";
