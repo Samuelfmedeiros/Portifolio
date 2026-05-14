@@ -60,7 +60,7 @@ export function Footer() {
               )}
               <span>{copied ? "Copiado!" : "samuelandrademedeiros@gmail.com"}</span>
               {/* Tooltip */}
-              <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-black/90 text-white whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+              <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-[var(--bg-secondary)]/90 text-[var(--text-primary)] whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
                 {copied ? "✓ Copiado!" : "Clique para copiar"}
               </span>
             </button>
@@ -94,7 +94,7 @@ export function Footer() {
                 href="https://wa.me/556191191722"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--text-secondary)] hover:text-green-400 transition-colors"
+                className="text-[var(--text-secondary)] hover:text-green-600 dark:hover:text-green-400 transition-colors"
                 aria-label="WhatsApp"
               >
                 <WhatsAppIcon className="w-5 h-5" />
