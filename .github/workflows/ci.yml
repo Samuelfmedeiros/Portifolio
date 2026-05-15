@@ -82,32 +82,3 @@ jobs:
         if: always()
         run: |
           kill $(cat /tmp/prod.pid) || true
-  deploy:
-    name: Deploy to Vercel
-    needs: test
-    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-    runs-on: ubuntu-latest
-    timeout-minutes: 10
-
-    steps:
-      - uses: actions/checkout@v4
-      - uses: pnpm/action-setup@v4
-        with:
-          version: 9.12.3
-      - uses: actions/setup-node@v4
-        with:
-          node-version: "20"
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
-
-      - name: Link Vercel project
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          pnpm exec vercel link --token "$VERCEL_TOKEN" --yes
-
-      - name: Deploy to Vercel
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
-        run: |
-          pnpm exec vercel deploy --prod --token "$VERCEL_TOKEN"
