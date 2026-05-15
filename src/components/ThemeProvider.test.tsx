@@ -2,6 +2,15 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeProvider, useTheme } from './ThemeProvider'
 
+// Mock Framer Motion before any imports
+vi.mock('framer-motion', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    useInView: vi.fn(() => true),
+  }
+})
+
 // Mock localStorage
 const localStorageMock = (() => {
   let store: Record<string, string> = {}
@@ -28,6 +37,7 @@ function TestConsumer() {
 describe('ThemeProvider', () => {
   beforeEach(() => {
     localStorageMock.clear()
+    document.documentElement.classList.remove('theme-dark', 'theme-light')
   })
 
   it('renders with default dark theme', () => {
@@ -64,21 +74,21 @@ describe('ThemeProvider', () => {
   })
 
   it('applies theme-dark class when dark', () => {
-    const { container } = render(
+    render(
       <ThemeProvider>
         <TestConsumer />
       </ThemeProvider>
     )
-    expect(container.querySelector('.theme-dark')).toBeTruthy()
+    expect(document.documentElement.classList.contains('theme-dark')).toBeTruthy()
   })
 
   it('applies theme-light class after toggle', () => {
-    const { container } = render(
+    render(
       <ThemeProvider>
         <TestConsumer />
       </ThemeProvider>
     )
     fireEvent.click(screen.getByText('Toggle'))
-    expect(container.querySelector('.theme-light')).toBeTruthy()
+    expect(document.documentElement.classList.contains('theme-light')).toBeTruthy()
   })
 })

@@ -1,4 +1,5 @@
 import '@testing-library/jest-dom/vitest'
+import { vi } from 'vitest'
 
 // Mock IntersectionObserver
 Object.defineProperty(window, 'IntersectionObserver', {
@@ -23,4 +24,11 @@ Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
 // Mock window.scrollY
 Object.defineProperty(window, 'scrollY', { writable: true, value: 0 })
 
-import { vi } from 'vitest'
+// Mock Framer Motion's useInView to always return true (element in view)
+vi.mock('framer-motion', async (importOriginal) => {
+  const actual = await importOriginal()
+  return {
+    ...actual,
+    useInView: vi.fn(() => true),
+  }
+})

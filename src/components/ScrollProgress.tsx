@@ -24,6 +24,7 @@ export function ScrollProgress() {
       className="scroll-progress"
       style={{ width: `${progress}%` }}
       aria-hidden="true"
+      role="presentation"
     />
   );
 }
