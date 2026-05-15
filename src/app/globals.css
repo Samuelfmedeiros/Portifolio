@@ -33,6 +33,14 @@ html {
   --glass-bg: rgba(10, 10, 18, 0.75);
   --glass-border: rgba(34, 211, 238, 0.12);
   --shadow: rgba(0, 0, 0, 0.5);
+  /* Semantic colors - dark */
+  --success: #34d399;
+  --error: #f87171;
+  --whatsapp: #25d366;
+  /* Proficiency colors - dark */
+  --proficiency-expert: #34d399;
+  --proficiency-advanced: #60a5fa;
+  --proficient: #fbbf24;
 }
 
 /* ========== LIGHT THEME (Daylight Ops) ========== */
@@ -49,6 +57,14 @@ html {
   --glass-bg: rgba(255, 255, 255, 0.7);
   --glass-border: rgba(2, 132, 199, 0.15);
   --shadow: rgba(15, 23, 42, 0.08);
+  /* Semantic colors - light */
+  --success: #16a34a;
+  --error: #dc2626;
+  --whatsapp: #128c7e;
+  /* Proficiency colors - light */
+  --proficiency-expert: #16a34a;
+  --proficiency-advanced: #2563eb;
+  --proficient: #d97706;
 }
 
 body {
@@ -85,13 +101,13 @@ body {
   animation: hud-flicker 4s infinite;
 }
 
-/* Scanline effect */
+/* Scanline effect — dark theme only */
 @keyframes scanline {
   0% { transform: translateY(-100%); }
   100% { transform: translateY(100vh); }
 }
 
-.scanline::after {
+.theme-dark .scanline::after {
   content: '';
   position: fixed;
   top: 0;
@@ -105,8 +121,8 @@ body {
   z-index: 9999;
 }
 
-/* Grid pattern for HUD */
-.hud-grid {
+/* Grid pattern for HUD — dark theme only */
+.theme-dark .hud-grid {
   background-image:
     linear-gradient(rgba(34, 211, 238, 0.03) 1px, transparent 1px),
     linear-gradient(90deg, rgba(34, 211, 238, 0.03) 1px, transparent 1px);

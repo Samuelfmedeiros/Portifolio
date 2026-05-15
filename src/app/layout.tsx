@@ -83,7 +83,7 @@ export const metadata: Metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
-    notAllowed: [],
+    notAllowed: [] as string[],
   },
   alternates: {
     canonical: "https://samuelmedeiros.vercel.app",
@@ -134,6 +134,21 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                try {
+                  var t = localStorage.getItem('mc-theme');
+                  if (!t) {
+                    t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
+                  }
+                  document.documentElement.classList.add(t === 'dark' ? 'theme-dark' : 'theme-light');
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="relative min-h-screen antialiased">
         <SkipLink />
