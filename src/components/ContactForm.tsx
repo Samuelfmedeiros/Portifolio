@@ -60,8 +60,9 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-12 px-4 md:px-6">
+    <section id="contact" className="py-12 px-4 md:px-6" aria-labelledby="contact-heading">
       <motion.h2
+        id="contact-heading"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -69,6 +70,13 @@ export function ContactForm() {
       >
         ▸ CONTATO
       </motion.h2>
+
+      {/* Status announcements for screen readers */}
+      <div role="status" aria-live="polite" className="sr-only">
+        {status === 'sending' && 'Enviando mensagem...'}
+        {status === 'sent' && 'Mensagem enviada com sucesso!'}
+        {status === 'error' && `Erro: ${errorMessage}`}
+      </div>
 
       {/* WhatsApp CTA */}
       <div className="max-w-lg mx-auto mb-6">
@@ -133,6 +141,8 @@ export function ContactForm() {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-8"
+            role="status"
+            aria-label="Mensagem enviada com sucesso"
           >
             <CheckCircle className="w-12 h-12 mx-auto mb-4 text-[var(--success)]" />
             <p className="font-mono text-sm text-[var(--accent)]">Mensagem enviada</p>
@@ -144,12 +154,13 @@ export function ContactForm() {
             </button>
           </motion.div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4" aria-label="Formulário de contato">
             <div>
-              <label className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
+              <label htmlFor="contact-name" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
                 Nome
               </label>
               <input
+                id="contact-name"
                 type="text"
                 value={name}
                 onChange={(e) => setName(e.target.value)}
@@ -160,10 +171,11 @@ export function ContactForm() {
             </div>
 
             <div>
-              <label className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
+              <label htmlFor="contact-email" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
                 Email
               </label>
               <input
+                id="contact-email"
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
@@ -174,10 +186,11 @@ export function ContactForm() {
             </div>
 
             <div>
-              <label className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
+              <label htmlFor="contact-message" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
                 Mensagem
               </label>
               <textarea
+                id="contact-message"
                 value={content}
                 onChange={(e) => setContent(e.target.value)}
                 required
@@ -190,6 +203,7 @@ export function ContactForm() {
             <button
               type="submit"
               disabled={status === "sending"}
+              aria-busy={status === "sending"}
               className="w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
             >
               {status === "sending" ? (

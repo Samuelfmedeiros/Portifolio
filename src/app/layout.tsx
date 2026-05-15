@@ -83,7 +83,6 @@ export const metadata: Metadata = {
       "max-snippet": -1,
       "max-video-preview": -1,
     },
-    notAllowed: [] as string[],
   },
   alternates: {
     canonical: "https://samuelmedeiros.vercel.app",
@@ -99,23 +98,6 @@ export const metadata: Metadata = {
       "msvalidate.01": "bing-site-verification-code",
     },
   },
-  metadataDatabase: {
-    issuer: "https://samuelmedeiros.vercel.app",
-  },
-  appLinks: {
-    ios: {
-      url: "https://samuelmedeiros.vercel.app",
-      app_store_id: "123456789",
-    },
-    android: {
-      package: "com.samuelmedeiros.portfolio",
-      app_name: "Samuel Medeiros",
-    },
-    web: {
-      url: "https://samuelmedeiros.vercel.app",
-      should_fallback: true,
-    },
-  },
   other: {
     "article:author": "https://samuelmedeiros.vercel.app",
     "article:section": "Portfolio",
@@ -125,7 +107,6 @@ export const metadata: Metadata = {
     apple: "/icon.svg",
     shortcut: "/icon.svg",
   },
-  category: "technology",
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

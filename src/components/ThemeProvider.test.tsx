@@ -2,28 +2,6 @@ import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen, fireEvent } from '@testing-library/react'
 import { ThemeProvider, useTheme } from './ThemeProvider'
 
-// Mock Framer Motion before any imports
-vi.mock('framer-motion', async (importOriginal) => {
-  const actual = await importOriginal()
-  return {
-    ...actual,
-    useInView: vi.fn(() => true),
-  }
-})
-
-// Mock localStorage
-const localStorageMock = (() => {
-  let store: Record<string, string> = {}
-  return {
-    getItem: vi.fn((key: string) => store[key] ?? null),
-    setItem: vi.fn((key: string, value: string) => { store[key] = value }),
-    removeItem: vi.fn((key: string) => { delete store[key] }),
-    clear: vi.fn(() => { store = {} }),
-  }
-})()
-
-Object.defineProperty(window, 'localStorage', { value: localStorageMock })
-
 function TestConsumer() {
   const { theme, toggle } = useTheme()
   return (
@@ -36,7 +14,7 @@ function TestConsumer() {
 
 describe('ThemeProvider', () => {
   beforeEach(() => {
-    localStorageMock.clear()
+    localStorage.clear()
     document.documentElement.classList.remove('theme-dark', 'theme-light')
   })
 
@@ -47,6 +25,7 @@ describe('ThemeProvider', () => {
       </ThemeProvider>
     )
     expect(screen.getByTestId('theme')).toHaveTextContent('dark')
+    expect(document.documentElement.classList.contains('theme-dark')).toBeTruthy()
   })
 
   it('toggles from dark to light', () => {
@@ -57,7 +36,8 @@ describe('ThemeProvider', () => {
     )
     fireEvent.click(screen.getByText('Toggle'))
     expect(screen.getByTestId('theme')).toHaveTextContent('light')
-    expect(localStorageMock.setItem).toHaveBeenCalledWith('mc-theme', 'light')
+    expect(localStorage.getItem('mc-theme')).toBe('light')
+    expect(document.documentElement.classList.contains('theme-light')).toBeTruthy()
   })
 
   it('toggles from light back to dark', () => {
@@ -70,7 +50,7 @@ describe('ThemeProvider', () => {
     fireEvent.click(btn) // dark → light
     fireEvent.click(btn) // light → dark
     expect(screen.getByTestId('theme')).toHaveTextContent('dark')
-    expect(localStorageMock.setItem).toHaveBeenCalledWith('mc-theme', 'dark')
+    expect(localStorage.getItem('mc-theme')).toBe('dark')
   })
 
   it('applies theme-dark class when dark', () => {
