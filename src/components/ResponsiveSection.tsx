@@ -139,7 +139,7 @@ export function ResponsiveGrid({
   gap = { mobile: "gap-4", desktop: "md:gap-6 lg:gap-8" },
   className = "",
 }: ResponsiveGridProps) {
-  const gridCols = {
+  const gridCols: Record<number, string> = {
     1: "grid-cols-1",
     2: "grid-cols-1 sm:grid-cols-2",
     3: "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3",

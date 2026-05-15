@@ -72,12 +72,12 @@ export function FadeInSection({
       animate={shouldAnimate ? "visible" : "hidden"}
       variants={{
         hidden: {
-          opacity: 0,
           ...getInitialPosition(),
+          opacity: 0,
         },
         visible: {
-          opacity: 1,
           ...getFinalPosition(),
+          opacity: 1,
           transition: {
             duration: 0.6,
             delay,
@@ -164,8 +164,8 @@ export function StaggerItem({
     <motion.div
       variants={{
         hidden: {
-          opacity: 0,
           ...getInitialPosition(),
+          opacity: 0,
         },
         visible: {
           opacity: 1,
