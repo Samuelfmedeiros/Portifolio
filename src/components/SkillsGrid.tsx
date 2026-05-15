@@ -82,9 +82,9 @@ const skills: Skill[] = [
 ];
 
 const proficiencyColor = {
-  Expert: "text-emerald-600 dark:text-emerald-400",
-  Advanced: "text-blue-600 dark:text-blue-400",
-  Proficient: "text-amber-600 dark:text-amber-400",
+  Expert: "text-[var(--proficiency-expert)]",
+  Advanced: "text-[var(--proficiency-advanced)]",
+  Proficient: "text-[var(--proficient)]",
 };
 
 const container = {

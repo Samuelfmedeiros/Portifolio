@@ -54,7 +54,7 @@ export function Footer() {
               aria-label="Copiar email"
             >
               {copied ? (
-                <Check className="w-3.5 h-3.5 text-green-400" />
+                <Check className="w-3.5 h-3.5 text-[var(--success)]" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}
@@ -94,7 +94,7 @@ export function Footer() {
                 href="https://wa.me/556191191722"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[var(--text-secondary)] hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                className="text-[var(--text-secondary)] hover:text-[var(--whatsapp)] transition-colors"
                 aria-label="WhatsApp"
               >
                 <WhatsAppIcon className="w-5 h-5" />

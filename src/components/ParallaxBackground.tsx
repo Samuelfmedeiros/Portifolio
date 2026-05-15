@@ -59,9 +59,19 @@ export function ParallaxBackground() {
     };
     window.addEventListener("mousemove", handleMouse, { passive: true });
 
+    const isDark = () => document.documentElement.classList.contains("theme-dark");
+
     const draw = () => {
       const w = canvas.width;
       const h = canvas.height;
+      const dark = isDark();
+
+      if (!dark) {
+        // Light theme: transparent canvas, let CSS background show through
+        ctx.clearRect(0, 0, w, h);
+        animationId = requestAnimationFrame(draw);
+        return;
+      }
 
       // Deep space gradient
       const gradient = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.3, Math.max(w, h));

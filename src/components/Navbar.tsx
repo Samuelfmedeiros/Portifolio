@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 
@@ -18,43 +18,113 @@ export function Navbar() {
   const [activeSection, setActiveSection] = useState("hero");
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const menuRef = useRef<HTMLDivElement>(null);
+  const toggleRef = useRef<HTMLButtonElement>(null);
+  const rafRef = useRef<number | null>(null);
+
+  // Close mobile menu helper
+  const closeMenu = useCallback(() => setMobileMenuOpen(false), []);
+
+  // Scroll detection — requestAnimationFrame throttle
   useEffect(() => {
-    const handleScroll = () => {
-      setScrolled(window.scrollY > 50);
+    const onScroll = () => {
+      if (rafRef.current !== null) return;
+      rafRef.current = requestAnimationFrame(() => {
+        setScrolled(window.scrollY > 50);
+        rafRef.current = null;
+      });
     };
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
   }, []);
 
+  // IntersectionObserver — robust cleanup with Set
   useEffect(() => {
-    const sections = NAV_ITEMS.map(item => item.href.replace("#", ""));
+    const ids = NAV_ITEMS.map((i) => i.href.replace("#", ""));
+    let alive = true;
     const observer = new IntersectionObserver(
       (entries) => {
-        entries.forEach((entry) => {
+        if (!alive) return;
+        for (const entry of entries) {
           if (entry.isIntersecting) {
             setActiveSection(entry.target.id);
           }
-        });
+        }
       },
       { threshold: 0.3 }
     );
 
-    sections.forEach((id) => {
+    for (const id of ids) {
       const el = document.getElementById(id);
       if (el) observer.observe(el);
-    });
+    }
 
-    return () => observer.disconnect();
+    return () => {
+      alive = false;
+      observer.disconnect();
+    };
   }, []);
+
+  // Close mobile menu on Escape
+  useEffect(() => {
+    const onKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && mobileMenuOpen) closeMenu();
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [mobileMenuOpen, closeMenu]);
+
+  // Close mobile menu on click outside
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onClick = (e: MouseEvent) => {
+      const menu = menuRef.current;
+      const toggle = toggleRef.current;
+      if (menu && !menu.contains(e.target as Node) && toggle && !toggle.contains(e.target as Node)) {
+        closeMenu();
+      }
+    };
+    // Slight delay so the click that opened the menu doesn't immediately close it
+    const timer = setTimeout(() => {
+      document.addEventListener("mousedown", onClick);
+    }, 0);
+    return () => {
+      clearTimeout(timer);
+      document.removeEventListener("mousedown", onClick);
+    };
+  }, [mobileMenuOpen, closeMenu]);
+
+  // Close mobile menu on scroll
+  useEffect(() => {
+    if (!mobileMenuOpen) return;
+    const onScroll = () => closeMenu();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, [mobileMenuOpen, closeMenu]);
+
+  // Lock body scroll when menu is open
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = "hidden";
+    } else {
+      document.body.style.overflow = "";
+    }
+    return () => { document.body.style.overflow = ""; };
+  }, [mobileMenuOpen]);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
       target.scrollIntoView({ behavior: "smooth" });
-      setMobileMenuOpen(false);
+      closeMenu();
     }
   };
+
+  const activeId = activeSection;
 
   return (
     <>
@@ -72,7 +142,7 @@ export function Navbar() {
       >
         <div className="max-w-7xl mx-auto px-4 md:px-6">
           <div className="flex items-center justify-between h-14 md:h-16">
-            
+
             {/* Logo */}
             <motion.a
               href="#hero"
@@ -84,35 +154,40 @@ export function Navbar() {
             </motion.a>
 
             {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-6">
-              {NAV_ITEMS.map((item) => (
-                <motion.a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`relative text-sm font-medium transition-colors ${
-                    activeSection === item.href.replace("#", "")
-                      ? "text-[var(--accent)]"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                  }`}
-                  whileHover={{ y: -2 }}
-                >
-                  {item.label}
-                  {activeSection === item.href.replace("#", "") && (
-                    <motion.div
-                      layoutId="navbar-indicator"
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--accent)]"
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </motion.a>
-              ))}
+            <div className="hidden lg:flex items-center gap-6" role="menubar">
+              {NAV_ITEMS.map((item) => {
+                const isActive = activeId === item.href.replace("#", "");
+                return (
+                  <motion.a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    role="menuitem"
+                    className={`relative text-sm font-medium transition-colors ${
+                      isActive
+                        ? "text-[var(--accent)]"
+                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                    }`}
+                    whileHover={{ y: -2 }}
+                    aria-current={isActive ? "page" : undefined}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-indicator"
+                        className="absolute -bottom-1 left-0 right-0 h-0.5 bg-[var(--accent)]"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </motion.a>
+                );
+              })}
             </div>
 
             {/* Actions */}
             <div className="flex items-center gap-3">
               <ThemeToggle />
-              
+
               <a
                 href="https://github.com/Samuelfmedeiros"
                 target="_blank"
@@ -125,11 +200,14 @@ export function Navbar() {
                 </svg>
               </a>
 
-              {/* Mobile menu button */}
+              {/* Mobile menu toggle */}
               <button
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                ref={toggleRef}
+                onClick={() => setMobileMenuOpen((v) => !v)}
                 className="lg:hidden p-2 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                aria-label="Menu"
+                aria-label={mobileMenuOpen ? "Fechar menu" : "Abrir menu"}
+                aria-expanded={mobileMenuOpen}
+                aria-controls="mobile-menu"
               >
                 <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   {mobileMenuOpen ? (
@@ -148,30 +226,51 @@ export function Navbar() {
       <AnimatePresence>
         {mobileMenuOpen && (
           <motion.div
+            ref={menuRef}
+            id="mobile-menu"
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
             transition={{ duration: 0.2 }}
+            role="menu"
+            aria-label="Menu de navegação mobile"
             className="fixed top-14 left-0 right-0 z-40 lg:hidden bg-[var(--bg-primary)]/98 backdrop-blur-md border-b border-[var(--border)]"
           >
             <div className="px-4 py-4 space-y-1">
-              {NAV_ITEMS.map((item, i) => (
-                <motion.a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05 }}
-                  className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
-                    activeSection === item.href.replace("#", "")
-                      ? "bg-[var(--accent)]/10 text-[var(--accent)]"
-                      : "text-[var(--text-secondary)] hover:bg-[var(--border)] hover:text-[var(--text-primary)]"
-                  }`}
+              {/* Close button inside menu */}
+              <div className="flex justify-end pb-2 border-b border-[var(--border)] mb-2">
+                <button
+                  onClick={closeMenu}
+                  className="p-1.5 text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors rounded"
+                  aria-label="Fechar menu"
                 >
-                  {item.label}
-                </motion.a>
-              ))}
+                  <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+
+              {NAV_ITEMS.map((item, i) => {
+                const isActive = activeId === item.href.replace("#", "");
+                return (
+                  <motion.a
+                    key={item.href}
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    role="menuitem"
+                    initial={{ opacity: 0, x: -20 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    transition={{ delay: i * 0.05 }}
+                    className={`block px-4 py-3 rounded-lg text-sm font-medium transition-colors ${
+                      isActive
+                        ? "bg-[var(--accent)]/10 text-[var(--accent)]"
+                        : "text-[var(--text-secondary)] hover:bg-[var(--border)] hover:text-[var(--text-primary)]"
+                    }`}
+                  >
+                    {item.label}
+                  </motion.a>
+                );
+              })}
             </div>
           </motion.div>
         )}
