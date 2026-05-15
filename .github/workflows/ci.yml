@@ -60,6 +60,9 @@ jobs:
       - name: Install Playwright browsers
         run: npx playwright install --with-deps
       - name: Build application
+        env:
+          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: pnpm build
       - name: Start production server
         id: prod-server
