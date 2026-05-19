@@ -55,9 +55,9 @@ export const metadata: Metadata = {
     alternateLocale: "en_US",
     url: "https://samuelmedeiros.vercel.app",
     siteName: "Samuel Medeiros",
-    title: "Samuel Medeiros — Analista de Dados",
+    title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     description:
-      "Analista de Dados com 5+ anos de experiência em Brasília. Power BI, SQL, Python, Machine Learning.",
+      "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência. Next.js, React, Python, SQL, Power BI, Machine Learning.",
     images: [
       {
         url: "/og-image.png",
@@ -79,8 +79,8 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     site: "@Samuelfmedeiros",
     creator: "@Samuelfmedeiros",
-    title: "Samuel Medeiros — Analista de Dados",
-    description: "Analista de Dados. Power BI, SQL, Python, Machine Learning. Brasília/DF.",
+    title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
+    description: "Desenvolvedor Full Stack e Analista de Dados. Next.js, Python, SQL, Power BI, Machine Learning. Brasília/DF.",
     images: ["/og-image.png"],
   },
   robots: {

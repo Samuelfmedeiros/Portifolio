@@ -24,6 +24,7 @@ export function Terminal() {
   const scrollRef = useRef<HTMLDivElement>(null);
   const commandHistoryRef = useRef<string[]>([]);
   const [historyIndex, setHistoryIndex] = useState(-1);
+  const [isFocused, setIsFocused] = useState(false);
   const { toggle: themeToggle } = useTheme();
 
   useEffect(() => {
@@ -279,8 +280,14 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={handleKeyDown}
-            className="flex-1 bg-transparent outline-none text-[var(--text-primary)] font-mono text-sm"
+            onFocus={() => setIsFocused(true)}
+            onBlur={() => setIsFocused(false)}
+            className={`flex-1 bg-transparent outline-none text-[var(--text-primary)] font-mono text-sm ${
+              isFocused ? "caret-[var(--accent)]" : ""
+            }`}
             placeholder="digite um comando..."
+            aria-label="Digite um comando"
+            role="textbox"
             autoFocus
           />
         </div>

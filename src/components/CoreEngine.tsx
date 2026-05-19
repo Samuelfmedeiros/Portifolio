@@ -53,8 +53,9 @@ const cards = [
 
 export function CoreEngine() {
   return (
-    <section id="ferramentas" className="py-12 px-4 md:px-6">
+    <section id="ferramentas" className="py-12 px-4 md:px-6" aria-labelledby="core-heading">
       <motion.h2
+        id="core-heading"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         viewport={{ once: true }}
@@ -69,14 +70,16 @@ export function CoreEngine() {
         whileInView="show"
         viewport={{ once: true, margin: "-100px" }}
         className="max-w-5xl mx-auto grid grid-cols-1 md:grid-cols-3 gap-6"
+        role="list"
+        aria-label="Habilidades e ferramentas"
       >
         {cards.map((card) => {
           const Icon = card.icon;
           return (
-            <motion.div key={card.title} variants={cardVariant}>
+            <motion.div key={card.title} variants={cardVariant} role="listitem">
               <GlassCard className="flex flex-col gap-4">
                 <div className="flex items-center gap-3">
-                  <Icon className="w-5 h-5 text-[var(--accent)]" />
+                  <Icon className="w-5 h-5 text-[var(--accent)]" aria-hidden="true" />
                   <h3 className="font-mono text-sm font-bold text-[var(--text-primary)]">
                     {card.title}
                   </h3>
@@ -88,7 +91,7 @@ export function CoreEngine() {
                       key={item}
                       className="text-xs font-mono text-[var(--text-secondary)] flex items-start gap-2"
                     >
-                      <span className="text-[var(--accent)] mt-0.5 shrink-0">▹</span>
+                      <span className="text-[var(--accent)] mt-0.5 shrink-0" aria-hidden="true">▹</span>
                       <span>{item}</span>
                     </li>
                   ))}

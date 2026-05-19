@@ -66,7 +66,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.6 }}
           className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-2"
         >
-          Analista de Dados — Brasília/DF
+          Desenvolvedor Full Stack &amp; Analista de Dados — Brasília/DF
         </motion.p>
 
         <motion.p
@@ -75,7 +75,7 @@ export function HeroSection() {
           transition={{ duration: 0.6, delay: 0.7 }}
           className="text-xs sm:text-sm text-[var(--text-secondary)] mb-10"
         >
-          Dashboards, SQL, Python e Machine Learning para transformar dados em decisões estratégicas.
+          Next.js, React, Python, SQL e Machine Learning para transformar dados em decisões estratégicas.
         </motion.p>
 
         <motion.div

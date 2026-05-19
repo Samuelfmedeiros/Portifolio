@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
-export function BackToTop() {
+export const BackToTop = memo(function BackToTop() {
   const [visible, setVisible] = useState(false);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function BackToTop() {
           aria-label="Voltar ao topo"
           title="Voltar ao topo"
         >
-          <ArrowUp className="w-5 h-5" />
+          <ArrowUp className="w-5 h-5" aria-hidden="true" />
         </motion.button>
       )}
     </AnimatePresence>

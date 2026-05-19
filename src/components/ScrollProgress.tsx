@@ -10,7 +10,9 @@ function debounce<T extends (...args: any[]) => any>(fn: T, ms: number) {
   };
 }
 
-export function ScrollProgress() {
+import { memo } from "react";
+
+export const ScrollProgress = memo(function ScrollProgress() {
   const [progress, setProgress] = useState(0);
 
   const updateProgress = useCallback(() => {
