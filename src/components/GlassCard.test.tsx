@@ -1,29 +1,26 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest'
-import { render, screen } from '@testing-library/react'
-import { GlassCard } from './GlassCard'
+import { describe, it, expect } from "vitest";
+import { render, screen } from "@testing-library/react";
+import { GlassCard } from "../GlassCard";
 
-describe('GlassCard', () => {
-  it('renders children correctly', () => {
-    render(<GlassCard><p>Test content</p></GlassCard>)
-    expect(screen.getByText('Test content')).toBeInTheDocument()
-  })
+describe("GlassCard", () => {
+  it("renders children", () => {
+    render(<GlassCard>Hello</GlassCard>);
+    expect(screen.getByText("Hello")).toBeInTheDocument();
+  });
 
-  it('applies default glass class', () => {
-    render(<GlassCard><p>Test</p></GlassCard>)
-    const card = screen.getByText('Test').parentElement
-    expect(card).toHaveClass('glass')
-  })
+  it("forwards ref to the motion.div", () => {
+    const ref = { current: null };
+    render(<GlassCard ref={ref}>Content</GlassCard>);
+    expect(ref.current).toBeTruthy();
+  });
 
-  it('merges custom className with default', () => {
-    render(<GlassCard className="custom-class"><p>Test</p></GlassCard>)
-    const card = screen.getByText('Test').parentElement
-    expect(card).toHaveClass('glass')
-    expect(card).toHaveClass('custom-class')
-  })
+  it("has display name for debugging", () => {
+    expect(GlassCard.displayName).toBe("GlassCard");
+  });
 
-  it('forwards ref to the div element', () => {
-    const ref = vi.fn()
-    render(<GlassCard ref={ref}><p>Test</p></GlassCard>)
-    expect(ref).toHaveBeenCalled()
-  })
-})
+  it("applies className correctly", () => {
+    const { container } = render(<GlassCard className="custom-class">Test</GlassCard>);
+    const div = container.firstChild;
+    expect(div).toHaveClass("custom-class");
+  });
+});

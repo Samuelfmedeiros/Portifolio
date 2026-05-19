@@ -109,8 +109,9 @@ const item = {
 
 export function SkillsGrid() {
   return (
-    <section className="py-12 md:py-16 px-4 md:px-6 max-w-6xl mx-auto">
+    <section className="py-12 md:py-16 px-4 md:px-6 max-w-6xl mx-auto" aria-labelledby="skills-heading">
       <motion.h2
+        id="skills-heading"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -126,9 +127,11 @@ export function SkillsGrid() {
         whileInView="visible"
         viewport={{ once: true, margin: "-100px" }}
         className="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-5"
+        role="list"
+        aria-label="Lista de habilidades técnicas"
       >
         {skills.map((skill) => (
-          <motion.div key={skill.name} variants={item}>
+          <motion.div key={skill.name} variants={item} role="listitem">
             <Tooltip
               content={
                 <div className="text-center">
@@ -146,7 +149,7 @@ export function SkillsGrid() {
             >
               <GlassCard>
                 <div className="flex flex-col items-center text-center gap-3 py-2 cursor-default">
-                  <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)]" />
+                  <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)]" aria-hidden="true" />
                   <div>
                     <h3 className="font-semibold text-sm md:text-base text-[var(--text-primary)]">
                       {skill.name}

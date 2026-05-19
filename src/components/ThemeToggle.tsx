@@ -1,11 +1,12 @@
 "use client";
 
+import { memo } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { useTheme } from "./ThemeProvider";
 
-export function ThemeToggle() {
+export const ThemeToggle = memo(function ThemeToggle() {
   const { theme, toggle } = useTheme();
   const [hover, setHover] = useState(false);
   const next = theme === "dark" ? "light" : "dark";

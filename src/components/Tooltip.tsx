@@ -9,7 +9,9 @@ interface TooltipProps {
   className?: string;
 }
 
-export function Tooltip({ children, content, className = "" }: TooltipProps) {
+import { memo } from "react";
+
+export const Tooltip = memo(function Tooltip({ children, content, className = "" }: TooltipProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [position, setPosition] = useState<"top" | "bottom">("top");
   const triggerRef = useRef<HTMLDivElement>(null);

@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, memo } from "react";
 
-export function MissionClock() {
+export const MissionClock = memo(function MissionClock() {
   const [time, setTime] = useState(new Date());
 
   useEffect(() => {

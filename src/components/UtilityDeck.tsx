@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Calculator, Gamepad2, X } from "lucide-react";
 import { GlassCard } from "./GlassCard";
@@ -9,7 +9,13 @@ import { DataCalculator } from "./DataCalculator";
 import { MiniGame } from "./MiniGame";
 import type { Widget } from "@/lib/types";
 
-export function UtilityDeck() {
+const WIDGETS = [
+  { key: "clock" as const, icon: Clock, label: "Relógio" },
+  { key: "calculator" as const, icon: Calculator, label: "Calculadora" },
+  { key: "game" as const, icon: Gamepad2, label: "Mini-game" },
+];
+
+export const UtilityDeck = memo(function UtilityDeck() {
   const [activeWidget, setActiveWidget] = useState<Widget>(null);
 
   return (
@@ -19,36 +25,24 @@ export function UtilityDeck() {
       </h2>
 
       <div className="max-w-xl mx-auto">
-        <div className="grid grid-cols-3 gap-2 md:gap-4">
-          <button
-            onClick={() => setActiveWidget(activeWidget === "clock" ? null : "clock")}
-            className={`glass p-4 md:p-6 rounded-xl text-center transition-all hover:scale-105 border-[var(--border)] ${
-              activeWidget === "clock" ? "ring-1 ring-[var(--accent)]" : ""
-            }`}
-          >
-            <Clock className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-1 md:mb-2 text-[var(--accent)]" />
-            <span className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)]">Relógio</span>
-          </button>
-
-          <button
-            onClick={() => setActiveWidget(activeWidget === "calculator" ? null : "calculator")}
-            className={`glass p-4 md:p-6 rounded-xl text-center transition-all hover:scale-105 border-[var(--border)] ${
-              activeWidget === "calculator" ? "ring-1 ring-[var(--accent)]" : ""
-            }`}
-          >
-            <Calculator className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-1 md:mb-2 text-[var(--accent)]" />
-            <span className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)]">Calculadora</span>
-          </button>
-
-          <button
-            onClick={() => setActiveWidget(activeWidget === "game" ? null : "game")}
-            className={`glass p-4 md:p-6 rounded-xl text-center transition-all hover:scale-105 border-[var(--border)] ${
-              activeWidget === "game" ? "ring-1 ring-[var(--accent)]" : ""
-            }`}
-          >
-            <Gamepad2 className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-1 md:mb-2 text-[var(--accent)]" />
-            <span className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)]">Mini-game</span>
-          </button>
+        <div className="grid grid-cols-3 gap-2 md:gap-4" role="group" aria-label="Utilitários">
+          {WIDGETS.map(({ key, icon: Icon, label }) => {
+            const isActive = activeWidget === key;
+            return (
+              <button
+                key={key}
+                onClick={() => setActiveWidget(isActive ? null : key)}
+                aria-expanded={isActive}
+                aria-controls={`widget-${key}`}
+                className={`glass p-4 md:p-6 rounded-xl text-center transition-all hover:scale-105 border-[var(--border)] ${
+                  isActive ? "ring-1 ring-[var(--accent)]" : ""
+                }`}
+              >
+                <Icon className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-1 md:mb-2 text-[var(--accent)]" />
+                <span className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)]">{label}</span>
+              </button>
+            );
+          })}
         </div>
 
         <AnimatePresence>
@@ -58,11 +52,15 @@ export function UtilityDeck() {
               animate={{ opacity: 1, height: "auto" }}
               exit={{ opacity: 0, height: 0 }}
               className="mt-4 md:mt-6 overflow-hidden"
+              id={`widget-${activeWidget}`}
+              role="region"
+              aria-label={`Widget: ${WIDGETS.find((w) => w.key === activeWidget)?.label}`}
             >
               <GlassCard className="relative">
                 <button
                   onClick={() => setActiveWidget(null)}
                   className="absolute top-3 right-3 text-[var(--text-secondary)] hover:text-[var(--accent)]"
+                  aria-label="Fechar widget"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -77,4 +75,4 @@ export function UtilityDeck() {
       </div>
     </section>
   );
-}
+});

@@ -325,6 +325,17 @@ select:focus-visible,
   box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.15);
 }
 
+/* ========== SELECTION COLOR ========== */
+::selection {
+  background: color-mix(in srgb, var(--accent) 30%, transparent);
+  color: var(--text-primary);
+}
+
+/* ========== LIGHT THEME SELECTION ========== */
+.theme-light ::selection {
+  background: color-mix(in srgb, var(--accent) 25%, transparent);
+}
+
 /* ========== PRINT STYLES ========== */
 @media print {
   .scanline,

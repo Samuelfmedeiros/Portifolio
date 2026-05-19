@@ -54,8 +54,9 @@ const experiences = [
 
 export function AboutTimeline() {
   return (
-    <section id="about" className="py-12 px-4 md:px-6">
+    <section id="about" className="py-12 px-4 md:px-6" aria-labelledby="about-heading">
       <motion.h2
+        id="about-heading"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
@@ -76,21 +77,23 @@ export function AboutTimeline() {
               transition={{ duration: 0.5, delay: i * 0.1 }}
               viewport={{ once: true }}
               className="relative pl-8"
+              role="article"
+              aria-label={exp.title}
             >
               {/* Timeline line */}
               {i < experiences.length - 1 && (
-                <div className="absolute left-4 top-10 bottom-0 w-px bg-gradient-to-b from-[var(--accent)] to-transparent" />
+                <div className="absolute left-4 top-10 bottom-0 w-px bg-gradient-to-b from-[var(--accent)] to-transparent" aria-hidden="true" />
               )}
 
               {/* Timeline dot */}
-              <div className="absolute left-2 top-5 w-4 h-4 rounded-full border-2 border-[var(--accent)] bg-[var(--bg-primary)] flex items-center justify-center">
+              <div className="absolute left-2 top-5 w-4 h-4 rounded-full border-2 border-[var(--accent)] bg-[var(--bg-primary)] flex items-center justify-center" aria-hidden="true">
                 <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)]" />
               </div>
 
               <GlassCard delay={i * 0.1}>
                 <div className="flex items-start gap-4">
                   <div className="shrink-0 w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-                    <Icon className="w-5 h-5 text-[var(--accent)]" />
+                    <Icon className="w-5 h-5 text-[var(--accent)]" aria-hidden="true" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 mb-2">
