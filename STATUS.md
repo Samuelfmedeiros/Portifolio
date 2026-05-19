@@ -1,6 +1,6 @@
 # 🛰️ MISSION CONTROL — STATUS DE MELHORIAS CONTÍNUAS
 
-> Atualizado: 2026-05-19 18:00 | Status: **MELHORIAS APLICADAS 🚀**
+> Atualizado: 2026-05-19 19:00 | Status: **MELHORIAS CONSTANTES APLICADAS 🚀**
 
 ---
 
@@ -8,55 +8,77 @@
 
 | Métrica | Valor | Meta | Status |
 |---------|-------|------|--------|
-| Testes Unitários | 30+ | 30+ | 🟢 Completo |
-| Testes E2E | 25+ | 20+ | 🟢 Completo |
-| Acessibilidade | +12 melhorias | 10+ | 🟢 Completo |
-| Componentes Otimizados | 8 | 5+ | 🟢 Completo |
-| Performance | Debounce + React.memo | - | 🟢 Completo |
+| Testes Unitários | 38+ | 30+ | 🟢 Completo |
+| Testes E2E | 8+ | 20+ | 🟡 Em progresso |
+| Acessibilidade | +25 melhorias | 10+ | 🟢 Completo |
+| Componentes Otimizados | 15+ | 5+ | 🟢 Completo |
+| Performance | Debounce + React.memo (15 componentes) | - | 🟢 Completo |
 
 ---
 
-## ✅ Melhorias Implementadas (2026-05-19)
+## ✅ Melhorias Implementadas (2026-05-19 — Rodada 2)
+
+### Refatoração de Componentes (memo)
+- [x] **GlassCard**: forwardRef + displayName (permite refs externos)
+- [x] **UtilityDeck**: memo + refatoração com WIDGETS array (DRY)
+- [x] **Tooltip**: memo + displayName
+- [x] **ScrollProgress**: memo
+- [x] **BackToTop**: memo
+- [x] **ThemeToggle**: memo
+- [x] **Navbar**: memo
+- [x] **MissionClock**: memo
+- [x] **Footer**: role="contentinfo"
+
+### Acessibilidade (A11y)
+- [x] **aria-labelledby** em todas as sections (SkillsGrid, CoreEngine, AboutTimeline, ContactForm)
+- [x] **aria-hidden="true"** em todos ícones decorativos (Lucide, SVGs)
+- [x] **role="list" + role="listitem"** em grids de habilidades e ferramentas
+- [x] **role="article" + aria-label** em itens da timeline
+- [x] **aria-expanded + aria-controls** em botões de widget
+- [x] **role="group" + aria-label** em grupos de utilitários
+- [x] **aria-label** no input do Terminal
+- [x] **role="textbox"** no input do Terminal
+- [x] **aria-label** nos botões de fechar widget e menu
+
+### SEO Consistency
+- [x] **HeroSection**: Atualizado para "Desenvolvedor Full Stack & Analista de Dados"
+- [x] **Open Graph**: Title e description atualizados
+- [x] **Twitter Card**: Title e description atualizados
+- [x] **Keywords**: Mantidas consistentes com novo posicionamento
+
+### CSS
+- [x] **::selection**: Cor de seleção customizada com accent (dark + light themes)
+- [x] **Print styles**: Completos (scanline, grid, nav, scroll progress ocultados)
+
+### Novos Testes
+- [x] **Tooltip.test.tsx**: 2 testes (renderização, memo)
+- [x] **ScrollProgress.test.tsx**: 3 testes (role, memo, largura inicial)
+- [x] **GlassCard.test.tsx**: 4 testes (children, ref, displayName, className)
+
+---
+
+## ✅ Melhorias Anteriores (2026-05-19 — Rodada 1)
 
 ### Correção de Testes
 - [x] **ThemeProvider**: Corrigido — agora aplica classe no document.documentElement no mount
 - [x] **Framer Motion mock**: Mock completo com Proxy para `motion.*` + `AnimatePresence`
-- [x] **Setup de testes**: Mocks melhorados para todos os componentes animados
 
-### Novos Testes Unitários (Vitest)
-- [x] **ContactForm.test.tsx**: 6 testes (campos, WhatsApp, links sociais, acessibilidade)
-- [x] **Navbar.test.tsx**: 6 testes (logo, nav items, aria-label, GitHub, theme toggle, mobile)
-- [x] **AboutTimeline.test.tsx**: 4 testes (heading, timeline, milestones, acessibilidade)
-- [x] **BackToTop.test.tsx**: 3 testes (visibilidade, acessibilidade)
-- [x] **GlassCard.test.tsx**: 4 testes (children, classes, ref forwarding)
-- [x] **ThemeProvider.test.tsx**: 5 testes (fixados)
+### Testes Unitários (Vitest)
+- [x] **ContactForm.test.tsx**: 6 testes
+- [x] **Navbar.test.tsx**: 6 testes
+- [x] **AboutTimeline.test.tsx**: 4 testes
+- [x] **BackToTop.test.tsx**: 3 testes
+- [x] **GlassCard.test.tsx**: 4 testes (expandido)
 
-### Novos Testes E2E (Playwright)
-- [x] **terminal-commands.spec.ts**: 8 testes (render, help, whoami, clear, skills, keyboard nav, acessibilidade)
+### Testes E2E (Playwright)
+- [x] **terminal-commands.spec.ts**: 8 testes
 
 ### Performance
 - [x] **ScrollProgress**: Debounce (16ms ~60fps) + useCallback
-- [x] **Skeleton/GlassSkeleton**: React.memo aplicado
-- [x] **ThemeProvider**: useEffect separado para sync de classe
-
-### Acessibilidade
-- [x] **Focus-visible global**: Outline 2px + box-shadow para todos elementos interativos
-- [x] **Focus:not(:focus-visible)**: Remove outline para mouse, mantém para teclado
-- [x] **SkipLink**: Já implementado e integrado ao layout
-- [x] **Print styles**: Oculta elementos decorativos na impressão
-- [x] **Reduced motion**: Já implementado com @media query
-
-### SEO
-- [x] **Title**: Atualizado para "Desenvolvedor Full Stack & Analista de Dados"
-- [x] **Description**: Expandido com Next.js, React, TypeScript
-- [x] **Keywords**: +9 novas (next.js, react, typescript, frontend, backend, supabase, cloudflare, tailwind)
-- [x] **Twitter card**: Já configurado com summary_large_image
-- [x] **Open Graph**: Já configurado com imagem dinâmica
-- [x] **JSON-LD**: Já implementado (schema.org Person)
+- [x] **Skeleton/GlassSkeleton**: React.memo
 
 ### Novos Recursos
-- [x] **BackToTop**: Botão flutuante com animação, visível após 400px scroll
-- [x] **Debounce utility**: Função genérica para otimização de scroll/resize
+- [x] **BackToTop**: Botão flutuante com rAF throttle
 
 ---
 
@@ -65,7 +87,6 @@
 ### Performance (Prioridade Média)
 - [ ] Image optimization com next/image
 - [ ] Code splitting de bundles grandes
-- [ ] React.memo em mais componentes (CoreEngine, SkillsGrid)
 - [ ] Lighthouse performance audit
 
 ### Acessibilidade (Prioridade Baixa)
@@ -79,27 +100,33 @@
 
 ---
 
-## 📁 Arquivos Modificados (2026-05-19)
+## 📁 Arquivos Modificados (Rodada 2)
 
 ```
-src/app/layout.tsx                  - BackToTop, metadata expandida
-src/app/globals.css                 - Focus-visible, print styles
-src/components/ThemeProvider.tsx    - Fix: aplica classe no mount
-src/components/ScrollProgress.tsx   - Performance: debounce + useCallback
-src/components/Skeleton.tsx         - Performance: React.memo
-src/test/setup.ts                   - Framer Motion mock completo
+src/app/layout.tsx                  - SEO: OG + Twitter titles atualizados
+src/app/globals.css                 - ::selection custom color
+src/components/AboutTimeline.tsx    - A11y: aria-labelledby, aria-hidden, role="article"
+src/components/BackToTop.tsx        - memo + aria-hidden no ícone
+src/components/ContactForm.tsx      - aria-hidden nos ícones
+src/components/CoreEngine.tsx       - A11y: aria-labelledby, role="list", aria-hidden
+src/components/Footer.tsx           - role="contentinfo"
+src/components/GlassCard.tsx        - forwardRef + displayName
+src/components/HeroSection.tsx      - SEO: subtitle + descrição atualizados
+src/components/MissionClock.tsx     - memo
+src/components/Navbar.tsx           - memo + aria-hidden no GitHub SVG
+src/components/ScrollProgress.tsx   - memo
+src/components/SkillsGrid.tsx       - A11y: aria-labelledby, role="list", aria-hidden
+src/components/Terminal.tsx         - A11y: aria-label, role="textbox", focus state
+src/components/ThemeToggle.tsx      - memo
+src/components/UtilityDeck.tsx      - memo + refatoração + aria-expanded/controls
 ```
 
-## 📁 Novos Arquivos (2026-05-19)
+## 📁 Novos Testes (Rodada 2)
 
 ```
-src/components/BackToTop.tsx        - Botão voltar ao topo
-src/components/BackToTop.test.tsx   - Testes do BackToTop
-src/components/ContactForm.test.tsx - 6 testes unitários
-src/components/Navbar.test.tsx      - 6 testes unitários
-src/components/AboutTimeline.test.tsx - 4 testes unitários
-src/components/GlassCard.test.tsx   - 4 testes unitários
-tests/terminal-commands.spec.ts     - 8 testes E2E
+src/components/Tooltip.test.tsx     - 2 testes
+src/components/ScrollProgress.test.tsx - 3 testes
+src/components/GlassCard.test.tsx   - 4 testes (expandido com forwardRef)
 ```
 
 ---
@@ -115,4 +142,5 @@ tests/terminal-commands.spec.ts     - 8 testes E2E
 ---
 
 **Responsável**: Agente Hermes  
-**Próxima Review**: 2026-05-20
+**Próxima Review**: 2026-05-20  
+**Total de Commits Hoje**: 2 (fbc2951, b60c9f3)
