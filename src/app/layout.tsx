@@ -10,17 +10,19 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
+import { BackToTop } from "@/components/BackToTop";
 import "./globals.css";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://samuelmedeiros.vercel.app"),
   title: {
-    default: "Samuel Medeiros — Analista de Dados",
+    default: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     template: "%s | Samuel Medeiros",
   },
   description:
-    "Analista de Dados com 5+ anos de experiência em Brasília. Power BI, SQL, Python, Machine Learning para transformar dados em decisões estratégicas.",
+    "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência em Brasília. Next.js, React, Python, SQL, Power BI, Machine Learning — transformando dados em decisões estratégicas.",
   keywords: [
+    "desenvolvedor full stack",
     "analista de dados",
     "power bi",
     "sql",
@@ -35,6 +37,14 @@ export const metadata: Metadata = {
     "etl",
     "postgresql",
     "azure",
+    "next.js",
+    "react",
+    "typescript",
+    "frontend",
+    "backend",
+    "supabase",
+    "cloudflare",
+    "tailwind css",
   ],
   authors: [{ name: "Samuel Medeiros", url: "https://samuelmedeiros.vercel.app" }],
   creator: "Samuel Medeiros",
@@ -147,6 +157,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ThemeProvider>
         <KeyboardShortcuts />
         <JsonLd />
+        <BackToTop />
       </body>
     </html>
   );
