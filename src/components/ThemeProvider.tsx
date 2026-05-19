@@ -32,6 +32,12 @@ export function useTheme() {
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
 
+  // Apply theme class on mount
+  useEffect(() => {
+    document.documentElement.classList.toggle("theme-dark", theme === "dark");
+    document.documentElement.classList.toggle("theme-light", theme === "light");
+  }, [theme]);
+
   // Sync with system preference changes
   useEffect(() => {
     const mql = window.matchMedia("(prefers-color-scheme: light)");

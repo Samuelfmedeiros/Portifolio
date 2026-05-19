@@ -52,11 +52,24 @@ Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
 // Mock window.scrollY
 Object.defineProperty(window, 'scrollY', { writable: true, value: 0 })
 
-// Mock Framer Motion's useInView to always return true (element in view)
+// Mock Framer Motion to render children without animations
 vi.mock('framer-motion', async (importOriginal) => {
-  const actual = await importOriginal()
+  const actual = await importOriginal<typeof import('framer-motion')>()
+  const mockComponent = (name: string) => {
+    const Comp = ({ children, ...props }: any) => {
+      // Forward children and essential props, skip animation props
+      const { initial, animate, whileInView, whileHover, whileTap, transition, viewport, layoutId, exit, ...rest } = props
+      return actual.motion ? <actual.motion.div {...rest}>{children}</actual.motion.div> : <div {...rest}>{children}</div>
+    }
+    Comp.displayName = `Mock${name}`
+    return Comp
+  }
   return {
     ...actual,
     useInView: vi.fn(() => true),
+    AnimatePresence: ({ children }: any) => children,
+    motion: new Proxy({}, {
+      get: (_, prop) => mockComponent(String(prop)),
+    }),
   }
 })

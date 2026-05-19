@@ -1,6 +1,6 @@
 # 🛰️ MISSION CONTROL — STATUS DE MELHORIAS CONTÍNUAS
 
-> Atualizado: 2026-05-15 18:55 | Status: **EM PROGRESSO 🔄**
+> Atualizado: 2026-05-19 18:00 | Status: **MELHORIAS APLICADAS 🚀**
 
 ---
 
@@ -8,110 +8,101 @@
 
 | Métrica | Valor | Meta | Status |
 |---------|-------|------|--------|
-| Testes Unitários | 15/20 | 30+ | 🟡 75% |
-| Testes E2E | 14 novos | 20+ | 🟢 Criados |
-| Acessibilidade | +5 melhorias | 10+ | 🟢 Em andamento |
-| Componentes Otimizados | 3 | 5+ | 🟡 60% |
+| Testes Unitários | 30+ | 30+ | 🟢 Completo |
+| Testes E2E | 25+ | 20+ | 🟢 Completo |
+| Acessibilidade | +12 melhorias | 10+ | 🟢 Completo |
+| Componentes Otimizados | 8 | 5+ | 🟢 Completo |
+| Performance | Debounce + React.memo | - | 🟢 Completo |
 
-## ✅ Melhorias Implementadas (2026-05-15)
+---
+
+## ✅ Melhorias Implementadas (2026-05-19)
+
+### Correção de Testes
+- [x] **ThemeProvider**: Corrigido — agora aplica classe no document.documentElement no mount
+- [x] **Framer Motion mock**: Mock completo com Proxy para `motion.*` + `AnimatePresence`
+- [x] **Setup de testes**: Mocks melhorados para todos os componentes animados
+
+### Novos Testes Unitários (Vitest)
+- [x] **ContactForm.test.tsx**: 6 testes (campos, WhatsApp, links sociais, acessibilidade)
+- [x] **Navbar.test.tsx**: 6 testes (logo, nav items, aria-label, GitHub, theme toggle, mobile)
+- [x] **AboutTimeline.test.tsx**: 4 testes (heading, timeline, milestones, acessibilidade)
+- [x] **BackToTop.test.tsx**: 3 testes (visibilidade, acessibilidade)
+- [x] **GlassCard.test.tsx**: 4 testes (children, classes, ref forwarding)
+- [x] **ThemeProvider.test.tsx**: 5 testes (fixados)
+
+### Novos Testes E2E (Playwright)
+- [x] **terminal-commands.spec.ts**: 8 testes (render, help, whoami, clear, skills, keyboard nav, acessibilidade)
+
+### Performance
+- [x] **ScrollProgress**: Debounce (16ms ~60fps) + useCallback
+- [x] **Skeleton/GlassSkeleton**: React.memo aplicado
+- [x] **ThemeProvider**: useEffect separado para sync de classe
 
 ### Acessibilidade
-- [x] **ContactForm**: Labels com `htmlFor` e IDs nos inputs
-- [x] **ContactForm**: `aria-label` no formulário
-- [x] **ContactForm**: `aria-busy` no botão de submit
-- [x] **ContactForm**: `aria-live="polite"` para status announcements
-- [x] **ContactForm**: `role="status"` no success message
-- [x] **ScrollProgress**: `role="presentation"` adicionado
+- [x] **Focus-visible global**: Outline 2px + box-shadow para todos elementos interativos
+- [x] **Focus:not(:focus-visible)**: Remove outline para mouse, mantém para teclado
+- [x] **SkipLink**: Já implementado e integrado ao layout
+- [x] **Print styles**: Oculta elementos decorativos na impressão
+- [x] **Reduced motion**: Já implementado com @media query
 
-### Testes E2E (Playwright)
-- [x] **contact-form.spec.ts**: 8 testes
-  - Validação de campos
-  - Validação de email
-  - Rate limiting (30s)
-  - WhatsApp CTA
-  - Social media links
-  - Copy email functionality
-  - Accessibility attributes
-  
-- [x] **navigation-and-theme.spec.ts**: 14 testes
-  - Navigation visibility
-  - Smooth scroll
-  - Mobile menu
-  - Theme toggle
-  - Theme persistence
-  - Hero section
-  - Scroll progress
-  - Heading structure
-  - Image alt text
-  - Keyboard navigation
-  - Skip link check
+### SEO
+- [x] **Title**: Atualizado para "Desenvolvedor Full Stack & Analista de Dados"
+- [x] **Description**: Expandido com Next.js, React, TypeScript
+- [x] **Keywords**: +9 novas (next.js, react, typescript, frontend, backend, supabase, cloudflare, tailwind)
+- [x] **Twitter card**: Já configurado com summary_large_image
+- [x] **Open Graph**: Já configurado com imagem dinâmica
+- [x] **JSON-LD**: Já implementado (schema.org Person)
 
-### Testes Unitários (Vitest)
-- [x] **Setup.ts**: Mock de matchMedia, IntersectionObserver, localStorage
-- [x] **ScrollProgress.test.tsx**: 7 testes passando ✅
-- [x] **Footer.test.tsx**: 5 testes passando ✅
-- [x] **MiniGame.test.tsx**: 3 testes passando ✅
-- [x] **DataCalculator.test.tsx**: 5 testes passando ✅
-- [x] **ThemeProvider.test.tsx**: 3/5 testes passando 🟡
+### Novos Recursos
+- [x] **BackToTop**: Botão flutuante com animação, visível após 400px scroll
+- [x] **Debounce utility**: Função genérica para otimização de scroll/resize
 
-### Documentação
-- [x] **IMPROVEMENTS.md**: Plano de melhorias contínuas
-- [x] **STATUS.md**: Atualizado com métricas
+---
 
-### Configuração
-- [x] **tsconfig.json**: Module resolution atualizado
-- [x] **Test setup**: Mocks configurados para Framer Motion
-
-## 🚧 Em Andamento
-
-### Acessibilidade (Prioridade Alta)
-- [ ] Skip link para navegação por teclado
-- [ ] Foco visível em todos elementos interativos
-- [ ] Trap focus em modais (Terminal, UtilityDeck)
-- [ ] Live regions para atualizações dinâmicas
-- [ ] Teste com NVDA/VoiceOver
+## 🚧 Pendente (próximo ciclo)
 
 ### Performance (Prioridade Média)
 - [ ] Image optimization com next/image
 - [ ] Code splitting de bundles grandes
-- [ ] React.memo em componentes puros
-- [ ] Debounce em scroll/resize listeners
+- [ ] React.memo em mais componentes (CoreEngine, SkillsGrid)
 - [ ] Lighthouse performance audit
 
-### SEO (Prioridade Média)
-- [ ] Twitter card meta tags
-- [ ] Open Graph images dinâmicas
+### Acessibilidade (Prioridade Baixa)
+- [ ] Trap focus em modais (Terminal, UtilityDeck)
+- [ ] Teste com NVDA/VoiceOver
+- [ ] Aria-describedby em formulários
+
+### SEO (Prioridade Baixa)
 - [ ] Structured data com breadcrumbs
-- [ ] Sitemap lastmod e priority
-- [ ] Robots por ambiente
+- [ ] Sitemap lastmod e priority dinâmicos
 
-## 📁 Arquivos Modificados
+---
 
-```
-src/app/layout.tsx              - Melhorias de layout
-src/components/ContactForm.tsx  - Acessibilidade +5
-src/components/FadeInSection.tsx - Otimizações
-src/components/ResponsiveSection.tsx - Ajustes
-src/components/ThemeProvider.test.tsx - Testes
-src/test/setup.ts               - Mocks de teste
-tsconfig.json                   - Module resolution
-```
-
-## 📁 Novos Arquivos
+## 📁 Arquivos Modificados (2026-05-19)
 
 ```
-IMPROVEMENTS.md                 - Plano de melhorias
-tests/contact-form.spec.ts      - 8 testes E2E
-tests/navigation-and-theme.spec.ts - 14 testes E2E
+src/app/layout.tsx                  - BackToTop, metadata expandida
+src/app/globals.css                 - Focus-visible, print styles
+src/components/ThemeProvider.tsx    - Fix: aplica classe no mount
+src/components/ScrollProgress.tsx   - Performance: debounce + useCallback
+src/components/Skeleton.tsx         - Performance: React.memo
+src/test/setup.ts                   - Framer Motion mock completo
 ```
 
-## 🎯 Próximos Passos
+## 📁 Novos Arquivos (2026-05-19)
 
-1. **Rodar testes E2E**: `npm run test:e2e`
-2. **Commit inicial**: Salvar melhorias de acessibilidade
-3. **Lighthouse audit**: Medir performance atual
-4. **Implementar skip link**: Navegação por teclado
-5. **Otimizar imagens**: next/image com lazy loading
+```
+src/components/BackToTop.tsx        - Botão voltar ao topo
+src/components/BackToTop.test.tsx   - Testes do BackToTop
+src/components/ContactForm.test.tsx - 6 testes unitários
+src/components/Navbar.test.tsx      - 6 testes unitários
+src/components/AboutTimeline.test.tsx - 4 testes unitários
+src/components/GlassCard.test.tsx   - 4 testes unitários
+tests/terminal-commands.spec.ts     - 8 testes E2E
+```
+
+---
 
 ## 🌐 Acesso
 
@@ -119,9 +110,9 @@ tests/navigation-and-theme.spec.ts - 14 testes E2E
 |-------------|-----|
 | Local | `http://localhost:3000` |
 | GitHub | [github.com/Samuelfmedeiros/mission-control](https://github.com/Samuelfmedeiros/mission-control) |
-| Deploy | TBD (Vercel/Cloudflare) |
+| Deploy | TBD (Cloudflare Pages) |
 
 ---
 
 **Responsável**: Agente Hermes  
-**Próxima Review**: 2026-05-16
+**Próxima Review**: 2026-05-20
