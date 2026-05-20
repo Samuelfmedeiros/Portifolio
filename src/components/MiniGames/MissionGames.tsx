@@ -4,9 +4,9 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "./GlassCard";
 import { MiniGame } from "./MiniGame";
-import { AsteroidDodge } from "./MiniGames/AsteroidDodge";
-import { CodeTyping } from "./MiniGames/CodeTyping";
-import { MemoryMatrix } from "./MiniGames/MemoryMatrix";
+import { AsteroidDodge } from "./AsteroidDodge";
+import { CodeTyping } from "./CodeTyping";
+import { MemoryMatrix } from "./MemoryMatrix";
 
 type GameTab = "simon" | "asteroid" | "typing" | "memory";
 
