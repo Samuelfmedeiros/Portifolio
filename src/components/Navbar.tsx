@@ -277,4 +277,4 @@ export const Navbar = memo(function Navbar() {
       </AnimatePresence>
     </>
   );
-}
+});

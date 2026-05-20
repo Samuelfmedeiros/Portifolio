@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback } from "react";
+import { useEffect, useState, useRef, useCallback, memo } from "react";
 
 function debounce<T extends (...args: any[]) => any>(fn: T, ms: number) {
   let timer: ReturnType<typeof setTimeout>;
@@ -9,8 +9,6 @@ function debounce<T extends (...args: any[]) => any>(fn: T, ms: number) {
     timer = setTimeout(() => fn(...args), ms);
   };
 }
-
-import { memo } from "react";
 
 export const ScrollProgress = memo(function ScrollProgress() {
   const [progress, setProgress] = useState(0);
@@ -38,4 +36,4 @@ export const ScrollProgress = memo(function ScrollProgress() {
       role="presentation"
     />
   );
-}
+});

@@ -61,4 +61,4 @@ export const ThemeToggle = memo(function ThemeToggle() {
       </motion.button>
     </div>
   );
-}
+});
