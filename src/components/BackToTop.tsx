@@ -44,4 +44,4 @@ export const BackToTop = memo(function BackToTop() {
       )}
     </AnimatePresence>
   );
-}
+});

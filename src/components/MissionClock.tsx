@@ -52,4 +52,4 @@ export const MissionClock = memo(function MissionClock() {
       </div>
     </div>
   );
-}
+});

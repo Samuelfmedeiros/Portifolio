@@ -5,6 +5,8 @@ interface GlassCardProps {
   children: ReactNode;
   className?: string;
   delay?: number;
+  role?: string;
+  "aria-labelledby"?: string;
 }
 
 export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
