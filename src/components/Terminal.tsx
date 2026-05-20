@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, KeyboardEvent } from "react";
 import { GlassCard } from "./GlassCard";
 import { useTheme } from "./ThemeProvider";
+import { MissionGames } from "./MiniGames/MissionGames";
 import type { Command } from "@/lib/types";
 
 const BANNER = [
@@ -35,8 +36,18 @@ export function Terminal() {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
   }, [history]);
 
+  const sanitizeInput = (input: string): string => {
+    // Remove potentially dangerous characters
+    return input
+      .replace(/[<>]/g, "") // Strip HTML-like tags
+      .replace(/javascript:/gi, "") // Strip javascript: protocol
+      .replace(/on\w+=/gi, "") // Strip event handlers
+      .replace(/[\x00-\x1F\x7F-\x9F]/g, "") // Strip control chars
+      .slice(0, 500); // Limit input length
+  };
+
   const executeCommand = (cmd: string) => {
-    const trimmed = cmd.trim().toLowerCase();
+    const trimmed = sanitizeInput(cmd).trim().toLowerCase();
     let output = "";
 
     switch (trimmed) {
@@ -341,6 +352,11 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
           />
         </div>
       </GlassCard>
+
+      {/* Mission Games */}
+      <div className="max-w-3xl mx-auto mt-8">
+        <MissionGames />
+      </div>
     </section>
   );
 }
