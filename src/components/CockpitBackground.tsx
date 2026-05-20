@@ -6,6 +6,7 @@ import { StarField } from "./StarField";
 import { Scanline } from "./Scanline";
 import { CockpitBorders } from "./CockpitBorders";
 import { HUDOverlay } from "./HUDOverlay";
+import { SpeedLines } from "./SpeedLines";
 
 /**
  * CockpitBackground — Compositor visual "Nave Futurista"
@@ -15,6 +16,7 @@ import { HUDOverlay } from "./HUDOverlay";
  *   L1: PerspectiveGrid      (grid de perspectiva Tron-style)
  *   L2: StarField            (campo estelar framer-motion — 3 camadas de profundidade)
  *   L3: Scanline             (linha de varredura horizontal)
+ *   L3b: SpeedLines           (efeito warp no scroll rápido)
  *   L4: CockpitBorders       (bordas decorativas do visor)
  *   L5: HUDOverlay           (telemetria fake nos cantos)
  */
@@ -32,6 +34,9 @@ export function CockpitBackground() {
 
       {/* L3: Scanline — linha de varredura horizontal */}
       <Scanline />
+
+      {/* L3b: SpeedLines — efeito warp durante scroll rápido */}
+      <SpeedLines />
 
       {/* L4: Cockpit Borders — cantos decorativos simulando visor de nave */}
       <CockpitBorders />
