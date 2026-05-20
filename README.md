@@ -1,89 +1,182 @@
-Portfolio
+# 🛰️ Mission Control — Portfólio Futurista
 
-[![CI](https://github.com/Samuelfmedeiros/mission-control/actions/workflows/ci.yml/badge.svg)](https://github.com/Samuelfmedeiros/mission-control/actions)
-[![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
-[![Tailwind](https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/tests-49%20passed-brightgreen)](https://github.com/Samuelfmedeiros/mission-control)
+> Portfólio pessoal com vibe de cockpit de nave espacial — telemetria em tempo real, mini-games e terminal interativo.
 
-Portal interativo de demonstração técnica, desenvolvido com estética de interface de comando espacial (Mission Control). Centraliza projetos de análise de dados, automação e engenharia de software em um ambiente imersivo.
+**🌐 Live:** [samuelmedeiros.vercel.app](https://samuelmedeiros.vercel.app/)
 
-## 🚀 Tecnologias
+---
 
-- **Framework:** Next.js 16 (App Router + Turbopack)
-- **Estilização:** Tailwind CSS 4 (Temas Dark/Light)
-- **Animações:** Framer Motion (Parallax, HUD, Spring)
-- **Ícones:** Lucide React
-- **Backend:** Supabase (mensagens + analytics)
-- **Testes:** Vitest + Testing Library (49 testes)
-- **CI/CD:** GitHub Actions
+## 🚀 Features
 
-## 🛠️ Módulos
+- **Cockpit Background** — 6 camadas visuais (parallax, grid, estrelas, scanlines, speed lines, HUD)
+- **HUD Overlay** — Telemetria em tempo real (altitude, velocidade, coordenadas, sistemas)
+- **Terminal Interativo** — 15+ comandos com easter eggs e sanitização de inputs
+- **Mission Games** — 4 mini-games (Sequência, Asteroid Dodge, Code Typing, Memory Matrix)
+- **Project Hangar** — Grid de projetos do GitHub com filtros, tech tags e holo-card effects
+- **Dark/Light Theme** — "Night Vision" e "Daylight Ops" com transição suave
+- **Responsive** — Menu horizontal scrollable no mobile, zero hamburger
+- **Acessibilidade** — Focus-visible, reduced-motion, aria labels, skip links, print styles
+- **Security** — CSP, HSTS, X-Frame-Options, XSS protection, input sanitization
+- **CI/CD** — GitHub Actions + Vercel deploy automático
 
-| Módulo | Descrição |
+---
+
+## 🛠️ Tech Stack
+
+| Camada | Tecnologia |
 |--------|-----------|
-| **Hero HUD** | Telemetria de scroll, indicadores de sistema, animações |
-| **Core Engine** | Especificações de hardware e stack (CPU, GPU, RAM, ferramentas) |
-| **Skills Matrix** | Grade de competências técnicas com ícones e categorias |
-| **Hangar de Projetos** | Cards dinâmicos via API do GitHub com ISR caching (1h) |
-| **Terminal Central** | CLI interativa com histórico (↑↓), autocomplete (Tab), neofetch e matrix |
-| **Utility Deck** | Relógio de missão, calculadora de dados, mini-game |
-| **Transmissão** | Formulário de contato → Supabase com rate limiting |
+| Frontend | Next.js 16, React 19, TypeScript |
+| Styling | TailwindCSS 4, Glassmorphism |
+| Animações | Framer Motion |
+| Ícones | Lucide React |
+| Backend | Supabase (PostgreSQL) |
+| Testes Unit | Vitest + Testing Library |
+| Testes E2E | Playwright |
+| Deploy | Vercel |
+| CI/CD | GitHub Actions |
 
-## 🎨 Temas
+---
 
-- **Night Vision** — Dark mode: preto puro `#000` + ciano neon `#22d3ee`
-- **Daylight Ops** — Light mode: cinza NASA `#f8fafc` + azul marinho
+## 📦 Instalação
 
-## ♿ Acessibilidade
+### Pré-requisitos
 
-- **SkipLink:** Link "Pular para conteúdo" visível ao focar (teclado)
-- **Aria-labels:** Navegação com identificadores descritivos
-- **Semântica:** HTML5 semântico com `main#main-content`, seções e roles
-
-## 🔍 SEO & Performance
-
-- **OG Image:** Geração dinâmica com `next/og` (1200×630, tema Mission Control com scanlines)
-- **Metadata:** OpenGraph, robots.txt, sitemap.xml, JsonLd (Schema.org Person)
-- **ISR:** Dados do GitHub cacheados por 1 hora (`revalidate: 3600`)
-- **Code Splitting:** Lazy loading com `next/dynamic` + skeletons
-- **Error Boundary:** Fallback estilizado para erros de renderização
-- **404 Customizada:** Página temática "SINAL PERDIDO"
-
-## 📋 Setup
+- Node.js 20+
+- pnpm 9+
 
 ```bash
+# Clonar repositório
 git clone https://github.com/Samuelfmedeiros/mission-control.git
 cd mission-control
+
+# Instalar dependências
 pnpm install
+
+# Variáveis de ambiente (crie .env.local)
+cp .env.example .env.local
+
+# Rodar dev server
 pnpm dev
-```
 
-### Variáveis de ambiente (`.env.local`)
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=https://oswchwwmamjaxcvisfie.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=SUPABASE_PUBLISHABLE_REMOVED
-```
-
-## 🧪 Testes
-
-```bash
-pnpm test          # watch mode
-pnpm test:run      # single run
-```
-
-Cobertura: 9 arquivos, **49 testes** — GlassCard, ThemeProvider, Terminal, MiniGame, DataCalculator, CoreEngine, HeroSection, Footer, SkillsGrid.
-
-## 📡 Deploy
-
-Configurado para Vercel via GitHub Actions. Ao fazer push na `master`, o CI executa:
-
-```
-lint → type-check → tests → build
+# Build production
+pnpm build
 ```
 
 ---
 
-**Samuel Andrade** — Analista de Dados & Produto  
-BI · SQL · Python · Machine Learning · Next.js
-# update
+## 🔑 Variáveis de Ambiente
+
+```env
+NEXT_PUBLIC_SUPABASE_URL=your_supabase_url
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_STATIC_EXPORT=false
+```
+
+---
+
+## 📁 Estrutura do Projeto
+
+```
+mission-control/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx          # Root layout + metadata
+│   │   └── page.tsx            # Landing page com todas as seções
+│   ├── components/
+│   │   ├── CockpitBackground.tsx  # Compositor das 6 camadas visuais
+│   │   ├── HUDOverlay.tsx         # Telemetria em tempo real
+│   │   ├── Navbar.tsx             # Menu integrado (sem hambúrguer)
+│   │   ├── Terminal.tsx           # Terminal interativo
+│   │   ├── ProjectHangar.tsx      # Grid de projetos
+│   │   ├── MiniGame.tsx           # Jogo de sequência (Simon)
+│   │   ├── MiniGames/
+│   │   │   ├── MissionGames.tsx   # Tab bar dos jogos
+│   │   │   ├── AsteroidDodge.tsx  # Desvie de asteroides
+│   │   │   ├── CodeTyping.tsx     # Digitação rápida hacker
+│   │   │   └── MemoryMatrix.tsx   # Jogo de memória
+│   │   ├── HeroSection.tsx        # Hero com parallax
+│   │   ├── AboutTimeline.tsx      # Timeline de carreira
+│   │   ├── SkillsGrid.tsx         # Grid de habilidades
+│   │   ├── ContactForm.tsx        # Formulário de contato
+│   │   └── ...                    # +20 componentes
+│   ├── hooks/
+│   │   └── useLocalStorage.ts     # Hook de localStorage
+│   ├── lib/
+│   │   ├── github.ts              # GitHub API client
+│   │   ├── supabase.ts            # Supabase client
+│   │   ├── staticProjects.ts      # Projetos estáticos
+│   │   └── types.ts               # TypeScript types
+│   └── test/
+│       └── setup.tsx              # Vitest setup + mocks
+├── tests/                         # Playwright e2e tests
+├── next.config.ts                 # Config + security headers
+├── vitest.config.ts               # Vitest configuration
+└── playwright.config.ts           # Playwright configuration
+```
+
+---
+
+## 🧪 Testes
+
+```bash
+# Testes unitários
+pnpm test:run
+
+# Testes E2E
+pnpm test:e2e
+```
+
+---
+
+## 🔒 Segurança
+
+- **Content Security Policy** — Restringe fontes de scripts, estilos e imagens
+- **HSTS** — Força HTTPS com preload
+- **X-Frame-Options: DENY** — Previne clickjacking
+- **Input Sanitization** — Terminal sanitiza todos os inputs (anti-XSS)
+- **noopener noreferrer** — Todos os links externos com proteção
+- **Supabase RLS** — Row Level Policies para proteção de dados
+
+---
+
+## 🎮 Comandos do Terminal
+
+| Comando | Descrição |
+|---------|-----------|
+| `ajuda` | Lista de comandos |
+| `sobre` | Sobre Samuel |
+| `projetos` | Lista de projetos |
+| `habilidades` | Tech skills |
+| `contato` | Informações de contato |
+| `stack` | Tech stack do projeto |
+| `neofetch` | System info estilizado |
+| `theme` | Alterna dark/light |
+| `matrix` | Easter egg |
+| `sudo rm -rf /` | 🙃 |
+
+---
+
+## 🚀 Deploy
+
+### Vercel (Produção)
+Deploy automático em push para `master`.
+
+### GitHub Pages (Static)
+```bash
+NEXT_PUBLIC_STATIC_EXPORT=true pnpm build
+```
+
+---
+
+## 👤 Autor
+
+**Samuel Medeiros** — Desenvolvedor Full Stack & Analista de Dados
+- 📧 samuelandrademedeiros@gmail.com
+- 💼 [LinkedIn](https://linkedin.com/in/samuelandrademedeiros)
+- 🐙 [GitHub](https://github.com/Samuelfmedeiros)
+
+---
+
+## 📄 Licença
+
+MIT
