@@ -14,17 +14,24 @@ describe('Navbar', () => {
 
   it('renders logo with name', () => {
     render(<Navbar />)
-    expect(screen.getByText('Samuel Medeiros')).toBeInTheDocument()
+    expect(screen.getByText('SM')).toBeInTheDocument()
   })
 
   it('renders all navigation items on desktop', () => {
     render(<Navbar />)
     expect(screen.getByText('Início')).toBeInTheDocument()
     expect(screen.getByText('Sobre')).toBeInTheDocument()
-    expect(screen.getByText('Habilidades')).toBeInTheDocument()
+    expect(screen.getByText('Skills')).toBeInTheDocument()
     expect(screen.getByText('Projetos')).toBeInTheDocument()
     expect(screen.getByText('Terminal')).toBeInTheDocument()
     expect(screen.getByText('Contato')).toBeInTheDocument()
+  })
+
+  it('renders mobile nav items (scrollable horizontal, no hamburger)', () => {
+    render(<Navbar />)
+    // Mobile nav uses icons + labels in horizontal scroll
+    expect(screen.getByText('Início')).toBeInTheDocument()
+    expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Navegação principal')
   })
 
   it('has proper aria-label for navigation', () => {
@@ -45,9 +52,21 @@ describe('Navbar', () => {
     expect(themeToggle).toBeInTheDocument()
   })
 
-  it('renders mobile menu toggle button', () => {
+  it('does NOT have a hamburger menu button', () => {
     render(<Navbar />)
-    const mobileToggle = screen.getByRole('button', { name: /abrir menu/i })
-    expect(mobileToggle).toBeInTheDocument()
+    // No hamburger — mobile uses horizontal scrollable nav
+    const hamburgerBtn = screen.queryByRole('button', { name: /abrir menu/i })
+    expect(hamburgerBtn).not.toBeInTheDocument()
+  })
+
+  it('renders mobile nav with icon + label pairs', () => {
+    render(<Navbar />)
+    // Check for emoji icons in mobile nav
+    expect(screen.getByText('🏠')).toBeInTheDocument()
+    expect(screen.getByText('👤')).toBeInTheDocument()
+    expect(screen.getByText('⚡')).toBeInTheDocument()
+    expect(screen.getByText('🛰️')).toBeInTheDocument()
+    expect(screen.getByText('💻')).toBeInTheDocument()
+    expect(screen.getByText('📡')).toBeInTheDocument()
   })
 })
