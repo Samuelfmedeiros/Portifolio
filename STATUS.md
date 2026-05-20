@@ -57,12 +57,51 @@
 
 ---
 
-## ✅ Melhorias Anteriores (2026-05-19 — Rodada 1)
+## ✅ Melhorias Implementadas (2026-05-19)
 
-### Correção de Testes
+### Correção de Testes (Sessão 1)
 - [x] **ThemeProvider**: Corrigido — agora aplica classe no document.documentElement no mount
 - [x] **Framer Motion mock**: Mock completo com Proxy para `motion.*` + `AnimatePresence`
 
+### Micro-melhorias (Sessão 2)
+
+#### Terminal
+- [x] Banner ASCII melhorado (box art com v2.0)
+- [x] +5 novos comandos: `date`, `uptime`, `stack`, `github`, `neofetch`
+- [x] aria-labelledby + role="region" para acessibilidade
+
+#### ContactForm
+- [x] Contador de caracteres (max 500) com feedback visual
+- [x] Validação em tempo real — botão desabilitado se inválido
+- [x] Borda vermelha quando excede limite
+- [x] Mensagem dinâmica de status
+
+#### HeroSection
+- [x] Scroll indicator animado (mouse icon com bounce)
+- [x] Hover scale + active scale nos CTAs
+- [x] Transição mais suave nos botões
+
+#### SkillsGrid
+- [x] Hover: scale + translateY + border accent
+- [x] Ícones rotacionam e escalam no hover
+- [x] Transições suaves (300ms)
+
+#### ProjectHangar
+- [x] Hover border accent + scale melhorado
+- [x] Transições mais suaves
+
+#### Footer
+- [x] Layout flex com copyright, data de atualização, versão
+- [x] Última atualização dinâmica
+
+#### CSS
+- [x] Micro-interações globais (a, button, .glass transitions)
+- [x] ::selection customizado (accent color)
+- [x] Focus-visible global (já existente)
+
+#### Novos Arquivos Utilitários
+- [x] `useLocalStorage` hook genérico
+- [x] `LoadingSpinner` componente SVG animado
 ### Testes Unitários (Vitest)
 - [x] **ContactForm.test.tsx**: 6 testes
 - [x] **Navbar.test.tsx**: 6 testes

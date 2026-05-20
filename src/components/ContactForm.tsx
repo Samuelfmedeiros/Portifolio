@@ -16,8 +16,15 @@ export function ContactForm() {
   const [copied, setCopied] = useState(false);
   const lastSentRef = useRef<number>(0);
 
+  const MAX_MESSAGE_LENGTH = 500;
+  const messageLength = content.length;
+  const isMessageTooLong = messageLength > MAX_MESSAGE_LENGTH;
+  const isFormValid = name.trim() && email.trim() && content.trim() && !isMessageTooLong;
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
+
+    if (!isFormValid) return;
 
     const now = Date.now();
     if (now - lastSentRef.current < 30_000) {
@@ -195,16 +202,42 @@ export function ContactForm() {
                 onChange={(e) => setContent(e.target.value)}
                 required
                 rows={4}
-                className="w-full bg-[var(--bg-primary)]/30 border border-[var(--border)] rounded-lg px-4 py-2 font-mono text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition-colors resize-none"
+                maxLength={MAX_MESSAGE_LENGTH + 50}
+                className={`w-full bg-[var(--bg-primary)]/30 border rounded-lg px-4 py-2 font-mono text-sm text-[var(--text-primary)] outline-none transition-colors resize-none ${
+                  isMessageTooLong
+                    ? "border-[var(--error)] focus:border-[var(--error)]"
+                    : "border-[var(--border)] focus:border-[var(--accent)]"
+                }`}
                 placeholder="Digite sua mensagem..."
               />
+              <div className="flex justify-between mt-1">
+                <span className="text-[10px] font-mono text-[var(--text-secondary)]">
+                  {messageLength === 0 ? "Mínimo 10 caracteres" : ""}
+                </span>
+                <span
+                  className={`text-[10px] font-mono ${
+                    isMessageTooLong
+                      ? "text-[var(--error)]"
+                      : messageLength > MAX_MESSAGE_LENGTH * 0.8
+                        ? "text-[var(--proficient)]"
+                        : "text-[var(--text-secondary)]"
+                  }`}
+                  aria-live="polite"
+                >
+                  {messageLength}/{MAX_MESSAGE_LENGTH}
+                </span>
+              </div>
             </div>
 
             <button
               type="submit"
-              disabled={status === "sending"}
+              disabled={status === "sending" || !isFormValid}
               aria-busy={status === "sending"}
-              className="w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10 transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+              className={`w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] transition-colors flex items-center justify-center gap-2 ${
+                !isFormValid && status !== "sending"
+                  ? "opacity-40 cursor-not-allowed"
+                  : "hover:bg-[var(--accent)]/10"
+              } disabled:opacity-50`}
             >
               {status === "sending" ? (
                 "Enviando..."

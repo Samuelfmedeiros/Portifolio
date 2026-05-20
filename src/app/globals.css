@@ -359,3 +359,23 @@ select:focus-visible,
     font-size: 0.8em;
   }
 }
+
+/* ========== MICRO-INTERACTIONS ========== */
+a {
+  transition: color 0.2s ease, transform 0.15s ease, opacity 0.2s ease;
+}
+
+button {
+  transition: background-color 0.2s ease, transform 0.15s ease, opacity 0.2s ease, border-color 0.2s ease;
+}
+
+/* Smooth card hover for all glass cards */
+.glass {
+  transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* Selection color */
+::selection {
+  background: var(--accent);
+  color: var(--bg-primary);
+}

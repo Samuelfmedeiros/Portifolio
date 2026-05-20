@@ -36,7 +36,7 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
             <GlassCard
               key={repo.id}
               delay={i * 0.1}
-              className={`${isFeatured ? "ring-1 ring-[var(--accent)]" : ""} hover:scale-[1.02] transition-transform`}
+              className={`${isFeatured ? "ring-1 ring-[var(--accent)]" : ""} group hover:scale-[1.02] hover:border-[var(--accent)]/30 transition-all duration-300`}
             >
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-2">
