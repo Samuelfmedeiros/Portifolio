@@ -1,6 +1,9 @@
-# Plano: Parallax Futurista — "Nave Futurista"
+# Plano: Parallax Futurista — "Nave Futurista" ✅ CONCLUÍDO
 
-## Estado Atual
+Status: Todos os 6 itens implementados, committed e pushed (master).
+Commits: `8b19b14` (cockpit compositor) + `b8ba81a` (speed lines warp)
+
+## Estado Atual (ANTES)
 
 - `ParallaxBackground.tsx` (ativo no layout): Canvas com 250 estrelas, 3 nebulosas, shooting stars, mouse parallax, scroll Y, deep space gradient — já é rico.
 - Componentes existentes mas **NÃO usados**: `StarField`, `PerspectiveGrid`, `HUDOverlay`, `Scanline`, `CockpitBorders`.
@@ -8,41 +11,17 @@
 
 ## Problema
 
-Os 5 componentes "cockpit" estão prontos mas não compõem a experiência. O background é rico mas isolado — falta a camada de HUD, grid de perspectiva, scanline e bordas de cockpit para dar a sensação de "visório de nave".
+Os 5 componentes "cockpit" estavam prontos mas não compunham a experiência. O background era rico mas isolado — faltava a camada de HUD, grid de perspectiva, scanline e bordas de cockpit para dar a sensação de "visório de nave".
 
-## Plano de Execução
+## ✅ Checklist Completo
 
-### 1. Criar `CockpitBackground.tsx` (compositor)
-Novo componente que empilha TODAS as camadas visuais em ordem correta:
-- L0: `ParallaxBackground` (canvas base — estrelas, nebulosas, shooting stars)
-- L1: `PerspectiveGrid` (grid de perspectiva Tron-style)
-- L2: `StarField` (campo estelar framer-motion — camadas 3D parallax)
-- L3: `Scanline` (linha de varredura)
-- L4: `CockpitBorders` (bordas do visor)
-- L5: `HUDOverlay` (telemetria nos cantos)
+| # | Item | Status | Arquivo |
+|---|------|--------|---------|
+| 1 | Campo estelar 3 camadas | ✅ | `ParallaxBackground.tsx` (250 estrelas, canvas) + `StarField.tsx` (3 profundidades framer-motion) |
+| 2 | Grid de perspectiva | ✅ | `PerspectiveGrid.tsx` (refinado: opacidade 0.12, cores cyan fixas) |
+| 3 | HUD Overlay | ✅ | `HUDOverlay.tsx` (telemetria + flicker + prefers-reduced-motion) |
+| 4 | Scanline sutil | ✅ | `Scanline.tsx` (12s + repeatDelay 3s, orgânico) |
+| 5 | Speed lines (warp) | ✅ | `SpeedLines.tsx` (NOVO — 20 linhas, proporcional ao scroll speed) |
+| 6 | Borda cockpit | ✅ | `CockpitBorders.tsx` (pulse escalonado + acentos topo/base) |
 
-### 2. Atualizar `layout.tsx`
-Substituir `<ParallaxBackground />` por `<CockpitBackground />`.
-
-### 3. Refinar componentes existentes
-- `PerspectiveGrid`: Ajustar opacidade para não competir com as estrelas
-- `HUDOverlay`: Adicionar `prefers-reduced-motion` para desativar flicker
-- `CockpitBorders`: Adicionar animação sutil de "pulse" nas bordas
-- `Scanline`: Variar velocidade para não ser robótico demais
-
-### 4. Performance
-- Tudo via CSS `transform` e `will-change` (GPU accelerated)
-- `ParallaxBackground` já usa `requestAnimationFrame` com cleanup correto
-- `StarField` usa `useMemo` para evitar re-generação de estrelas
-- `HUDOverlay` usa `setInterval` de 1s — leve
-
-### 5. prefers-reduced-motion
-- Respeitar em todas as camadas animadas (StarField, Scanline, HUDOverlay flicker)
-- `ParallaxBackground` já respeita (dark mode only, sem animação no light)
-
-## Arquivos a modificar
-- `src/components/CockpitBackground.tsx` (NOVO)
-- `src/app/layout.tsx` (trocar import)
-- `src/components/PerspectiveGrid.tsx` (refinar)
-- `src/components/CockpitBorders.tsx` (animar pulse)
-- `src/components/Scanline.tsx` (variar velocidade)
+## Arquitetura Final das Camadas (z-index stack)
