@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { ThemeProvider } from "@/components/ThemeProvider";
-import { ParallaxBackground } from "@/components/ParallaxBackground";
+import { CockpitBackground } from "@/components/CockpitBackground";
 import { AppWrapper } from "@/components/AppWrapper";
 import { Navbar } from "@/components/Navbar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
@@ -146,7 +146,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ThemeProvider>
           <AnalyticsTracker />
           <AppWrapper>
-            <ParallaxBackground />
+            <CockpitBackground />
             <ScrollProgress />
             <Navbar />
             <main id="main-content">
