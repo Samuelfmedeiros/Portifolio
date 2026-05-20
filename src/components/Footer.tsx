@@ -126,9 +126,15 @@ export function Footer() {
         </div>
 
         {/* Bottom bar */}
-        <div className="pt-8 border-t border-[var(--border)] text-center">
+        <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs font-mono text-[var(--text-secondary)]/50">
             © {new Date().getFullYear()} Samuel Medeiros
+          </p>
+          <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
+            Última atualização: {new Date().toLocaleDateString("pt-BR")}
+          </p>
+          <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
+            Mission Control v2.0
           </p>
         </div>
       </div>

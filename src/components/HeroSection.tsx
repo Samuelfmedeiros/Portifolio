@@ -105,7 +105,7 @@ export function HeroSection() {
         >
           <a
             href="#projects"
-            className="px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 transition-opacity"
+            className="px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
             Ver Projetos
           </a>
@@ -113,10 +113,33 @@ export function HeroSection() {
             href="/Samuel_Andrade_2026.pdf"
             target="_blank"
             rel="noopener noreferrer"
-            className="px-6 py-3 rounded-lg border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm hover:bg-[var(--border)] transition-colors"
+            className="px-6 py-3 rounded-lg border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm hover:bg-[var(--border)] hover:scale-[1.02] active:scale-[0.98] transition-all"
           >
             Baixar Currículo
           </a>
+        </motion.div>
+
+        {/* Scroll indicator */}
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+          className="mt-16 flex flex-col items-center gap-2"
+        >
+          <span className="text-[10px] font-mono text-[var(--text-secondary)] tracking-widest uppercase">
+            Scroll
+          </span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.5, repeat: Infinity, ease: "easeInOut" }}
+            className="w-5 h-8 rounded-full border-2 border-[var(--border)] flex items-start justify-center p-1"
+          >
+            <motion.div
+              animate={{ opacity: [1, 0.3, 1] }}
+              transition={{ duration: 1.5, repeat: Infinity }}
+              className="w-1 h-2 bg-[var(--accent)] rounded-full"
+            />
+          </motion.div>
         </motion.div>
       </div>
     </section>

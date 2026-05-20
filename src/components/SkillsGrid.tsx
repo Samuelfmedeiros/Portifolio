@@ -147,9 +147,9 @@ export function SkillsGrid() {
                 </div>
               }
             >
-              <GlassCard>
+              <GlassCard className="group hover:border-[var(--accent)]/40 transition-all duration-300 hover:scale-[1.03] hover:-translate-y-1">
                 <div className="flex flex-col items-center text-center gap-3 py-2 cursor-default">
-                  <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)]" aria-hidden="true" />
+                  <skill.icon className="w-8 h-8 md:w-10 md:h-10 text-[var(--accent)] group-hover:scale-110 group-hover:rotate-3 transition-transform duration-300" aria-hidden="true" />
                   <div>
                     <h3 className="font-semibold text-sm md:text-base text-[var(--text-primary)]">
                       {skill.name}

@@ -6,14 +6,18 @@ import { useTheme } from "./ThemeProvider";
 import type { Command } from "@/lib/types";
 
 const BANNER = [
-  "Samuel Medeiros — Analista de Dados",
+  " ╔══════════════════════════════════════╗",
+  " ║     🛰️  MISSION CONTROL  v2.0      ║",
+  " ║     Samuel Medeiros — Dev Full Stack║",
+  " ╚══════════════════════════════════════╝",
+  "",
   "Digite 'help' ou pressione Tab para autocompletar.",
   "",
 ].join("\n");
 
 const PROMPT = "C:\\Users\\Visitor";
 
-const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "hora", "whoami", "theme", "fix", "run", "matrix", "sudo"];
+const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "hora", "date", "whoami", "theme", "fix", "run", "matrix", "sudo", "stack", "github", "neofetch", "uptime"];
 
 export function Terminal() {
   const [input, setInput] = useState("");
@@ -45,9 +49,14 @@ export function Terminal() {
   habilidades   — Habilidades técnicas
   contato       — Informações de contato
   limpar        — Limpa o terminal
-  hora          — Hora atual
+  hora          — Data e hora atual
+  date          — Data formatada completa
   whoami        — Nome do usuário
   theme         — Alterna o tema
+  stack         — Tech stack do projeto
+  github        — Info do GitHub
+  neofetch      — System info estilo neofetch
+  uptime        — Sessão uptime
 
 ⚡ EASTER EGGS (para devs):
   fix path_variables        — Repara variáveis do Windows
@@ -112,6 +121,46 @@ Experiência:
 
       case "whoami":
         output = "Samuel Medeiros";
+        break;
+
+      case "date":
+        output = `Data atual: ${new Date().toLocaleDateString("pt-BR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}\nHorário: ${new Date().toLocaleTimeString("pt-BR")}`;
+        break;
+
+      case "uptime":
+        const uptimeSecs = Math.floor((Date.now() - performance.now()) / 1000);
+        const mins = Math.floor(uptimeSecs / 60);
+        output = `Session uptime: ${mins} min`;
+        break;
+
+      case "stack":
+        output = `TECH STACK:
+  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4
+  Animações: Framer Motion, Lucide Icons
+  Backend:   Supabase (PostgreSQL), Cloudflare Workers
+  Testes:    Vitest, Playwright
+  Deploy:    Cloudflare Pages, Vercel
+  CI/CD:     GitHub Actions`;
+        break;
+
+      case "github":
+        output = `GitHub: github.com/Samuelfmedeiros
+  Repos públicos: mission-control, dog-walk e mais
+  Linguagens: TypeScript, Python, SQL, JavaScript
+  Contribuições: Frequentes`;
+        break;
+
+      case "neofetch":
+        output = `
+        ╭───────────────╮         samuel@portfolio
+        │   🛰️  MC v2  │         ──────────────────
+        │  Mission Ctrl │         OS: Web (Next.js 16)
+        ╰───────────────╯         Host: ${typeof navigator !== 'undefined' ? navigator.platform : 'unknown'}
+                                  Shell: Terminal React
+                                  Theme: ${typeof document !== 'undefined' ? document.documentElement.classList.contains('theme-dark') ? 'Night Vision' : 'Daylight Ops' : 'unknown'}
+                                  CPU: ${typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || '??' : '?'} cores
+                                  Memory: ${typeof navigator !== 'undefined' && (navigator as any).deviceMemory ? (navigator as any).deviceMemory + 'GB' : '??'}
+                                  Browser: ${typeof navigator !== 'undefined' ? navigator.userAgent.split(' ').pop() || 'unknown' : 'unknown'}`;
         break;
 
       case "theme":
@@ -248,11 +297,11 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
 
   return (
     <section id="terminal" className="py-12 md:py-20 px-4 md:px-6">
-      <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center">
-        ▸ TERMINAL
-      </h2>
+          <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center" id="terminal-heading">
+            ▸ TERMINAL
+          </h2>
 
-      <GlassCard className="max-w-3xl mx-auto font-mono text-sm">
+          <GlassCard className="max-w-3xl mx-auto font-mono text-sm" role="region" aria-labelledby="terminal-heading">
         <div
           ref={scrollRef}
           className="h-48 sm:h-64 md:h-80 overflow-y-auto mb-4 p-4 rounded-lg bg-[var(--bg-primary)]/30 text-[var(--text-primary)] scroll-smooth"
