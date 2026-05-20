@@ -49,19 +49,23 @@ const securityHeaders = [
   },
 ];
 
+const isStaticExport = process.env.NEXT_PUBLIC_STATIC_EXPORT === "true";
+
 const nextConfig: NextConfig = {
-  // Security headers
-  async headers() {
-    return [
-      {
-        source: "/(.*)",
-        headers: securityHeaders,
-      },
-    ];
-  },
+  // Security headers (only when running on a server — not static export)
+  ...(!isStaticExport && {
+    async headers() {
+      return [
+        {
+          source: "/(.*)",
+          headers: securityHeaders,
+        },
+      ];
+    },
+  }),
 
   // GitHub Pages: set NEXT_PUBLIC_STATIC_EXPORT=true in env
-  ...(process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" && {
+  ...(isStaticExport && {
     output: "export",
     images: { unoptimized: true },
     basePath: "",
