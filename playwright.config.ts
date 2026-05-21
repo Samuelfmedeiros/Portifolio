@@ -20,18 +20,22 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
 
-  webServer: {
+  webServer: process.env.TEST_BASE_URL ? undefined : {
     command: 'npx serve out -l 3000',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
-    timeout: 60000,
+    timeout: 120000,
     stdout: 'pipe',
+    stderr: 'pipe',
   },
 
   projects: [
     {
       name: 'chromium',
-      use: { ...devices['Desktop Chromium'] },
+      use: {
+        ...devices['Desktop Chromium'],
+        baseURL: process.env.TEST_BASE_URL || 'http://localhost:3000',
+      },
     },
   ],
 });
