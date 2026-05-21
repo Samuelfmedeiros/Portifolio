@@ -20,6 +20,14 @@ export default defineConfig({
     screenshot: 'only-on-failure',
   },
 
+  webServer: {
+    command: 'npx serve out -l 3000',
+    url: 'http://localhost:3000',
+    reuseExistingServer: !process.env.CI,
+    timeout: 60000,
+    stdout: 'pipe',
+  },
+
   projects: [
     {
       name: 'chromium',

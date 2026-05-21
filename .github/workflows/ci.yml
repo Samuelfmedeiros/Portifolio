@@ -65,31 +65,10 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: pnpm build
-      - name: Start static server
-        run: |
-          echo "📦 Starting static server from out/ directory..."
-          ls -la out/ | head -10
-          npx -y serve@latest out -l 3000 &
-          SERVER_PID=$!
-          echo "Server PID: $SERVER_PID"
-          echo "⏳ Waiting for server..."
-          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
-            sleep 1
-            if curl -sf http://localhost:3000 > /dev/null 2>&1; then
-              echo "✅ Server ready after ${i}s"
-              curl -so /dev/null -w "HTTP %{http_code}" http://localhost:3000
-              echo ""
-              exit 0
-            fi
-          done
-          echo "❌ Server did not start within 20s"
-          kill $SERVER_PID 2>/dev/null || true
-          exit 1
       - name: Run Playwright tests
-        run: npx playwright test --project=chromium --reporter=list --retries=2
-      - name: Stop server
-        if: always()
-        run: kill $(cat /tmp/prod.pid) 2>/dev/null || true
+        env:
+          CI: "true"
+        run: npx playwright test --project=chromium --reporter=list
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
