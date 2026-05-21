@@ -10,7 +10,7 @@ describe('SplashScreen', () => {
   it('renders without crashing', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    expect(screen.getByText('SamuelMed')).toBeInTheDocument()
+    expect(screen.getByText('Samuel Medeiros')).toBeInTheDocument()
   })
 
   it('displays the logo', () => {
