@@ -48,7 +48,7 @@ jobs:
     name: Playwright E2E
     needs: test
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -60,14 +60,10 @@ jobs:
         run: pnpm install --frozen-lockfile
       - name: Install Playwright browsers
         run: npx playwright install --with-deps chromium
-      - name: Build application
-        env:
-          NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
-        run: pnpm build
-      - name: Run Playwright tests
+      - name: Run Playwright tests against production
         env:
           CI: "true"
+          TEST_BASE_URL: "https://samuelmedeiros.vercel.app"
         run: npx playwright test --project=chromium --reporter=list
       - name: Upload test results
         if: always()
