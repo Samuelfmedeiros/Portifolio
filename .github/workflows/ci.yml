@@ -66,25 +66,25 @@ jobs:
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: pnpm build
       - name: Start static server
-        id: prod-server
         run: |
-          npx serve out -l 3000 > /dev/null 2>&1 &
-          echo $! > /tmp/prod.pid
-          echo "Waiting for server..."
-          for i in $(seq 1 30); do
-            if curl -sf http://localhost:3000 > /dev/null 2>&1; then
-              echo "✅ Server ready on port 3000 after ${i}s"
-              break
-            fi
+          echo "📦 Starting static server from out/ directory..."
+          ls -la out/ | head -10
+          npx -y serve@latest out -l 3000 &
+          SERVER_PID=$!
+          echo "Server PID: $SERVER_PID"
+          echo "⏳ Waiting for server..."
+          for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20; do
             sleep 1
+            if curl -sf http://localhost:3000 > /dev/null 2>&1; then
+              echo "✅ Server ready after ${i}s"
+              curl -so /dev/null -w "HTTP %{http_code}" http://localhost:3000
+              echo ""
+              exit 0
+            fi
           done
-          # Verify server responds with HTML
-          STATUS=$(curl -so /dev/null -w "%{http_code}" http://localhost:3000)
-          echo "HTTP Status: $STATUS"
-          if [ "$STATUS" != "200" ]; then
-            echo "❌ Server returned $STATUS"
-            exit 1
-          fi
+          echo "❌ Server did not start within 20s"
+          kill $SERVER_PID 2>/dev/null || true
+          exit 1
       - name: Run Playwright tests
         run: npx playwright test --project=chromium --reporter=list --retries=2
       - name: Stop server
