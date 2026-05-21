@@ -26,7 +26,7 @@ jobs:
           node-version: "20"
 
       - name: Install pnpm
-        run: npm install -g pnpm
+        run: npm install -g pnpm@9
 
       - name: Install and build
         env:
@@ -34,10 +34,17 @@ jobs:
           NEXT_PUBLIC_SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           NEXT_PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
         run: |
+          set -e
           echo "Node version: $(node --version)"
           echo "pnpm version: $(pnpm --version)"
-          pnpm install --frozen-lockfile
-          pnpm build 2>&1
+          echo "=== pnpm install ==="
+          pnpm install --frozen-lockfile 2>&1
+          echo "=== pnpm build ==="
+          pnpm build 2>&1 || { echo "BUILD FAILED"; exit 1; }
+          echo "=== Build output ==="
+          ls -la out/ 2>/dev/null || ls -la .next/ 2>/dev/null || echo "No output dir"
+          echo "=== Build summary ==="
+          du -sh out/ 2>/dev/null || du -sh .next/ 2>/dev/null || echo "No size"
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
