@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useRef, useMemo } from "react";
+import { useMemo } from "react";
 
 interface Star {
   id: number;
@@ -35,11 +35,7 @@ const depthSpeed: Record<Star["depth"], [string, string]> = {
 };
 
 export function StarField() {
-  const containerRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: containerRef,
-    offset: ["start start", "end start"],
-  });
+  const { scrollYProgress } = useScroll(); // global scroll — container é fixed, target não funciona
 
   const shouldReduceMotion = useReducedMotion();
   const stars = useMemo(() => generateStars(60), []);
@@ -51,7 +47,7 @@ export function StarField() {
   }, [stars]);
 
   return (
-    <div ref={containerRef} className="absolute inset-0 z-0 overflow-hidden">
+    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
       {([1, 2, 3] as const).map((depth) => {
         const speed = shouldReduceMotion ? ["0%", "0%"] : depthSpeed[depth];
         const y = useTransform(scrollYProgress, [0, 1], speed);

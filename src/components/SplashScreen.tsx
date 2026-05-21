@@ -60,7 +60,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
           className="text-center mb-12"
         >
           <h1 className="text-4xl font-mono font-bold text-white mb-2">
-            Samuel<span className="text-cyan-400">Med</span>
+            Samuel <span className="text-cyan-400">Medeiros</span>
           </h1>
           <p className="text-slate-500 text-sm font-mono">Mission Control v2.0</p>
         </motion.div>
