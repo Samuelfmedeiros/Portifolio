@@ -5,7 +5,7 @@ export interface Repo {
   id: number;
   name: string;
   description: string | null;
-  html_url: string;
+  html_url: string | null;
   homepage: string | null;
   stargazers_count: number;
   forks_count: number;
@@ -13,6 +13,10 @@ export interface Repo {
   topics: string[];
   pushed_at: string;
   created_at: string;
+  /** Custom gradient for project card header */
+  imageGradient?: string;
+  /** Whether this project has a live demo */
+  hasDemo?: boolean;
 }
 
 /** Terminal command history entry */

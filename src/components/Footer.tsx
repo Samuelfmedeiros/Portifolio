@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Copy, Check } from "lucide-react";
+import { Mail, Copy, Check, Shield, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -27,8 +28,176 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
+export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms' }) {
+  if (!open) return null;
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
+          />
+          {/* Modal */}
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+          >
+            <div className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-[var(--accent)]" />
+                  <h2 className="font-mono text-lg text-[var(--accent)]">
+                    {activeTab === 'privacy' ? 'Política de Privacidade' : 'Termos de Uso'}
+                  </h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  aria-label="Fechar modal"
+                >
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              {/* Tabs */}
+              <div className="flex border-b border-[var(--border)]/50 mb-6">
+                <button
+                  onClick={() => {/* Will be handled by state */}}
+                  className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'privacy' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
+                >
+                  Política de Privacidade
+                </button>
+                <button
+                  onClick={() => {/* Will be handled by state */}}
+                  className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'terms' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
+                >
+                  Termos de Uso
+                </button>
+              </div>
+
+              {/* Content */}
+              <div className="space-y-4 text-xs font-mono text-[var(--text-secondary)] leading-relaxed">
+                {activeTab === 'privacy' && (
+                  <>
+                    <p>
+                      <strong className="text-[var(--text-primary)]">Última atualização:</strong> {new Date().toLocaleDateString("pt-BR")}
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)] mt-4">1. Coleta de Dados</h3>
+                    <p>
+                      Este portfólio coleta apenas dados necessários para funcionamento:
+                      mensagens enviadas pelo formulário de contato (nome, email e conteúdo)
+                      e dados de navegação anonimizados (page views) apenas com seu consentimento.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">2. Uso dos Dados</h3>
+                    <p>
+                      Os dados do formulário são utilizados exclusivamente para retorno de contato profissional.
+                      Dados de navegação (analytics) são usados apenas para entender quais páginas são mais acessadas.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">3. Armazenamento</h3>
+                    <p>
+                      Os dados são armazenados no Supabase (servidores cloud seguros). Não vendemos,
+                      alugamos ou compartilhamos seus dados com terceiros para fins comerciais.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">4. Seus Direitos (LGPD)</h3>
+                    <p>
+                      Conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018), você tem direito a:
+                    </p>
+                    <ul className="list-disc list-inside space-y-1 ml-2">
+                      <li>Acesso aos seus dados pessoais</li>
+                      <li>Correção de dados incompletos, inexatos ou desatualizados</li>
+                      <li>Eliminação dos dados pessoais tratados com consentimento</li>
+                      <li>Revogação do consentimento a qualquer momento</li>
+                      <li>Portabilidade dos dados a outro fornecedor de serviço</li>
+                    </ul>
+
+                    <h3 className="text-sm text-[var(--accent)]">5. Cookies e Analytics</h3>
+                    <p>
+                      Utilizamos cookies apenas para: preferências de tema (claro/escuro) e
+                      consentimento de analytics. O rastreamento de page views só é ativado
+                      após seu consentimento explícito.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">6. Contato</h3>
+                    <p>
+                      Para exercer seus direitos ou esclarecer dúvidas sobre privacidade,
+                      entre em contato: samuelandrademedeiros@gmail.com
+                    </p>
+                  </>
+                )}
+                
+                {activeTab === 'terms' && (
+                  <>
+                    <p>
+                      <strong className="text-[var(--text-primary)]">Última atualização:</strong> {new Date().toLocaleDateString("pt-BR")}
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)] mt-4">1. Aceitação dos Termos</h3>
+                    <p>
+                      Ao acessar e utilizar este portfólio, você concorda em cumprir e estar vinculado aos presentes Termos de Uso.
+                      Se você não concordar com qualquer parte destes termos, por favor não utilize este site.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">2. Uso do Site</h3>
+                    <p>
+                      Este portfólio é destinado exclusivamente para exibição de projetos profissionais, habilidades e experiências de Samuel Medeiros.
+                      Você pode visualizar o conteúdo para fins pessoais e profissionais, mas não pode reproduzir, distribuir ou criar obras derivadas sem permissão explícita.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">3. Propriedade Intelectual</h3>
+                    <p>
+                      Todo o conteúdo deste site, incluindo textos, imagens, gráficos, logotipos, ícones e código-fonte, é propriedade exclusiva de Samuel Medeiros, exceto quando indicado de outra forma.
+                      Todos os direitos de propriedade intelectual estão reservados.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">4. Limitação de Responsabilidade</h3>
+                    <p>
+                      Samuel Medeiros não será responsável por quaisquer danos diretos, indiretos, incidentais, consequentes ou punitivos resultantes do acesso ou uso deste site.
+                      Embora nos esforcemos para manter as informações atualizadas e corretas, não garantimos a exatidão, integridade ou utilidade das informações fornecidas.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">5. Links Externos</h3>
+                    <p>
+                      Este site pode conter links para sites de terceiros que não são controlados por Samuel Medeiros.
+                      Não assumimos responsabilidade pelo conteúdo, políticas de privacidade ou práticas de qualquer site de terceiros.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">6. Alterações nos Termos</h3>
+                    <p>
+                      Samuel Medeiros reserva-se o direito de modificar ou substituir estes Termos de Uso a qualquer momento.
+                      É sua responsabilidade revisar estes termos periodicamente para mudanças. Seu uso continuado do site após tais modificações constitui aceitação dos novos termos.
+                    </p>
+
+                    <h3 className="text-sm text-[var(--accent)]">7. Contato</h3>
+                    <p>
+                      Para perguntas sobre estes Termos de Uso, entre em contato: samuelandrademedeiros@gmail.com
+                    </p>
+                  </>
+                )}
+              </div>
+            </div>
+          </motion.div>
+        </>
+      )}
+    </AnimatePresence>
+  );
+}
+
 export function Footer() {
   const [copied, setCopied] = useState(false);
+  const [privacyOpen, setPrivacyOpen] = useState(false);
+  const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
@@ -125,6 +294,31 @@ export function Footer() {
           </div>
         </div>
 
+        {/* LGPD / Privacy Section */}
+        <div id="privacidade" className="mb-8 p-4 rounded-lg border border-[var(--border)]/30 bg-[var(--bg-primary)]/20">
+          <div className="flex items-start gap-3">
+            <Shield className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
+            <div>
+              <h3 className="font-mono text-xs text-[var(--accent)] mb-1">
+                Proteção de Dados (LGPD)
+              </h3>
+              <p className="text-[11px] font-mono text-[var(--text-secondary)] leading-relaxed">
+                Seus dados estão protegidos conforme a LGPD (Lei 13.709/2018). Não compartilhamos seus dados com terceiros.
+                Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento.
+              </p>
+              <button
+                onClick={() => {
+                  setPrivacyOpen(true);
+                  setActiveTab('privacy');
+                }}
+                className="mt-2 text-[11px] font-mono text-[var(--accent)] hover:underline transition-colors"
+              >
+                Leia a Política de Privacidade completa →
+              </button>
+            </div>
+          </div>
+        </div>
+
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs font-mono text-[var(--text-secondary)]/50">
@@ -138,6 +332,9 @@ export function Footer() {
           </p>
         </div>
       </div>
+
+      {/* Privacy/Terms Modal */}
+      <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} activeTab={activeTab} />
     </footer>
   );
 }

@@ -32,6 +32,13 @@ const LANG_COLORS: Record<string, string> = {
   Svelte: "#ff3e00",
 };
 
+// Gradient map for known projects
+const PROJECT_GRADIENTS: Record<string, string> = {
+  "seu.pet": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  "mission-control": "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+  DogWalk: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
+};
+
 // Tech tag colors based on category
 const getTagStyle = (tech: string) => {
   const lower = tech.toLowerCase();
@@ -154,6 +161,7 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
             const updated = repo.pushed_at
               ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
               : null;
+            const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
 
             return (
               <motion.div
@@ -174,26 +182,33 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
 
                   {/* Featured badge */}
                   {isFeatured && (
-                    <div className="absolute top-3 right-3 z-10">
+                    <div className="absolute top-3 right-3 z-20">
                       <span className="text-[9px] font-mono text-[var(--accent)] border border-[var(--accent)]/40 px-2 py-0.5 rounded bg-[var(--accent)]/10 backdrop-blur-sm">
                         ★ FEATURED
                       </span>
                     </div>
                   )}
 
-                  <div className="relative">
-                    {/* Header */}
-                    <div className="flex items-start gap-2 mb-3 pr-16">
-                      <div className="p-1.5 rounded-lg bg-[var(--accent)]/10 border border-[var(--accent)]/20 shrink-0 mt-0.5">
-                        <Code className="w-3.5 h-3.5 text-[var(--accent)]" />
-                      </div>
-                      <h3 className="font-mono text-sm text-[var(--text-primary)] group-hover:text-[var(--accent)] transition-colors leading-tight">
+                  {/* Project image header */}
+                  <div
+                    className="relative h-[120px] w-full overflow-hidden"
+                    style={{ background: gradient }}
+                  >
+                    {/* Overlay pattern */}
+                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
+                    {/* Project name overlay */}
+                    <div className="absolute inset-0 flex items-center justify-center">
+                      <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg">
                         {repo.name}
-                      </h3>
+                      </span>
                     </div>
+                    {/* Bottom fade */}
+                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
+                  </div>
 
+                  <div className="relative p-1">
                     {/* Description */}
-                    <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 min-h-[2.5rem]">
+                    <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 min-h-[2.5rem] mt-1">
                       {repo.description || "No description provided"}
                     </p>
 
@@ -237,18 +252,20 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
 
                     {/* Action links */}
                     <div className="flex gap-3">
-                      <a
-                        href={repo.html_url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[10px] font-mono text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
-                      >
-                        <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                        REPO
-                      </a>
-                      {repo.homepage && (
+                      {repo.html_url && (
                         <a
-                          href={repo.homepage}
+                          href={repo.html_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-[10px] font-mono text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
+                        >
+                          <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                          REPO
+                        </a>
+                      )}
+                      {(repo.homepage || repo.hasDemo) && (
+                        <a
+                          href={repo.homepage || "#"}
                           target="_blank"
                           rel="noopener noreferrer"
                           className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"

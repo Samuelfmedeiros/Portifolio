@@ -4,6 +4,6 @@
  * @deprecated Use UnifiedProfile instead.
  * This stub is kept for import compatibility.
  */
-export function AboutTimeline() {
+export function SkillsGrid() {
   return null;
 }

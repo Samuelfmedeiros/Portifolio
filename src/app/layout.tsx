@@ -11,6 +11,7 @@ import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
+import { CookieBannerProvider, useAnalyticsConsent } from "@/components/CookieBanner";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -119,6 +120,12 @@ export const metadata: Metadata = {
   },
 };
 
+function ConditionalAnalytics() {
+  const { consent } = useAnalyticsConsent();
+  if (consent !== "accepted") return null;
+  return <AnalyticsTracker />;
+}
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" suppressHydrationWarning>
@@ -144,16 +151,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="relative min-h-screen antialiased">
         <SkipLink />
         <ThemeProvider>
-          <AnalyticsTracker />
-          <AppWrapper>
-            <CockpitBackground />
-            <ScrollProgress />
-            <Navbar />
-            <main id="main-content">
-              <ErrorBoundary>{children}</ErrorBoundary>
-            </main>
-            <Footer />
-          </AppWrapper>
+          <CookieBannerProvider>
+            <ConditionalAnalytics />
+            <AppWrapper>
+              <CockpitBackground />
+              <ScrollProgress />
+              <Navbar />
+              <main id="main-content">
+                <ErrorBoundary>{children}</ErrorBoundary>
+              </main>
+              <Footer />
+            </AppWrapper>
+          </CookieBannerProvider>
         </ThemeProvider>
         <KeyboardShortcuts />
         <JsonLd />
