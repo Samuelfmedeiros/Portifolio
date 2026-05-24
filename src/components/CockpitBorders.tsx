@@ -1,92 +1,131 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { motion, useScroll, useTransform } from "framer-motion";
 
 export function CockpitBorders() {
-  const cornerBase = "absolute w-8 h-8 md:w-16 md:h-16 border-cyan-500/20 z-1";
-  const innerCorner = "absolute w-4 h-4 md:w-6 md:h-6 border-cyan-400/10 z-1";
+  const { scrollYProgress } = useScroll();
+  const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.3]);
+
+  // Gradient corner component
+  const GradientCorner = ({ position, delay = 0 }: { position: string; delay?: number }) => {
+    const positionClasses: Record<string, string> = {
+      "top-left": "top-0 left-0",
+      "top-right": "top-0 right-0",
+      "bottom-left": "bottom-0 left-0",
+      "bottom-right": "bottom-0 right-0",
+    };
+
+    const gradientDir: Record<string, string> = {
+      "top-left": "to-br",
+      "top-right": "to-bl",
+      "bottom-left": "to-tr",
+      "bottom-right": "to-tl",
+    };
+
+    return (
+      <motion.div
+        style={{ opacity }}
+        className={`absolute w-12 h-12 md:w-20 md:h-20 ${positionClasses[position]} z-1`}
+      >
+        {/* Outer gradient border - softer */}
+        <motion.div
+          className={`absolute inset-0 ${positionClasses[position]} rounded-tl-lg bg-gradient-to-${gradientDir[position]} from-[var(--accent)] to-transparent`}
+          style={{
+            opacity: 0.12,
+            maskImage: position === "top-left"
+              ? "linear-gradient(to bottom right, black 0%, transparent 70%)"
+              : position === "top-right"
+              ? "linear-gradient(to bottom left, black 0%, transparent 70%)"
+              : position === "bottom-left"
+              ? "linear-gradient(to top right, black 0%, transparent 70%)"
+              : "linear-gradient(to top left, black 0%, transparent 70%)",
+            WebkitMaskImage: position === "top-left"
+              ? "linear-gradient(to bottom right, black 0%, transparent 70%)"
+              : position === "top-right"
+              ? "linear-gradient(to bottom left, black 0%, transparent 70%)"
+              : position === "bottom-left"
+              ? "linear-gradient(to top right, black 0%, transparent 70%)"
+              : "linear-gradient(to top left, black 0%, transparent 70%)",
+          }}
+          animate={{ opacity: [0.08, 0.18, 0.08] }}
+          transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay }}
+        />
+
+        {/* Inner accent - thin line */}
+        <div
+          className={`absolute w-6 h-6 md:w-8 md:h-8 ${position === "top-left" ? "top-1 left-1" : position === "top-right" ? "top-1 right-1" : position === "bottom-left" ? "bottom-1 left-1" : "bottom-1 right-1"}`}
+          style={{
+            borderTop: position.startsWith("top") ? "1px solid rgba(34, 211, 238, 0.08)" : "none",
+            borderBottom: position.startsWith("bottom") ? "1px solid rgba(34, 211, 238, 0.08)" : "none",
+            borderLeft: position.endsWith("left") ? "1px solid rgba(34, 211, 238, 0.08)" : "none",
+            borderRight: position.endsWith("right") ? "1px solid rgba(34, 211, 238, 0.08)" : "none",
+          }}
+        />
+      </motion.div>
+    );
+  };
 
   return (
-    <div className="absolute inset-0 z-1 pointer-events-none">
-      {/* Main corners — larger, animated */}
-      {/* Top-left */}
-      <motion.div
-        className={`${cornerBase} top-0 left-0 border-r-0 border-b-0 rounded-tl-lg`}
-        animate={{ opacity: [0.15, 0.45, 0.15], borderColor: ["rgba(6,182,212,0.15)", "rgba(6,182,212,0.35)", "rgba(6,182,212,0.15)"] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
-      />
-      {/* Top-right */}
-      <motion.div
-        className={`${cornerBase} top-0 right-0 border-l-0 border-b-0 rounded-tr-lg`}
-        animate={{ opacity: [0.15, 0.45, 0.15], borderColor: ["rgba(6,182,212,0.15)", "rgba(6,182,212,0.35)", "rgba(6,182,212,0.15)"] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 1 }}
-      />
-      {/* Bottom-left */}
-      <motion.div
-        className={`${cornerBase} bottom-0 left-0 border-r-0 border-t-0 rounded-bl-lg`}
-        animate={{ opacity: [0.15, 0.45, 0.15], borderColor: ["rgba(6,182,212,0.15)", "rgba(6,182,212,0.35)", "rgba(6,182,212,0.15)"] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
-      />
-      {/* Bottom-right */}
-      <motion.div
-        className={`${cornerBase} bottom-0 right-0 border-l-0 border-t-0 rounded-br-lg`}
-        animate={{ opacity: [0.15, 0.45, 0.15], borderColor: ["rgba(6,182,212,0.15)", "rgba(6,182,212,0.35)", "rgba(6,182,212,0.15)"] }}
-        transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 3 }}
-      />
+    <motion.div className="absolute inset-0 z-1 pointer-events-none" style={{ opacity }}>
+      {/* Four gradient corners */}
+      <GradientCorner position="top-left" delay={0} />
+      <GradientCorner position="top-right" delay={1} />
+      <GradientCorner position="bottom-left" delay={2} />
+      <GradientCorner position="bottom-right" delay={3} />
 
-      {/* Inner corners — smaller accent */}
-      <div className={`${innerCorner} top-2 left-2 md:top-3 md:left-3 border-r-0 border-b-0 rounded-tl`} />
-      <div className={`${innerCorner} top-2 right-2 md:top-3 md:right-3 border-l-0 border-b-0 rounded-tr`} />
-      <div className={`${innerCorner} bottom-2 left-2 md:bottom-3 md:left-3 border-r-0 border-t-0 rounded-bl`} />
-      <div className={`${innerCorner} bottom-2 right-2 md:bottom-3 md:right-3 border-l-0 border-t-0 rounded-br`} />
-
-      {/* Side accents — animated pulse */}
+      {/* Side gradient accents - softer */}
       <motion.div
-        className="absolute top-1/4 left-0 w-1 h-16 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent"
-        animate={{ opacity: [0.3, 0.8, 0.3] }}
+        className="absolute top-[15%] left-0 w-px h-20 bg-gradient-to-b from-transparent via-[var(--accent)] to-transparent"
+        style={{ opacity: 0.08 }}
+        animate={{ opacity: [0.04, 0.12, 0.04], height: ["5rem", "8rem", "5rem"] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute top-1/4 right-0 w-1 h-16 bg-gradient-to-b from-transparent via-cyan-500/10 to-transparent"
-        animate={{ opacity: [0.3, 0.8, 0.3] }}
+        className="absolute top-[15%] right-0 w-px h-20 bg-gradient-to-b from-transparent via-[var(--accent)] to-transparent"
+        style={{ opacity: 0.08 }}
+        animate={{ opacity: [0.04, 0.12, 0.04], height: ["5rem", "8rem", "5rem"] }}
         transition={{ duration: 3, repeat: Infinity, ease: "easeInOut", delay: 1.5 }}
       />
 
-      {/* Top/bottom center accents */}
+      {/* Top/bottom center gradient accents */}
       <motion.div
-        className="absolute top-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-cyan-500/15 to-transparent"
-        animate={{ width: ["6rem", "10rem", "6rem"] }}
+        className="absolute top-0 left-1/2 -translate-x-1/2 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
+        style={{ opacity: 0.1 }}
+        animate={{ width: ["6rem", "12rem", "6rem"] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-32 h-px bg-gradient-to-r from-transparent via-cyan-500/15 to-transparent"
-        animate={{ width: ["6rem", "10rem", "6rem"] }}
+        className="absolute bottom-0 left-1/2 -translate-x-1/2 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
+        style={{ opacity: 0.1 }}
+        animate={{ width: ["6rem", "12rem", "6rem"] }}
         transition={{ duration: 4, repeat: Infinity, ease: "easeInOut", delay: 2 }}
       />
 
-      {/* Edge glow lines — subtle animated edges */}
+      {/* Edge glow lines - very subtle */}
       <motion.div
-        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent"
-        animate={{ opacity: [0.1, 0.4, 0.1] }}
+        className="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
+        style={{ opacity: 0.06 }}
+        animate={{ opacity: [0.03, 0.1, 0.03] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.div
-        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-cyan-400/20 to-transparent"
-        animate={{ opacity: [0.1, 0.4, 0.1] }}
+        className="absolute bottom-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-[var(--accent)] to-transparent"
+        style={{ opacity: 0.06 }}
+        animate={{ opacity: [0.03, 0.1, 0.03] }}
         transition={{ duration: 5, repeat: Infinity, ease: "easeInOut", delay: 2.5 }}
       />
 
-      {/* Viewport markers — HUD-style small marks along edges */}
-      {/* Top markers */}
-      <div className="absolute top-0 left-[20%] w-px h-3 bg-cyan-400/10" />
-      <div className="absolute top-0 left-[40%] w-px h-3 bg-cyan-400/10" />
-      <div className="absolute top-0 left-[60%] w-px h-3 bg-cyan-400/10" />
-      <div className="absolute top-0 left-[80%] w-px h-3 bg-cyan-400/10" />
-      {/* Bottom markers */}
-      <div className="absolute bottom-0 left-[20%] w-px h-3 bg-cyan-400/10" />
-      <div className="absolute bottom-0 left-[40%] w-px h-3 bg-cyan-400/10" />
-      <div className="absolute bottom-0 left-[60%] w-px h-3 bg-cyan-400/10" />
-      <div className="absolute bottom-0 left-[80%] w-px h-3 bg-cyan-400/10" />
-    </div>
+      {/* Viewport markers - softer */}
+      {[20, 40, 60, 80].map((pct, i) => (
+        <div key={`t-${i}`} className="absolute top-0" style={{ left: `${pct}%` }}>
+          <div className="w-px h-2 bg-gradient-to-b from-[var(--accent)] to-transparent" style={{ opacity: 0.06 }} />
+        </div>
+      ))}
+      {[20, 40, 60, 80].map((pct, i) => (
+        <div key={`b-${i}`} className="absolute bottom-0" style={{ left: `${pct}%` }}>
+          <div className="w-px h-2 bg-gradient-to-t from-[var(--accent)] to-transparent" style={{ opacity: 0.06 }} />
+        </div>
+      ))}
+    </motion.div>
   );
 }

@@ -1,0 +1,102 @@
+const fs = require('fs');
+const path = require('path');
+const { promisify } = require('util');
+const readFile = promisify(fs.readFile);
+const readdir = promisify(fs.readdir);
+
+async function main() {
+  const vercelJsonPath = path.resolve(process.cwd(), 'vercel.json');
+  let csp = '';
+  try {
+    const data = await readFile(vercelJsonPath, 'utf8');
+    const vercelConfig = JSON.parse(data);
+    const headers = vercelConfig.headers || [];
+    for (const h of headers) {
+      if (h.source === '/(.*)') {
+        for (const header of h.headers) {
+          if (header.key.toLowerCase() === 'content-security-policy') {
+            csp = header.value;
+            break;
+          }
+        }
+        break;
+      }
+    }
+  } catch (err) {
+    console.error('⚠️  Could not read vercel.json:', err.message);
+    // Continue without CSP check
+  }
+
+  const outDir = path.resolve(process.cwd(), 'out');
+  const nextDir = path.resolve(process.cwd(), '.next');
+  const targetDir = fs.existsSync(outDir) ? outDir : (fs.existsSync(nextDir) ? nextDir : null);
+  if (!targetDir) {
+    console.error('❌  No out/ or .next/ directory found. Run build first.');
+    process.exit(1);
+  }
+
+  const files = await getAllFiles(targetDir);
+  const violations = [];
+
+  for (const file of files) {
+    if (path.extname(file) !== '.html') continue;
+    let content;
+    try {
+      content = await readFile(file, 'utf8');
+    } catch (e) {
+      continue;
+    }
+
+    // Inline <script> without src
+    const scriptRegex = /<script\b(?![^>]*\bsrc=)[^>]*>[\s\S]*?<\/script>/gi;
+    let match;
+    while ((match = scriptRegex.exec(content)) !== null) {
+      violations.push({ file, reason: 'Inline <script> block', snippet: match[0].slice(0, 100) });
+    }
+
+    // Inline <style>
+    const styleRegex = /<style\b[^>]*>[\s\S]*?<\/style>/gi;
+    while ((match = styleRegex.exec(content)) !== null) {
+      violations.push({ file, reason: 'Inline <style> block', snippet: match[0].slice(0, 100) });
+    }
+
+    // Inline event handlers (onclick, onload, etc.)
+    const eventRegex = /\s(on\w+)\s*=\s*["'][^"']*["']/gi;
+    while ((match = eventRegex.exec(content)) !== null) {
+      violations.push({ file, reason: `Inline event handler ${match[1]}`, snippet: match[0].slice(0, 100) });
+    }
+  }
+
+  if (violations.length === 0) {
+    console.log('✅  CSP verification passed: No inline script/style/event handlers found.');
+    return;
+  }
+
+  console.error('❌  CSP verification failed: Inline content detected that may be blocked by CSP.');
+  console.error('   CSP:', csp || '(none)');
+  console.error('');
+  for (const v of violations) {
+    console.error(`   - ${v.file}: ${v.reason}`);
+    console.error(`     ${v.snippet}`);
+  }
+  process.exit(1);
+}
+
+async function getAllFiles(dir) {
+  const entries = await readdir(dir, { withFileTypes: true });
+  let files = [];
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+    if (entry.isDirectory()) {
+      files = files.concat(await getAllFiles(fullPath));
+    } else {
+      files.push(fullPath);
+    }
+  }
+  return files;
+}
+
+main().catch(err => {
+  console.error('❌  Unexpected error:', err);
+  process.exit(1);
+});

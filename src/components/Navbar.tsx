@@ -6,8 +6,7 @@ import { ThemeToggle } from "./ThemeToggle";
 
 const NAV_ITEMS = [
   { href: "#hero", label: "Início", icon: "🏠" },
-  { href: "#about", label: "Sobre", icon: "👤" },
-  { href: "#skills", label: "Skills", icon: "⚡" },
+  { href: "#profile", label: "Perfil", icon: "👤" },
   { href: "#projects", label: "Projetos", icon: "🛰️" },
   { href: "#terminal", label: "Terminal", icon: "💻" },
   { href: "#contact", label: "Contato", icon: "📡" },
@@ -67,11 +66,19 @@ export const Navbar = memo(function Navbar() {
     e.preventDefault();
     const target = document.querySelector(href);
     if (target) {
-      // Always scroll to top first, then to section
+      // Scroll to top smoothly, then to target after scroll ends
       window.scrollTo({ top: 0, behavior: "smooth" });
-      setTimeout(() => {
+      const handleScrollEnd = () => {
         target.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+        window.removeEventListener("scrollend", handleScrollEnd);
+      };
+      // Use scrollend event if available, fallback to timeout
+      if ("onscrollend" in window) {
+        window.addEventListener("scrollend", handleScrollEnd);
+      } else {
+        // Fallback: wait for scroll to complete (approx duration)
+        setTimeout(handleScrollEnd, 1000);
+      }
     }
   };
 
