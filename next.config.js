@@ -1,4 +1,5 @@
 const path = require('path');
+// Project root is the directory containing this config (mission-control)
 const projectRoot = path.resolve(__dirname);
 
 /** @type {import('next').NextConfig} */
