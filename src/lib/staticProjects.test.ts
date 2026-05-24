@@ -26,4 +26,12 @@ describe('staticProjects', () => {
     expect(FEATURED_PROJECTS).toContain('mission-control')
     expect(FEATURED_PROJECTS).toContain('seu.pet')
   })
+
+  it('seu.pet has homepage and imageGradient', () => {
+    const seuPet = STATIC_PROJECTS.find(p => p.name === 'seu.pet')
+    expect(seuPet).toBeDefined()
+    expect(seuPet?.homepage).toBe('https://seu.pet')
+    expect(seuPet?.imageGradient).toBeDefined()
+    expect(seuPet?.hasDemo).toBe(true)
+  })
 })

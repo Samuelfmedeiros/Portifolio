@@ -11,6 +11,7 @@ export function ContactForm() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [content, setContent] = useState("");
+  const [lgpdConsent, setLgpdConsent] = useState(false);
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [copied, setCopied] = useState(false);
@@ -19,7 +20,7 @@ export function ContactForm() {
   const MAX_MESSAGE_LENGTH = 500;
   const messageLength = content.length;
   const isMessageTooLong = messageLength > MAX_MESSAGE_LENGTH;
-  const isFormValid = name.trim() && email.trim() && content.trim() && !isMessageTooLong;
+  const isFormValid = name.trim() && email.trim() && content.trim() && !isMessageTooLong && lgpdConsent;
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -63,6 +64,7 @@ export function ContactForm() {
       setName("");
       setEmail("");
       setContent("");
+      setLgpdConsent(false);
     }
   };
 
@@ -227,6 +229,24 @@ export function ContactForm() {
                   {messageLength}/{MAX_MESSAGE_LENGTH}
                 </span>
               </div>
+            </div>
+
+            {/* LGPD Consent Checkbox */}
+            <div className="flex items-start gap-2 pt-1">
+              <input
+                id="contact-lgpd-consent"
+                type="checkbox"
+                checked={lgpdConsent}
+                onChange={(e) => setLgpdConsent(e.target.checked)}
+                className="mt-0.5 w-4 h-4 rounded accent-[var(--accent)] cursor-pointer shrink-0"
+              />
+              <label htmlFor="contact-lgpd-consent" className="text-[11px] font-mono text-[var(--text-secondary)] leading-snug cursor-pointer">
+                Concordo com a{" "}
+                <a href="#privacidade" className="text-[var(--accent)] hover:underline">
+                  Política de Privacidade
+                </a>{" "}
+                e autorizo o uso dos meus dados para contato.
+              </label>
             </div>
 
             <button
