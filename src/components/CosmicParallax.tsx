@@ -7,7 +7,7 @@ import { motion, useTransform, useScroll } from 'framer-motion';
  * CosmicParallax - NASA/Star Wars inspired parallax with enhanced animations
  * 3 layers: Deep Space (L0), Holographic Data (L1), Frontal Interface (L2)
  */
-export function CosmicParallax({ className }: { className?: string }) {
+export function CosmicParallax({ className, ...props }: { className?: string }) {
   const targetRef = useRef<HTMLDivElement>(null);
 
   // Scroll progress (0 to 1)
@@ -48,7 +48,7 @@ export function CosmicParallax({ className }: { className?: string }) {
   );
 
   return (
-    <section ref={targetRef} className={`relative h-[300vh] w-full bg-black overflow-hidden ${className || ""}`}>
+    <section ref={targetRef} className={`relative h-[300vh] w-full bg-black overflow-hidden ${className || ''}`} {...props}>
       {/* LAYER 0: DEEP SPACE */}
       <motion.div
         style={{
