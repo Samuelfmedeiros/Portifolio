@@ -241,3 +241,4 @@ NEXT_PUBLIC_STATIC_EXPORT=true pnpm build
 ## 📄 Licença
 
 MIT
+Last check: 2026-05-25T02:18:56Z
