@@ -1,4 +1,4 @@
-import { TermsModal } from '@/components/Footer'
+import { PrivacyModal } from '@/components/Footer'
 
 export default function TermosPage() {
   return (
