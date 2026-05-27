@@ -76,8 +76,8 @@ export const Navbar = memo(function Navbar() {
       if ("onscrollend" in window) {
         window.addEventListener("scrollend", handleScrollEnd);
       } else {
-        // Fallback: wait for scroll to complete (approx duration)
-        setTimeout(handleScrollEnd, 1000);
+        // Fallback: wait for scroll to complete (approx duration for long parallax pages)
+        setTimeout(handleScrollEnd, 1200);
       }
     }
   };
