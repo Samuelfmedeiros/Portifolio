@@ -64,8 +64,8 @@ Object.defineProperty(window, 'ResizeObserver', {
 })
 
 // Mock Framer Motion to render children without animations (no JSX in factory)
-vi.mock('framer-motion', () => {
-  const React = require('react')
+vi.mock('framer-motion', async () => {
+  const React = await import('react')
   const MockMotionComponent = (props: any) => {
     const { children, initial, animate, whileInView, whileHover, whileTap, transition, viewport, layoutId, exit, ...rest } = props
     return React.createElement('div', rest, children)
