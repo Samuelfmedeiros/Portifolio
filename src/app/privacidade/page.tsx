@@ -1,3 +1,5 @@
+'use client'
+
 import { PrivacyModal } from '@/components/Footer'
 
 export default function PrivacidadePage() {

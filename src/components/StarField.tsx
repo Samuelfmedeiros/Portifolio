@@ -35,7 +35,7 @@ const depthSpeed: Record<Star["depth"], [string, string]> = {
 };
 
 export function StarField() {
-  const { scrollYProgress } = useScroll(); // global scroll — container é fixed, target não funciona
+  const { scrollYProgress } = useScroll();
 
   const shouldReduceMotion = useReducedMotion();
   const stars = useMemo(() => generateStars(60), []);
@@ -46,11 +46,20 @@ export function StarField() {
     return grouped;
   }, [stars]);
 
+  const speed1 = shouldReduceMotion ? '0%' : depthSpeed[1][1];
+  const speed2 = shouldReduceMotion ? '0%' : depthSpeed[2][1];
+  const speed3 = shouldReduceMotion ? '0%' : depthSpeed[3][1];
+
+  const y1 = useTransform(scrollYProgress, [0, 1], ['0%', speed1]);
+  const y2 = useTransform(scrollYProgress, [0, 1], ['0%', speed2]);
+  const y3 = useTransform(scrollYProgress, [0, 1], ['0%', speed3]);
+
+  const depthY = { 1: y1, 2: y2, 3: y3 } as const;
+
   return (
     <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
       {([1, 2, 3] as const).map((depth) => {
-        const speed = shouldReduceMotion ? ["0%", "0%"] : depthSpeed[depth];
-        const y = useTransform(scrollYProgress, [0, 1], speed);
+        const y = depthY[depth];
         return (
           <motion.div
             key={depth}
@@ -76,7 +85,7 @@ export function StarField() {
                       }
                 }
                 transition={{
-                  duration: 2 + Math.random() * 3,
+                  duration: 2 + ((star.id * 7 + 13) % 10) / 10 * 3,
                   repeat: Infinity,
                   ease: "easeInOut",
                 }}

@@ -4,18 +4,18 @@ import { CockpitBackground } from "@/components/CockpitBackground";
 import { AppWrapper } from "@/components/AppWrapper";
 import { Navbar } from "@/components/Navbar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
-import { AnalyticsTracker } from "@/components/AnalyticsTracker";
+import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
 import { Footer } from "@/components/Footer";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
-import { CookieBannerProvider, useAnalyticsConsent } from "@/components/CookieBanner";
+import { CookieBannerProvider } from "@/components/CookieBanner";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://samuelmedeiros.vercel.app"),
+  metadataBase: new URL("https://mission-control-e22.pages.dev"),
   title: {
     default: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     template: "%s | Samuel Medeiros",
@@ -119,12 +119,6 @@ export const metadata: Metadata = {
     shortcut: "/icon.svg",
   },
 };
-
-function ConditionalAnalytics() {
-  const { consent } = useAnalyticsConsent();
-  if (consent !== "accepted") return null;
-  return <AnalyticsTracker />;
-}
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

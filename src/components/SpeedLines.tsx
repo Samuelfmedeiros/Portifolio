@@ -23,14 +23,20 @@ export function SpeedLines() {
   const shouldReduceMotion = useReducedMotion();
 
   const lines: SpeedLine[] = useMemo(
-    () =>
-      Array.from({ length: 20 }, (_, i) => ({
+    () => {
+      let seed = 42;
+      const pseudoRandom = () => {
+        seed = (seed * 16807) % 2147483647;
+        return (seed - 1) / 2147483646;
+      };
+      return Array.from({ length: 20 }, (_, i) => ({
         id: i,
-        x: Math.random() * 100,
-        width: Math.random() * 1.5 + 0.5,
-        delay: Math.random() * 2,
-        duration: Math.random() * 1 + 0.5,
-      })),
+        x: pseudoRandom() * 100,
+        width: pseudoRandom() * 1.5 + 0.5,
+        delay: pseudoRandom() * 2,
+        duration: pseudoRandom() * 1 + 0.5,
+      }));
+    },
     []
   );
 
