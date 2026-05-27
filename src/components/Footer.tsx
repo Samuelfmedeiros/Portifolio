@@ -48,9 +48,10 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            onClick={onClose}
             className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
           >
-            <div className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
+            <div onClick={(e) => e.stopPropagation()} className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-[var(--accent)]" />
@@ -70,14 +71,14 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
               {/* Tabs */}
               <div className="flex border-b border-[var(--border)]/50 mb-6">
                 <button
-                  onClick={() => {/* Will be handled by state */}}
                   className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'privacy' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
+                  aria-current={activeTab === 'privacy' ? 'page' : undefined}
                 >
                   Política de Privacidade
                 </button>
                 <button
-                  onClick={() => {/* Will be handled by state */}}
                   className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'terms' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
+                  aria-current={activeTab === 'terms' ? 'page' : undefined}
                 >
                   Termos de Uso
                 </button>
