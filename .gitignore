@@ -32,6 +32,9 @@ pnpm-debug.log*
 # vercel
 .vercel
 
+# temp files
+_tmp_*
+
 # typescript
 *.tsbuildinfo
 next-env.d.ts

@@ -1,6 +1,26 @@
 # 🛰️ Mission Control — Melhorias Contínuas
 
-## Status: Todos os Pipelines Verdes ✅
+## Status: Correções de Consistência ✅
+
+---
+
+### ✅ Correções Aplicadas (2026-05-27)
+
+#### URLs e Deploy
+- [x] **SITE_URL centralizada** — `src/lib/types.ts` exporta `SITE_URL` usado em sitemap, robots, metadataBase
+- [x] **metadataBase** — Corrigido de Cloudflare Pages → Vercel (deploy primário)
+- [x] **sitemap.ts** — Agora inclui páginas de `/privacidade` e `/termos`
+- [x] **robots.ts** — Sitemap URL sincronizado com Vercel
+- [x] **manifest.ts** — `start_url` corrigido de `/mission-control/` → `/`
+
+#### SEO / OG
+- [x] **OG Image** — Usa rota dinâmica `/opengraph-image` (gerada pelo next/og) em vez de `/og-image.png` estático
+- [x] **Twitter Card image** — Mesma correção, imagem dinâmica
+- [x] **OG images duplicadas removidas** — Simplificado pra uma única entry
+
+#### Testes
+- [x] **vitest.config.ts** — `setupFiles` adicionado (resolve matcher errors)
+- [x] 19 arquivos de teste a mais passando com a correção (174/243)
 
 ---
 
@@ -100,6 +120,6 @@
 
 ---
 
-**Última Atualização**: 2026-05-21  
+**Última Atualização**: 2026-05-27  
 **Responsável**: Agente Hermes  
 **URL de Produção**: https://samuelmedeiros.vercel.app/
