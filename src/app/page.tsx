@@ -8,7 +8,6 @@ import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
-import { ScrollProgress } from "@/components/ScrollProgress";
 import { CosmicParallax } from "@/components/CosmicParallax";
 
 const Terminal = dynamic(
@@ -25,7 +24,6 @@ async function HangarWithData() {
 export default function Home() {
   return (
     <>
-      <ScrollProgress />
       <div className="section-wrapper">
         <section id="hero" className="section-wrapper relative">
           <CosmicParallax className="absolute inset-0 z-0" />
