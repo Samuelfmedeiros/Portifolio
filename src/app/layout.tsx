@@ -12,10 +12,11 @@ import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
 import { CookieBannerProvider } from "@/components/CookieBanner";
+import { SITE_URL } from "@/lib/types";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://mission-control-e22.pages.dev"),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     template: "%s | Samuel Medeiros",
@@ -61,16 +62,10 @@ export const metadata: Metadata = {
       "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência. Next.js, React, Python, SQL, Power BI, Machine Learning.",
     images: [
       {
-        url: "/og-image.png",
+        url: "/opengraph-image",
         width: 1200,
         height: 630,
         alt: "Samuel Medeiros — Analista de Dados",
-      },
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: "Samuel Medeiros",
       },
     ],
     videos: [],
@@ -82,7 +77,7 @@ export const metadata: Metadata = {
     creator: "@Samuelfmedeiros",
     title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     description: "Desenvolvedor Full Stack e Analista de Dados. Next.js, Python, SQL, Power BI, Machine Learning. Brasília/DF.",
-    images: ["/og-image.png"],
+    images: ["/opengraph-image"],
   },
   robots: {
     index: true,

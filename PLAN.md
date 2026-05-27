@@ -8,6 +8,17 @@
 
 ## ✅ Itens Completados
 
+### 0. Correções de Deploy e Consistência (2026-05-27)
+- [x] **URL base unificada** — SITE_URL centralizada em `src/lib/types.ts`
+- [x] **metadataBase** — Agora usa SITE_URL (Vercel) em vez de Cloudflare Pages
+- [x] **sitemap.ts** — URLs corrigidas, add páginas de privacidade/termos
+- [x] **robots.ts** — Sitemap URL aponta pra Vercel
+- [x] **manifest.ts** — start_url='/mission-control/' → '/' (rota correta)
+- [x] **OG Image** — src relativa (`/opengraph-image`) em vez de `/og-image.png` hardcoded
+- [x] **Twitter Card image** — src relativa, resolvida via metadataBase
+- [x] **vitest.config.ts** — setupFiles adicionado (resolve matchers do jest-dom)
+- [x] **Layout** — OG images duplicadas removidas, simplificado pra única entry
+
 ### 1. Página Sem Rolagem (Above-the-Fold)
 - [x] Hero/Capa — 100vh com SplashScreen, parallax, nome + tagline + CTAs
 - [x] Seções organizadas com FadeInSection (anim on scroll)
@@ -86,5 +97,5 @@
 ---
 
 **Responsável**: Agente Hermes  
-**Última Atualização**: 2026-05-21  
+**Última Atualização**: 2026-05-27  
 **URL de Produção**: https://samuelmedeiros.vercel.app/
