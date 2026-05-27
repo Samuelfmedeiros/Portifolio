@@ -176,7 +176,9 @@ export function ContactForm() {
                 required
                 className="w-full bg-[var(--bg-primary)]/30 border border-[var(--border)] rounded-lg px-4 py-2 font-mono text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition-colors"
                 placeholder="Seu nome"
+                aria-describedby="contact-name-desc"
               />
+              <span id="contact-name-desc" className="sr-only">Digite seu nome completo</span>
             </div>
 
             <div>
@@ -191,7 +193,9 @@ export function ContactForm() {
                 required
                 className="w-full bg-[var(--bg-primary)]/30 border border-[var(--border)] rounded-lg px-4 py-2 font-mono text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition-colors"
                 placeholder="seu@email.com"
+                aria-describedby="contact-email-desc"
               />
+              <span id="contact-email-desc" className="sr-only">Formato esperado: seu@email.com</span>
             </div>
 
             <div>
@@ -211,7 +215,9 @@ export function ContactForm() {
                     : "border-[var(--border)] focus:border-[var(--accent)]"
                 }`}
                 placeholder="Digite sua mensagem..."
+                aria-describedby="contact-message-desc"
               />
+              <span id="contact-message-desc" className="sr-only">Máximo de {MAX_MESSAGE_LENGTH} caracteres</span>
               <div className="flex justify-between mt-1">
                 <span className="text-[10px] font-mono text-[var(--text-secondary)]">
                   {messageLength === 0 ? "Mínimo 10 caracteres" : ""}
