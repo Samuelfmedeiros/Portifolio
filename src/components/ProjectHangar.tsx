@@ -121,7 +121,7 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
         whileInView={{ opacity: 1 }}
         className="text-2xl font-mono text-[var(--accent)] mb-6 text-center"
       >
-        ▸ PROJECT HANGAR
+        ▸ PROJETOS
       </motion.h2>
 
       {/* Filter bar */}
