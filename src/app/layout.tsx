@@ -136,6 +136,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
+              (function(){
+                try {
+                  if ('scrollRestoration' in history) {
+                    history.scrollRestoration = 'manual';
+                  }
+                  window.scrollTo(0, 0);
+                  var st = function(){ window.scrollTo(0, 0); };
+                  if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', st);
+                  }
+                  window.addEventListener('load', function(){ window.scrollTo(0, 0); });
+                  var c = 0, iv = setInterval(function(){
+                    window.scrollTo(0, 0);
+                    if (++c > 20) clearInterval(iv);
+                  }, 25);
+                } catch(e) {}
+              })();
+            `,
+          }}
+        />
       </head>
       <body className="relative min-h-screen antialiased">
         <SkipLink />
