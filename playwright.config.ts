@@ -1,5 +1,5 @@
 // playwright.config.ts
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig } from '@playwright/test';
 
 export default defineConfig({
   testDir: './tests',
@@ -33,7 +33,7 @@ export default defineConfig({
     {
       name: 'chromium',
       use: {
-        ...devices['Desktop Chromium'],
+        viewport: { width: 1280, height: 720 },
         baseURL: process.env.TEST_BASE_URL || 'http://localhost:3000',
       },
     },
