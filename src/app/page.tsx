@@ -8,7 +8,6 @@ import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
-import { CosmicParallax } from "@/components/CosmicParallax";
 
 const Terminal = dynamic(
   () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
@@ -26,7 +25,6 @@ export default function Home() {
     <>
       <div className="section-wrapper">
         <section id="hero" className="section-wrapper relative">
-          <CosmicParallax className="absolute inset-0 z-0" />
           <HeroSection />
         </section>
         <section id="profile">
