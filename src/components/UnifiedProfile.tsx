@@ -42,6 +42,12 @@ const proficiencyColor: Record<string, string> = {
   Proficient: "text-[var(--proficient)]",
 };
 
+const proficiencyWidth: Record<string, number> = {
+  Expert: 95,
+  Advanced: 78,
+  Proficient: 60,
+};
+
 /* ──────────────────── ANIMATIONS ──────────────────── */
 
 const stagger = (delay = 0.08) => ({
@@ -94,6 +100,23 @@ function SkillsSubSection() {
                     <h4 className="font-semibold text-xs md:text-sm text-[var(--text-primary)]">{s.name}</h4>
                     <p className="font-mono text-[10px] text-[var(--text-secondary)] mt-0.5">{s.category}</p>
                   </div>
+                  {/* Proficiency bar */}
+                  <div className="w-full h-1.5 rounded-full bg-[var(--border)]/50 overflow-hidden mt-1">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${proficiencyWidth[s.proficiency]}%` }}
+                      viewport={{ once: true }}
+                      transition={{ duration: 1, delay: 0.3, ease: "easeOut" }}
+                      className={`h-full rounded-full ${
+                        s.proficiency === "Expert"
+                          ? "bg-gradient-to-r from-cyan-400 to-emerald-400"
+                          : s.proficiency === "Advanced"
+                          ? "bg-gradient-to-r from-cyan-400 to-blue-400"
+                          : "bg-gradient-to-r from-purple-400 to-pink-400"
+                      }`}
+                    />
+                  </div>
+                  <span className={`font-mono text-[9px] ${proficiencyColor[s.proficiency]}`}>{s.proficiency}</span>
                 </div>
               </GlassCard>
             </Tooltip>
@@ -215,8 +238,10 @@ export function UnifiedProfile() {
       <motion.div
         variants={stagger(0.05)}
         initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }}
-        className="max-w-5xl mx-auto"
+        className="max-w-5xl mx-auto space-y-8"
       >
+        <SkillsSubSection />
+        <ToolsSubSection />
         <ExperienceSubSection />
       </motion.div>
     </section>

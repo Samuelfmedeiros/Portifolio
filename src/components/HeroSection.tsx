@@ -2,6 +2,7 @@
 
 import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef } from "react";
+import { TypeWriter } from "./TypeWriter";
 
 // Decorative cockpit SVG as inline component
 function CockpitSVG() {
@@ -164,7 +165,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-3 whitespace-nowrap"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-3"
           >
             Samuel{" "}
             <motion.span
@@ -188,9 +189,20 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.6 }}
-            className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-2"
+            className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-2 h-7"
           >
-            Desenvolvedor Full Stack &amp; Analista de Dados -- Brasilia/DF
+            <TypeWriter
+              phrases={[
+                "Desenvolvedor Full Stack & Analista de Dados — Brasília/DF",
+                "Transformando dados em decisões estratégicas 📊",
+                "Python • SQL • Power BI • Machine Learning",
+                "Next.js • React • TypeScript • Node.js",
+                "4+ anos transformando negócios com dados 🚀",
+              ]}
+              speed={35}
+              deleteSpeed={20}
+              pauseDuration={3000}
+            />
           </motion.p>
 
           <motion.p
@@ -199,7 +211,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.7 }}
             className="text-xs sm:text-sm text-[var(--text-secondary)] mb-6"
           >
-            Next.js, React, Python, SQL e Machine Learning para transformar dados em decisoes estrategicas.
+            Next.js, React, Python, SQL e Machine Learning — transformando dados em decisões estratégicas.
           </motion.p>
 
           <motion.div

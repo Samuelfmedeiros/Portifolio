@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { GlassCard } from "../GlassCard";
-import { MiniGame } from "../MiniGame";
+import { MiniGame } from "./MiniGame";
 import { AsteroidDodge } from "./AsteroidDodge";
 import { CodeTyping } from "./CodeTyping";
 import { MemoryMatrix } from "./MemoryMatrix";

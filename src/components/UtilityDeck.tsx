@@ -6,7 +6,7 @@ import { Clock, Calculator, Gamepad2, X } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { MissionClock } from "./MissionClock";
 import { DataCalculator } from "./DataCalculator";
-import { MiniGame } from "./MiniGame";
+import { MiniGame } from "./MiniGames/MiniGame";
 import type { Widget } from "@/lib/types";
 
 const WIDGETS = [
