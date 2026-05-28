@@ -8,6 +8,7 @@ import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
+import { GitHubStatsSection } from "@/components/GitHubStatsSection";
 
 const Terminal = dynamic(
   () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
@@ -35,6 +36,9 @@ export default function Home() {
           <Suspense fallback={<HangarSkeleton />}>
             <HangarWithData />
           </Suspense>
+        </section>
+        <section id="stats">
+          <GitHubStatsSection />
         </section>
         <section id="terminal">
           <Terminal />

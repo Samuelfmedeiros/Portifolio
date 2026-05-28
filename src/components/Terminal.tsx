@@ -18,7 +18,7 @@ const BANNER = [
 
 const PROMPT = "C:\\Users\\Visitor";
 
-const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "hora", "date", "whoami", "theme", "fix", "run", "matrix", "sudo", "stack", "github", "neofetch", "uptime"];
+const COMMANDS = ["help", "ajuda", "sobre", "projetos", "habilidades", "contato", "limpar", "clear", "cls", "hora", "date", "whoami", "theme", "fix", "run", "matrix", "sudo", "stack", "github", "neofetch", "uptime", "ls", "echo", "banner", "quote", "exit", "ipconfig", "ping", "cowsay", "whois", "pwd", "holofote", "skills"];
 
 export function Terminal() {
   const [input, setInput] = useState("");
@@ -58,6 +58,7 @@ export function Terminal() {
   sobre         — Sobre Samuel
   projetos      — Lista de projetos
   habilidades   — Habilidades técnicas
+  skills        — Nível de proficiência em cada skill
   contato       — Informações de contato
   limpar        — Limpa o terminal
   hora          — Data e hora atual
@@ -68,6 +69,16 @@ export function Terminal() {
   github        — Info do GitHub
   neofetch      — System info estilo neofetch
   uptime        — Sessão uptime
+  ls            — Lista arquivos do diretório
+  pwd           — Mostra diretório atual
+  echo <text>   — Repete o texto
+  banner        — Mostra o banner
+  quote         — Citação inspiradora aleatória
+  ipconfig      — Informações de rede
+  ping <host>   — Ping em um servidor
+  whois <nome>  — Informações sobre alguém
+  cowsay        — Vaca falante 🐄
+  holofote      — Coloca Samuel no holofote
 
 ⚡ EASTER EGGS (para devs):
   fix path_variables        — Repara variáveis do Windows
@@ -256,7 +267,179 @@ Exemplo: run routine:lights_out`;
 (Porque isso é um portfólio, não um servidor de produção.)`;
         break;
 
+      case "ls":
+        output = ` Volume in drive C é WINDOWS
+ Volume Serial Number: MC-2026
+
+ Directory of C:\\Users\\Visitor\\
+
+2026-05-27  10:30    <DIR>          .
+2026-05-27  10:30    <DIR>          ..
+2026-05-27  10:30    <DIR>          Documents
+2026-05-27  10:30    <DIR>          Projects
+2026-05-27  10:30    <DIR>          Downloads
+2026-05-27  10:30    <DIR>          Desktop
+2026-05-27  10:30    <DIR>          Music
+               0 File(s)              0 bytes
+               7 Dir(s)   ∞ bytes free`;
+        break;
+
+      case "pwd":
+        output = PROMPT;
+        break;
+
+      case "cls":
+      case "clear":
+      case "limpar":
+        setHistory([]);
+        return;
+
+      case "skills":
+        output = `PROFICIÊNCIA EM HABILIDADES:
+
+  Power BI           ████████████████████████░  95%  Expert
+  SQL & PostgreSQL   ████████████████████████░  95%  Expert
+  Python             ████████████████████░░░░░  78%  Advanced
+  Machine Learning   ████████████████████░░░░░  78%  Advanced
+  Next.js & React    ████████████████████░░░░░  78%  Advanced
+  LLMs Locais        ██████████████████░░░░░░░  60%  Proficient
+  Docker             ██████████████████░░░░░░░  60%  Proficient
+  Git & GitHub       ████████████████████░░░░░  78%  Advanced`;
+        break;
+
+      case "banner":
+        output = BANNER;
+        break;
+
+      case "quote": {
+        const quotes = [
+          "\"A melhor maneira de prever o futuro é criá-lo.\" — Peter Drucker",
+          "\"Dados são o novo petróleo.\" — Clive Humby",
+          "\"Sem dados, você é apenas mais uma pessoa com uma opinião.\" — W. Edwards Deming",
+          "\"A simplicidade é a sofisticação máxima.\" — Leonardo da Vinci",
+          "\"O único jeito de fazer um ótimo trabalho é amar o que você faz.\" — Steve Jobs",
+          "\"Não é o mais forte que sobrevive, mas o que melhor se adapta.\" — Charles Darwin",
+          "\"A tecnologia move o mundo.\" — Steve Jobs",
+          "\"Transformar problemas em oportunidades é a essência da inovação.\" — Samuel Medeiros",
+          "\"O sucesso é a soma de pequenos esforços repetidos dia após dia.\" — Robert Collier",
+          "\"Se você pode medir, você pode gerenciar.\" — Peter Drucker",
+        ];
+        output = `📜 ${quotes[Math.floor(Math.random() * quotes.length)]}`;
+        break;
+      }
+
+      case "ipconfig":
+        output = `Windows IP Configuration
+
+Ethernet adapter Ethernet0:
+   Connection-specific DNS Suffix  . : local
+   IPv4 Address. . . . . . . . . . . : 192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}
+   Subnet Mask . . . . . . . . . . . : 255.255.255.0
+   Default Gateway . . . . . . . . . : 192.168.1.1
+
+Wireless LAN adapter Wi-Fi:
+   Connection-specific DNS Suffix  . : local
+   IPv4 Address. . . . . . . . . . . : 10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}
+   Subnet Mask . . . . . . . . . . . : 255.0.0.0
+   Default Gateway . . . . . . . . . : 10.0.0.1
+
+   🛰️ Mission Control Signal: ❚❚❚❚❚❚❚❚❚❚ 100%`;
+        break;
+
+      case "exit":
+        output = `> Encerrando sessão...
+> Salvando configurações...
+> 
+> Obrigado por visitar! Volte sempre 🚀
+> 
+> (Dica: Feche esta aba se quiser sair de verdade.)`;
+        break;
+
+      case "holofote":
+        output = `
+╔══════════════════════════════════════════════════════╗
+║                                                      ║
+║     ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆       ║
+║                                                      ║
+║          🎯  S A M U E L  M E D E I R O S  🎯        ║
+║                                                      ║
+║     ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆       ║
+║                                                      ║
+║     Desenvolvedor Full Stack & Analista de Dados     ║
+║     Transformando dados em decisoes estrategicas     ║
+║                                                      ║
+╚══════════════════════════════════════════════════════╝`;
+        break;
+
       default:
+        // Check for echo
+        if (trimmed.startsWith("echo ")) {
+          output = trimmed.slice(5);
+          break;
+        }
+
+        // Check for ping
+        if (trimmed.startsWith("ping ")) {
+          const host = trimmed.slice(5) || "localhost";
+          const ms = Math.floor(Math.random() * 40 + 10);
+          output = `Pinging ${host} [192.168.1.${Math.floor(Math.random() * 254)}] with 32 bytes of data:
+Reply from 192.168.1.1: bytes=32 time=${ms}ms TTL=64
+Reply from 192.168.1.1: bytes=32 time=${ms + 5}ms TTL=64
+Reply from 192.168.1.1: bytes=32 time=${ms - 3}ms TTL=64
+Reply from 192.168.1.1: bytes=32 time=${ms + 2}ms TTL=64
+
+Ping statistics for 192.168.1.${Math.floor(Math.random() * 254)}:
+    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
+Approximate round trip times in milli-seconds:
+    Minimum = ${ms - 3}ms, Maximum = ${ms + 5}ms, Average = ${Math.floor(ms + 1)}ms`;
+          break;
+        }
+
+        // Check for whois
+        if (trimmed.startsWith("whois ")) {
+          const name = trimmed.slice(6);
+          output = `WHOIS lookup for "${name}"...
+
+  Nome: ${name}
+  Cargo: Analista de Dados / Desenvolvedor Full Stack
+  Localização: Brasília, DF — Brasil
+  Expertise: Power BI, SQL, Python, Machine Learning
+  Contato: samuelandrademedeiros@gmail.com
+  GitHub: github.com/Samuelfmedeiros
+  LinkedIn: linkedin.com/in/samuelandrademedeiros
+
+  [Resultados obtidos do registro WHOIS interno]`;
+          break;
+        }
+
+        // Check for cowsay
+        if (trimmed.startsWith("cowsay ")) {
+          const msg = trimmed.slice(7) || "Moo!";
+          const width = Math.max(msg.length, 4);
+          const border = "─".repeat(width);
+          output = ` ┌${border}┐
+ │ ${msg.padEnd(width - 1)} │
+ └${border}┘
+  \\   ^__^
+   \\  (oo)\\_______
+      (__)\\       )\\/\\
+          ||----w |
+          ||     ||`;
+          break;
+        }
+
+        if (trimmed.startsWith("cowsay")) {
+          output = ` ┌────┐
+ │ Moo! │
+ └────┘
+  \\   ^__^
+   \\  (oo)\\_______
+      (__)\\       )\\/\\
+          ||----w |
+          ||     ||`;
+          break;
+        }
+
         output = `Comando não encontrado: '${trimmed}'
 Digite 'ajuda' para ver os comandos disponíveis.`;
     }
@@ -301,8 +484,23 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
     if (e.key === "Tab") {
       e.preventDefault();
       const currentInput = input.trim().toLowerCase();
-      const match = COMMANDS.find((c) => c.startsWith(currentInput));
-      if (match) setInput(match);
+      if (!currentInput) return;
+      const matches = COMMANDS.filter((c) => c.startsWith(currentInput));
+      if (matches.length === 0) return;
+      if (matches.length === 1) {
+        setInput(matches[0]);
+      } else {
+        const prefix = matches.reduce((common, cmd) => {
+          let i = 0;
+          while (i < common.length && i < cmd.length && common[i] === cmd[i]) i++;
+          return common.slice(0, i);
+        });
+        if (prefix.length > currentInput.length) {
+          setInput(prefix);
+        } else {
+          setHistory((prev) => [...prev, { cmd: `${currentInput}\t`, output: matches.join("  ") }]);
+        }
+      }
     }
   };
 
