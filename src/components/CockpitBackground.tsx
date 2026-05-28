@@ -5,7 +5,6 @@ import { PerspectiveGrid } from "./PerspectiveGrid";
 import { StarField } from "./StarField";
 import { Scanline } from "./Scanline";
 import { CockpitBorders } from "./CockpitBorders";
-import { HUDOverlay } from "./HUDOverlay";
 import { SpeedLines } from "./SpeedLines";
 
 /**
@@ -18,7 +17,6 @@ import { SpeedLines } from "./SpeedLines";
  *   L3: Scanline             (linha de varredura horizontal)
  *   L3b: SpeedLines           (efeito warp no scroll rápido)
  *   L4: CockpitBorders       (bordas decorativas do visor)
- *   L5: HUDOverlay           (telemetria fake nos cantos)
  */
 export function CockpitBackground() {
   return (
@@ -40,9 +38,6 @@ export function CockpitBackground() {
 
       {/* L4: Cockpit Borders — cantos decorativos simulando visor de nave */}
       <CockpitBorders />
-
-      {/* L5: HUD Overlay — telemetria nos cantos da tela */}
-      <HUDOverlay />
     </div>
   );
 }

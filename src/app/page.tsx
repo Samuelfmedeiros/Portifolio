@@ -16,7 +16,8 @@ const Terminal = dynamic(
 
 async function HangarWithData() {
   const repos = await getRepos();
-  const allProjects = [...STATIC_PROJECTS, ...repos];
+  const filteredRepos = repos.filter((r) => r.name !== "SamuelFmedeiros");
+  const allProjects = [...STATIC_PROJECTS, ...filteredRepos];
   return <ProjectHangar repos={allProjects} />;
 }
 

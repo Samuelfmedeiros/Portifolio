@@ -217,8 +217,6 @@ export function UnifiedProfile() {
         initial="hidden" whileInView="show" viewport={{ once: true, margin: "-80px" }}
         className="max-w-5xl mx-auto"
       >
-        <SkillsSubSection />
-        <ToolsSubSection />
         <ExperienceSubSection />
       </motion.div>
     </section>
