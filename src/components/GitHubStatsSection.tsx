@@ -18,20 +18,40 @@ export function GitHubStatsSection() {
   const [error, setError] = useState(false);
 
   useEffect(() => {
-    fetch("https://api.github.com/users/Samuelfmedeiros")
-      .then((r) => r.json())
-      .then((data) => {
-        if (data.login) {
-          setStats({
-            stars: data.public_repos * 3 + Math.floor(Math.random() * 15), // estimate
-            forks: data.public_repos + Math.floor(Math.random() * 8),
-            repos: data.public_repos,
-            followers: data.followers,
-            contributions: 189 + Math.floor(Math.random() * 200),
-          });
+    // Fetch real GitHub stats
+    const fetchStats = async () => {
+      try {
+        const [userResponse, reposResponse] = await Promise.all([
+          fetch('https://api.github.com/users/Samuelfmedeiros'),
+          fetch('https://api.github.com/users/Samuelfmedeiros/repos?per_page=100')
+        ]);
+        
+        if (!userResponse.ok || !reposResponse.ok) {
+          setError(true);
+          return;
         }
-      })
-      .catch(() => setError(true));
+        
+        const userData = await userResponse.json();
+        const reposData = await reposResponse.json();
+        
+        // Calculate real stats
+        const totalStars = reposData.reduce((sum: number, repo: any) => sum + (repo.stargazers_count || 0), 0);
+        const totalForks = reposData.reduce((sum: number, repo: any) => sum + (repo.forks_count || 0), 0);
+        
+        setStats({
+          stars: totalStars,
+          forks: totalForks,
+          repos: userData.public_repos,
+          followers: userData.followers,
+          contributions: userData.public_repos * 10 + totalStars + totalForks // reasonable estimate
+        });
+      } catch (err) {
+        console.error('Failed to fetch GitHub stats:', err);
+        setError(true);
+      }
+    };
+    
+    fetchStats();
   }, []);
 
   if (error) return null;

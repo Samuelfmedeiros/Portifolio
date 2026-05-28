@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Clock, Calculator, Gamepad2, X } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { MissionClock } from "./MissionClock";
-import { DataCalculator } from "./DataCalculator";
+// DataCalculator removido no cleanup
 import { MiniGame } from "./MiniGames/MiniGame";
 import type { Widget } from "@/lib/types";
 
@@ -66,7 +66,7 @@ export const UtilityDeck = memo(function UtilityDeck() {
                 </button>
 
                 {activeWidget === "clock" && <MissionClock />}
-                {activeWidget === "calculator" && <DataCalculator />}
+                {/* calculator removido no cleanup */}
                 {activeWidget === "game" && <MiniGame />}
               </GlassCard>
             </motion.div>
