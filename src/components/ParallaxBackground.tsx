@@ -22,7 +22,17 @@ interface ShootingStar {
   opacity: number;
   life: number;
   angle: number;
-  color: [number, number, number];
+  trailHue: number;
+}
+
+interface Planet {
+  x: number;
+  y: number;
+  radius: number;
+  rotation: number;
+  rotationSpeed: number;
+  hue: number;
+  bandOffset: number;
 }
 
 export function ParallaxBackground() {
@@ -41,6 +51,7 @@ export function ParallaxBackground() {
     let scrollVelocity = 0;
     let mouseX = 0;
     let mouseY = 0;
+    let planetStartAngle = 0;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -49,32 +60,42 @@ export function ParallaxBackground() {
     resize();
     window.addEventListener("resize", resize);
 
-    // Generate multi-depth star field
+    // PLANET config — positioned in the distance
+    const planet: Planet = {
+      x: 0.75, // % of width
+      y: 0.35, // % of height
+      radius: 0, // set on resize
+      rotation: 0,
+      rotationSpeed: 0.0003,
+      hue: 210,
+      bandOffset: 0,
+    };
+
+    // Generate multi-depth star field — 3× denser
     const stars: Star[] = [];
-    const starCounts = { deep: 150, mid: 80, close: 40 };
+    const starCounts = { deep: 250, mid: 150, close: 80 };
 
     for (const [depth, count] of Object.entries(starCounts)) {
       for (let i = 0; i < count; i++) {
         stars.push({
           x: Math.random() * canvas.width,
           y: Math.random() * canvas.height,
-          size: depth === "deep" ? Math.random() * 1.2 + 0.2
-                : depth === "mid" ? Math.random() * 1.8 + 0.4
-                : Math.random() * 2.8 + 0.6,
-          opacity: depth === "deep" ? Math.random() * 0.5 + 0.2
-                   : depth === "mid" ? Math.random() * 0.6 + 0.3
-                   : Math.random() * 0.8 + 0.4,
-          speed: depth === "deep" ? Math.random() * 0.15 + 0.02
-                 : depth === "mid" ? Math.random() * 0.35 + 0.08
-                 : Math.random() * 0.6 + 0.15,
+          size: depth === "deep" ? Math.random() * 1.0 + 0.1
+                : depth === "mid" ? Math.random() * 1.5 + 0.3
+                : Math.random() * 2.5 + 0.5,
+          opacity: depth === "deep" ? Math.random() * 0.4 + 0.15
+                   : depth === "mid" ? Math.random() * 0.5 + 0.25
+                   : Math.random() * 0.7 + 0.35,
+          speed: depth === "deep" ? Math.random() * 0.1 + 0.01
+                 : depth === "mid" ? Math.random() * 0.25 + 0.05
+                 : Math.random() * 0.5 + 0.1,
           twinkle: Math.random() * Math.PI * 2,
-          twinkleSpeed: Math.random() * 0.02 + 0.008,
+          twinkleSpeed: Math.random() * 0.015 + 0.005,
           depth: depth as Star["depth"],
-          hue: 200 + Math.random() * 60, // blue-cyan range
+          hue: 190 + Math.random() * 80,
         });
       }
     }
-
     const shootingStars: ShootingStar[] = [];
 
     const handleScroll = () => {
@@ -102,192 +123,233 @@ export function ParallaxBackground() {
       scrollVelocity *= 0.92;
       const warpFactor = Math.min(scrollVelocity / 80, 1);
 
+      // Update planet size relative to viewport
+      planet.radius = Math.min(w, h) * 0.12;
+      planet.rotation += planet.rotationSpeed;
+      planet.bandOffset = Math.sin(planet.rotation * 2) * 0.3;
+      planetStartAngle += 0.001;
+
+      // --- BACKGROUND ---
       if (dark) {
-        // Deep space gradient
-        const gradient = ctx.createRadialGradient(w * 0.5, h * 0.3, 0, w * 0.5, h * 0.3, Math.max(w, h));
-        gradient.addColorStop(0, "#010818");
-        gradient.addColorStop(0.4, "#000510");
+        // Deep space gradient — richer colors
+        const gradient = ctx.createRadialGradient(w * 0.5, h * 0.25, 0, w * 0.5, h * 0.25, Math.max(w, h) * 0.8);
+        gradient.addColorStop(0, "#020c1a");
+        gradient.addColorStop(0.3, "#010612");
+        gradient.addColorStop(0.6, "#00040a");
         gradient.addColorStop(1, "#000000");
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, w, h);
       } else {
-        // Light theme: subtle stars on transparent canvas
         ctx.clearRect(0, 0, w, h);
       }
 
-      // Mouse parallax offset - stronger on close layers
+      // Mouse parallax offset
       const mx = (mouseX - w * 0.5) * 0.02;
       const my = (mouseY - h * 0.5) * 0.015;
 
-      // Enhanced nebula clouds with more colors and softer glow
-      const drawNebula = (cx: number, cy: number, radius: number, stops: { offset: number; color: string }[], scrollMult: number, parallaxMult: number) => {
+      // === NEBULAE ===
+      const drawNebula = (
+        cx: number, cy: number, radius: number,
+        stops: { offset: number; color: string }[],
+        scrollMult: number, parallaxMult: number
+      ) => {
+        if (!dark) return;
         const nebulaY = (cy + scrollY * scrollMult) % h;
-        const n = ctx.createRadialGradient(cx + mx * parallaxMult, nebulaY + my * parallaxMult, 0, cx + mx * parallaxMult, nebulaY + my * parallaxMult, radius);
-        for (const stop of stops) {
-          n.addColorStop(stop.offset, stop.color);
-        }
+        const n = ctx.createRadialGradient(
+          cx + mx * parallaxMult, nebulaY + my * parallaxMult, 0,
+          cx + mx * parallaxMult, nebulaY + my * parallaxMult, radius
+        );
+        for (const stop of stops) n.addColorStop(stop.offset, stop.color);
         ctx.fillStyle = n;
         ctx.fillRect(0, 0, w, h);
       };
 
-      // Nebula 1: cyan-indigo large cloud
-      drawNebula(w * 0.15, h * 0.08, Math.max(w, h) * 0.45, [
-        { offset: 0, color: "rgba(34, 211, 238, 0.06)" },
-        { offset: 0.3, color: "rgba(99, 102, 241, 0.04)" },
-        { offset: 0.6, color: "rgba(168, 85, 247, 0.02)" },
+      // Nebula 1: ethereal cyan-teal
+      drawNebula(w * 0.12, h * 0.05, Math.max(w, h) * 0.5, [
+        { offset: 0, color: "rgba(34, 211, 238, 0.04)" },
+        { offset: 0.25, color: "rgba(20, 184, 166, 0.03)" },
+        { offset: 0.55, color: "rgba(168, 85, 247, 0.015)" },
         { offset: 1, color: "transparent" },
-      ], 0.02, 1);
+      ], 0.015, 1.2);
 
-      // Nebula 2: indigo-cyan medium cloud
-      drawNebula(w * 0.82, h * 0.55, w * 0.38, [
-        { offset: 0, color: "rgba(99, 102, 241, 0.07)" },
-        { offset: 0.4, color: "rgba(34, 211, 238, 0.03)" },
-        { offset: 0.7, color: "rgba(236, 72, 153, 0.02)" },
+      // Nebula 2: purple-coral drift
+      drawNebula(w * 0.78, h * 0.6, w * 0.4, [
+        { offset: 0, color: "rgba(168, 85, 247, 0.05)" },
+        { offset: 0.35, color: "rgba(236, 72, 153, 0.03)" },
+        { offset: 0.65, color: "rgba(59, 130, 246, 0.015)" },
         { offset: 1, color: "transparent" },
-      ], 0.05, 0.6);
+      ], 0.04, 0.7);
 
-      // Nebula 3: pink-purple accent
-      drawNebula(w * 0.5, h * 0.3, w * 0.3, [
-        { offset: 0, color: "rgba(236, 72, 153, 0.04)" },
-        { offset: 0.5, color: "rgba(168, 85, 247, 0.02)" },
+      // Nebula 3: subtle amber-gold accent
+      drawNebula(w * 0.55, h * 0.2, w * 0.25, [
+        { offset: 0, color: "rgba(245, 158, 11, 0.015)" },
+        { offset: 0.4, color: "rgba(251, 191, 36, 0.008)" },
         { offset: 1, color: "transparent" },
-      ], 0.035, 0.4);
+      ], 0.03, 0.5);
 
-      // Nebula 4: deep blue subtle
-      drawNebula(w * 0.35, h * 0.75, w * 0.28, [
-        { offset: 0, color: "rgba(59, 130, 246, 0.03)" },
-        { offset: 0.5, color: "rgba(99, 102, 241, 0.015)" },
-        { offset: 1, color: "transparent" },
-      ], 0.04, 0.5);
+      // === PLANET ===
+      if (dark) {
+        const px = w * planet.x + mx * 0.3;
+        const py = h * planet.y + scrollY * 0.008 + my * 0.2;
+        const pr = planet.radius;
 
-      // Parallax factors per depth
+        // Outer atmosphere glow
+        const atmosGlow = ctx.createRadialGradient(px, py, pr * 0.7, px, py, pr * 2.5);
+        const atmosHue = planet.hue + Math.sin(planet.rotation * 0.5) * 5;
+        atmosGlow.addColorStop(0, `hsla(${atmosHue}, 70%, 60%, 0.06)`);
+        atmosGlow.addColorStop(0.5, `hsla(${atmosHue + 20}, 60%, 50%, 0.03)`);
+        atmosGlow.addColorStop(1, "transparent");
+        ctx.fillStyle = atmosGlow;
+        ctx.beginPath();
+        ctx.arc(px, py, pr * 2.5, 0, Math.PI * 2);
+        ctx.fill();
+
+        // Planet body
+        ctx.save();
+        ctx.beginPath();
+        ctx.arc(px, py, pr, 0, Math.PI * 2);
+        ctx.clip();
+
+        // Base gradient — spherical
+        const bodyGrad = ctx.createRadialGradient(
+          px - pr * 0.3, py - pr * 0.3, 0,
+          px, py, pr
+        );
+        const baseHue = planet.hue + Math.sin(planet.rotation) * 3;
+        bodyGrad.addColorStop(0, `hsla(${baseHue}, 40%, 35%, 0.5)`);
+        bodyGrad.addColorStop(0.5, `hsla(${baseHue - 10}, 30%, 22%, 0.7)`);
+        bodyGrad.addColorStop(1, `hsla(${baseHue - 20}, 25%, 12%, 0.8)`);
+        ctx.fillStyle = bodyGrad;
+        ctx.fillRect(px - pr, py - pr, pr * 2, pr * 2);
+
+        // Surface bands
+        for (let i = 0; i < 6; i++) {
+          const bandY = py - pr + (pr * 2 * (0.15 + i * 0.14)) + Math.sin(planet.rotation * 3 + i) * pr * 0.04;
+          const bandH = pr * 0.06 + Math.sin(i * 2 + planet.rotation) * pr * 0.02;
+          const bandHue = baseHue + Math.sin(i + planet.bandOffset) * 15;
+          ctx.fillStyle = `hsla(${bandHue}, 35%, ${20 + (i % 2) * 8}%, 0.25)`;
+          ctx.fillRect(px - pr, bandY, pr * 2, bandH);
+        }
+
+        // Atmosphere rim light (top)
+        const rimGrad = ctx.createRadialGradient(px, py - pr * 0.3, pr * 0.1, px, py - pr * 0.3, pr * 1.1);
+        rimGrad.addColorStop(0, "transparent");
+        rimGrad.addColorStop(0.6, "transparent");
+        rimGrad.addColorStop(0.85, `hsla(${baseHue + 30}, 80%, 70%, 0.04)`);
+        rimGrad.addColorStop(1, `hsla(${baseHue + 30}, 80%, 70%, 0)`);
+        ctx.fillStyle = rimGrad;
+        ctx.fillRect(px - pr, py - pr, pr * 2, pr * 2);
+
+        ctx.restore();
+
+        // Planet inner shadow (crescent dark side)
+        const shadowGrad = ctx.createRadialGradient(
+          px + pr * 0.5, py, 0,
+          px, py, pr
+        );
+        shadowGrad.addColorStop(0, "transparent");
+        shadowGrad.addColorStop(0.7, "transparent");
+        shadowGrad.addColorStop(1, "rgba(0, 0, 0, 0.25)");
+        ctx.fillStyle = shadowGrad;
+        ctx.beginPath();
+        ctx.arc(px, py, pr, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // === STARS ===
       const parallaxFactors: Record<Star["depth"], { scroll: number; mouse: number }> = {
         deep: { scroll: 0.01, mouse: 0.2 },
         mid: { scroll: 0.03, mouse: 0.5 },
         close: { scroll: 0.06, mouse: 1.0 },
       };
 
-      // Draw stars with depth-based parallax and warp effect
       for (const star of stars) {
         const pf = parallaxFactors[star.depth];
         const y = ((star.y + scrollY * star.speed * pf.scroll + my * pf.mouse) % h + h) % h;
         const x = ((star.x + mx * pf.mouse) % w + w) % w;
 
         star.twinkle += star.twinkleSpeed;
-        const twinkleOpacity = star.opacity * (0.6 + 0.4 * Math.sin(star.twinkle));
+        const twinkleOpacity = star.opacity * (0.5 + 0.5 * Math.sin(star.twinkle));
 
-        // Warp effect: stretch stars during fast scroll
-        if (warpFactor > 0.1) {
-          const stretchLength = star.size * (1 + warpFactor * 8);
-          const warpAlpha = twinkleOpacity * warpFactor * 0.6;
-
-          ctx.save();
-          ctx.translate(x, y);
-
-          // Direction based on scroll
-          const scrollDir = scrollY > lastScrollY ? 1 : -1;
-          ctx.scale(1, 1 + warpFactor * 4);
-
-          const glow = ctx.createRadialGradient(0, 0, 0, 0, 0, stretchLength);
-          const hue = star.hue;
-          glow.addColorStop(0, `hsla(${hue}, 80%, 85%, ${warpAlpha})`);
-          glow.addColorStop(0.5, `hsla(${hue}, 70%, 70%, ${warpAlpha * 0.3})`);
-          glow.addColorStop(1, "transparent");
-          ctx.fillStyle = glow;
-          ctx.fillRect(-stretchLength, -stretchLength * 2, stretchLength * 2, stretchLength * 4);
-
-          ctx.restore();
-        }
-
-        // Glow for larger stars
+        // Star glow (bigger stars)
         if (star.size > 1.2) {
-          const glowRadius = star.size * (3 + warpFactor * 2);
+          const glowRadius = star.size * 4;
           const glow = ctx.createRadialGradient(x, y, 0, x, y, glowRadius);
           const starHue = star.hue;
-          glow.addColorStop(0, `hsla(${starHue}, 60%, 85%, ${twinkleOpacity * 0.25})`);
+          glow.addColorStop(0, `hsla(${starHue}, 60%, 85%, ${twinkleOpacity * 0.15})`);
           glow.addColorStop(1, "transparent");
           ctx.fillStyle = glow;
           ctx.fillRect(x - glowRadius, y - glowRadius, glowRadius * 2, glowRadius * 2);
         }
 
         // Star body
-        const baseOpacity = dark ? twinkleOpacity : twinkleOpacity * 0.25; // dimmer in light theme
+        const baseOpacity = dark ? twinkleOpacity : twinkleOpacity * 0.2;
         ctx.fillStyle = dark
-          ? `hsla(${star.hue}, 40%, 90%, ${baseOpacity})`
-          : `rgba(100, 130, 160, ${baseOpacity})`;
+          ? `hsla(${star.hue}, 50%, ${80 + Math.random() * 20}%, ${baseOpacity})`
+          : `rgba(120, 140, 170, ${baseOpacity})`;
         ctx.beginPath();
         ctx.arc(x, y, star.size, 0, Math.PI * 2);
         ctx.fill();
       }
 
-      // Shooting stars - more frequent with colored trails
-      if (Math.random() < 0.008) { // ~2.5x more frequent
-        const colors: [number, number, number][] = [
-          [34, 211, 238],  // cyan
-          [168, 85, 247],  // purple
-          [236, 72, 153],  // pink
-          [96, 165, 250],  // blue
-        ];
+      // === SHOOTING STARS ===
+      if (dark && Math.random() < 0.006) {
+        const trailHue = 200 + Math.random() * 100;
         shootingStars.push({
-          x: Math.random() * w * 0.8,
-          y: Math.random() * h * 0.4,
-          length: Math.random() * 120 + 60,
-          speed: Math.random() * 10 + 8,
+          x: Math.random() * w * 0.7,
+          y: Math.random() * h * 0.35,
+          length: Math.random() * 100 + 50,
+          speed: Math.random() * 12 + 6,
           opacity: 1,
           life: 1,
-          angle: 0.3 + Math.random() * 0.2,
-          color: colors[Math.floor(Math.random() * colors.length)],
+          angle: 0.25 + Math.random() * 0.2,
+          trailHue,
         });
       }
 
-      // Draw shooting stars with colored trails
       for (let i = shootingStars.length - 1; i >= 0; i--) {
         const ss = shootingStars[i];
         ss.x += ss.speed;
         ss.y += ss.speed * ss.angle;
-        ss.life -= 0.015;
-        ss.opacity = ss.life;
+        ss.life -= 0.018;
+        ss.opacity = Math.max(0, ss.life);
 
         if (ss.life <= 0) {
           shootingStars.splice(i, 1);
           continue;
         }
 
-        const [r, g, b] = ss.color;
         const endX = ss.x - ss.length;
         const endY = ss.y - ss.length * ss.angle;
 
-        // Main trail with color
-        const grad = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
-        grad.addColorStop(0, `rgba(255, 255, 255, ${ss.opacity})`);
-        grad.addColorStop(0.3, `rgba(${r}, ${g}, ${b}, ${ss.opacity * 0.8})`);
-        grad.addColorStop(0.7, `rgba(${r}, ${g}, ${b}, ${ss.opacity * 0.3})`);
-        grad.addColorStop(1, "transparent");
-        ctx.strokeStyle = grad;
-        ctx.lineWidth = 2;
-        ctx.beginPath();
-        ctx.moveTo(ss.x, ss.y);
-        ctx.lineTo(endX, endY);
-        ctx.stroke();
-
-        // Secondary glow trail
+        // Glow trail
         const glowGrad = ctx.createLinearGradient(ss.x, ss.y, endX, endY);
-        glowGrad.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${ss.opacity * 0.15})`);
+        glowGrad.addColorStop(0, `hsla(${ss.trailHue}, 80%, 90%, ${ss.opacity * 0.6})`);
+        glowGrad.addColorStop(0.3, `hsla(${ss.trailHue}, 60%, 70%, ${ss.opacity * 0.3})`);
+        glowGrad.addColorStop(0.7, `hsla(${ss.trailHue}, 40%, 50%, ${ss.opacity * 0.1})`);
         glowGrad.addColorStop(1, "transparent");
         ctx.strokeStyle = glowGrad;
-        ctx.lineWidth = 6;
+        ctx.lineWidth = 2.5;
         ctx.beginPath();
         ctx.moveTo(ss.x, ss.y);
         ctx.lineTo(endX, endY);
         ctx.stroke();
 
-        // Head glow
-        const headGlow = ctx.createRadialGradient(ss.x, ss.y, 0, ss.x, ss.y, 8);
-        headGlow.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${ss.opacity * 0.6})`);
+        // Outer glow
+        ctx.strokeStyle = `hsla(${ss.trailHue}, 60%, 60%, ${ss.opacity * 0.08})`;
+        ctx.lineWidth = 8;
+        ctx.beginPath();
+        ctx.moveTo(ss.x, ss.y);
+        ctx.lineTo(endX, endY);
+        ctx.stroke();
+
+        // Head
+        const headGlow = ctx.createRadialGradient(ss.x, ss.y, 0, ss.x, ss.y, 6);
+        headGlow.addColorStop(0, `hsla(${ss.trailHue}, 80%, 95%, ${ss.opacity * 0.5})`);
         headGlow.addColorStop(1, "transparent");
         ctx.fillStyle = headGlow;
         ctx.beginPath();
-        ctx.arc(ss.x, ss.y, 8, 0, Math.PI * 2);
+        ctx.arc(ss.x, ss.y, 6, 0, Math.PI * 2);
         ctx.fill();
       }
 
