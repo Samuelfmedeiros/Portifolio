@@ -123,7 +123,7 @@ export function HeroSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative min-h-[85vh] flex items-center justify-center px-4 md:px-6 overflow-hidden">
+    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center px-4 md:px-6 overflow-hidden">
       {/* Background layer with parallax - grid + circles */}
       <motion.div
         style={{ y: bgY, opacity }}
@@ -155,7 +155,7 @@ export function HeroSection() {
       {/* Content with stronger parallax */}
       <motion.div style={{ y: textY, opacity }} className="text-center max-w-3xl mx-auto relative z-10">
         {/* Glassmorphism card wrapper */}
-        <div className="glass rounded-2xl p-8 md:p-12 border border-[var(--glass-border)] shadow-2xl"
+        <div className="glass rounded-2xl p-6 md:p-10 border border-[var(--glass-border)] shadow-2xl"
           style={{
             boxShadow: "0 0 40px rgba(34, 211, 238, 0.05), 0 0 80px rgba(99, 102, 241, 0.03)",
           }}
@@ -164,7 +164,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-4 whitespace-nowrap"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-3 whitespace-nowrap"
           >
             Samuel{" "}
             <motion.span
@@ -181,7 +181,7 @@ export function HeroSection() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.6, delay: 0.5 }}
-            className="h-px w-24 md:w-32 mx-auto bg-[var(--accent)] mb-6"
+            className="h-px w-24 md:w-32 mx-auto bg-[var(--accent)] mb-4"
           />
 
           <motion.p
@@ -197,7 +197,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.7 }}
-            className="text-xs sm:text-sm text-[var(--text-secondary)] mb-10"
+            className="text-xs sm:text-sm text-[var(--text-secondary)] mb-6"
           >
             Next.js, React, Python, SQL e Machine Learning para transformar dados em decisoes estrategicas.
           </motion.p>
@@ -206,7 +206,7 @@ export function HeroSection() {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6, delay: 0.8 }}
-            className="flex flex-wrap gap-2 justify-center mb-10"
+            className="flex flex-wrap gap-2 justify-center mb-6"
           >
             {["Power BI", "SQL", "Python", "Machine Learning", "ETL", "Azure"].map((skill, i) => (
               <motion.span
@@ -258,7 +258,7 @@ export function HeroSection() {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 1.5, duration: 1 }}
-          className="mt-8 flex flex-col items-center gap-2"
+          className="mt-6 flex flex-col items-center gap-2"
         >
           <span className="text-[10px] font-mono text-[var(--text-secondary)] tracking-widest uppercase">
             Scroll
