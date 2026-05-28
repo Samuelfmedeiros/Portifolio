@@ -1,16 +1,70 @@
 const path = require('path');
-// Project root is the directory containing this config (mission-control)
-const projectRoot = path.resolve(__dirname);
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // GitHub Pages: set NEXT_PUBLIC_STATIC_EXPORT=true in env
-  ...(process.env.NEXT_PUBLIC_STATIC_EXPORT === "true" && {
-    output: "export",
-    images: { unoptimized: true },
-    basePath: "",
-    assetPrefix: "",
-  }),
+  // Produção otimizada
+  reactStrictMode: true,
+  poweredByHeader: false,
+  
+  // Turbopack explícito
+  turbopack: {},
+  
+  // Otimização de imagens → WebP/AVIF automático
+  images: {
+    formats: ['image/avif', 'image/webp'],
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
+    imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
+  },
+  
+  // Tree-shaking agressivo
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+    reactRemoveProperties: true,
+  },
+  
+  // Webpack otimizado (fallback se necessário)
+  webpack: (config, { isServer }) => {
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        path: false,
+        crypto: false,
+      };
+    }
+    return config;
+  },
+  
+  // Headers de segurança
+  async headers() {
+    return [
+      {
+        source: '/:path*',
+        headers: [
+          {
+            key: 'X-DNS-Prefetch-Control',
+            value: 'on'
+          },
+          {
+            key: 'Strict-Transport-Security',
+            value: 'max-age=63072000; includeSubDomains; preload'
+          },
+          {
+            key: 'X-Frame-Options',
+            value: 'SAMEORIGIN'
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff'
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'strict-origin-when-cross-origin'
+          }
+        ]
+      }
+    ];
+  }
 };
 
 module.exports = nextConfig;
