@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
 const BOOT_MESSAGES = [
@@ -15,23 +15,28 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
   const [progress, setProgress] = useState(0);
   const [messageIndex, setMessageIndex] = useState(0);
   const [showCursor, setShowCursor] = useState(true);
+  const onCompleteRef = useRef(onComplete);
+  onCompleteRef.current = onComplete;
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setTimeout(onComplete, 500);
-          return 100;
-        }
-        return prev + 2;
-      });
+    let currentProgress = 0;
 
-      if (progress > 0 && progress < 40) setMessageIndex(0);
-      else if (progress >= 40 && progress < 60) setMessageIndex(1);
-      else if (progress >= 60 && progress < 80) setMessageIndex(2);
-      else if (progress >= 80 && progress < 95) setMessageIndex(3);
-      else if (progress >= 95) setMessageIndex(4);
+    const interval = setInterval(() => {
+      currentProgress += 2;
+      if (currentProgress > 100) currentProgress = 100;
+
+      setProgress(currentProgress);
+
+      if (currentProgress >= 40 && currentProgress < 60) setMessageIndex(1);
+      else if (currentProgress >= 60 && currentProgress < 80) setMessageIndex(2);
+      else if (currentProgress >= 80 && currentProgress < 95) setMessageIndex(3);
+      else if (currentProgress >= 95) setMessageIndex(4);
+
+      if (currentProgress >= 100) {
+        clearInterval(interval);
+        clearInterval(cursorInterval);
+        setTimeout(() => onCompleteRef.current(), 500);
+      }
     }, 50);
 
     const cursorInterval = setInterval(() => {
@@ -42,7 +47,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
       clearInterval(interval);
       clearInterval(cursorInterval);
     };
-  }, [progress, onComplete]);
+  }, []);
 
   return (
     <motion.div
