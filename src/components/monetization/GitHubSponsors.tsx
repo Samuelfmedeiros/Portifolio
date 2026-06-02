@@ -33,19 +33,15 @@ export function GitHubSponsors({ className = "" }: { className?: string }) {
 
 /**
  * Compact icon-only version for tight spaces.
+ * Renders ONLY the icon (no <a> wrapper) so it can be nested inside
+ * an existing <a> without creating invalid nested <a> elements.
  */
 export function GitHubSponsorsIcon({ className = "" }: { className?: string }) {
   if (!GITHUB_SPONSORS_CONFIG.enabled) return null;
 
   return (
-    <a
-      href={GITHUB_SPONSORS_CONFIG.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Patrocine no GitHub Sponsors"
-      className={`text-[var(--text-secondary)] hover:text-pink-500 transition-colors ${className}`}
-    >
-      <Heart className="w-4 h-4" />
-    </a>
+    <Heart
+      className={`w-4 h-4 text-[var(--text-secondary)] hover:text-pink-500 transition-colors ${className}`}
+    />
   );
 }

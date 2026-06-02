@@ -35,19 +35,15 @@ export function BuyMeACoffee({ className = "" }: { className?: string }) {
 
 /**
  * Compact BMC icon-only version — for tight spaces.
+ * Renders ONLY the icon (no <a> wrapper) so it can be nested inside
+ * an existing <a> without creating invalid nested <a> elements.
  */
 export function BuyMeACoffeeIcon({ className = "" }: { className?: string }) {
   if (!BMC_CONFIG.enabled) return null;
 
   return (
-    <a
-      href={BMC_CONFIG.url}
-      target="_blank"
-      rel="noopener noreferrer"
-      aria-label="Apoie meu trabalho no Buy Me a Coffee"
-      className={`text-[var(--text-secondary)] hover:text-amber-500 transition-colors ${className}`}
-    >
-      <Coffee className="w-4 h-4" />
-    </a>
+    <Coffee
+      className={`w-4 h-4 text-[var(--text-secondary)] hover:text-amber-500 transition-colors ${className}`}
+    />
   );
 }
