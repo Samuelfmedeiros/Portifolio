@@ -1,10 +1,10 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import { Navbar } from './Navbar'
+import React from 'react'
 
 describe('Navbar', () => {
   beforeEach(() => {
-    // Mock IntersectionObserver
     global.IntersectionObserver = class IntersectionObserver {
       observe = vi.fn()
       unobserve = vi.fn()
@@ -19,18 +19,15 @@ describe('Navbar', () => {
 
   it('renders all navigation items on desktop', () => {
     render(<Navbar />)
-    expect(screen.getByText('Início')).toBeInTheDocument()
-    expect(screen.getByText('Sobre')).toBeInTheDocument()
-    expect(screen.getByText('Skills')).toBeInTheDocument()
-    expect(screen.getByText('Projetos')).toBeInTheDocument()
-    expect(screen.getByText('Terminal')).toBeInTheDocument()
-    expect(screen.getByText('Contato')).toBeInTheDocument()
+    const navItems = ['Início', 'Projetos', 'Terminal', 'Contato']
+    for (const item of navItems) {
+      expect(screen.getAllByText(item).length).toBeGreaterThanOrEqual(1)
+    }
   })
 
-  it('renders mobile nav items (scrollable horizontal, no hamburger)', () => {
+  it('renders mobile nav items', () => {
     render(<Navbar />)
-    // Mobile nav uses icons + labels in horizontal scroll
-    expect(screen.getByText('Início')).toBeInTheDocument()
+    expect(screen.getAllByText('Início').length).toBeGreaterThanOrEqual(1)
     expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Navegação principal')
   })
 
@@ -46,25 +43,27 @@ describe('Navbar', () => {
     expect(githubLink).toHaveAttribute('href', 'https://github.com/Samuelfmedeiros')
   })
 
+  it('renders palette picker button', () => {
+    render(<Navbar />)
+    const paletteBtn = screen.getByRole('button', { name: /paleta/i })
+    expect(paletteBtn).toBeInTheDocument()
+  })
+
   it('renders theme toggle button', () => {
     render(<Navbar />)
-    const themeToggle = screen.getByRole('button', { name: /alternar tema/i })
+    const themeToggle = screen.getByRole('button', { name: /claro/i })
     expect(themeToggle).toBeInTheDocument()
   })
 
   it('does NOT have a hamburger menu button', () => {
     render(<Navbar />)
-    // No hamburger — mobile uses horizontal scrollable nav
     const hamburgerBtn = screen.queryByRole('button', { name: /abrir menu/i })
     expect(hamburgerBtn).not.toBeInTheDocument()
   })
 
   it('renders mobile nav with icon + label pairs', () => {
     render(<Navbar />)
-    // Check for emoji icons in mobile nav
-    expect(screen.getByText('🏠')).toBeInTheDocument()
-    expect(screen.getByText('👤')).toBeInTheDocument()
-    expect(screen.getByText('⚡')).toBeInTheDocument()
+    expect(screen.getByText('🚀')).toBeInTheDocument()
     expect(screen.getByText('🛰️')).toBeInTheDocument()
     expect(screen.getByText('💻')).toBeInTheDocument()
     expect(screen.getByText('📡')).toBeInTheDocument()

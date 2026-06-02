@@ -1,7 +1,8 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import type { Theme } from "@/lib/types";
+import { PALETTES, DEFAULT_PALETTE, STORAGE_PALETTE_KEY } from "@/lib/palettes";
 
 const STORAGE_KEY = "mc-theme";
 
@@ -19,11 +20,39 @@ function getInitialTheme(): Theme {
   return getSystemTheme();
 }
 
-const ThemeContext = createContext<{
+function getInitialPalette(): string {
+  if (typeof window === "undefined") return DEFAULT_PALETTE;
+  return localStorage.getItem(STORAGE_PALETTE_KEY) || DEFAULT_PALETTE;
+}
+
+function applyPaletteToDoc(paletteId: string, theme: Theme) {
+  const palette = PALETTES.find((p) => p.id === paletteId) || PALETTES[0];
+  const accent = theme === "dark" ? palette.accentDark : palette.accentLight;
+  const alt = theme === "dark" ? palette.altDark : palette.altLight;
+  document.documentElement.style.setProperty("--accent", accent);
+  document.documentElement.style.setProperty("--accent-alt", alt);
+}
+
+function setThemeClass(theme: Theme) {
+  document.documentElement.classList.toggle("theme-dark", theme === "dark");
+  document.documentElement.classList.toggle("theme-light", theme === "light");
+}
+
+interface ThemeContextValue {
   theme: Theme;
+  palette: string;
   toggle: () => void;
   setTheme: (t: Theme) => void;
-}>({ theme: "dark", toggle: () => {}, setTheme: () => {} });
+  setPalette: (id: string) => void;
+}
+
+const ThemeContext = createContext<ThemeContextValue>({
+  theme: "dark",
+  palette: DEFAULT_PALETTE,
+  toggle: () => {},
+  setTheme: () => {},
+  setPalette: () => {},
+});
 
 export function useTheme() {
   return useContext(ThemeContext);
@@ -31,12 +60,19 @@ export function useTheme() {
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
+  const [palette, setPaletteState] = useState<string>(getInitialPalette);
 
-  // Apply theme class on mount
+  // Apply theme class + palette on mount
   useEffect(() => {
-    document.documentElement.classList.toggle("theme-dark", theme === "dark");
-    document.documentElement.classList.toggle("theme-light", theme === "light");
-  }, [theme]);
+    setThemeClass(theme);
+    applyPaletteToDoc(palette, theme);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Re-apply palette when theme changes
+  useEffect(() => {
+    setThemeClass(theme);
+    applyPaletteToDoc(palette, theme);
+  }, [theme, palette]);
 
   // Sync with system preference changes
   useEffect(() => {
@@ -46,27 +82,28 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       if (!saved) {
         const next = e.matches ? "light" : "dark";
         setThemeState(next);
-        document.documentElement.classList.toggle("theme-dark", next === "dark");
-        document.documentElement.classList.toggle("theme-light", next === "light");
       }
     };
     mql.addEventListener("change", handler);
     return () => mql.removeEventListener("change", handler);
   }, []);
 
-  const setTheme = (next: Theme) => {
+  const setTheme = useCallback((next: Theme) => {
     setThemeState(next);
     localStorage.setItem(STORAGE_KEY, next);
-    document.documentElement.classList.toggle("theme-dark", next === "dark");
-    document.documentElement.classList.toggle("theme-light", next === "light");
-  };
+  }, []);
 
-  const toggle = () => {
+  const toggle = useCallback(() => {
     setTheme(theme === "dark" ? "light" : "dark");
-  };
+  }, [theme, setTheme]);
+
+  const setPalette = useCallback((id: string) => {
+    setPaletteState(id);
+    localStorage.setItem(STORAGE_PALETTE_KEY, id);
+  }, []);
 
   return (
-    <ThemeContext.Provider value={{ theme, toggle, setTheme }}>
+    <ThemeContext.Provider value={{ theme, palette, toggle, setTheme, setPalette }}>
       <div className={theme === "dark" ? "theme-dark" : "theme-light"}>
         {children}
       </div>
