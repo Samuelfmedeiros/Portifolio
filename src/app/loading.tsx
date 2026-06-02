@@ -3,10 +3,10 @@ import { GlassSkeleton } from "@/components/Skeleton";
 export default function Loading() {
   return (
     <div className="min-h-screen pt-24 px-6 bg-[var(--bg-primary)]">
-      {/* Hero skeleton */}
+      {/* Hero skeleton — no animate-pulse to avoid stuck SSR state */}
       <div className="max-w-4xl mx-auto mb-20 text-center">
-        <div className="animate-pulse bg-[var(--border)] h-16 w-64 mx-auto rounded mb-4" />
-        <div className="animate-pulse bg-[var(--border)] h-6 w-48 mx-auto rounded" />
+        <div className="bg-[var(--border)] h-16 w-64 mx-auto rounded mb-4" />
+        <div className="bg-[var(--border)] h-6 w-48 mx-auto rounded" />
       </div>
 
       {/* Grid skeleton */}
