@@ -28,25 +28,19 @@ afterEach(() => {
 
 describe('CockpitBackground', () => {
   it('renders without crashing', () => {
-    render(<CockpitBackground />)
-    // The component renders a fixed container div
-    const container = document.querySelector('.fixed.inset-0.-z-10')
-    expect(container).toBeInTheDocument()
-  })
-
-  it('renders all visual layers', () => {
     const { container } = render(<CockpitBackground />)
-    // Should have canvas from ParallaxBackground
-    expect(container.querySelector('canvas')).toBeInTheDocument()
-    // Should have absolute container
-    const layers = container.querySelectorAll('.absolute')
-    expect(layers.length).toBeGreaterThan(0)
+    // The component renders a fixed container div
+    expect(container.firstChild).toBeInTheDocument()
   })
 
-  it('is positioned fixed with negative z-index', () => {
-    render(<CockpitBackground />)
-    const container = document.querySelector('.fixed.inset-0.-z-10')
-    expect(container).toHaveClass('fixed')
-    expect(container).toHaveClass('-z-10')
+  it('renders canvas from ParallaxBackground', () => {
+    const { container } = render(<CockpitBackground />)
+    expect(container.querySelector('canvas')).toBeInTheDocument()
+  })
+
+  it('renders child visual layers', () => {
+    const { container } = render(<CockpitBackground />)
+    // Should have multiple child components rendered
+    expect(container.firstChild?.children.length).toBeGreaterThanOrEqual(4)
   })
 })

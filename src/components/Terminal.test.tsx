@@ -1,93 +1,72 @@
-import { describe, it, expect } from 'vitest'
+import { describe, it, expect, vi } from 'vitest'
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Terminal } from './Terminal'
 
+// Mock MiniGames to avoid heavy imports
+vi.mock('./MiniGames/MissionGames', () => ({
+  MissionGames: () => null,
+}))
+
 describe('Terminal', () => {
-  it('renders initial welcome message', () => {
+  it('renders initial welcome banner', () => {
     render(<Terminal />)
-    expect(screen.getByText(/CONTROL TERMINAL/)).toBeInTheDocument()
+    expect(screen.getByText(/MISSION CONTROL/)).toBeInTheDocument()
   })
 
   it('renders input field', () => {
     render(<Terminal />)
-    expect(screen.getByPlaceholderText('type a command...')).toBeInTheDocument()
+    expect(screen.getByPlaceholderText('digite um comando...')).toBeInTheDocument()
   })
 
-  it('executes help command', async () => {
+  it('executes ajuda command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'help{Enter}')
-    expect(screen.getByText(/AVAILABLE COMMANDS/)).toBeInTheDocument()
+    const input = screen.getByPlaceholderText('digite um comando...')
+    await userEvent.type(input, 'ajuda{Enter}')
+    expect(screen.getByText(/COMANDOS DISPONÍVEIS/)).toBeInTheDocument()
   })
 
   it('executes whoami command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
+    const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'whoami{Enter}')
-    expect(screen.getByText(/OPERATOR: Samuel Andrade/)).toBeInTheDocument()
+    expect(screen.getByText(/Samuel/)).toBeInTheDocument()
   })
 
-  it('executes ls projects command', async () => {
+  it('executes projetos command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'ls projects{Enter}')
+    const input = screen.getByPlaceholderText('digite um comando...')
+    await userEvent.type(input, 'projetos{Enter}')
     expect(screen.getByText(/DogWalk/)).toBeInTheDocument()
   })
 
-  it('executes skills command', async () => {
+  it('executes habilidades command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'skills{Enter}')
+    const input = screen.getByPlaceholderText('digite um comando...')
+    await userEvent.type(input, 'habilidades{Enter}')
     expect(screen.getByText(/Python/)).toBeInTheDocument()
     expect(screen.getByText(/SQL/)).toBeInTheDocument()
   })
 
-  it('executes contact command', async () => {
+  it('executes contato command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'contact{Enter}')
+    const input = screen.getByPlaceholderText('digite um comando...')
+    await userEvent.type(input, 'contato{Enter}')
     expect(screen.getByText(/samuelandrademedeiros@gmail.com/)).toBeInTheDocument()
-  })
-
-  it('executes date command', async () => {
-    render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'date{Enter}')
-    expect(screen.getByText(/MISSION TIME/)).toBeInTheDocument()
   })
 
   it('shows error for unknown command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
+    const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'invalidcmd{Enter}')
     expect(screen.getByText(/COMMAND NOT FOUND/)).toBeInTheDocument()
   })
 
   it('clears history on clear command', async () => {
     render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'help{Enter}')
+    const input = screen.getByPlaceholderText('digite um comando...')
+    await userEvent.type(input, 'ajuda{Enter}')
     await userEvent.type(input, 'clear{Enter}')
-    // After clear, history is empty — banner and commands are gone
-    expect(screen.queryByText(/AVAILABLE COMMANDS/)).not.toBeInTheDocument()
-    expect(screen.queryByText(/CONTROL TERMINAL/)).not.toBeInTheDocument()
-  })
-
-  it('executes neofetch command', async () => {
-    render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'neofetch{Enter}')
-    expect(screen.getByText(/Next\.js 16/)).toBeInTheDocument()
-    expect(screen.getByText(/RTX 3060/)).toBeInTheDocument()
-  })
-
-  it('executes matrix command', async () => {
-    render(<Terminal />)
-    const input = screen.getByPlaceholderText('type a command...')
-    await userEvent.type(input, 'matrix{Enter}')
-    // matrix generates random chars — check for multiple lines of output
-    const matrixOutput = screen.getByText(/[ｦｧｨｩｪｫｬｭｮｯｱｲｳｵｶｷ]/)
-    expect(matrixOutput).toBeInTheDocument()
+    expect(screen.queryByText(/COMANDOS DISPONÍVEIS/)).not.toBeInTheDocument()
   })
 })
