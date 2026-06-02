@@ -1,7 +1,6 @@
 import { Suspense } from "react";
 import dynamic from "next/dynamic";
-import { HeroSection } from "@/components/HeroSection";
-import { UnifiedProfile } from "@/components/UnifiedProfile";
+import { ProfileSection } from "@/components/ProfileSection";
 import { ProjectHangar } from "@/components/ProjectHangar";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { GlassSkeleton } from "@/components/Skeleton";
@@ -26,12 +25,7 @@ export default function Home() {
   return (
     <>
       <div className="section-wrapper">
-        <section id="hero" className="section-wrapper relative">
-          <HeroSection />
-        </section>
-        <section id="profile">
-          <UnifiedProfile />
-        </section>
+        <ProfileSection />
         <section id="projects">
           <Suspense fallback={<HangarSkeleton />}>
             <HangarWithData />

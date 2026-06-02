@@ -66,10 +66,6 @@ Object.defineProperty(window, 'ResizeObserver', {
 // Mock Framer Motion to render children without animations (no JSX in factory)
 vi.mock('framer-motion', async () => {
   const React = await import('react')
-  const MockMotionComponent = (props: any) => {
-    const { children, initial, animate, whileInView, whileHover, whileTap, transition, viewport, layoutId, exit, ...rest } = props
-    return React.createElement('div', rest, children)
-  }
 
   return {
     useInView: () => true,
@@ -79,8 +75,12 @@ vi.mock('framer-motion', async () => {
     AnimatePresence: ({ children }: any) => children,
     motion: new Proxy({}, {
       get: (_, prop) => {
-        const Comp = MockMotionComponent
-        Comp.displayName = `motion.${String(prop)}`
+        const tag = String(prop)
+        const Comp = (props: any) => {
+          const { children, initial, animate, whileInView, whileHover, whileTap, transition, viewport, layoutId, exit, ...rest } = props
+          return React.createElement(tag, rest, children)
+        }
+        Comp.displayName = `motion.${tag}`
         return Comp
       },
     }),

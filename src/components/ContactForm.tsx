@@ -227,7 +227,7 @@ export function ContactForm() {
                     isMessageTooLong
                       ? "text-[var(--error)]"
                       : messageLength > MAX_MESSAGE_LENGTH * 0.8
-                        ? "text-[var(--proficient)]"
+                        ? "text-[var(--proficiency-proficient)]"
                         : "text-[var(--text-secondary)]"
                   }`}
                   aria-live="polite"

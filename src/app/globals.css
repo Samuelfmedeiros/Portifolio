@@ -40,7 +40,7 @@ html {
   /* Proficiency colors - dark */
   --proficiency-expert: #34d399;
   --proficiency-advanced: #60a5fa;
-  --proficient: #fbbf24;
+  --proficiency-proficient: #fbbf24;
 }
 
 /* ========== LIGHT THEME (Daylight Ops) ========== */
@@ -64,7 +64,7 @@ html {
   /* Proficiency colors - light */
   --proficiency-expert: #16a34a;
   --proficiency-advanced: #2563eb;
-  --proficient: #d97706;
+  --proficiency-proficient: #d97706;
 }
 
 body {
@@ -328,7 +328,7 @@ select:focus-visible,
 [tabindex]:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 2px;
-  box-shadow: 0 0 0 4px rgba(34, 211, 238, 0.15);
+  box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 15%, transparent);
 }
 
 /* ========== SELECTION COLOR ========== */
@@ -380,8 +380,4 @@ button {
   transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-/* Selection color */
-::selection {
-  background: var(--accent);
-  color: var(--bg-primary);
-}
+

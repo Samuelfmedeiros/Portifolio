@@ -70,16 +70,17 @@ describe("ThemeToggle", () => {
   it("toggles theme when clicked", () => {
     localStorage.setItem("mc-theme", "dark");
 
-    render(<TestToggleWrapper />);
+    render(
+      <ThemeProvider>
+        <TestToggleWrapper />
+      </ThemeProvider>
+    );
 
-    // Initial theme should be dark
     expect(screen.getByTestId("current-theme")).toHaveTextContent("dark");
 
-    // Click toggle
     const button = screen.getByRole("button");
     fireEvent.click(button);
 
-    // Theme should now be light
     expect(screen.getByTestId("current-theme")).toHaveTextContent("light");
   });
 
@@ -123,16 +124,17 @@ describe("ThemeToggle", () => {
   it("toggles from light to dark", () => {
     localStorage.setItem("mc-theme", "light");
 
-    render(<TestToggleWrapper />);
+    render(
+      <ThemeProvider>
+        <TestToggleWrapper />
+      </ThemeProvider>
+    );
 
-    // Initial theme should be light
     expect(screen.getByTestId("current-theme")).toHaveTextContent("light");
 
-    // Click toggle
     const button = screen.getByRole("button");
     fireEvent.click(button);
 
-    // Theme should now be dark
     expect(screen.getByTestId("current-theme")).toHaveTextContent("dark");
   });
 });
