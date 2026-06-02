@@ -72,6 +72,7 @@ vi.mock('framer-motion', async () => {
     useScroll: () => ({ scrollYProgress: { get: () => 0, onChange: () => {}, on: () => {}, off: () => {}, stop: () => {} } }),
     useTransform: (input: any) => ({ get: () => 0, onChange: () => {}, on: () => {}, off: () => {}, stop: () => {} }),
     useAnimation: () => ({ start: () => {}, stop: () => {}, set: () => {} }),
+ useReducedMotion: () => false,
     AnimatePresence: ({ children }: any) => children,
     motion: new Proxy({}, {
       get: (_, prop) => {

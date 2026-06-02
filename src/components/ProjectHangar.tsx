@@ -2,10 +2,11 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Code, Star, GitFork, Calendar } from "lucide-react";
+import { ExternalLink, Code, Star, GitFork, Calendar, Zap } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
+import { getProjectAffiliates } from "@/lib/monetization";
 
 const FEATURED = FEATURED_PROJECTS;
 
@@ -275,6 +276,27 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
                         </a>
                       )}
                     </div>
+
+                    {/* Affiliate "powered by" links — subtle, no consent needed */}
+                    {getProjectAffiliates(repo.name).length > 0 && (
+                      <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-[var(--border)]/20">
+                        <span className="text-[8px] font-mono text-[var(--text-secondary)]/40 self-center">
+                          powered by
+                        </span>
+                        {getProjectAffiliates(repo.name).map((aff) => (
+                          <a
+                            key={aff.key}
+                            href={aff.url}
+                            target="_blank"
+                            rel="sponsored noopener noreferrer"
+                            className="text-[8px] font-mono text-[var(--text-secondary)]/40 hover:text-[var(--accent)] transition-colors flex items-center gap-0.5"
+                          >
+                            <Zap className="w-2 h-2" />
+                            {aff.name}
+                          </a>
+                        ))}
+                      </div>
+                    )}
                   </div>
                 </GlassCard>
               </motion.div>

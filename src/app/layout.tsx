@@ -11,7 +11,8 @@ import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
-import { CookieBannerProvider } from "@/components/CookieBanner";
+import { CookieBannerProvider, useAnalyticsConsent } from "@/components/CookieBanner";
+import { MonetizationProvider } from "@/components/monetization/MonetizationProvider";
 import { SITE_URL } from "@/lib/types";
 import "./globals.css";
 
@@ -164,16 +165,18 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <SkipLink />
         <ThemeProvider>
           <CookieBannerProvider>
-            <ConditionalAnalytics />
-            <AppWrapper>
-              <CockpitBackground />
-              <ScrollProgress />
-              <Navbar />
-              <main id="main-content">
-                <ErrorBoundary>{children}</ErrorBoundary>
-              </main>
-              <Footer />
-            </AppWrapper>
+            <MonetizationProvider>
+              <ConditionalAnalytics />
+              <AppWrapper>
+                <CockpitBackground />
+                <ScrollProgress />
+                <Navbar />
+                <main id="main-content">
+                  <ErrorBoundary>{children}</ErrorBoundary>
+                </main>
+                <Footer />
+              </AppWrapper>
+            </MonetizationProvider>
           </CookieBannerProvider>
         </ThemeProvider>
         <KeyboardShortcuts />

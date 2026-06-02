@@ -1,8 +1,11 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Copy, Check, Shield, X } from "lucide-react";
+import { Mail, Copy, Check, Shield, X, Coffee, Heart } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
+import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
+import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
+import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -130,15 +133,31 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                       após seu consentimento explícito.
                     </p>
 
+                    <h3 className="text-sm text-[var(--accent)] mt-4">5.1 Anúncios e Monetização</h3>
+                    <p>
+                      Este site pode exibir anúncios do Google AdSense. Os anúncios são carregados
+                      apenas com seu consentimento explícito. Sem consentimento, nenhum script de
+                      anúncio é carregado. Quando permitido, você pode escolher entre anúncios
+                      personalizados (usam cookies de rastreamento) ou não personalizados (sem rastreamento).
+                      Você pode alterar essa preferência a qualquer momento através do banner de cookies.
+                    </p>
+                    <p>
+                      Este site também pode conter links de afiliados para serviços que realmente utilizo
+                      (hospedagem, banco de dados, ferramentas). Esses links são identificados com
+                      rel=&quot;sponsored&quot; e não requerem consentimento de cookies, pois são simples links
+                      de referência. Links de doação (Buy Me a Coffee, GitHub Sponsors) também não
+                      requerem consentimento.
+                    </p>
+
                     <h3 className="text-sm text-[var(--accent)]">6. Contato</h3>
                     <p>
                       Para exercer seus direitos ou esclarecer dúvidas sobre privacidade,
                       entre em contato: samuelandrademedeiros@gmail.com
                     </p>
-                  </>
-                )}
-                
-                {activeTab === 'terms' && (
+                    </>
+                    )}
+
+                    {activeTab === 'terms' && (
                   <>
                     <p>
                       <strong className="text-[var(--text-primary)]">Última atualização:</strong> {new Date().toLocaleDateString("pt-BR")}
@@ -292,6 +311,33 @@ export function Footer() {
             >
               Download em PDF ↓
             </a>
+            {/* Support buttons — discreet, no consent needed */}
+            <div className="flex items-center gap-3 mt-3">
+              {BMC_CONFIG.enabled && (
+                <a
+                  href={BMC_CONFIG.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
+                  aria-label="Buy me a coffee"
+                >
+                  <BuyMeACoffeeIcon className="w-3.5 h-3.5" />
+                  <span>Coffee</span>
+                </a>
+              )}
+              {GITHUB_SPONSORS_CONFIG.enabled && (
+                <a
+                  href={GITHUB_SPONSORS_CONFIG.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
+                  aria-label="GitHub Sponsors"
+                >
+                  <GitHubSponsorsIcon className="w-3.5 h-3.5" />
+                  <span>Sponsor</span>
+                </a>
+              )}
+            </div>
           </div>
         </div>
 

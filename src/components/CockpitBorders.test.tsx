@@ -15,11 +15,11 @@ describe('CockpitBorders', () => {
     expect(div).toHaveClass('pointer-events-none')
   })
 
-  it('renders four corner elements', () => {
+  it('renders four corner elements and decorative accents', () => {
     const { container } = render(<CockpitBorders />)
-    // There should be 4 motion.div corners + 4 accent divs = 8 children
+    // 4 corners + 2 side accents + 2 center accents + 2 edge glows + 8 viewport markers = 18
     const children = container.firstChild?.children
-    expect(children?.length).toBe(8)
+    expect(children?.length).toBe(18)
   })
 
   it('renders side accent elements', () => {

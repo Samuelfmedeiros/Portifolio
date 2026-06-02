@@ -35,7 +35,7 @@ const nextConfig = {
     return config;
   },
   
-  // Headers de segurança
+  // Headers de segurança + CSP para AdSense
   async headers() {
     return [
       {
@@ -68,6 +68,19 @@ const nextConfig = {
           {
             key: 'X-XSS-Protection',
             value: '1; mode=block'
+          },
+          {
+            key: 'Content-Security-Policy',
+            value: [
+              "default-src 'self'",
+              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://www.googletagmanager.com https://www.google-analytics.com",
+              "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+              "img-src 'self' data: blob: https://avatars.githubusercontent.com https://*.googleusercontent.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com",
+              "font-src 'self' https://fonts.gstatic.com",
+              "connect-src 'self' https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net",
+              "frame-src https://googleads.g.doubleclick.net https://td.doubleclick.net",
+              "link-relattr 'sponsored'",
+            ].join('; ')
           }
         ]
       }

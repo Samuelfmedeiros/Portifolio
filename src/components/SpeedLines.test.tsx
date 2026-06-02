@@ -4,17 +4,13 @@ import { SpeedLines } from './SpeedLines'
 
 describe('SpeedLines', () => {
   beforeEach(() => {
-    vi.useFakeTimers()
-    // Mock scrollY
-    Object.defineProperty(window, 'scrollY', {
-      value: 0,
-      writable: true,
-    })
-    // Mock requestAnimationFrame
+    // Mock requestAnimationFrame / cancelAnimationFrame
     vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
       return setTimeout(cb, 16) as unknown as number
     })
-    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation(() => {})
+    vi.spyOn(window, 'cancelAnimationFrame').mockImplementation((id) => {
+      clearTimeout(id)
+    })
   })
 
   afterEach(() => {
@@ -22,15 +18,13 @@ describe('SpeedLines', () => {
   })
 
   it('renders without crashing', () => {
-    // Should render but return null since intensity starts at 0
     const { container } = render(<SpeedLines />)
-    // Initially returns null because intensity < 0.02
     expect(container).toBeTruthy()
   })
 
-  it('returns null when intensity is low', () => {
+  it('returns null when intensity is low (no scroll)', () => {
     const { container } = render(<SpeedLines />)
-    // No children since intensity starts at 0
+    // Initially returns null because intensity starts at 0
     expect(container.firstChild).toBeNull()
   })
 })
