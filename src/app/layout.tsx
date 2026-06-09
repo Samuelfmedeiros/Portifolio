@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
+import Script from "next/script";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CockpitBackground } from "@/components/CockpitBackground";
 import { AppWrapper } from "@/components/AppWrapper";
@@ -136,15 +137,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
-        {/* Google AdSense - verificação de propriedade */}
-        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5928931854509344" crossOrigin="anonymous" />
-        {/* Google CMP - Consent Management Platform (EEE/UK/Suíça) */}
-        <script async src="https://fundingchoicesmessages.google.com/i/pub-5928931854509344?ers=1" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `(function(){function g(){if(!window.frames['googlefcPresent']){if(document.body){const a=document.createElement('iframe');a.style='width:0;height:0;border:none;z-index:-1000;left:-1000px;top:-1000px';a.style.display='none';a.name='googlefcPresent';document.body.appendChild(a)}else setTimeout(g,0)}}g()})();`,
-          }}
-        />
+        {/* Theme + scroll restoration — critical, must run before paint */}
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -183,12 +176,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             `,
           }}
         />
-        {/* Google AdSense — script de verificação e carregamento */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5928931854509344"
-          crossOrigin="anonymous"
-        />
       </head>
       <body className="relative min-h-screen antialiased">
         <SkipLink />
@@ -215,6 +202,26 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <KeyboardShortcuts />
         <JsonLd />
         <BackToTop />
+
+        {/* Third-party scripts — loaded after hydration to prevent hydration errors */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5928931854509344"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        <Script
+          async
+          src="https://fundingchoicesmessages.google.com/i/pub-5928931854509344?ers=1"
+          strategy="afterInteractive"
+        />
+        <Script
+          id="google-cmp-iframe"
+          strategy="afterInteractive"
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function g(){if(!window.frames['googlefcPresent']){if(document.body){const a=document.createElement('iframe');a.style='width:0;height:0;border:none;z-index:-1000;left:-1000px;top:-1000px';a.style.display='none';a.name='googlefcPresent';document.body.appendChild(a)}else setTimeout(g,0)}}g()})();`,
+          }}
+        />
       </body>
     </html>
   );

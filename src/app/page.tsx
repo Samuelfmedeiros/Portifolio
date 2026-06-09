@@ -17,7 +17,12 @@ const Terminal = dynamic(
 async function HangarWithData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter((r) => r.name !== "SamuelFmedeiros");
-  const allProjects = [...STATIC_PROJECTS, ...filteredRepos];
+  
+  // Merge static + API, deduplicating by name (API data takes precedence)
+  const repoMap = new Map<string, typeof STATIC_PROJECTS[0]>();
+  for (const r of STATIC_PROJECTS) repoMap.set(r.name, r);
+  for (const r of filteredRepos) repoMap.set(r.name, r);
+  const allProjects = Array.from(repoMap.values());
 
   // Split games from other projects
   const games = allProjects.filter((r) => GAME_PROJECTS.includes(r.name));
