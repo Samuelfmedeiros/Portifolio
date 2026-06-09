@@ -30,7 +30,7 @@ describe('Terminal', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'whoami{Enter}')
-    expect(screen.getByText(/Samuel/)).toBeInTheDocument()
+    expect(screen.getByText('Samuel Medeiros')).toBeInTheDocument()
   })
 
   it('executes projetos command', async () => {
@@ -59,7 +59,7 @@ describe('Terminal', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'invalidcmd{Enter}')
-    expect(screen.getByText(/COMMAND NOT FOUND/)).toBeInTheDocument()
+    expect(screen.getByText(/Comando não encontrado/)).toBeInTheDocument()
   })
 
   it('clears history on clear command', async () => {

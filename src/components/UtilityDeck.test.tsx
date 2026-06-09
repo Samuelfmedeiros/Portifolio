@@ -11,7 +11,7 @@ vi.mock('./DataCalculator', () => ({
   DataCalculator: () => <div data-testid="data-calculator">Data Calculator</div>,
 }))
 
-vi.mock('./MiniGame', () => ({
+vi.mock('./MiniGames/MiniGame', () => ({
   MiniGame: () => <div data-testid="mini-game">Mini Game</div>,
 }))
 
@@ -55,9 +55,9 @@ describe('UtilityDeck', () => {
     fireEvent.click(screen.getByText('Relógio').closest('button')!)
     expect(screen.getByTestId('mission-clock')).toBeInTheDocument()
 
-    // Click calculator
-    fireEvent.click(screen.getByText('Calculadora').closest('button')!)
-    expect(screen.getByTestId('data-calculator')).toBeInTheDocument()
+    // Click mini-game (calculator was removed)
+    fireEvent.click(screen.getByText('Mini-game').closest('button')!)
+    expect(screen.getByTestId('mini-game')).toBeInTheDocument()
     expect(screen.queryByTestId('mission-clock')).not.toBeInTheDocument()
   })
 

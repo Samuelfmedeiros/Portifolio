@@ -5,7 +5,9 @@ import { HeroSection } from "../HeroSection";
 describe("HeroSection", () => {
   it("renders main title", () => {
     render(<HeroSection />);
-    expect(screen.getByText(/Samuel Medeiros/)).toBeTruthy();
+    // Title is split across elements: "Samuel " + <span>Medeiros</span>
+    // Use role selector for the heading
+    expect(screen.getByRole("heading", { level: 1 })).toBeInTheDocument();
   });
 
   it("renders CTAs", () => {

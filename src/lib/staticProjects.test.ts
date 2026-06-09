@@ -22,9 +22,9 @@ describe('staticProjects', () => {
   })
 
   it('FEATURED_PROJECTS contains expected project names', () => {
-    expect(FEATURED_PROJECTS).toContain('DogWalk')
     expect(FEATURED_PROJECTS).toContain('mission-control')
     expect(FEATURED_PROJECTS).toContain('seu.pet')
+    expect(FEATURED_PROJECTS).toContain('simon-game')
   })
 
   it('seu.pet has homepage and imageGradient', () => {

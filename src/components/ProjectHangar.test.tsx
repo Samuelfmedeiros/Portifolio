@@ -56,7 +56,8 @@ describe('ProjectHangar', () => {
 
   it('shows language indicator', () => {
     render(<ProjectHangar repos={mockRepos} />)
-    expect(screen.getByText('TypeScript')).toBeInTheDocument()
+    // TypeScript appears twice (both repos), use getAllByText
+    expect(screen.getAllByText('TypeScript').length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows empty state when no repos', () => {

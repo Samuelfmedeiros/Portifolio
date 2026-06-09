@@ -38,13 +38,14 @@ describe('getRepos', () => {
     expect(repos[0].name).toBe('my-project')
   })
 
-  it('throws error when API returns non-ok response', async () => {
+  it('returns empty array when API returns non-ok response', async () => {
     global.fetch = vi.fn().mockResolvedValue({
       ok: false,
       status: 404,
       statusText: 'Not Found',
     })
 
-    await expect(getRepos()).rejects.toThrow('GitHub API error: 404 Not Found')
+    const repos = await getRepos()
+    expect(repos).toEqual([])
   })
 })

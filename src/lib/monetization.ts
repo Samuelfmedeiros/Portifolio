@@ -6,7 +6,8 @@
 export const ADSENSE_CONFIG = {
   /** Google AdSense client ID (ca-pub-XXXX). Set via NEXT_PUBLIC_ADSENSE_CLIENT_ID */
   get clientId(): string {
-  return process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "";
+    const value = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+    return value ?? "";
   },
   /** Ad slot ID for the footer banner. Set via NEXT_PUBLIC_ADSENSE_SLOT_FOOTER */
   footerSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER || "",
@@ -14,14 +15,19 @@ export const ADSENSE_CONFIG = {
   sidebarSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR || "",
   /** Whether AdSense is enabled (requires client ID) */
   get enabled(): boolean {
-    return !!(process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID || "");
+    const value = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
+    return !!value;
   },
 };
 
 /** Buy Me a Coffee configuration */
 export const BMC_CONFIG = {
   /** BMC username. Set via NEXT_PUBLIC_BMC_USERNAME */
-  username: process.env.NEXT_PUBLIC_BMC_USERNAME || "samuelmedeiros",
+  get username(): string {
+    const value = process.env.NEXT_PUBLIC_BMC_USERNAME;
+    if (value === undefined || value === null) return "samuelmedeiros";
+    return value;
+  },
   /** Full BMC URL */
   get url(): string {
     return `https://buymeacoffee.com/${this.username}`;
@@ -35,7 +41,11 @@ export const BMC_CONFIG = {
 /** GitHub Sponsors configuration */
 export const GITHUB_SPONSORS_CONFIG = {
   /** GitHub username for sponsors */
-  username: process.env.NEXT_PUBLIC_GITHUB_SPONSORS_USERNAME || "Samuelfmedeiros",
+  get username(): string {
+    const value = process.env.NEXT_PUBLIC_GITHUB_SPONSORS_USERNAME;
+    if (value === undefined || value === null) return "Samuelfmedeiros";
+    return value;
+  },
   /** Full sponsors URL */
   get url(): string {
     return `https://github.com/sponsors/${this.username}`;
@@ -126,11 +136,16 @@ export function parseMonetizationConsent(raw: string | null): MonetizationConsen
     const parsed = JSON.parse(raw);
     if (
       typeof parsed === "object" &&
-      typeof parsed.analytics === "boolean" &&
-      typeof parsed.ads === "boolean" &&
-      typeof parsed.nonPersonalizedAds === "boolean"
+      parsed !== null &&
+      "analytics" in parsed &&
+      "ads" in parsed &&
+      "nonPersonalizedAds" in parsed
     ) {
-      return parsed as MonetizationConsent;
+      return {
+        analytics: Boolean(parsed.analytics),
+        ads: Boolean(parsed.ads),
+        nonPersonalizedAds: Boolean(parsed.nonPersonalizedAds),
+      };
     }
   } catch {
     // invalid JSON
