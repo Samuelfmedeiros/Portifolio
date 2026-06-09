@@ -6,8 +6,10 @@ const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
   
-  // Turbopack explícito
-  turbopack: {},
+  // Turbopack explícito com root correto
+  turbopack: {
+    root: path.resolve(__dirname),
+  },
   
   // Otimização de imagens → WebP/AVIF automático
   images: {
