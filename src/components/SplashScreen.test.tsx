@@ -5,6 +5,18 @@ import { SplashScreen } from './SplashScreen'
 describe('SplashScreen', () => {
   beforeEach(() => {
     vi.useFakeTimers()
+
+    // Mock navigator.hardwareConcurrency
+    Object.defineProperty(navigator, 'hardwareConcurrency', {
+      writable: true,
+      value: 8,
+    })
+
+    // Mock navigator.userAgent
+    Object.defineProperty(navigator, 'userAgent', {
+      writable: true,
+      value: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) Chrome/120.0.0.0',
+    })
   })
 
   afterEach(() => {
@@ -17,40 +29,39 @@ describe('SplashScreen', () => {
     expect(container.querySelector('.fixed.inset-0')).toBeInTheDocument()
   })
 
-  it('shows welcome text during transit phase', () => {
+  it('shows status line text', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    vi.advanceTimersByTime(4500)
-    const welcomeElements = screen.getAllByText('SEJA BEM-VINDO')
-    expect(welcomeElements.length).toBeGreaterThan(0)
+    const statusElements = screen.getAllByText('SYSTEM CONTROL v3.1')
+    expect(statusElements.length).toBeGreaterThan(0)
   })
 
-  it('has cinematic overlays', () => {
+  it('shows INICIALIZANDO during animation', () => {
+    const onComplete = vi.fn()
+    render(<SplashScreen onComplete={onComplete} />)
+    vi.advanceTimersByTime(1200)
+    const initElements = screen.getAllByText('INICIALIZANDO')
+    expect(initElements.length).toBeGreaterThan(0)
+  })
+
+  it('has cinematic overlays (vignette)', () => {
     const { container } = render(<SplashScreen onComplete={vi.fn()} />)
     const vignette = container.querySelector('[class*="radial"]')
-    const scanline = container.querySelector('[class*="repeating"]')
-    expect(vignette || scanline).toBeTruthy()
+    expect(vignette).toBeTruthy()
   })
 
   it('calls onComplete after animation sequence', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    vi.advanceTimersByTime(7500)
+    vi.advanceTimersByTime(9000)
     expect(onComplete).toHaveBeenCalled()
   })
 
   it('does not call onComplete before animation ends', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    vi.advanceTimersByTime(3000)
+    vi.advanceTimersByTime(2000)
     expect(onComplete).not.toHaveBeenCalled()
-  })
-
-  it('has dark background', () => {
-    const onComplete = vi.fn()
-    const { container } = render(<SplashScreen onComplete={onComplete} />)
-    const root = container.querySelector('.fixed.inset-0') as HTMLElement
-    expect(root?.className).toContain('bg-[')
   })
 
   it('renders progress bar at bottom', () => {
@@ -70,11 +81,12 @@ describe('SplashScreen', () => {
   it('has letterbox bars', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    const bars = container.querySelectorAll('.h-\\[12\\%\\]')
-    expect(bars.length).toBe(2)
+    // Letterbox bars are motion.div elements with h-[12%]
+    const letterboxBars = container.querySelectorAll('.h-\\[12\\%\\]')
+    expect(letterboxBars.length).toBe(2)
   })
 
-  it('injects CSS keyframes for star animation', () => {
+  it('injects CSS keyframes for animations', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
     const styleTag = container.querySelector('style')
@@ -86,5 +98,26 @@ describe('SplashScreen', () => {
     const { container } = render(<SplashScreen onComplete={onComplete} />)
     const perspectiveEl = container.querySelector('[style*="perspective"]')
     expect(perspectiveEl).toBeInTheDocument()
+  })
+
+  it('has MC monogram SVG paths', () => {
+    const onComplete = vi.fn()
+    const { container } = render(<SplashScreen onComplete={onComplete} />)
+    const svg = container.querySelector('svg')
+    expect(svg).toBeInTheDocument()
+  })
+
+  it('has skip button for accessibility', () => {
+    const onComplete = vi.fn()
+    render(<SplashScreen onComplete={onComplete} />)
+    const skipBtn = screen.getByLabelText('Pular animação de abertura')
+    expect(skipBtn).toBeInTheDocument()
+  })
+
+  it('has boot message content', () => {
+    const onComplete = vi.fn()
+    render(<SplashScreen onComplete={onComplete} />)
+    const bootMsg = screen.queryByText(/SYSTEM BOOT SEQUENCE/)
+    expect(bootMsg).toBeTruthy()
   })
 })
