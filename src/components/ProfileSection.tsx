@@ -340,7 +340,7 @@ function CircuitLines() {
 
 function SkillsCompact() {
   return (
-    <div className="mb-12">
+    <div className="mb-8">
       <motion.h3
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -536,10 +536,10 @@ export function ProfileSection() {
       {/* L3: Hero content — parallax mais rápido, fade out */}
       <motion.div
         style={{ y: heroY, opacity: heroOpacity }}
-        className="relative z-10 text-center max-w-3xl mx-auto mb-12"
+        className="relative z-10 text-center max-w-3xl mx-auto mb-8"
       >
         <div
-          className="glass rounded-2xl p-6 md:p-10 border border-[var(--glass-border)] shadow-2xl"
+          className="glass rounded-2xl p-4 md:p-8 border border-[var(--glass-border)] shadow-2xl"
           style={{
             boxShadow: "0 0 40px color-mix(in srgb, var(--accent) 5%, transparent), 0 0 80px color-mix(in srgb, var(--accent-alt) 3%, transparent)",
           }}

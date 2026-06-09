@@ -11,11 +11,13 @@ export const STATIC_PROJECTS: Repo[] = [
     stargazers_count: 0,
     forks_count: 0,
     language: "TypeScript",
-    topics: ["featured"],
+    topics: ["featured", "web"],
     pushed_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: true,
+    icon: "🐾",
+    imageUrl: "/projects/seu.pet.png",
   },
   {
     id: 1001,
@@ -32,6 +34,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: false,
+    icon: "🧠",
   },
   {
     id: 1002,
@@ -48,6 +51,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
     hasDemo: false,
+    icon: "🚀",
   },
   {
     id: 1003,
@@ -64,6 +68,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     hasDemo: false,
+    icon: "⌨️",
   },
   {
     id: 1004,
@@ -80,8 +85,10 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
     hasDemo: false,
+    icon: "🔲",
   },
   // NOTA: DogWalk removido — projeto está em fase de reformulação
 ];
 
 export const FEATURED_PROJECTS = ["mission-control", "seu.pet", "simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];
+export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];

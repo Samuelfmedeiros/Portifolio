@@ -20,6 +20,10 @@ export interface Repo {
   imageGradient?: string;
   /** Whether this project has a live demo */
   hasDemo?: boolean;
+  /** URL for project thumbnail/screenshot */
+  imageUrl?: string;
+  /** Project emoji/icon for visual identity */
+  icon?: string;
 }
 
 /** Terminal command history entry */
