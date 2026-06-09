@@ -131,16 +131,16 @@ function TreasureShip({ phase }: { phase: number }) {
         cx="135" cy="40"
         rx={15 + glowIntensity * 40} ry={8 + glowIntensity * 18}
         fill="url(#plumeGrad)"
-        animate={{ opacity: [0.3, 0.9, 0.3], scaleX: [1, 1.3, 1], scaleY: [1, 1.15, 1] }}
-        transition={{ duration: 0.12 + (1 - glowIntensity * 0.3) * 0.2, repeat: Infinity, ease: "linear" }}
+        animate={{ opacity: [0.3, 0.8, 0.3], scaleX: [1, 1.2, 1], scaleY: [1, 1.1, 1] }}
+        transition={{ duration: 0.2 + (1 - glowIntensity * 0.3) * 0.3, repeat: Infinity, ease: "easeInOut" }}
         style={{ filter: "blur(14px)" }}
       />
       <motion.ellipse
         cx="132" cy="40"
         rx={8 + glowIntensity * 25} ry={4 + glowIntensity * 10}
         fill="var(--accent, #22d3ee)"
-        animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.15, 1] }}
-        transition={{ duration: 0.08 + (1 - glowIntensity * 0.3) * 0.12, repeat: Infinity }}
+        animate={{ opacity: [0.5, 0.9, 0.5], scale: [1, 1.1, 1] }}
+        transition={{ duration: 0.15 + (1 - glowIntensity * 0.3) * 0.2, repeat: Infinity, ease: "easeInOut" }}
         style={{ filter: "blur(8px)" }}
       />
       <motion.ellipse
@@ -154,12 +154,12 @@ function TreasureShip({ phase }: { phase: number }) {
 
       {/* Solar sails */}
       <motion.path d="M50 40 L90 5 L130 15 L110 30 Z" fill="url(#sailGrad)" stroke="#6366f1" strokeWidth="0.6" opacity={0.7}
-        animate={warp ? { scaleX: [1, 1.4, 1], opacity: [0.7, 0.2, 0.7] } : {}}
-        transition={{ duration: 0.4, repeat: Infinity }}
+        animate={warp ? { scaleX: [1, 1.25, 1], opacity: [0.7, 0.3, 0.7] } : {}}
+        transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut" }}
       />
       <motion.path d="M50 40 L90 75 L130 65 L110 50 Z" fill="url(#sailGrad)" stroke="#6366f1" strokeWidth="0.6" opacity={0.7}
-        animate={warp ? { scaleX: [1, 1.4, 1], opacity: [0.7, 0.2, 0.7] } : {}}
-        transition={{ duration: 0.4, repeat: Infinity, delay: 0.08 }}
+        animate={warp ? { scaleX: [1, 1.25, 1], opacity: [0.7, 0.3, 0.7] } : {}}
+        transition={{ duration: 0.6, repeat: Infinity, ease: "easeInOut", delay: 0.12 }}
       />
 
       {/* Hull */}
@@ -393,17 +393,17 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
               : phase === 1
                 ? { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", opacity: 1, scale: 0.8, rotate: -5 }
                 : phase === 2
-                  ? { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", scale: 1.1, rotate: 0 }
+                  ? { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", opacity: 1, scale: 1.05, rotate: -2 }
                   : phase === 3
-                    ? { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", scale: [1.1, 1.5, 0.9], rotate: [0, 0, 3, -3, 0] }
-                    : { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", scale: 0.15, opacity: 0 }
+                    ? { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", scale: [1.05, 1.2, 0.95, 1.05], rotate: [-2, 0, 2, -1, 0] }
+                    : { x: "calc(50vw - 80px)", y: "calc(50vh - 40px)", opacity: 0, scale: 0.3 }
           }
           transition={
-            phase === 1 ? { duration: 1, ease: [0.12, 0.8, 0.25, 1] } :
-            phase === 2 ? { duration: 0.8, ease: "easeOut" } :
-            phase === 3 ? { duration: 1.2, ease: "easeInOut" } :
-            phase === 4 ? { duration: 0.7, ease: "easeIn" } :
-            { duration: 0.6 }
+            phase === 1 ? { duration: 1.2, ease: [0.25, 0.8, 0.25, 1] } :
+            phase === 2 ? { duration: 1, ease: [0.25, 0.46, 0.45, 0.94] } :
+            phase === 3 ? { duration: 1.5, ease: "easeInOut" } :
+            phase === 4 ? { duration: 0.8, ease: [0.55, 0, 1, 0.45] } :
+            { duration: 0.8 }
           }
           style={{ transform: `translate(${mx * 18}px, ${my * 18}px)` }}
         >
