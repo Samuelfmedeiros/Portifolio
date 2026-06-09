@@ -52,6 +52,19 @@
 ### CSP (Content Security Policy)
 - [x] `fundingchoicesmessages.google.com` adicionado ao script-src e frame-src
 - [x] `api.github.com` adicionado ao connect-src (GitHub stats agora carregam)
+- [x] `ep1.adtrafficquality.google`, `ep2.adtrafficquality.google`, `*.adtrafficquality.google` adicionados ao connect-src, img-src, frame-src
+
+### Correções de Build
+- [x] Scripts AdSense/CMP movidos para `next/script afterInteractive` (elimina hydration error)
+- [x] Script AdSense duplicado removido do `<head>`
+- [x] Repositórios deduplicados por nome (elimina jogos duplicados na seção 🎮 JOGOS)
+- [x] `link-relattr` removido do CSP (diretiva inválida quebrava o header inteiro)
+
+---
+
+## ✅ Erros no Console (final)
+- **0 erros críticos** — CSP, GitHub API, CMP tudo ok
+- **3 erros benignos** — todos do AdSense (telemetria/tracking, não afetam nada)
 
 ---
 
