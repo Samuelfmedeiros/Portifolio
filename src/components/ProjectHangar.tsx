@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { ExternalLink, Code, Star, GitFork, Calendar, Zap } from "lucide-react";
+import { ExternalLink, Star, GitFork, Calendar, Zap } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
@@ -81,7 +81,171 @@ const extractTechTags = (repo: Repo): string[] => {
   return [...new Set(tags)].slice(0, 5);
 };
 
-export function ProjectHangar({ repos }: { repos: Repo[] }) {
+function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
+  const isFeatured = FEATURED.includes(repo.name);
+  const techTags = extractTechTags(repo);
+  const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
+  const updated = repo.pushed_at
+    ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
+    : null;
+  const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
+
+  return (
+    <motion.div
+      key={repo.id}
+      layout
+      initial={{ opacity: 0, scale: 0.95 }}
+      animate={{ opacity: 1, scale: 1 }}
+      exit={{ opacity: 0, scale: 0.95 }}
+      transition={{ duration: 0.25, delay: i * 0.05 }}
+    >
+      <GlassCard
+        delay={0}
+        className="group relative h-full flex flex-col overflow-hidden hover:scale-[1.03] transition-all duration-300"
+      >
+        {/* Holo-card glow effect */}
+        <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--accent-alt)]/5" />
+        <div className="absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[inherit] bg-gradient-to-br from-[var(--accent)]/20 via-transparent to-[var(--accent-alt)]/20 blur-sm" />
+
+        {/* Featured badge */}
+        {isFeatured && (
+          <div className="absolute top-3 right-3 z-20">
+            <span className="text-[9px] font-mono text-[var(--accent)] border border-[var(--accent)]/40 px-2 py-0.5 rounded bg-[var(--accent)]/10 backdrop-blur-sm">
+              ★ FEATURED
+            </span>
+          </div>
+        )}
+
+        {/* Project image header */}
+        <div
+          className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center"
+          style={{ background: gradient }}
+        >
+          {/* Overlay pattern */}
+          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
+          
+          {/* Project screenshot or icon */}
+          {repo.imageUrl ? (
+            <img
+              src={repo.imageUrl}
+              alt={repo.name}
+              className="absolute inset-0 w-full h-full object-cover"
+              loading="lazy"
+            />
+          ) : repo.icon ? (
+            <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
+          ) : (
+            <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg relative z-10">
+              {repo.name}
+            </span>
+          )}
+          
+          {/* Bottom fade */}
+          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
+        </div>
+
+        <div className="relative p-1 flex flex-col flex-1">
+          {/* Name (always visible now) */}
+          <p className="text-xs font-mono font-semibold text-[var(--text-primary)] mb-1 truncate">
+            {repo.icon && repo.name}
+          </p>
+
+          {/* Description */}
+          <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 mt-1">
+            {repo.description || "No description provided"}
+          </p>
+
+          {/* Tech tags */}
+          {techTags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mb-3">
+              {techTags.map((tag) => (
+                <span
+                  key={tag}
+                  className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${getTagStyle(tag)}`}
+                >
+                  {tag}
+                </span>
+              ))}
+            </div>
+          )}
+
+          {/* Stats row */}
+          <div className="flex items-center gap-3 text-[10px] text-[var(--text-secondary)] mb-3 pb-3 border-b border-[var(--border)]/30">
+            {repo.language && (
+              <span className="flex items-center gap-1">
+                <span
+                  className="w-2 h-2 rounded-full"
+                  style={{ backgroundColor: langColor }}
+                />
+                {repo.language}
+              </span>
+            )}
+            <span className="flex items-center gap-0.5">
+              <Star className="w-3 h-3" /> {repo.stargazers_count}
+            </span>
+            <span className="flex items-center gap-0.5">
+              <GitFork className="w-3 h-3" /> {repo.forks_count}
+            </span>
+            {updated && (
+              <span className="flex items-center gap-0.5 ml-auto">
+                <Calendar className="w-3 h-3" /> {updated}
+              </span>
+            )}
+          </div>
+
+          {/* Action links */}
+          <div className="flex gap-3">
+            {repo.html_url && (
+              <a
+                href={repo.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-mono text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
+              >
+                <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                REPO
+              </a>
+            )}
+            {(repo.homepage || repo.hasDemo) && (
+              <a
+                href={repo.homepage || "#"}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
+              >
+                <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                DEMO
+              </a>
+            )}
+          </div>
+
+          {/* Affiliate "powered by" links */}
+          {getProjectAffiliates(repo.name).length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-[var(--border)]/20">
+              <span className="text-[8px] font-mono text-[var(--text-secondary)]/40 self-center">
+                powered by
+              </span>
+              {getProjectAffiliates(repo.name).map((aff) => (
+                <a
+                  key={aff.key}
+                  href={aff.url}
+                  target="_blank"
+                  rel="sponsored noopener noreferrer"
+                  className="text-[8px] font-mono text-[var(--text-secondary)]/40 hover:text-[var(--accent)] transition-colors flex items-center gap-0.5"
+                >
+                  <Zap className="w-2 h-2" />
+                  {aff.name}
+                </a>
+              ))}
+            </div>
+          )}
+        </div>
+      </GlassCard>
+    </motion.div>
+  );
+}
+
+export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]; title?: string }) {
   const [activeFilter, setActiveFilter] = useState<string>("all");
 
   // Collect all unique languages/tags for filter
@@ -107,8 +271,8 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
 
   if (!repos || repos.length === 0) {
     return (
-      <section id="projects" className="py-20 px-6">
-        <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center">
+      <section id="projects" className="py-8 px-6">
+        <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">
           ▸ Nenhum projeto encontrado
         </h2>
       </section>
@@ -116,34 +280,36 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
   }
 
   return (
-    <section id="projects" className="py-12 px-6">
+    <section id="projects" className="py-8 px-6">
       <motion.h2
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
-        className="text-2xl font-mono text-[var(--accent)] mb-6 text-center"
+        className="text-xl font-mono text-[var(--accent)] mb-4 text-center"
       >
-        ▸ PROJETOS
+        {title}
       </motion.h2>
 
       {/* Filter bar */}
-      <div className="flex items-center justify-center gap-1 mb-8 overflow-x-auto hide-scrollbar pb-2">
-        {allTags.slice(0, 12).map((tag) => (
-          <button
-            key={tag}
-            onClick={() => setActiveFilter(tag)}
-            className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-all shrink-0 whitespace-nowrap ${
-              activeFilter === tag
-                ? "bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/40 shadow-[0_0_10px_var(--accent)]/10"
-                : "text-[var(--text-secondary)] border border-transparent hover:border-[var(--border)]/50 hover:text-[var(--text-primary)] hover:bg-[var(--border)]/10"
-            }`}
-          >
-            {tag === "all" ? "Todos" : tag}
-          </button>
-        ))}
-      </div>
+      {allTags.length > 1 && (
+        <div className="flex items-center justify-center gap-1 mb-4 overflow-x-auto hide-scrollbar pb-2">
+          {allTags.slice(0, 12).map((tag) => (
+            <button
+              key={tag}
+              onClick={() => setActiveFilter(tag)}
+              className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-all shrink-0 whitespace-nowrap ${
+                activeFilter === tag
+                  ? "bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/40 shadow-[0_0_10px_var(--accent)]/10"
+                  : "text-[var(--text-secondary)] border border-transparent hover:border-[var(--border)]/50 hover:text-[var(--text-primary)] hover:bg-[var(--border)]/10"
+              }`}
+            >
+              {tag === "all" ? "Todos" : tag}
+            </button>
+          ))}
+        </div>
+      )}
 
       {/* Stats bar */}
-      <div className="flex items-center justify-center gap-4 mb-8 font-mono text-xs text-[var(--text-secondary)]">
+      <div className="flex items-center justify-center gap-4 mb-6 font-mono text-xs text-[var(--text-secondary)]">
         <span>{filteredRepos.length} projeto{filteredRepos.length !== 1 ? "s" : ""}</span>
         <span className="text-[var(--border)]">|</span>
         <span>Filtro: {activeFilter === "all" ? "Todos" : activeFilter}</span>
@@ -155,158 +321,14 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
         layout
       >
         <AnimatePresence>
-          {filteredRepos.map((repo, i) => {
-            const isFeatured = FEATURED.includes(repo.name);
-            const techTags = extractTechTags(repo);
-            const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
-            const updated = repo.pushed_at
-              ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
-              : null;
-            const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
-
-            return (
-              <motion.div
-                key={repo.id}
-                layout
-                initial={{ opacity: 0, scale: 0.95 }}
-                animate={{ opacity: 1, scale: 1 }}
-                exit={{ opacity: 0, scale: 0.95 }}
-                transition={{ duration: 0.25, delay: i * 0.05 }}
-              >
-                <GlassCard
-                  delay={0}
-                  className="group relative h-full flex flex-col overflow-hidden hover:scale-[1.03] transition-all duration-300"
-                >
-                  {/* Holo-card glow effect */}
-                  <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--accent-alt)]/5" />
-                  <div className="absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[inherit] bg-gradient-to-br from-[var(--accent)]/20 via-transparent to-[var(--accent-alt)]/20 blur-sm" />
-
-                  {/* Featured badge */}
-                  {isFeatured && (
-                    <div className="absolute top-3 right-3 z-20">
-                      <span className="text-[9px] font-mono text-[var(--accent)] border border-[var(--accent)]/40 px-2 py-0.5 rounded bg-[var(--accent)]/10 backdrop-blur-sm">
-                        ★ FEATURED
-                      </span>
-                    </div>
-                  )}
-
-                  {/* Project image header — fixed height */}
-                  <div
-                    className="relative h-[120px] w-full shrink-0 overflow-hidden"
-                    style={{ background: gradient }}
-                  >
-                    {/* Overlay pattern */}
-                    <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
-                    {/* Project name overlay */}
-                    <div className="absolute inset-0 flex items-center justify-center">
-                      <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg">
-                        {repo.name}
-                      </span>
-                    </div>
-                    {/* Bottom fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
-                  </div>
-
-                  <div className="relative p-1 flex flex-col flex-1">
-                    {/* Description — flex-1 pra ocupar espaço igual entre cards */}
-                    <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 mt-1">
-                      {repo.description || "No description provided"}
-                    </p>
-
-                    {/* Tech tags */}
-                    {techTags.length > 0 && (
-                      <div className="flex flex-wrap gap-1 mb-3">
-                        {techTags.map((tag) => (
-                          <span
-                            key={tag}
-                            className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${getTagStyle(tag)}`}
-                          >
-                            {tag}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    {/* Stats row */}
-                    <div className="flex items-center gap-3 text-[10px] text-[var(--text-secondary)] mb-3 pb-3 border-b border-[var(--border)]/30">
-                      {repo.language && (
-                        <span className="flex items-center gap-1">
-                          <span
-                            className="w-2 h-2 rounded-full"
-                            style={{ backgroundColor: langColor }}
-                          />
-                          {repo.language}
-                        </span>
-                      )}
-                      <span className="flex items-center gap-0.5">
-                        <Star className="w-3 h-3" /> {repo.stargazers_count}
-                      </span>
-                      <span className="flex items-center gap-0.5">
-                        <GitFork className="w-3 h-3" /> {repo.forks_count}
-                      </span>
-                      {updated && (
-                        <span className="flex items-center gap-0.5 ml-auto">
-                          <Calendar className="w-3 h-3" /> {updated}
-                        </span>
-                      )}
-                    </div>
-
-                    {/* Action links */}
-                    <div className="flex gap-3">
-                      {repo.html_url && (
-                        <a
-                          href={repo.html_url}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[10px] font-mono text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
-                        >
-                          <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                          REPO
-                        </a>
-                      )}
-                      {(repo.homepage || repo.hasDemo) && (
-                        <a
-                          href={repo.homepage || "#"}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
-                        >
-                          <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                          DEMO
-                        </a>
-                      )}
-                    </div>
-
-                    {/* Affiliate "powered by" links — subtle, no consent needed */}
-                    {getProjectAffiliates(repo.name).length > 0 && (
-                      <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-[var(--border)]/20">
-                        <span className="text-[8px] font-mono text-[var(--text-secondary)]/40 self-center">
-                          powered by
-                        </span>
-                        {getProjectAffiliates(repo.name).map((aff) => (
-                          <a
-                            key={aff.key}
-                            href={aff.url}
-                            target="_blank"
-                            rel="sponsored noopener noreferrer"
-                            className="text-[8px] font-mono text-[var(--text-secondary)]/40 hover:text-[var(--accent)] transition-colors flex items-center gap-0.5"
-                          >
-                            <Zap className="w-2 h-2" />
-                            {aff.name}
-                          </a>
-                        ))}
-                      </div>
-                    )}
-                  </div>
-                </GlassCard>
-              </motion.div>
-            );
-          })}
+          {filteredRepos.map((repo, i) => (
+            <ProjectCard key={repo.id} repo={repo} index={i} />
+          ))}
         </AnimatePresence>
       </motion.div>
 
       {filteredRepos.length === 0 && (
-        <div className="text-center py-12">
+        <div className="text-center py-8">
           <p className="font-mono text-sm text-[var(--text-secondary)]">
             Nenhum projeto encontrado com o filtro "{activeFilter}"
           </p>

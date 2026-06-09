@@ -69,7 +69,7 @@ export function ContactForm() {
   };
 
   return (
-    <section id="contact" className="py-12 px-4 md:px-6" aria-labelledby="contact-heading">
+    <section id="contact" className="py-8 px-4 md:px-6" aria-labelledby="contact-heading">
       <motion.h2
         id="contact-heading"
         initial={{ opacity: 0, y: 20 }}

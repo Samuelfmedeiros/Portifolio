@@ -127,9 +127,9 @@ export function KeyboardShortcuts() {
         </span>
       </div>
 
-      {/* Mobile shortcuts bar */}
+      {/* Mobile shortcuts bar — hidden on mobile, only desktop */}
       <div
-        className={`fixed bottom-16 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 ${
+        className={`fixed bottom-16 left-1/2 -translate-x-1/2 z-40 transition-all duration-300 hidden md:block ${
           visible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
         }`}
       >

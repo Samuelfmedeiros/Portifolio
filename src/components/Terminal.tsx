@@ -505,7 +505,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
   };
 
   return (
-    <section id="terminal" className="py-12 md:py-20 px-4 md:px-6">
+    <section id="terminal" className="py-8 md:py-12 px-4 md:px-6">
           <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center" id="terminal-heading">
             ▸ TERMINAL
           </h2>

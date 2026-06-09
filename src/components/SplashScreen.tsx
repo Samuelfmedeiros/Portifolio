@@ -8,7 +8,7 @@ const BOOT_MESSAGES = [
   "Carregando módulos de dados...",
   "Conectando à base de conhecimento...",
   "Sincronizando credenciais...",
-  "Mission Control pronto para decolagem.",
+  "Seja bem-vindo ao meu portfólio!",
 ];
 
 export function SplashScreen({ onComplete }: { onComplete: () => void }) {
@@ -57,24 +57,23 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
       className="fixed inset-0 z-[9999] bg-slate-950 flex items-center justify-center"
     >
       <div className="w-full max-w-md px-8">
-        {/* Logo */}
+        {/* Logo simplificado */}
         <motion.div
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.5 }}
           className="text-center mb-12"
         >
-          <h1 className="text-4xl font-mono font-bold text-white mb-2">
-            Samuel <span className="text-cyan-400">Medeiros</span>
-          </h1>
-          <p className="text-slate-500 text-sm font-mono">Mission Control v2.0</p>
+          <div className="w-16 h-16 mx-auto mb-4 rounded-full bg-gradient-to-br from-cyan-400 to-indigo-500 flex items-center justify-center">
+            <span className="text-2xl font-bold text-white">SM</span>
+          </div>
         </motion.div>
 
         {/* Boot sequence */}
         <div className="bg-slate-900/50 rounded-lg p-6 border border-slate-800">
           <div className="flex items-center gap-2 mb-4">
             <div className="w-2 h-2 rounded-full bg-cyan-400 animate-pulse" />
-            <span className="text-cyan-400 text-xs font-mono">SYSTEM BOOT</span>
+            <span className="text-cyan-400 text-xs font-mono">SEJA BEM-VINDO</span>
           </div>
 
           <div className="h-32 font-mono text-xs text-slate-400 overflow-hidden">

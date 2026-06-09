@@ -124,7 +124,7 @@ export function HeroSection() {
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
   return (
-    <section ref={containerRef} className="relative min-h-screen flex items-center justify-center px-4 md:px-6 overflow-hidden">
+    <section ref={containerRef} className="relative min-h-[70vh] flex items-center justify-center px-4 md:px-6 overflow-hidden">
       {/* Background layer with parallax - grid + circles */}
       <motion.div
         style={{ y: bgY, opacity }}

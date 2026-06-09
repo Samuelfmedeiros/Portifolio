@@ -49,7 +49,7 @@ export function MissionGames() {
             }`}
           >
             <span className="mr-1">{game.icon}</span>
-            <span className="hidden sm:inline">{game.label}</span>
+            <span className="inline sm:inline">{game.label}</span>
           </button>
         ))}
       </div>

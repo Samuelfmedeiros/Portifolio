@@ -2,7 +2,7 @@
 
 # 🛰️ MISSION CONTROL — STATUS DE MELHORIAS CONTÍNUAS
 
-> Atualizado: 2026-05-27 17:15 | Status: **CORREÇÕES DE CONSISTÊNCIA ✅**
+> Atualizado: 2026-06-09 00:55 | Status: **MELHORIAS DE UX E MOBILE ✅**
 
 ## 📊 Métricas Atuais
 
@@ -24,6 +24,36 @@
 | Vercel Deploy | automático | `5791132` | ✅ Online |
 | CI: Build + Lint + Test | push pra `master` | — | ✅ Automático |
 | CI: Playwright E2E | push pra `master` | — | ✅ Automático |
+
+## ✅ Melhorias Aplicadas (2026-06-09)
+
+### SplashScreen
+- [x] Texto "Samuel Medeiros" removido da tela de boot
+- [x] "Mission Control v2.0" removido
+- [x] "SYSTEM BOOT" → "SEJA BEM-VINDO"
+- [x] "Mission Control pronto para decolagem." → "Seja bem-vindo ao meu portfólio!"
+
+### Mobile / UX
+- [x] Atalho de teclado agora não aparece mais em mobile (só desktop)
+- [x] Nomes dos jogos visíveis em mobile (antes escondidos via `hidden sm:inline`)
+- [x] Espaçamento do topo aumentado (pt-14 → pt-20, md:pt-16 → md:pt-24)
+
+### Projetos e Jogos
+- [x] Cards dos projetos agora têm imagem (screenshot real do seu.pet; emoji/icons para demais)
+- [x] Jogos separados em seção própria ("🎮 JOGOS") abaixo dos projetos principais
+- [x] Ícones/emojis adicionados a cada projeto para identidade visual
+
+### Tamanho da página reduzido
+- [x] HeroSection: min-h-screen → min-h-[70vh]
+- [x] Padding de sections reduzido (py-12 → py-8, etc)
+- [x] ProfileSection: hero padding reduzido (p-6 → p-4, mb-12 → mb-8)
+- [x] Terminal, GitHubStats, ContactForm: padding vertical reduzido
+
+### CSP (Content Security Policy)
+- [x] `fundingchoicesmessages.google.com` adicionado ao script-src e frame-src
+- [x] `api.github.com` adicionado ao connect-src (GitHub stats agora carregam)
+
+---
 
 ## ✅ Correções Aplicadas (2026-05-27)
 
