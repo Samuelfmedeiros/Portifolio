@@ -34,8 +34,9 @@ function applyPaletteToDoc(paletteId: string, theme: Theme) {
 }
 
 function setThemeClass(theme: Theme) {
-  document.documentElement.classList.toggle("theme-dark", theme === "dark");
-  document.documentElement.classList.toggle("theme-light", theme === "light");
+  const root = document.documentElement;
+  root.classList.toggle("theme-dark", theme === "dark");
+  root.classList.toggle("theme-light", theme === "light");
 }
 
 interface ThemeContextValue {
@@ -104,9 +105,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ theme, palette, toggle, setTheme, setPalette }}>
-      <div className={theme === "dark" ? "theme-dark" : "theme-light"}>
-        {children}
-      </div>
+      {children}
     </ThemeContext.Provider>
   );
 }

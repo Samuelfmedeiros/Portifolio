@@ -112,7 +112,7 @@ export const Navbar = memo(function Navbar() {
           </motion.a>
 
           {/* Desktop Nav — horizontal with glass effect */}
-          <div className="hidden lg:flex items-center gap-1" role="menubar">
+          <div className="hidden lg:flex items-center gap-1" role="list">
             {NAV_ITEMS.map((item) => {
               const isActive = activeId === item.href.replace("#", "");
               return (
@@ -120,14 +120,13 @@ export const Navbar = memo(function Navbar() {
                   key={item.href}
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  role="menuitem"
                   className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all ${
                     isActive
                       ? "text-[var(--accent)] bg-[var(--accent)]/10"
                       : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)]/20"
                   }`}
                   whileHover={{ y: -1 }}
-                  aria-current={isActive ? "page" : undefined}
+                  aria-current={isActive ? "true" : undefined}
                 >
                   {item.label}
                   {isActive && (
@@ -164,7 +163,7 @@ export const Navbar = memo(function Navbar() {
         <div
           ref={scrollRef}
           className="lg:hidden flex items-center gap-1 overflow-x-auto hide-scrollbar pb-2 -mx-3 px-3"
-          role="menubar"
+          role="list"
           aria-label="Navegação mobile"
         >
           {NAV_ITEMS.map((item) => {
@@ -174,14 +173,13 @@ export const Navbar = memo(function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                role="menuitem"
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 whitespace-nowrap ${
                   isActive
                     ? "text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30"
                     : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent"
                 }`}
                 whileTap={{ scale: 0.95 }}
-                aria-current={isActive ? "page" : undefined}
+                aria-current={isActive ? "true" : undefined}
               >
                 <span className="text-sm">{item.icon}</span>
                 <span>{item.label}</span>

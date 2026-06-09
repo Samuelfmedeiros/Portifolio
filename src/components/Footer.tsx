@@ -53,6 +53,9 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             onClick={onClose}
             className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeTab === 'privacy' ? 'Política de Privacidade' : 'Termos de Uso'}
           >
             <div onClick={(e) => e.stopPropagation()} className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
