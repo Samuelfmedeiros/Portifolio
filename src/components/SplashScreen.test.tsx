@@ -8,35 +8,36 @@ describe('SplashScreen', () => {
   })
 
   afterEach(() => {
-    vi.useRealTimers()
+    vi.restoreAllTimers()
   })
 
   it('renders without crashing', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Canvas-based splash screen
-    expect(container.querySelector('canvas')).toBeInTheDocument()
+    expect(container.querySelector('.fixed.inset-0')).toBeInTheDocument()
   })
 
   it('shows welcome text during transit phase', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    // Welcome text is drawn on canvas after ~5.8s phase transition
-    // Just verify timers work without crashing
-    vi.advanceTimersByTime(6000)
-    expect(true).toBe(true)
+    // "SEJA BEM-VINDO" appears during warp phase (phase 3+, around 3.8s)
+    vi.advanceTimersByTime(4500)
+    expect(screen.getByText('SEJA BEM-VINDO')).toBeInTheDocument()
   })
 
-  it('has canvas element for cinematic effect', () => {
+  it('has scanline overlay for cinematic effect', () => {
     const { container } = render(<SplashScreen onComplete={vi.fn()} />)
-    expect(container.querySelector('canvas')).toBeInTheDocument()
+    // Scanline overlay uses repeating-linear-gradient
+    const vignette = container.querySelector('[class*="radial"]')
+    const scanline = container.querySelector('[class*="repeating"]')
+    expect(vignette || scanline).toBeTruthy()
   })
 
   it('calls onComplete after animation sequence', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
 
-    // Animation takes ~7.2 seconds
+    // Animation takes ~7 seconds
     vi.advanceTimersByTime(7500)
     expect(onComplete).toHaveBeenCalled()
   })
@@ -49,18 +50,48 @@ describe('SplashScreen', () => {
     expect(onComplete).not.toHaveBeenCalled()
   })
 
-  it('has cyan/slate color scheme', () => {
+  it('has dark background', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Root div has bg-[#020617] (slate-950)
-    const root = container.firstChild as HTMLElement
-    expect(root.className).toContain('bg-')
+    const root = container.querySelector('.fixed.inset-0') as HTMLElement
+    expect(root?.className).toContain('bg-[')
   })
 
-  it('renders canvas for animation instead of progress bar', () => {
+  it('renders progress bar at bottom', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Canvas-based splash - check canvas is rendered
-    expect(container.querySelector('canvas')).toBeInTheDocument()
+    // Progress bar exists (rounded-full divs)
+    const progressBars = container.querySelectorAll('.rounded-full')
+    expect(progressBars.length).toBeGreaterThan(0)
+  })
+
+  it('has spaceship SVG', () => {
+    const onComplete = vi.fn()
+    const { container } = render(<SplashScreen onComplete={onComplete} />)
+    const svg = container.querySelector('svg')
+    expect(svg).toBeInTheDocument()
+  })
+
+  it('has letterbox bars', () => {
+    const onComplete = vi.fn()
+    const { container } = render(<SplashScreen onComplete={onComplete} />)
+    // Letterbox bars are the top and bottom black bars
+    const bars = container.querySelectorAll('.h-\\[12\\%\\]')
+    expect(bars.length).toBe(2)
+  })
+
+  it('injects CSS keyframes for star animation', () => {
+    const onComplete = vi.fn()
+    const { container } = render(<SplashScreen onComplete={onComplete} />)
+    const styleTag = container.querySelector('style')
+    expect(styleTag?.innerHTML).toContain('@keyframes')
+  })
+
+  it('renders warp tunnel effect phase 3+', () => {
+    const onComplete = vi.fn()
+    const { container } = render(<SplashScreen onComplete={onComplete} />)
+    // Warp tunnel uses perspective
+    const perspectiveEl = container.querySelector('[style*="perspective"]')
+    expect(perspectiveEl).toBeInTheDocument()
   })
 })
