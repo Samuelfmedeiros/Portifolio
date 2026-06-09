@@ -12,7 +12,6 @@ html {
 }
 
 :root {
-  /* Base glass (fallback) */
   --glass-bg: rgba(255, 255, 255, 0.05);
   --glass-border: rgba(255, 255, 255, 0.1);
   --cyan-neon: #22d3ee;
@@ -136,9 +135,6 @@ body {
 }
 
 /* ========== SMOOTH SCROLL SECTIONS ========== */
-html {
-  scroll-behavior: smooth;
-}
 
 .section-wrapper {
   min-height: 100vh;

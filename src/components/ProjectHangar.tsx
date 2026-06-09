@@ -175,7 +175,7 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
               >
                 <GlassCard
                   delay={0}
-                  className="group relative h-full overflow-hidden hover:scale-[1.03] transition-all duration-300"
+                  className="group relative h-full flex flex-col overflow-hidden hover:scale-[1.03] transition-all duration-300"
                 >
                   {/* Holo-card glow effect */}
                   <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--accent-alt)]/5" />
@@ -190,9 +190,9 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
                     </div>
                   )}
 
-                  {/* Project image header */}
+                  {/* Project image header — fixed height */}
                   <div
-                    className="relative h-[120px] w-full overflow-hidden"
+                    className="relative h-[120px] w-full shrink-0 overflow-hidden"
                     style={{ background: gradient }}
                   >
                     {/* Overlay pattern */}
@@ -207,9 +207,9 @@ export function ProjectHangar({ repos }: { repos: Repo[] }) {
                     <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
                   </div>
 
-                  <div className="relative p-1">
-                    {/* Description */}
-                    <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 min-h-[2.5rem] mt-1">
+                  <div className="relative p-1 flex flex-col flex-1">
+                    {/* Description — flex-1 pra ocupar espaço igual entre cards */}
+                    <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 mt-1">
                       {repo.description || "No description provided"}
                     </p>
 
