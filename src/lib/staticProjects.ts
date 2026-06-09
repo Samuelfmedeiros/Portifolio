@@ -25,7 +25,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Jogo clássico de memorização de sequência de cores. Repita a sequência para pontuar!",
     html_url: "https://github.com/Samuelfmedeiros/simon-game",
-    homepage: null,
+    homepage: "https://samuelfmedeiros.github.io/simon-game",
     stargazers_count: 0,
     forks_count: 0,
     language: "JavaScript",
@@ -42,7 +42,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Jogo de desviar de asteroides. Controle a nave com o mouse e sobreviva o máximo possível!",
     html_url: "https://github.com/Samuelfmedeiros/asteroid-dodge",
-    homepage: null,
+    homepage: "https://samuelfmedeiros.github.io/asteroid-dodge",
     stargazers_count: 0,
     forks_count: 0,
     language: "JavaScript",
@@ -59,7 +59,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Desafio de digitação de código. Digite snippets de várias linguagens o mais rápido possível!",
     html_url: "https://github.com/Samuelfmedeiros/code-typing",
-    homepage: null,
+    homepage: "https://samuelfmedeiros.github.io/code-typing",
     stargazers_count: 0,
     forks_count: 0,
     language: "JavaScript",
@@ -76,7 +76,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Jogo de memória visual. Memorize as células destacadas e recrie o padrão!",
     html_url: "https://github.com/Samuelfmedeiros/memory-matrix",
-    homepage: null,
+    homepage: "https://samuelfmedeiros.github.io/memory-matrix",
     stargazers_count: 0,
     forks_count: 0,
     language: "JavaScript",

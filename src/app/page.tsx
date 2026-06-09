@@ -2,12 +2,12 @@ import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { ProfileSection } from "@/components/ProfileSection";
 import { ProjectHangar } from "@/components/ProjectHangar";
+import { GameShowcase } from "@/components/GameShowcase";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { GlassSkeleton } from "@/components/Skeleton";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
-import { GitHubStatsSection } from "@/components/GitHubStatsSection";
 
 const Terminal = dynamic(
   () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
@@ -18,10 +18,10 @@ async function HangarWithData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter((r) => r.name !== "SamuelFmedeiros");
   
-  // Merge static + API, deduplicating by name (API data takes precedence)
+  // Merge static + API, deduplicating by name (static data takes precedence for featured fields)
   const repoMap = new Map<string, typeof STATIC_PROJECTS[0]>();
-  for (const r of STATIC_PROJECTS) repoMap.set(r.name, r);
   for (const r of filteredRepos) repoMap.set(r.name, r);
+  for (const r of STATIC_PROJECTS) repoMap.set(r.name, r);
   const allProjects = Array.from(repoMap.values());
 
   // Split games from other projects
@@ -33,7 +33,7 @@ async function HangarWithData() {
       <ProjectHangar repos={projects} title="▸ PROJETOS" />
       {games.length > 0 && (
         <section id="games" className="scroll-mt-20">
-          <ProjectHangar repos={games} title="🎮 JOGOS" />
+          <GameShowcase repos={games} />
         </section>
       )}
     </>
@@ -49,9 +49,6 @@ export default function Home() {
           <Suspense fallback={<HangarSkeleton />}>
             <HangarWithData />
           </Suspense>
-        </section>
-        <section id="stats" className="scroll-mt-20">
-          <GitHubStatsSection />
         </section>
         <section id="terminal" className="scroll-mt-20">
           <Terminal />
