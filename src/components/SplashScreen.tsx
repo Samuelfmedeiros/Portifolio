@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useState, useEffect, useRef, useMemo, memo } from "react";
+import { motion, AnimatePresence, useReducedMotion, type HTMLMotionProps } from "framer-motion";
 import { useDeviceTier, type DeviceTier } from "@/hooks/useDeviceTier";
+import { useTheme } from "./ThemeProvider";
 
 // ─── Tier config ───
 const TIER_CFG: Record<DeviceTier, {
@@ -11,8 +12,8 @@ const TIER_CFG: Record<DeviceTier, {
   phase4: number; complete: number;
 }> = {
   low:    { stars: 80,  rings: 8,  streaks: 10, trailParticles: 6,  energyParticles: 0, phase1: 200,  phase2: 600,  phase3: 1200, phase4: 2000, complete: 3200 },
-  mid:    { stars: 200, rings: 15, streaks: 20, trailParticles: 10, energyParticles: 4, phase1: 500,  phase2: 2000, phase3: 3500, phase4: 5200, complete: 6500 },
-  high:   { stars: 400, rings: 25, streaks: 40, trailParticles: 20, energyParticles: 8, phase1: 800,  phase2: 2800, phase3: 4600, phase4: 6500, complete: 8200 },
+  mid:    { stars: 200, rings: 15, streaks: 20, trailParticles: 10, energyParticles: 4, phase1: 400,  phase2: 1400, phase3: 2400, phase4: 3600, complete: 4500 },
+  high:   { stars: 400, rings: 25, streaks: 40, trailParticles: 20, energyParticles: 8, phase1: 600,  phase2: 1800, phase3: 3000, phase4: 4200, complete: 5800 },
 };
 
 // ─── CSS keyframes injection ───
@@ -29,6 +30,12 @@ const starfieldStyles = `
 @keyframes glitch-skew { 0% { clip-path: inset(0 0 0 0); transform: skew(0deg); } 10% { clip-path: inset(12% 0 50% 0); transform: skew(-1deg); } 20% { clip-path: inset(40% 0 8% 0); transform: skew(0.5deg); } 30% { clip-path: inset(5% 0 65% 0); transform: skew(-0.3deg); } 40% { clip-path: inset(80% 0 5% 0); transform: skew(1deg); } 50% { clip-path: inset(0 0 0 0); transform: skew(0deg); } }
 @keyframes scanline-sweep { 0% { transform: translateY(-100%); } 100% { transform: translateY(100vh); } }
 @media (prefers-reduced-motion: reduce) { @keyframes drift-cyan { to { opacity: 0; } } @keyframes drift-indigo { to { opacity: 0; } } @keyframes drift-white { to { opacity: 0; } } @keyframes warp-streak { to { opacity: 0; } } @keyframes tunnel-pulse { 0%, 100% { opacity: 0.03; } } @keyframes draw-logo { to { stroke-dashoffset: 0; opacity: 1; } } @keyframes engine-glow-pulse { to { opacity: 0.35; } } @keyframes boot-fade-in { to { opacity: 1; } } @keyframes glitch-skew { to { transform: skew(0deg); } } }
+@keyframes vignette-pulse { 0%, 100% { opacity: 0.5; } 50% { opacity: 0.85; } }
+.glitch-active { animation: glitch-skew 0.6s ease-in-out; }
+@media (prefers-reduced-motion: reduce) { .glitch-active { animation: none; } }
+@keyframes grain-shift { 0%, 100% { background-position: 0 0; } 20% { background-position: -5px 5px; } 40% { background-position: 5px -5px; } 60% { background-position: -3px 3px; } 80% { background-position: 3px -3px; } }
+@keyframes type-reveal { 0% { max-width: 0; border-right-color: transparent; } 1% { border-right-color: currentColor; } 90% { border-right-color: currentColor; } 100% { max-width: 400px; border-right-color: transparent; } }
+@keyframes blink-cursor { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
 `;
 
 // ─── Types ───
@@ -47,7 +54,7 @@ function genStars(count: number): Star[] {
 }
 
 // ─── Static star layer (pure CSS, 0 React cost) ───
-function StarLayer({ stars, className }: { stars: Star[]; className?: string }) {
+const StarLayer = memo(function StarLayer({ stars, className }: { stars: Star[]; className?: string }) {
   return (
     <div className={`absolute inset-0 pointer-events-none ${className ?? ""}`}>
       {stars.map((s, i) => (
@@ -68,10 +75,10 @@ function StarLayer({ stars, className }: { stars: Star[]; className?: string }) 
       ))}
     </div>
   );
-}
+});
 
 // ─── Warp streaks (pure CSS) ───
-function WarpStreaks({ count = 40 }: { count: number }) {
+const WarpStreaks = memo(function WarpStreaks({ count = 40 }: { count: number }) {
   return (
     <div className="absolute inset-0 pointer-events-none overflow-hidden">
       {Array.from({ length: count }).map((_, i) => {
@@ -96,10 +103,10 @@ function WarpStreaks({ count = 40 }: { count: number }) {
       })}
     </div>
   );
-}
+});
 
 // ─── Warp tunnel rings (CSS) ───
-function WarpRingLayer({ count = 25 }: { count: number }) {
+const WarpRingLayer = memo(function WarpRingLayer({ count = 25 }: { count: number }) {
   return (
     <div
       className="absolute inset-0 flex items-center justify-center pointer-events-none"
@@ -125,7 +132,7 @@ function WarpRingLayer({ count = 25 }: { count: number }) {
       })}
     </div>
   );
-}
+});
 
 // ─── HUD corner brackets ───
 function HudCorners({ opacity = 0.3 }: { opacity?: number }) {
@@ -233,15 +240,16 @@ function Wordmark({ phase }: { phase: number }) {
 // ─── Boot messages ───
 function BootMessages({ phase }: { phase: number }) {
   const messages = [
-    { text: "> SYSTEM BOOT SEQUENCE INITIATED", highlight: true, showAt: 2 },
-    { text: "> LOADING CORE MODULES ......... OK", showAt: 3 },
-    { text: "> ESTABLISHING SECURE CHANNEL .. OK", showAt: 3 },
-    { text: "> ALL SYSTEMS NOMINAL", highlight: true, showAt: 4 },
+    { text: "> BOOTING NEXT.JS ENGINE ........ OK", highlight: false, showAt: 2 },
+    { text: "> MOUNTING SUPABASE CLIENT ....... OK", highlight: false, showAt: 3 },
+    { text: "> SYNCING POWER BI DASHBOARDS ... OK", highlight: false, showAt: 3 },
+    { text: "> FULL STACK COMMAND CENTER ...... READY", highlight: true, showAt: 4 },
   ];
   return (
     <div className="absolute bottom-32 left-8 right-8 z-10 pointer-events-none">
       {messages.map((msg, i) => {
         const visible = phase >= msg.showAt;
+        const charCount = msg.text.length;
         return (
           <motion.p
             key={i}
@@ -253,7 +261,26 @@ function BootMessages({ phase }: { phase: number }) {
             animate={visible ? { opacity: msg.highlight ? 0.4 : 0.15 } : { opacity: 0 }}
             transition={{ duration: 0.6, delay: i * 0.8 + 0.1 }}
           >
-            {msg.text}
+            <span
+              className="inline-block overflow-hidden whitespace-nowrap align-bottom border-r-2 border-current"
+              style={{
+                maxWidth: visible ? 400 : 0,
+                animation: visible
+                  ? `type-reveal ${0.5 + charCount * 0.04}s steps(${charCount}) ${i * 0.15}s forwards`
+                  : "none",
+              }}
+            >
+              {msg.text}
+            </span>
+            {visible && (
+              <span
+                className="inline-block w-[2px] h-[9px] align-middle ml-[1px] bg-current"
+                style={{
+                  animation: "blink-cursor 0.8s step-end infinite",
+                  animationDelay: `${0.5 + charCount * 0.04 + i * 0.15}s`,
+                }}
+              />
+            )}
           </motion.p>
         );
       })}
@@ -489,9 +516,9 @@ function TreasureShip({ phase, glowIntensity: gi }: { phase: number; glowIntensi
       />
 
       {/* ── LAYER 5: Hull panel lines (greebles) ── */}
-      <motion.g
-        opacity={0.15}
-        animate={exiting ? { opacity: 0 } : {}}
+      <g
+        opacity={exiting ? 0 : 0.15}
+        style={{ transition: "opacity 0.3s" }}
       >
         {/* Horizontal panel line */}
         <path d="M30 42 L120 48" stroke="var(--accent, #22d3ee)" strokeWidth="0.3" fill="none" />
@@ -507,7 +534,7 @@ function TreasureShip({ phase, glowIntensity: gi }: { phase: number; glowIntensi
         <circle cx="100" cy="62" r="0.6" fill="var(--accent-alt, #6366f1)" opacity={0.5} />
         {/* Side marking accent */}
         <path d="M30 50 L50 50" stroke="var(--accent, #22d3ee)" strokeWidth="0.4" fill="none" opacity={0.3} />
-      </motion.g>
+      </g>
 
       {/* ── LAYER 6: Engine nozzle ── */}
       <motion.path
@@ -528,22 +555,22 @@ function TreasureShip({ phase, glowIntensity: gi }: { phase: number; glowIntensi
       />
 
       {/* ── LAYER 7: Upper fin/wing ── */}
-      <motion.path
+      <path
         d="M35 28 L50 14 L72 22 L68 30 Z"
         fill="var(--accent-alt, #4f46e5)" stroke="var(--accent-alt, #6366f1)" strokeWidth="0.3"
-        animate={exiting ? { opacity: 0 } : { opacity: 0.7 }}
-        transition={{ duration: 0.3 }}
+        opacity={exiting ? 0 : 0.7}
+        style={{ transition: "opacity 0.3s" }}
       />
       {/* Lower fin */}
-      <motion.path
+      <path
         d="M35 72 L50 86 L72 78 L68 70 Z"
         fill="var(--accent-alt, #4f46e5)" stroke="var(--accent-alt, #6366f1)" strokeWidth="0.3"
-        animate={exiting ? { opacity: 0 } : { opacity: 0.7 }}
-        transition={{ duration: 0.3 }}
+        opacity={exiting ? 0 : 0.7}
+        style={{ transition: "opacity 0.3s" }}
       />
 
       {/* ── LAYER 8: Cockpit ── */}
-      <motion.ellipse
+      <ellipse
         cx="28" cy="50" rx="9" ry="12"
         fill="var(--bg-primary, #020617)"
         stroke="var(--accent, #22d3ee)" strokeWidth="0.5"
@@ -569,16 +596,17 @@ function TreasureShip({ phase, glowIntensity: gi }: { phase: number; glowIntensi
         }
       />
       {/* Cockpit rim */}
-      <motion.path
+      <path
         d="M20 42 Q28 39 36 42"
         stroke="rgba(255,255,255,0.12)" strokeWidth="0.5" fill="none"
       />
 
       {/* ── LAYER 9: Stern ornament / tail accent ── */}
-      <motion.path
+      <path
         d="M125 42 L140 35 L140 65 L125 58 Z"
-        fill="var(--accent-alt, #6366f1)" opacity={0.08}
-        animate={exiting ? { opacity: 0 } : {}}
+        fill="var(--accent-alt, #6366f1)"
+        opacity={exiting ? 0 : 0.08}
+        style={{ transition: "opacity 0.3s" }}
       />
 
       {/* ── LAYER 10: Warp charge rings (phase 2) ── */}
@@ -715,14 +743,12 @@ function EnergyParticles({ warp, count = 6 }: { warp: boolean; count?: number })
 function GlitchOverlay({ active }: { active: boolean }) {
   return (
     <motion.div
-      className="absolute inset-0 pointer-events-none z-40"
+      className={`absolute inset-0 pointer-events-none z-40 ${active ? "glitch-active" : ""}`}
       style={{
         background: "linear-gradient(90deg, color-mix(in srgb, var(--accent, #22d3ee) 8%, transparent) 0%, transparent 50%, color-mix(in srgb, var(--accent-alt, #6366f1) 8%, transparent) 100%)",
       }}
       animate={active ? {
         opacity: [0, 0.15, 0.3, 0.1, 0.2, 0],
-        animationName: "glitch-skew",
-        animationDuration: "0.6s",
       } : { opacity: 0 }}
       transition={{ duration: 0.8 }}
     />
@@ -737,6 +763,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
   const mouseRef = useRef({ x: 0, y: 0 });
   const prefersReducedMotion = useReducedMotion();
   const tier = useDeviceTier();
+  const { theme } = useTheme();
   onCompleteRef.current = onComplete;
 
   const cfg = TIER_CFG[tier];
@@ -759,21 +786,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
     return () => t.forEach(clearTimeout);
   }, [prefersReducedMotion, cfg.phase1, cfg.phase2, cfg.phase3, cfg.phase4, cfg.complete]);
 
-  // ── Responsive dimensions ──
-  const [, setDims] = useState({ w: 1200, h: 800 });
-  useEffect(() => {
-    const update = () => {
-      if (containerRef.current) {
-        const r = containerRef.current.getBoundingClientRect();
-        setDims({ w: r.width, h: r.height });
-      }
-    };
-    update();
-    window.addEventListener("resize", update);
-    return () => window.removeEventListener("resize", update);
-  }, []);
-
-  // ── Mouse parallax ──
+  // Mouse parallax
   useEffect(() => {
     const handle = (e: MouseEvent) => {
       if (containerRef.current) {
@@ -799,14 +812,8 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
 
   const warpActive = phase >= 3;
   const transitActive = phase === 4;
-  const tierKey = tier; // stable for phase rendering
   const mx = mouseRef.current.x;
   const my = mouseRef.current.y;
-
-  /* eslint-disable @typescript-eslint/no-unused-vars */
-  // Hack to keep tierKey in scope for future phase-driven logic
-  void(tierKey);
-  /* eslint-enable @typescript-eslint/no-unused-vars */
 
   // Build ship animation phases — dramatic Treasure Planet flight path
   const shipPhase = (p: number): HTMLMotionProps<"div">["animate"] => {
@@ -876,8 +883,11 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
       >
       <motion.div
         ref={containerRef}
-        className="relative w-full h-full bg-[var(--bg-primary,#020617)] overflow-hidden cursor-default"
-        style={{ perspective: "1000px" }}
+        className="relative w-full h-full overflow-hidden cursor-default"
+        style={{
+          perspective: "1000px",
+          backgroundColor: theme === "light" ? "#0a0a1a" : "var(--bg-primary, #020617)",
+        }}
       >
         {/* ── LAYER 1: Deep background nebula ── */}
         <div
@@ -899,7 +909,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
 
         {/* ── LAYER 2.5: Background pattern asset ── */}
         <img
-          src="/splash-bg-pattern.svg"
+          src={theme === "light" ? "/splash-bg-pattern-light.svg" : "/splash-bg-pattern.svg"}
           alt=""
           aria-hidden="true"
           className="absolute inset-0 w-full h-full pointer-events-none select-none z-[2]"
@@ -907,6 +917,20 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
             opacity: phase > 0 ? 0.25 : 0,
             transition: "opacity 2s ease-out",
             mixBlendMode: "overlay",
+          }}
+        />
+
+        {/* ── LAYER 2.6: Film grain overlay — small tiled texture (cache-friendly), shifted via background-position for zero-layout cost ── */}
+        <div
+          className="absolute inset-0 pointer-events-none z-[2]"
+          aria-hidden="true"
+          style={{
+            opacity: 0.35,
+            backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E")`,
+            backgroundSize: "200px 200px",
+            mixBlendMode: "overlay",
+            animation: "grain-shift 8s steps(10) infinite",
+            willChange: "background-position",
           }}
         />
 
@@ -965,7 +989,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
             phase === 4 ? { duration: 1.2, ease: [0.55, 0, 1, 0.45] } :
             { duration: 1 }
           }
-          style={{ transform: `translate(${mx * 16}px, ${my * 16}px)` }}
+          style={{ transform: `translate(${mx * 16}px, ${my * 16}px)`, willChange: "transform, opacity" }}
         >
           <TreasureShip phase={phase} glowIntensity={Math.min(1, phase / 2)} />
 
@@ -1054,12 +1078,20 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
 
         {/* ── LAYER 15: Letterbox bars ── */}
         <motion.div
-          className="absolute top-0 left-0 right-0 h-[12%] bg-[var(--bg-primary,#020617)] z-20 pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-[12%] z-20 pointer-events-none"
+          style={{
+            backgroundColor: theme === "light" ? "#0a0a1a" : "var(--bg-primary, #020617)",
+            willChange: "opacity",
+          }}
           animate={{ opacity: transitActive ? 0 : 1 }}
           transition={{ duration: 0.5 }}
         />
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[12%] bg-[var(--bg-primary,#020617)] z-20 pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 h-[12%] z-20 pointer-events-none"
+          style={{
+            backgroundColor: theme === "light" ? "#0a0a1a" : "var(--bg-primary, #020617)",
+            willChange: "opacity",
+          }}
           animate={{ opacity: transitActive ? 0 : 1 }}
           transition={{ duration: 0.5 }}
         />
