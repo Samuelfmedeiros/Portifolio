@@ -27,6 +27,13 @@ const GAMES: GameOption[] = [
 export function MissionGames() {
   const [activeGame, setActiveGame] = useState<GameTab>("simon");
 
+  const GAMES_REPO: Record<GameTab, string> = {
+    simon: "https://github.com/Samuelfmedeiros/simon-game",
+    asteroid: "https://github.com/Samuelfmedeiros/asteroid-dodge",
+    typing: "https://github.com/Samuelfmedeiros/code-typing",
+    memory: "https://github.com/Samuelfmedeiros/memory-matrix",
+  };
+
   return (
     <div className="py-2">
       {/* Tab bar */}
@@ -45,6 +52,18 @@ export function MissionGames() {
             <span className="hidden sm:inline">{game.label}</span>
           </button>
         ))}
+      </div>
+
+      {/* Link ao repositório */}
+      <div className="text-right mb-2">
+        <a
+          href={GAMES_REPO[activeGame]}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
+        >
+          Ver código no GitHub →
+        </a>
       </div>
 
       {/* Active game */}

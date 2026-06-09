@@ -171,7 +171,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <CockpitBackground />
                 <ScrollProgress />
                 <Navbar />
-                <main id="main-content">
+                <main id="main-content" className="pt-14 md:pt-16">
                   <ErrorBoundary>{children}</ErrorBoundary>
                 </main>
                 <Footer />

@@ -17,7 +17,71 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: true,
   },
+  {
+    id: 1001,
+    name: "simon-game",
+    description:
+      "Jogo clássico de memorização de sequência de cores. Repita a sequência para pontuar!",
+    html_url: "https://github.com/Samuelfmedeiros/simon-game",
+    homepage: null,
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["game", "react"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    hasDemo: false,
+  },
+  {
+    id: 1002,
+    name: "asteroid-dodge",
+    description:
+      "Jogo de desviar de asteroides. Controle a nave com o mouse e sobreviva o máximo possível!",
+    html_url: "https://github.com/Samuelfmedeiros/asteroid-dodge",
+    homepage: null,
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["game", "react"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+    hasDemo: false,
+  },
+  {
+    id: 1003,
+    name: "code-typing",
+    description:
+      "Desafio de digitação de código. Digite snippets de várias linguagens o mais rápido possível!",
+    html_url: "https://github.com/Samuelfmedeiros/code-typing",
+    homepage: null,
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["game", "react"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
+    hasDemo: false,
+  },
+  {
+    id: 1004,
+    name: "memory-matrix",
+    description:
+      "Jogo de memória visual. Memorize as células destacadas e recrie o padrão!",
+    html_url: "https://github.com/Samuelfmedeiros/memory-matrix",
+    homepage: null,
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["game", "react"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
+    hasDemo: false,
+  },
   // NOTA: DogWalk removido — projeto está em fase de reformulação
 ];
 
-export const FEATURED_PROJECTS = ["mission-control", "seu.pet"];
+export const FEATURED_PROJECTS = ["mission-control", "seu.pet", "simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];
