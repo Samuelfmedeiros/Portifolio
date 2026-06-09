@@ -78,7 +78,7 @@ const nextConfig = {
               "img-src 'self' data: blob: https://avatars.githubusercontent.com https://*.googleusercontent.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com",
               "font-src 'self' https://fonts.gstatic.com",
               "connect-src 'self' https://api.github.com https://ep1.adtrafficquality.google https://ep2.adtrafficquality.google https://*.adtrafficquality.google https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net",
-              "frame-src https://googleads.g.doubleclick.net https://td.doubleclick.net https://fundingchoicesmessages.google.com",
+              "frame-src https://googleads.g.doubleclick.net https://td.doubleclick.net https://fundingchoicesmessages.google.com https://ep2.adtrafficquality.google",
             ].join('; ')
           }
         ]
