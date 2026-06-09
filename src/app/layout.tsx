@@ -138,6 +138,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
         {/* Google AdSense - verificação de propriedade */}
         <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5928931854509344" crossOrigin="anonymous" />
+        {/* Google CMP - Consent Management Platform (EEE/UK/Suíça) */}
+        <script async src="https://fundingchoicesmessages.google.com/i/pub-5928931854509344?ers=1" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `(function(){function g(){if(!window.frames['googlefcPresent']){if(document.body){const a=document.createElement('iframe');a.style='width:0;height:0;border:none;z-index:-1000;left:-1000px;top:-1000px';a.style.display='none';a.name='googlefcPresent';document.body.appendChild(a)}else setTimeout(g,0)}}g()})();`,
+          }}
+        />
         <script
           dangerouslySetInnerHTML={{
             __html: `
