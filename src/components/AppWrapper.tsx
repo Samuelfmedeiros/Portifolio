@@ -31,6 +31,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const visited = sessionStorage.getItem("visited");
     if (visited) {
+      setHasVisited(true);
       setIsLoading(false);
     }
   }, []);
