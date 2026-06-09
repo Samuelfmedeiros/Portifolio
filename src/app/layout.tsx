@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { CockpitBackground } from "@/components/CockpitBackground";
 import { AppWrapper } from "@/components/AppWrapper";
@@ -12,9 +13,22 @@ import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
 import { CookieBannerProvider, useAnalyticsConsent } from "@/components/CookieBanner";
-import { MonetizationProvider } from "@/components/monetization/MonetizationProvider";
+import { MonetizationProvider, AdSense } from "@/components/monetization";
 import { SITE_URL } from "@/lib/types";
 import "./globals.css";
+
+// Fontes modernas
+const inter = Inter({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-inter",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -118,7 +132,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="pt-BR" suppressHydrationWarning>
+    <html lang="pt-BR" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
@@ -174,6 +188,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <main id="main-content" className="pt-14 md:pt-16">
                   <ErrorBoundary>{children}</ErrorBoundary>
                 </main>
+                {/* AdSense banner — só aparece quando configurado no .env.local */}
+                <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
+                  <AdSense slot="footer" format="horizontal" className="min-h-[90px]" />
+                </div>
                 <Footer />
               </AppWrapper>
             </MonetizationProvider>

@@ -340,38 +340,71 @@ function CircuitLines() {
 
 function SkillsCompact() {
   return (
-    <div className="mb-8">
+    <div className="mb-12">
       <motion.h3
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
-        className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-3"
+        className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
       >
         ▸ HABILIDADES
       </motion.h3>
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-        {skills.map((skill) => (
-          <Tooltip key={skill.name} content={
-            <div className="text-center">
-              <p className="font-semibold text-xs">{skill.name}</p>
-              <p className="font-mono text-[10px] text-[var(--accent)]">{skill.level}</p>
-              <p className="font-mono text-[9px] text-[var(--text-secondary)]">{skill.category}</p>
-            </div>
-          }>
-            <GlassCard className="group hover:scale-[1.02] transition-all duration-200">
-              <div className="flex flex-col items-center gap-1.5 py-1">
-                <skill.icon className="w-6 h-6 text-[var(--accent)] group-hover:scale-110 transition-transform" />
-                <span className="font-semibold text-[10px] md:text-xs">{skill.name}</span>
-                <div className="w-full h-1 rounded-full bg-[var(--border)]/50 overflow-hidden">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
+        {skills.map((skill, i) => (
+          <motion.div
+            key={skill.name}
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.4, delay: i * 0.08 }}
+            viewport={{ once: true }}
+            className="group relative"
+          >
+            {/* Glow border on hover */}
+            <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-[var(--accent)]/0 via-[var(--accent)]/0 to-[var(--accent)]/0 group-hover:from-[var(--accent)]/20 group-hover:via-[var(--accent)]/5 group-hover:to-[var(--accent-alt)]/20 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-sm" />
+            
+            <div className="relative glass rounded-xl p-4 md:p-5 border border-[var(--border)] group-hover:border-[var(--accent)]/40 transition-all duration-300 h-full flex flex-col">
+              {/* Icon with colored glow */}
+              <div className="flex items-center gap-3 mb-3">
+                <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center group-hover:bg-[var(--accent)]/20 transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_15px_var(--accent)]/20">
+                  <skill.icon className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent)] group-hover:scale-110 transition-transform duration-300" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <span className="font-semibold text-sm md:text-base text-[var(--text-primary)] block truncate">
+                    {skill.name}
+                  </span>
+                </div>
+              </div>
+
+              {/* Category badge */}
+              <div className="mb-auto">
+                <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-full bg-[var(--accent)]/8 text-[var(--accent)]/70 border border-[var(--accent)]/15">
+                  {skill.category}
+                </span>
+              </div>
+
+              {/* Level bar */}
+              <div className="mt-3 pt-3 border-t border-[var(--border)]/30">
+                <div className="flex items-center justify-between mb-1.5">
+                  <span className="text-[10px] font-mono text-[var(--text-secondary)]/60 uppercase tracking-wider">
+                    Nível
+                  </span>
+                  <span className="text-[10px] font-mono font-semibold" style={{ color: `var(--proficiency-${skill.level.toLowerCase()}, var(--accent))` }}>
+                    {skill.level}
+                  </span>
+                </div>
+                <div className="w-full h-1.5 rounded-full bg-[var(--border)]/30 overflow-hidden">
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${levelWidth[skill.level]}%` }}
-                    transition={{ duration: 0.8, delay: 0.2 }}
-                    className={`h-full rounded-full bg-gradient-to-r ${skill.color}`}
+                    transition={{ duration: 1, delay: 0.3 + i * 0.08, ease: "easeOut" }}
+                    className="h-full rounded-full bg-gradient-to-r"
+                    style={{
+                      background: `linear-gradient(90deg, var(--accent), var(--accent-alt, #7c3aed))`,
+                    }}
                   />
                 </div>
               </div>
-            </GlassCard>
-          </Tooltip>
+            </div>
+          </motion.div>
         ))}
       </div>
     </div>
