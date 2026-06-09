@@ -8,7 +8,7 @@ describe('SplashScreen', () => {
   })
 
   afterEach(() => {
-    vi.restoreAllTimers()
+    vi.useRealTimers()
   })
 
   it('renders without crashing', () => {
@@ -20,14 +20,13 @@ describe('SplashScreen', () => {
   it('shows welcome text during transit phase', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    // "SEJA BEM-VINDO" appears during warp phase (phase 3+, around 3.8s)
     vi.advanceTimersByTime(4500)
-    expect(screen.getByText('SEJA BEM-VINDO')).toBeInTheDocument()
+    const welcomeElements = screen.getAllByText('SEJA BEM-VINDO')
+    expect(welcomeElements.length).toBeGreaterThan(0)
   })
 
-  it('has scanline overlay for cinematic effect', () => {
+  it('has cinematic overlays', () => {
     const { container } = render(<SplashScreen onComplete={vi.fn()} />)
-    // Scanline overlay uses repeating-linear-gradient
     const vignette = container.querySelector('[class*="radial"]')
     const scanline = container.querySelector('[class*="repeating"]')
     expect(vignette || scanline).toBeTruthy()
@@ -36,8 +35,6 @@ describe('SplashScreen', () => {
   it('calls onComplete after animation sequence', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-
-    // Animation takes ~7 seconds
     vi.advanceTimersByTime(7500)
     expect(onComplete).toHaveBeenCalled()
   })
@@ -45,7 +42,6 @@ describe('SplashScreen', () => {
   it('does not call onComplete before animation ends', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-
     vi.advanceTimersByTime(3000)
     expect(onComplete).not.toHaveBeenCalled()
   })
@@ -60,7 +56,6 @@ describe('SplashScreen', () => {
   it('renders progress bar at bottom', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Progress bar exists (rounded-full divs)
     const progressBars = container.querySelectorAll('.rounded-full')
     expect(progressBars.length).toBeGreaterThan(0)
   })
@@ -75,7 +70,6 @@ describe('SplashScreen', () => {
   it('has letterbox bars', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Letterbox bars are the top and bottom black bars
     const bars = container.querySelectorAll('.h-\\[12\\%\\]')
     expect(bars.length).toBe(2)
   })
@@ -87,10 +81,9 @@ describe('SplashScreen', () => {
     expect(styleTag?.innerHTML).toContain('@keyframes')
   })
 
-  it('renders warp tunnel effect phase 3+', () => {
+  it('renders perspective container for warp effect', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Warp tunnel uses perspective
     const perspectiveEl = container.querySelector('[style*="perspective"]')
     expect(perspectiveEl).toBeInTheDocument()
   })
