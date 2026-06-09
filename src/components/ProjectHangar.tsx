@@ -279,6 +279,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
   // Collect all unique languages/tags for filter
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
+    if (!repos) return ["all"];
     repos.forEach((r) => {
       if (r.language) tagSet.add(r.language);
       r.topics?.forEach((t) => {

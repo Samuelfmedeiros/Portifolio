@@ -37,8 +37,10 @@ describe("Navbar", () => {
     // Links appear in both desktop and mobile nav, so use getAllByText
     const inicioLinks = screen.getAllByText("Início");
     expect(inicioLinks.length).toBeGreaterThanOrEqual(1);
-    expect(screen.getByText("Projetos")).toBeInTheDocument();
-    expect(screen.getByText("Terminal")).toBeInTheDocument();
+    // Projetos appears in both desktop and mobile
+    expect(screen.getAllByText("Projetos").length).toBeGreaterThanOrEqual(1);
+    // Terminal appears in both desktop and mobile
+    expect(screen.getAllByText("Terminal").length).toBeGreaterThanOrEqual(1);
   });
 
   it("theme toggle is present", () => {
