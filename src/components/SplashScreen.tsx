@@ -1,7 +1,7 @@
 "use client";
 
-import { useState, useEffect, useRef, useMemo, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useRef, useMemo } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 
 // ─── CSS keyframes injection ───
 const starfieldStyles = `
@@ -13,6 +13,7 @@ const starfieldStyles = `
 @keyframes tunnel-pulse { 0%, 100% { opacity: 0.15; transform: scale(0.3) rotateX(75deg); } 50% { opacity: 0.4; transform: scale(0.5) rotateX(75deg); } }
 @keyframes letterbox-in { 0% { transform: scaleY(1); } 100% { transform: scaleY(0); } }
 @keyframes letterbox-out { 0% { transform: scaleY(0); } 100% { transform: scaleY(1); } }
+@media (prefers-reduced-motion: reduce) { @keyframes drift-cyan { to { opacity: 0; } } @keyframes drift-indigo { to { opacity: 0; } } @keyframes drift-white { to { opacity: 0; } } @keyframes warp-streak { to { opacity: 0; } } @keyframes tunnel-pulse { 0%, 100% { opacity: 0.03; } } }
 `;
 
 // ─── Types ───
@@ -123,7 +124,7 @@ function TreasureShip({ phase }: { phase: number }) {
     <svg
       width="160" height="80" viewBox="0 0 160 80" fill="none"
       xmlns="http://www.w3.org/2000/svg"
-      style={{ filter: `drop-shadow(0 0 ${40 + glowIntensity * 40}px rgba(99,102,241,${0.4 + glowIntensity * 0.3}))` }}
+      style={{ filter: `drop-shadow(0 0 ${40 + glowIntensity * 40}px var(--accent-alt, #6366f1)) drop-shadow(0 0 ${20 + glowIntensity * 20}px var(--accent, #22d3ee))` }}
     >
       {/* Engine plume */}
       <motion.ellipse
@@ -137,7 +138,7 @@ function TreasureShip({ phase }: { phase: number }) {
       <motion.ellipse
         cx="132" cy="40"
         rx={8 + glowIntensity * 25} ry={4 + glowIntensity * 10}
-        fill="#22d3ee"
+        fill="var(--accent, #22d3ee)"
         animate={{ opacity: [0.5, 1, 0.5], scale: [1, 1.15, 1] }}
         transition={{ duration: 0.08 + (1 - glowIntensity * 0.3) * 0.12, repeat: Infinity }}
         style={{ filter: "blur(8px)" }}
@@ -162,7 +163,7 @@ function TreasureShip({ phase }: { phase: number }) {
       />
 
       {/* Hull */}
-      <motion.path d="M15 40 L40 22 L95 28 L125 37 L125 43 L95 52 L40 58 Z" fill="url(#hullGrad)" stroke="#22d3ee" strokeWidth="0.8" />
+      <motion.path d="M15 40 L40 22 L95 28 L125 37 L125 43 L95 52 L40 58 Z" fill="url(#hullGrad)" stroke="var(--accent, #22d3ee)" strokeWidth="0.8" />
       <motion.path d="M20 40 L40 26 L85 32 L105 38" stroke="rgba(255,255,255,0.15)" strokeWidth="1.2" fill="none" />
 
       {/* Fins */}
@@ -170,9 +171,9 @@ function TreasureShip({ phase }: { phase: number }) {
       <motion.path d="M40 58 L55 70 L75 62 L70 56 Z" fill="#4f46e5" stroke="#6366f1" strokeWidth="0.4" opacity={0.8} />
 
       {/* Cockpit */}
-      <motion.ellipse cx="38" cy="40" rx="8" ry="10" fill="#020617" stroke="#22d3ee" strokeWidth="0.6" />
-      <motion.ellipse cx="38" cy="40" rx="4" ry="6" fill="#06b6d4" opacity={0.15} />
-      <motion.circle cx="36" cy="37" r="1.5" fill="#22d3ee"
+      <motion.ellipse cx="38" cy="40" rx="8" ry="10" fill="var(--bg-primary,#020617)" stroke="#22d3ee" strokeWidth="0.6" />
+      <motion.ellipse cx="38" cy="40" rx="4" ry="6" fill="var(--accent, #06b6d4)" opacity={0.15} />
+      <motion.circle cx="36" cy="37" r="1.5" fill="var(--accent, #22d3ee)"
         animate={{ opacity: [0.2, 0.8, 0.2] }}
         transition={{ duration: 0.8, repeat: Infinity }}
       />
@@ -183,7 +184,7 @@ function TreasureShip({ phase }: { phase: number }) {
           key={i}
           cx={65 + i * 15} cy="40"
           rx={5 + i * 10 * glowIntensity} ry={2 + i * 4 * glowIntensity}
-          stroke={i % 2 === 0 ? "#06b6d4" : "#6366f1"}
+          stroke={i % 2 === 0 ? "var(--accent, #06b6d4)" : "var(--accent-alt, #6366f1)"}
           strokeWidth="0.5" fill="none"
           opacity={[0.4, 0.2, 0.1][i]}
           animate={{ scale: [1, 1.8], opacity: [0.4, 0] }}
@@ -193,20 +194,20 @@ function TreasureShip({ phase }: { phase: number }) {
 
       <defs>
         <radialGradient id="plumeGrad" cx="50%" cy="50%" r="50%">
-          <stop offset="0%" stopColor="#22d3ee" stopOpacity={1} />
-          <stop offset="35%" stopColor="#6366f1" stopOpacity={0.6} />
-          <stop offset="100%" stopColor="#6366f1" stopOpacity={0} />
+          <stop offset="0%" stopColor="var(--accent, #22d3ee)" stopOpacity={1} />
+          <stop offset="35%" stopColor="var(--accent-alt, #6366f1)" stopOpacity={0.6} />
+          <stop offset="100%" stopColor="var(--accent-alt, #6366f1)" stopOpacity={0} />
         </radialGradient>
         <linearGradient id="sailGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#6366f1" stopOpacity={0.4} />
-          <stop offset="50%" stopColor="#06b6d4" stopOpacity={0.2} />
-          <stop offset="100%" stopColor="#22d3ee" stopOpacity={0.05} />
+          <stop offset="0%" stopColor="var(--accent-alt, #6366f1)" stopOpacity={0.4} />
+          <stop offset="50%" stopColor="var(--accent, #06b6d4)" stopOpacity={0.2} />
+          <stop offset="100%" stopColor="var(--accent, #22d3ee)" stopOpacity={0.05} />
         </linearGradient>
         <linearGradient id="hullGrad" x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0%" stopColor="#4f46e5" />
-          <stop offset="40%" stopColor="#6366f1" />
-          <stop offset="70%" stopColor="#06b6d4" />
-          <stop offset="100%" stopColor="#0891b2" />
+          <stop offset="0%" stopColor="var(--accent-alt, #4f46e5)" />
+          <stop offset="40%" stopColor="var(--accent-alt, #6366f1)" />
+          <stop offset="70%" stopColor="var(--accent, #06b6d4)" />
+          <stop offset="100%" stopColor="var(--accent, #0891b2)" />
         </linearGradient>
       </defs>
     </svg>
@@ -219,7 +220,7 @@ function FlashOverlay({ show }: { show: boolean }) {
     <motion.div
       className="absolute inset-0 pointer-events-none z-30"
       style={{
-        background: "radial-gradient(ellipse at center, rgba(99,102,241,0.35), rgba(6,182,212,0.15), transparent)",
+        background: "radial-gradient(ellipse at center, color-mix(in srgb, var(--accent-alt, #6366f1) 35%, transparent), color-mix(in srgb, var(--accent, #22d3ee) 15%, transparent), transparent)",
       }}
       animate={{
         opacity: show ? [0, 0.7, 0] : 0,
@@ -246,8 +247,8 @@ function EnergyParticles({ warp }: { warp: boolean }) {
             style={{
               left: `${x}%`, top: `${y}%`,
               width: size, height: size,
-              background: `radial-gradient(circle, rgba(255,255,255,0.9), rgba(99,102,241,0.3))`,
-              boxShadow: `0 0 ${size * 4}px rgba(99,102,241,0.5)`,
+              background: `radial-gradient(circle, rgba(255,255,255,0.9), color-mix(in srgb, var(--accent-alt, #6366f1) 30%, transparent))`,
+              boxShadow: `0 0 ${size * 4}px color-mix(in srgb, var(--accent-alt, #6366f1) 50%, transparent)`,
             }}
             initial={{ opacity: 0, scale: 0 }}
             animate={{
@@ -276,21 +277,26 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
   const containerRef = useRef<HTMLDivElement>(null);
   const onCompleteRef = useRef(onComplete);
   const mouseRef = useRef({ x: 0, y: 0 });
+  const prefersReducedMotion = useReducedMotion();
   onCompleteRef.current = onComplete;
 
-  // Stars regeneram só quando dims mudam
+  // Stars only regenerate when dims change
   const stars = useMemo(() => genStars(400, dims.w, dims.h), [dims.w, dims.h]);
 
-  // ── Animation timing ──
+  // Skip animation timing entirely for reduced motion — complete immediately
   useEffect(() => {
+    if (prefersReducedMotion) {
+      onCompleteRef.current();
+      return;
+    }
     const t: ReturnType<typeof setTimeout>[] = [];
-    t.push(setTimeout(() => setPhase(1), 600));   // 0.6s: stars glow, nebula fades in
-    t.push(setTimeout(() => setPhase(2), 2000));   // 2.0s: ship flies in from left
-    t.push(setTimeout(() => setPhase(3), 3800));   // 3.8s: hyperspace warp
-    t.push(setTimeout(() => setPhase(4), 5500));   // 5.5s: flash transit
-    t.push(setTimeout(() => onCompleteRef.current(), 7000)); // 7.0s: done
+    t.push(setTimeout(() => setPhase(1), 600));
+    t.push(setTimeout(() => setPhase(2), 2000));
+    t.push(setTimeout(() => setPhase(3), 3800));
+    t.push(setTimeout(() => setPhase(4), 5500));
+    t.push(setTimeout(() => onCompleteRef.current(), 7000));
     return () => t.forEach(clearTimeout);
-  }, []);
+  }, [prefersReducedMotion]);
 
   // ── Responsive dimensions ──
   useEffect(() => {
@@ -330,23 +336,33 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
       {/* Inject CSS keyframes once */}
       <style>{starfieldStyles}</style>
 
+      {/* Skip button for accessibility — appears on focus via sr-only pattern */}
+      <button
+        onClick={onComplete}
+        tabIndex={0}
+        className="fixed top-4 left-4 z-[10000] sr-only focus:not-sr-only focus:px-4 focus:py-2 focus:rounded-lg focus:text-sm focus:font-mono focus:bg-[var(--bg-primary,#020617)] focus:text-[var(--accent)] focus:border-2 focus:border-[var(--accent)] focus:outline-none"
+        aria-label="Pular animação de abertura"
+      >
+        Pular ▸
+      </button>
+
       <motion.div
         ref={containerRef}
         initial={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         transition={{ duration: 0.3 }}
-        className="fixed inset-0 z-[9999] bg-[#020617] overflow-hidden cursor-none"
+        className="fixed inset-0 z-[9999] bg-[var(--bg-primary,#020617)] overflow-hidden cursor-default"
         style={{ perspective: "1000px" }}
       >
         {/* ── LAYER 1: Deep background nebula ── */}
         <div
-          className="absolute inset-0 opacity-40 transition-opacity duration-[2000ms]"
+          className="absolute inset-0 transition-opacity duration-[2000ms]"
           style={{
             opacity: phase > 0 ? 0.4 : 0,
             background: `
-              radial-gradient(ellipse at ${30 + mx * 12}% ${35 + my * 12}%, rgba(99,102,241,0.2) 0%, transparent 60%),
-              radial-gradient(ellipse at ${70 - mx * 12}% ${65 - my * 12}%, rgba(6,182,212,0.15) 0%, transparent 50%),
-              radial-gradient(ellipse at 50% 50%, rgba(139,92,246,0.1) 0%, transparent 70%)
+              radial-gradient(ellipse at ${30 + mx * 12}% ${35 + my * 12}%, color-mix(in srgb, var(--accent-alt, #6366f1) 20%, transparent) 0%, transparent 60%),
+              radial-gradient(ellipse at ${70 - mx * 12}% ${65 - my * 12}%, color-mix(in srgb, var(--accent, #06b6d4) 15%, transparent) 0%, transparent 50%),
+              radial-gradient(ellipse at 50% 50%, color-mix(in srgb, var(--accent-alt, #a78bfa) 10%, transparent) 0%, transparent 70%)
             `,
             filter: "blur(50px)",
             willChange: "opacity, background",
@@ -403,7 +419,7 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
                   style={{
                     width: 1 + Math.random() * 3,
                     height: 1 + Math.random() * 3,
-                    background: `radial-gradient(circle, #22d3ee, #6366f1)`,
+                    background: `radial-gradient(circle, var(--accent, #22d3ee), var(--accent-alt, #6366f1))`,
                     top: -6 + Math.random() * 12,
                     left: 0,
                     filter: "blur(1px)",
@@ -427,20 +443,23 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
 
         {/* ── LAYER 7: Progress bar + Welcome ── */}
         <div className="absolute bottom-8 left-1/2 -translate-x-1/2 z-20">
-          <div className="w-32 h-[2px] bg-indigo-950/50 rounded-full overflow-hidden">
+          <div className="w-32 h-[2px] bg-[var(--border)]/30 rounded-full overflow-hidden">
             <motion.div
-              className="h-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-indigo-500 rounded-full"
+              className="h-full rounded-full"
               initial={{ width: "0%" }}
               animate={{ width: `${Math.min(100, (phase / 4) * 100)}%` }}
               transition={{ duration: 0.3 }}
-              style={{ boxShadow: "0 0 8px rgba(6,182,212,0.5)" }}
+              style={{ 
+                background: `linear-gradient(90deg, var(--accent-alt, #6366f1), var(--accent, #22d3ee))`,
+                boxShadow: "0 0 8px color-mix(in srgb, var(--accent) 50%, transparent)",
+              }}
             />
           </div>
           <motion.p
             initial={{ opacity: 0, y: 5 }}
             animate={{ opacity: phase >= 3 ? 1 : 0, y: 0 }}
             transition={{ duration: 0.4, delay: 0.2 }}
-            className="text-center text-[10px] font-mono text-cyan-400/60 mt-2 tracking-[0.3em]"
+            className="text-center text-[10px] font-mono text-[var(--accent)]/60 mt-2 tracking-[0.3em]"
           >
             SEJA BEM-VINDO
           </motion.p>
@@ -448,16 +467,16 @@ export function SplashScreen({ onComplete }: { onComplete: () => void }) {
 
         {/* ── LAYER 8: Cinematic overlays ── */}
         <div className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(2,6,23,0.7)_100%)]" />
-        <div className="absolute inset-0 pointer-events-none opacity-[0.025] bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,rgba(6,182,212,0.3)_2px,rgba(6,182,212,0.3)_3px)]" />
+        <div className="absolute inset-0 pointer-events-none opacity-[0.025] bg-[repeating-linear-gradient(0deg,transparent,transparent_2px,color-mix(in_srgb,var(--accent)_30%,transparent)_2px,color-mix(in_srgb,var(--accent)_30%,transparent)_3px)]" />
 
         {/* ── LAYER 9: Letterbox bars ── */}
         <motion.div
-          className="absolute top-0 left-0 right-0 h-[12%] bg-[#020617] z-20 pointer-events-none"
+          className="absolute top-0 left-0 right-0 h-[12%] bg-[var(--bg-primary,#020617)] z-20 pointer-events-none"
           animate={{ opacity: transitActive ? 0 : 1 }}
           transition={{ duration: 0.5 }}
         />
         <motion.div
-          className="absolute bottom-0 left-0 right-0 h-[12%] bg-[#020617] z-20 pointer-events-none"
+          className="absolute bottom-0 left-0 right-0 h-[12%] bg-[var(--bg-primary,#020617)] z-20 pointer-events-none"
           animate={{ opacity: transitActive ? 0 : 1 }}
           transition={{ duration: 0.5 }}
         />

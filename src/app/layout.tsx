@@ -148,6 +148,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     t = window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
                   }
                   document.documentElement.classList.add(t === 'dark' ? 'theme-dark' : 'theme-light');
+                  // Restore palette accent colors to prevent FOUC
+                  var p = localStorage.getItem('mc-palette');
+                  if (p) {
+                    var palettes = {"cyan":["#22d3ee","#0284c7","#6366f1","#4338ca"],"emerald":["#34d399","#059669","#818cf8","#4f46e5"],"violet":["#a78bfa","#7c3aed","#f472b6","#db2777"],"amber":["#fbbf24","#d97706","#fb923c","#ea580c"],"rose":["#fb7185","#e11d48","#a78bfa","#7c3aed"],"blue":["#60a5fa","#2563eb","#34d399","#059669"]};
+                    var c = palettes[p];
+                    if (c) {
+                      var d = t === 'dark' ? 0 : 1;
+                      document.documentElement.style.setProperty('--accent', c[d]);
+                      document.documentElement.style.setProperty('--accent-alt', c[d+2]);
+                    }
+                  }
                 } catch(e) {}
               })();
             `,
