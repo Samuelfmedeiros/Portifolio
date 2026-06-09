@@ -136,6 +136,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
+        {/* Google AdSense - verificação de propriedade */}
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5928931854509344" crossOrigin="anonymous" />
         <script
           dangerouslySetInnerHTML={{
             __html: `
@@ -173,6 +175,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               })();
             `,
           }}
+        />
+        {/* Google AdSense — script de verificação e carregamento */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5928931854509344"
+          crossOrigin="anonymous"
         />
       </head>
       <body className="relative min-h-screen antialiased">
