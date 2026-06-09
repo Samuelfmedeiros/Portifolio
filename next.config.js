@@ -79,7 +79,6 @@ const nextConfig = {
               "font-src 'self' https://fonts.gstatic.com",
               "connect-src 'self' https://api.github.com https://www.google-analytics.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net",
               "frame-src https://googleads.g.doubleclick.net https://td.doubleclick.net https://fundingchoicesmessages.google.com",
-              "link-relattr 'sponsored'",
             ].join('; ')
           }
         ]
