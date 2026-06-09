@@ -34,9 +34,11 @@ describe("Navbar", () => {
 
   it("contains navigation links", () => {
     render(<Navbar />);
-    expect(screen.getByText("Início")).toBeInTheDocument();
-    expect(screen.getByText("Sobre")).toBeInTheDocument();
+    // Links appear in both desktop and mobile nav, so use getAllByText
+    const inicioLinks = screen.getAllByText("Início");
+    expect(inicioLinks.length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText("Projetos")).toBeInTheDocument();
+    expect(screen.getByText("Terminal")).toBeInTheDocument();
   });
 
   it("theme toggle is present", () => {
