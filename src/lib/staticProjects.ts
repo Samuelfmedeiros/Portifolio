@@ -17,7 +17,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: true,
     icon: "🐾",
-    imageUrl: "/projects/seu.pet.png",
+    imageUrl: "/projects/seu.pet.gif",
   },
   {
     id: 1001,

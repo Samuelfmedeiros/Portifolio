@@ -116,33 +116,61 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
           </div>
         )}
 
-        {/* Project image header */}
-        <div
-          className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center"
-          style={{ background: gradient }}
-        >
-          {/* Overlay pattern */}
-          <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
-          
-          {/* Project screenshot or icon */}
-          {repo.imageUrl ? (
-            <img
-              src={repo.imageUrl}
-              alt={repo.name}
-              className="absolute inset-0 w-full h-full object-cover"
-              loading="lazy"
-            />
-          ) : repo.icon ? (
-            <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
-          ) : (
-            <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg relative z-10">
-              {repo.name}
-            </span>
-          )}
-          
-          {/* Bottom fade */}
-          <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
-        </div>
+        {/* Project image header — clickable if has demo */}
+        {repo.homepage || repo.hasDemo ? (
+          <a
+            href={repo.homepage || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
+            style={{ background: gradient }}
+          >
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
+            {repo.imageUrl ? (
+              <img
+                src={repo.imageUrl}
+                alt={repo.name}
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
+                loading="lazy"
+              />
+            ) : repo.icon ? (
+              <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
+            ) : (
+              <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg relative z-10">
+                {repo.name}
+              </span>
+            )}
+            {/* Play overlay on hover */}
+            <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-all duration-300 flex items-center justify-center">
+              <span className="opacity-0 group-hover/image:opacity-100 text-white font-mono text-xs tracking-widest transition-opacity duration-300 flex items-center gap-1">
+                ▶ ABRIR DEMO
+              </span>
+            </div>
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
+          </a>
+        ) : (
+          <div
+            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center"
+            style={{ background: gradient }}
+          >
+            <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
+            {repo.imageUrl ? (
+              <img
+                src={repo.imageUrl}
+                alt={repo.name}
+                className="absolute inset-0 w-full h-full object-cover"
+                loading="lazy"
+              />
+            ) : repo.icon ? (
+              <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
+            ) : (
+              <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg relative z-10">
+                {repo.name}
+              </span>
+            )}
+            <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
+          </div>
+        )}
 
         <div className="relative p-1 flex flex-col flex-1">
           {/* Name (always visible now) */}

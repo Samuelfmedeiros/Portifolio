@@ -95,7 +95,7 @@ export function getActiveAffiliates(category?: AffiliateLink["category"]): Affil
 
 /** Map project names to relevant affiliate links */
 export const PROJECT_AFFILIATES: Record<string, string[]> = {
-  "seu.pet": ["supabase", "vercel", "cloudflare"],
+  "seu.pet": [],
   "mission-control": ["vercel"],
   DogWalk: ["supabase", "cloudflare"],
 };
