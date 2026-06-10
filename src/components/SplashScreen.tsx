@@ -82,7 +82,11 @@ export function SplashScreen({ onComplete }: Props) {
       const pct = Math.min((elapsed / TOTAL_DURATION) * 100, 100);
       setProgress(pct);
 
-      const lineIdx = BOOT_LINES.findLastIndex((l) => elapsed >= l.delay);
+      // Find which boot line should be visible (avoid findLastIndex for compat)
+      let lineIdx = -1;
+      for (let i = BOOT_LINES.length - 1; i >= 0; i--) {
+        if (elapsed >= BOOT_LINES[i].delay) { lineIdx = i; break; }
+      }
       if (lineIdx >= 0) setVisibleLine(lineIdx);
 
       if (pct >= 100 && !doneRef.current) {
@@ -95,8 +99,23 @@ export function SplashScreen({ onComplete }: Props) {
     }
 
     raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
+    return () => {
+      cancelAnimationFrame(raf);
+      doneRef.current = true;
+    };
   }, [prefersReducedMotion]);
+
+  // Force complete if stuck (ISR safety)
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      if (!doneRef.current) {
+        doneRef.current = true;
+        setExiting(true);
+        setTimeout(() => onCompleteRef.current(), 400);
+      }
+    }, TOTAL_DURATION + 3000);
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <motion.div
