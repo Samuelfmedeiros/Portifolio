@@ -32,15 +32,15 @@ describe('SplashScreen', () => {
   it('shows status line text', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    const statusElements = screen.getAllByText('SYSTEM CONTROL v3.1')
+    const statusElements = screen.getAllByText('TATU PROCURE v1.0')
     expect(statusElements.length).toBeGreaterThan(0)
   })
 
-  it('shows INICIALIZANDO during animation', () => {
+  it('shows CARREGANDO during initial phase', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
     vi.advanceTimersByTime(1200)
-    const initElements = screen.getAllByText('INICIALIZANDO')
+    const initElements = screen.getAllByText('CARREGANDO')
     expect(initElements.length).toBeGreaterThan(0)
   })
 
@@ -53,7 +53,7 @@ describe('SplashScreen', () => {
   it('calls onComplete after animation sequence', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    vi.advanceTimersByTime(9000)
+    vi.advanceTimersByTime(12000)
     expect(onComplete).toHaveBeenCalled()
   })
 
@@ -71,17 +71,24 @@ describe('SplashScreen', () => {
     expect(progressBars.length).toBeGreaterThan(0)
   })
 
-  it('has spaceship SVG', () => {
+  it('has Tatu SVG', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()
   })
 
+  it('shows TATU themed boot message', () => {
+    const onComplete = vi.fn()
+    render(<SplashScreen onComplete={onComplete} />)
+    vi.advanceTimersByTime(1200)
+    const bootMsg = screen.queryByText(/TATU PROCURE SYSTEM/)
+    expect(bootMsg).toBeTruthy()
+  })
+
   it('has letterbox bars', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Letterbox bars are motion.div elements with h-[12%]
     const letterboxBars = container.querySelectorAll('.h-\\[12\\%\\]')
     expect(letterboxBars.length).toBe(2)
   })
@@ -93,31 +100,10 @@ describe('SplashScreen', () => {
     expect(styleTag?.innerHTML).toContain('@keyframes')
   })
 
-  it('renders perspective container for warp effect', () => {
-    const onComplete = vi.fn()
-    const { container } = render(<SplashScreen onComplete={onComplete} />)
-    const perspectiveEl = container.querySelector('[style*="perspective"]')
-    expect(perspectiveEl).toBeInTheDocument()
-  })
-
-  it('has MC monogram SVG paths', () => {
-    const onComplete = vi.fn()
-    const { container } = render(<SplashScreen onComplete={onComplete} />)
-    const svg = container.querySelector('svg')
-    expect(svg).toBeInTheDocument()
-  })
-
   it('has skip button for accessibility', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
     const skipBtn = screen.getByLabelText('Pular animação de abertura')
     expect(skipBtn).toBeInTheDocument()
-  })
-
-  it('has boot message content', () => {
-    const onComplete = vi.fn()
-    render(<SplashScreen onComplete={onComplete} />)
-    const bootMsg = screen.queryByText(/SYSTEM BOOT SEQUENCE/)
-    expect(bootMsg).toBeTruthy()
   })
 })
