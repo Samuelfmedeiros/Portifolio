@@ -5,7 +5,7 @@ Portfolio estilo Treasure Planet · Next.js 16 + React 19 + Framer Motion + Tail
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `df72bc7` — fix: splash preta e transição quebrada
+- **Último commit:** `edec454` — SplashScreen melhorada: Tatu cava buraco com animação+black hole+partículas
 - **Status:** ✅ Operacional
 - **Testes:** 174/243 unitários · 8 E2E smoke
 
