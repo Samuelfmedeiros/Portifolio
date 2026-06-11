@@ -149,7 +149,7 @@ function TatuGlyphInner({
                 key={i}
                 cx={baseX}
                 cy={baseY}
-                r={(0.8 + Math.random() * 0.6) * s}
+                r={(0.8 + i * 0.15) * s}  /* pseudo-random from index */
                 fill={i % 2 === 0 ? "#22d3ee" : "#6366f1"}
               >
                 <animate

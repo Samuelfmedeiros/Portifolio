@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef, memo, useCallback } from "react";
+import { useState, useEffect, useRef, memo, useMemo } from "react";
 import { motion, useReducedMotion, AnimatePresence } from "framer-motion";
 import { TatuGlyph } from "./TatuGlyph";
 
@@ -35,15 +35,18 @@ const BOOT_LINES: BootLine[] = [
 ];
 
 // ─── Stars ───
-type Star = { x: number; y: number; size: number; delay: number };
+type Star = { x: number; y: number; size: number; delay: number; opacity: number; animDuration: number; shadowColor: string };
 const STAR_COUNT = 200;
 
 const genStars = () =>
-  Array.from({ length: STAR_COUNT }, () => ({
+  Array.from({ length: STAR_COUNT }, (_, i) => ({
     x: Math.random() * 100,
     y: Math.random() * 100,
     size: 0.3 + Math.random() * 2.2,
     delay: Math.random() * 4,
+    opacity: 0.1 + Math.random() * 0.35,
+    animDuration: 1.5 + Math.random() * 2.5,
+    shadowColor: i % 5 === 0 ? "#6366f1" : "#22d3ee",
   }));
 
 const StarField = memo(function StarField({ stars }: { stars: Star[] }) {
@@ -58,10 +61,10 @@ const StarField = memo(function StarField({ stars }: { stars: Star[] }) {
             top: `${s.y}%`,
             width: s.size,
             height: s.size,
-            background: i % 5 === 0 ? "#6366f1" : "#22d3ee",
-            opacity: 0.1 + Math.random() * 0.35,
-            boxShadow: `0 0 ${s.size * 2}px ${i % 5 === 0 ? "#6366f1" : "#22d3ee"}`,
-            animation: `star-pulse ${1.5 + Math.random() * 2.5}s ease-in-out ${s.delay}s infinite alternate`,
+            background: s.shadowColor,
+            opacity: s.opacity,
+            boxShadow: `0 0 ${s.size * 2}px ${s.shadowColor}`,
+            animation: `star-pulse ${s.animDuration}s ease-in-out ${s.delay}s infinite alternate`,
           }}
         />
       ))}
@@ -210,25 +213,37 @@ const AccretionStream = memo(function AccretionStream({
 }: {
   active: boolean; digLevel: number;
 }) {
+  const particles = useMemo(() => {
+    const count = 12 + digLevel * 6;
+    return Array.from({ length: count }, (_, i) => ({
+      angle: (i / 12) * Math.PI * 2 + Math.random() * 0.5,
+      dist: 30 + Math.random() * 50,
+      w: 1.5 + Math.random() * 2,
+      h: 1.5 + Math.random() * 2,
+      shadow: 2 + Math.random() * 4,
+      dur: 1.5 + Math.random() * 2,
+      del: Math.random() * 2,
+    }));
+  }, [digLevel]);
+
   if (!active) return null;
   return (
     <div className="absolute inset-0 pointer-events-none z-[4]" aria-hidden>
-      {Array.from({ length: 12 + digLevel * 6 }).map((_, i) => {
-        const angle = (i / 12) * Math.PI * 2 + Math.random() * 0.5;
-        const dist = 30 + Math.random() * 50;
+      {particles.map((p, i) => {
+        const bg = i % 3 === 0 ? "#6366f1" : "#22d3ee";
         return (
           <motion.div
             key={i}
             className="absolute rounded-full"
             style={{
-              width: 1.5 + Math.random() * 2,
-              height: 1.5 + Math.random() * 2,
-              background: i % 3 === 0 ? "#6366f1" : "#22d3ee",
-              boxShadow: `0 0 ${2 + Math.random() * 4}px ${i % 3 === 0 ? "#6366f1" : "#22d3ee"}`,
+              width: p.w,
+              height: p.h,
+              background: bg,
+              boxShadow: `0 0 ${p.shadow}px ${bg}`,
             }}
             initial={{
-              x: `calc(50% + ${Math.cos(angle) * dist}px)`,
-              y: `calc(50% + ${Math.sin(angle) * dist}px)`,
+              x: `calc(50% + ${Math.cos(p.angle) * p.dist}px)`,
+              y: `calc(50% + ${Math.sin(p.angle) * p.dist}px)`,
               opacity: 0,
             }}
             animate={{
@@ -238,9 +253,9 @@ const AccretionStream = memo(function AccretionStream({
               scale: [0.5, 1, 0.3],
             }}
             transition={{
-              duration: 1.5 + Math.random() * 2,
+              duration: p.dur,
               repeat: Infinity,
-              delay: Math.random() * 2,
+              delay: p.del,
               ease: "easeIn",
             }}
           />
@@ -252,37 +267,50 @@ const AccretionStream = memo(function AccretionStream({
 
 // ─── Portal burst particles ───
 const PortalBurst = memo(function PortalBurst({ show }: { show: boolean }) {
+  const particles = useMemo(() =>
+    Array.from({ length: 60 }, (_, i) => {
+      const angle = (i / 60) * Math.PI * 2;
+      const bg = i % 5 < 2 ? "#fff" : i % 3 === 0 ? "#6366f1" : "#22d3ee";
+      return {
+        angle,
+        dist: 100 + Math.random() * 200,
+        w: 1 + Math.random() * 4,
+        h: 1 + Math.random() * 4,
+        bg,
+        shadow: `0 0 ${3 + Math.random() * 8}px ${bg}`,
+        dur: 0.8 + Math.random() * 0.6,
+        del: Math.random() * 0.3,
+      };
+    }), []
+  );
+
   if (!show) return null;
   return (
     <div className="absolute inset-0 pointer-events-none z-[6]" aria-hidden>
-      {Array.from({ length: 60 }).map((_, i) => {
-        const angle = (i / 60) * Math.PI * 2;
-        const dist = 100 + Math.random() * 200;
-        return (
-          <motion.div
-            key={i}
-            className="absolute rounded-full"
-            style={{
-              width: 1 + Math.random() * 4,
-              height: 1 + Math.random() * 4,
-              background: i % 5 < 2 ? "#fff" : i % 3 === 0 ? "#6366f1" : "#22d3ee",
-              boxShadow: `0 0 ${3 + Math.random() * 8}px ${i % 3 === 0 ? "#6366f1" : "#22d3ee"}`,
-            }}
-            initial={{ x: "50%", y: "50%", opacity: 1, scale: 1 }}
-            animate={{
-              x: `calc(50% + ${Math.cos(angle) * dist}px)`,
-              y: `calc(50% + ${Math.sin(angle) * dist}px)`,
-              opacity: [1, 0.5, 0],
-              scale: [1, 0.6, 0],
-            }}
-            transition={{
-              duration: 0.8 + Math.random() * 0.6,
-              delay: Math.random() * 0.3,
-              ease: "easeOut",
-            }}
-          />
-        );
-      })}
+      {particles.map((p, i) => (
+        <motion.div
+          key={i}
+          className="absolute rounded-full"
+          style={{
+            width: p.w,
+            height: p.h,
+            background: p.bg,
+            boxShadow: p.shadow,
+          }}
+          initial={{ x: "50%", y: "50%", opacity: 1, scale: 1 }}
+          animate={{
+            x: `calc(50% + ${Math.cos(p.angle) * p.dist}px)`,
+            y: `calc(50% + ${Math.sin(p.angle) * p.dist}px)`,
+            opacity: [1, 0.5, 0],
+            scale: [1, 0.6, 0],
+          }}
+          transition={{
+            duration: p.dur,
+            delay: p.del,
+            ease: "easeOut",
+          }}
+        />
+      ))}
     </div>
   );
 });
@@ -300,8 +328,12 @@ export function SplashScreen({ onComplete, onPortalOpen }: Props) {
   const doneRef = useRef(false);
   const portalFiredRef = useRef(false);
   const onCompleteRef = useRef(onComplete);
-  onCompleteRef.current = onComplete;
-  const stars = useRef(genStars()).current;
+  const stars = useMemo(genStars, []);
+
+  // Sync onCompleteRef when it changes
+  useEffect(() => {
+    onCompleteRef.current = onComplete;
+  }, [onComplete]);
 
   // ── Phase from elapsed ──
   const phase =
@@ -372,8 +404,10 @@ export function SplashScreen({ onComplete, onPortalOpen }: Props) {
   // ── Timer ──
   useEffect(() => {
     if (prefersReducedMotion) {
-      setElapsed(TOTAL_DURATION + 100);
-      const t = setTimeout(() => onCompleteRef.current(), 200);
+      const t = setTimeout(() => {
+        setElapsed(TOTAL_DURATION + 100);
+        onCompleteRef.current();
+      }, 200);
       return () => clearTimeout(t);
     }
 
@@ -407,7 +441,7 @@ export function SplashScreen({ onComplete, onPortalOpen }: Props) {
 
     raf = requestAnimationFrame(tick);
     return () => cancelAnimationFrame(raf);
-  }, [prefersReducedMotion]);
+  }, [prefersReducedMotion, onPortalOpen]);
 
   // Force complete safety timeout
   useEffect(() => {
