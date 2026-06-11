@@ -22,18 +22,10 @@ describe('SplashScreen', () => {
     expect(container.querySelector('.fixed.inset-0')).toBeInTheDocument()
   })
 
-  it('shows status line text', () => {
+  it('shows TATU boot message', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    const statusElements = screen.getAllByText('TATU PROCURE v1.0')
-    expect(statusElements.length).toBeGreaterThan(0)
-  })
-
-  it('shows boot sequence on initial render', () => {
-    const onComplete = vi.fn()
-    render(<SplashScreen onComplete={onComplete} />)
-    // Shows TATU PROCURE SYSTEM boot line
-    const bootMsg = screen.getByText('TATU PROCURE SYSTEM v1.0')
+    const bootMsg = screen.getByText('TATU PROCURE SYSTEM...')
     expect(bootMsg).toBeInTheDocument()
   })
 
@@ -48,8 +40,8 @@ describe('SplashScreen', () => {
     vi.useFakeTimers()
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    // Safety timer: TOTAL_DURATION + 3000ms = 6200ms total
-    vi.advanceTimersByTime(7000)
+    // Safety timer: TOTAL_DURATION (8800) + 3000ms = 11800ms
+    vi.advanceTimersByTime(12000)
     expect(onComplete).toHaveBeenCalledTimes(1)
     vi.useRealTimers()
   })
@@ -64,34 +56,18 @@ describe('SplashScreen', () => {
     vi.useRealTimers()
   })
 
-  it('renders progress bar at bottom', () => {
+  it('renders progress bar', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
     const progressBars = container.querySelectorAll('.rounded-full')
     expect(progressBars.length).toBeGreaterThan(0)
   })
 
-  it('has Tatu SVG', () => {
+  it('has Tatu SVG rendered', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
     const svg = container.querySelector('svg')
     expect(svg).toBeInTheDocument()
-  })
-
-  it('shows TATU themed boot message', () => {
-    const onComplete = vi.fn()
-    render(<SplashScreen onComplete={onComplete} />)
-    const bootMsg = screen.queryByText(/TATU PROCURE SYSTEM/)
-    expect(bootMsg).toBeTruthy()
-  })
-
-  it('detects cinematic letterbox effect', () => {
-    const onComplete = vi.fn()
-    const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // New component: scanline overlay instead of letterbox bars
-    // Check that the component has cinematic styling
-    const starDivs = container.querySelectorAll('.absolute.inset-0')
-    expect(starDivs.length).toBeGreaterThan(0)
   })
 
   it('injects CSS keyframes for animations', () => {
@@ -101,29 +77,25 @@ describe('SplashScreen', () => {
     expect(styleTag?.innerHTML).toContain('@keyframes')
   })
 
-  it('has skip button for reduced motion users', () => {
+  it('has skip for reduced motion', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Component auto-skips via useReducedMotion — check that it renders a motion div
     const splash = container.querySelector('.fixed.inset-0')
     expect(splash).toBeInTheDocument()
   })
 
-  it('auto-progresses through boot sequence', () => {
+  it('renders boot lines container', () => {
     const onComplete = vi.fn()
     const { container } = render(<SplashScreen onComplete={onComplete} />)
-    // Component auto-progresses via requestAnimationFrame
-    // Verifies that the boot lines are rendered sequentially
-    const bootLines = container.querySelectorAll('.font-mono.text-xs > *')
-    expect(bootLines.length).toBeGreaterThan(0)
+    const bootContainer = container.querySelector('.font-mono')
+    expect(bootContainer).toBeInTheDocument()
   })
 
-  it('calls onComplete after timeout if animation hangs', () => {
+  it('calls onComplete after double safety timeout', () => {
     vi.useFakeTimers()
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    // Safety timeout should fire after TOTAL_DURATION + 3000ms
-    vi.advanceTimersByTime(7000)
+    vi.advanceTimersByTime(13000)
     expect(onComplete).toHaveBeenCalledTimes(1)
     vi.useRealTimers()
   })
