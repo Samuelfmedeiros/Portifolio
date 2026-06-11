@@ -5,22 +5,15 @@ on:
     branches: [master]
   workflow_dispatch:
 
-env:
-  VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-  VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
-
 jobs:
-  build-and-deploy:
+  ci:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - uses: pnpm/action-setup@v4
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'pnpm'
@@ -35,11 +28,8 @@ jobs:
       - name: Run unit tests
         run: pnpm test:run
 
-      - name: Install Vercel CLI
-        run: npm install -g vercel@latest
-
-      - name: Build and Deploy to Vercel
-        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
+      - name: Build & Deploy to Vercel
+        run: npx vercel@latest --prod --token=${{ secrets.VERCEL_TOKEN }} --yes 2>&1
 
       - name: Health Check
         run: |
