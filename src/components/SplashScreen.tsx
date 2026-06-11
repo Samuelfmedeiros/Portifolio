@@ -290,13 +290,15 @@ const PortalBurst = memo(function PortalBurst({ show }: { show: boolean }) {
 // ─── Props ───
 interface Props {
   onComplete: () => void;
+  onPortalOpen?: () => void;
 }
 
-export function SplashScreen({ onComplete }: Props) {
+export function SplashScreen({ onComplete, onPortalOpen }: Props) {
   const prefersReducedMotion = useReducedMotion();
   const [elapsed, setElapsed] = useState(0);
   const [exiting, setExiting] = useState(false);
   const doneRef = useRef(false);
+  const portalFiredRef = useRef(false);
   const onCompleteRef = useRef(onComplete);
   onCompleteRef.current = onComplete;
   const stars = useRef(genStars()).current;
@@ -381,6 +383,17 @@ export function SplashScreen({ onComplete }: Props) {
     function tick(now: number) {
       const e = now - start;
       setElapsed(e);
+
+      // Fire portal callback when entering portal phase
+      if (
+        e >= PHASES.PORTAL &&
+        e < PHASES.EXIT &&
+        !portalFiredRef.current &&
+        onPortalOpen
+      ) {
+        portalFiredRef.current = true;
+        onPortalOpen();
+      }
 
       if (e >= TOTAL_DURATION && !doneRef.current) {
         doneRef.current = true;
