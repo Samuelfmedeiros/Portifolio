@@ -29,7 +29,9 @@ jobs:
         run: pnpm test:run
 
       - name: Build & Deploy to Vercel
-        run: npx vercel@latest --prod --token=${{ secrets.VERCEL_TOKEN }} --yes 2>&1
+        run: npx vercel@latest --prod --yes 2>&1
+        env:
+          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
 
       - name: Health Check
         run: |
