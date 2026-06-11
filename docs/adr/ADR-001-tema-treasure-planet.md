@@ -1,6 +1,6 @@
 # ADR-001: Tema Visual Treasure Planet (Ciano + Preto)
 
-**Status:** Aceito
+**Status:** Deprecado — arquivado por decisão de Samuel (2026-06-11)
 **Data:** 2026-06-11
 
 ## Contexto
