@@ -8,9 +8,6 @@ importers:
 
   .:
     dependencies:
-      '@rive-app/react-canvas':
-        specifier: ^4.29.0
-        version: 4.29.0(react@19.2.4)
       '@supabase/supabase-js':
         specifier: ^2.105.3
         version: 2.108.1
@@ -1599,14 +1596,6 @@ packages:
   '@renovatebot/pep440@4.2.1':
     resolution: {integrity: sha512-2FK1hF93Fuf1laSdfiEmJvSJPVIDHEUTz68D3Fi9s0IZrrpaEcj6pTFBTbYvsgC5du4ogrtf5re7yMMvrKNgkw==}
     engines: {node: ^20.9.0 || ^22.11.0 || ^24, pnpm: ^10.0.0}
-
-  '@rive-app/canvas@2.38.0':
-    resolution: {integrity: sha512-tTrPXsWJZLARBa3H9rOPVMrWp5IRwaVABHLISdBogGGebp0sIAAmfDAD1eK/bP+UODejsT4X3mPBI3GPNln44g==}
-
-  '@rive-app/react-canvas@4.29.0':
-    resolution: {integrity: sha512-Jwlnq/9g8DIAS7VIw4c9Pj9UN11F9BmznLq4oFGmd2w80lCZtRjU9UHTs+RfDC2+0y2fBc3BRiwEHgja0krkQQ==}
-    peerDependencies:
-      react: ^16.8.0 || ^17.0.0 || ^18.0.0 || ^19.0
 
   '@rolldown/binding-android-arm64@1.0.0-rc.1':
     resolution: {integrity: sha512-He6ZoCfv5D7dlRbrhNBkuMVIHd0GDnjJwbICE1OWpG7G3S2gmJ+eXkcNLJjzjNDpeI2aRy56ou39AJM9AD8YFA==}
@@ -8412,13 +8401,6 @@ snapshots:
       - supports-color
 
   '@renovatebot/pep440@4.2.1': {}
-
-  '@rive-app/canvas@2.38.0': {}
-
-  '@rive-app/react-canvas@4.29.0(react@19.2.4)':
-    dependencies:
-      '@rive-app/canvas': 2.38.0
-      react: 19.2.4
 
   '@rolldown/binding-android-arm64@1.0.0-rc.1':
     optional: true
