@@ -181,7 +181,7 @@ Experiência:
                                   Shell: Terminal React
                                   Theme: ${typeof document !== 'undefined' ? document.documentElement.classList.contains('theme-dark') ? 'Night Vision' : 'Daylight Ops' : 'unknown'}
                                   CPU: ${typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || '??' : '?'} cores
-                                  Memory: ${typeof navigator !== 'undefined' && (navigator as any).deviceMemory ? (navigator as any).deviceMemory + 'GB' : '??'}
+                                  Memory: ${typeof navigator !== 'undefined' && (navigator as Navigator & { deviceMemory?: number }).deviceMemory ? (navigator as Navigator & { deviceMemory?: number }).deviceMemory + 'GB' : '??'}
                                   Browser: ${typeof navigator !== 'undefined' ? navigator.userAgent.split(' ').pop() || 'unknown' : 'unknown'}`;
         break;
 

@@ -359,7 +359,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
       {filteredRepos.length === 0 && (
         <div className="text-center py-8">
           <p className="font-mono text-sm text-[var(--text-secondary)]">
-            Nenhum projeto encontrado com o filtro "{activeFilter}"
+            Nenhum projeto encontrado com o filtro {'"'}{activeFilter}{'"'}
           </p>
           <button
             onClick={() => setActiveFilter("all")}

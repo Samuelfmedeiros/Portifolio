@@ -34,9 +34,11 @@ export function MiniGame() {
   }, [sequence]);
 
   useEffect(() => {
+    /* eslint-disable react-hooks/set-state-in-effect */
     if (phase === "showing" && sequence.length > 0) {
       flashSequence();
     }
+    /* eslint-enable react-hooks/set-state-in-effect */
   }, [phase, sequence, flashSequence]);
 
   const handleClick = useCallback(

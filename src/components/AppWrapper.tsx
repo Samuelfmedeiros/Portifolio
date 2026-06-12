@@ -4,16 +4,18 @@ import { useState, useEffect, useCallback } from "react";
 import { SplashScreen } from "./SplashScreen";
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  const [isLoading, setIsLoading] = useState(true);
-  const [portalEmerge, setPortalEmerge] = useState(false);
-
-  useEffect(() => {
-    const visited = sessionStorage.getItem("visited");
-    if (visited) {
-      setIsLoading(false);
-      setPortalEmerge(true);
+  const [isLoading, setIsLoading] = useState(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
+      return false;
     }
-  }, []);
+    return true;
+  });
+  const [portalEmerge, setPortalEmerge] = useState(() => {
+    if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
+      return true;
+    }
+    return false;
+  });
 
   const handleComplete = useCallback(() => {
     sessionStorage.setItem("visited", "true");

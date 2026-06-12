@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, useScroll, useTransform } from "framer-motion";
+import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
 import { useRef, useMemo } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
@@ -140,7 +140,7 @@ const hexagons = [
   { id: 2, x: "12%", y: "65%", size: 18, delay: 0.8, parallaxSpeed: 0.2, opacity: 0.06 },
 ];
 
-function FloatingHexagons({ yOffset }: { yOffset: any }) {
+function FloatingHexagons({ yOffset }: { yOffset: MotionValue<string> }) {
   return (
     <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden" aria-hidden="true">
       {hexagons.map((h) => (
@@ -190,7 +190,7 @@ const hudPanels = [
   { id: 3, label: "DATA NODES", value: "ACTIVE", x: "83%", y: "55%", color: "var(--success)", delay: 2.2 },
 ];
 
-function HUDDataPanels({ yOffset }: { yOffset: any }) {
+function HUDDataPanels({ yOffset }: { yOffset: MotionValue<string> }) {
   return (
     <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden" aria-hidden="true">
       {hudPanels.map((panel) => (
@@ -233,17 +233,26 @@ function HUDDataPanels({ yOffset }: { yOffset: any }) {
 
 const PARTICLE_COUNT = 20;
 
+function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
+
 function DataParticles() {
-  const particles = useMemo(() =>
-    Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
+  const particles = useMemo(() => {
+    const rand = seededRandom(42);
+    return Array.from({ length: PARTICLE_COUNT }, (_, i) => ({
       id: i,
-      left: Math.random() * 100,
-      size: Math.random() * 2 + 1,
-      delay: Math.random() * 8,
-      duration: 6 + Math.random() * 8,
-      drift: (Math.random() - 0.5) * 40,
-    })),
-  []);
+      left: rand() * 100,
+      size: rand() * 2 + 1,
+      delay: rand() * 8,
+      duration: 6 + rand() * 8,
+      drift: (rand() - 0.5) * 40,
+    }));
+  }, []);
 
   return (
     <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden" aria-hidden="true">

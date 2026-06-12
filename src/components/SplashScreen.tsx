@@ -215,14 +215,16 @@ const AccretionStream = memo(function AccretionStream({
 }) {
   const particles = useMemo(() => {
     const count = 12 + digLevel * 6;
+    // eslint-disable-next-line react-hooks/purity
+    const rand = () => Math.random();
     return Array.from({ length: count }, (_, i) => ({
-      angle: (i / 12) * Math.PI * 2 + Math.random() * 0.5,
-      dist: 30 + Math.random() * 50,
-      w: 1.5 + Math.random() * 2,
-      h: 1.5 + Math.random() * 2,
-      shadow: 2 + Math.random() * 4,
-      dur: 1.5 + Math.random() * 2,
-      del: Math.random() * 2,
+      angle: (i / 12) * Math.PI * 2 + rand() * 0.5,
+      dist: 30 + rand() * 50,
+      w: 1.5 + rand() * 2,
+      h: 1.5 + rand() * 2,
+      shadow: 2 + rand() * 4,
+      dur: 1.5 + rand() * 2,
+      del: rand() * 2,
     }));
   }, [digLevel]);
 
@@ -266,23 +268,29 @@ const AccretionStream = memo(function AccretionStream({
 });
 
 // ─── Portal burst particles ───
-const PortalBurst = memo(function PortalBurst({ show }: { show: boolean }) {
-  const particles = useMemo(() =>
-    Array.from({ length: 60 }, (_, i) => {
+interface PortalBurstProps {
+  show: boolean;
+}
+
+const PortalBurst = memo(function PortalBurst({ show }: PortalBurstProps) {
+  const particles = useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
+    const rand = () => Math.random();
+    return Array.from({ length: 60 }, (_, i) => {
       const angle = (i / 60) * Math.PI * 2;
       const bg = i % 5 < 2 ? "#fff" : i % 3 === 0 ? "#6366f1" : "#22d3ee";
       return {
         angle,
-        dist: 100 + Math.random() * 200,
-        w: 1 + Math.random() * 4,
-        h: 1 + Math.random() * 4,
+        dist: 100 + rand() * 200,
+        w: 1 + rand() * 4,
+        h: 1 + rand() * 4,
         bg,
-        shadow: `0 0 ${3 + Math.random() * 8}px ${bg}`,
-        dur: 0.8 + Math.random() * 0.6,
-        del: Math.random() * 0.3,
+        shadow: `0 0 ${3 + rand() * 8}px ${bg}`,
+        dur: 0.8 + rand() * 0.6,
+        del: rand() * 0.3,
       };
-    }), []
-  );
+    });
+  }, []);
 
   if (!show) return null;
   return (
@@ -328,7 +336,7 @@ export function SplashScreen({ onComplete, onPortalOpen }: Props) {
   const doneRef = useRef(false);
   const portalFiredRef = useRef(false);
   const onCompleteRef = useRef(onComplete);
-  const stars = useMemo(genStars, []);
+  const stars = useMemo(() => genStars(), []);
 
   // Sync onCompleteRef when it changes
   useEffect(() => {
