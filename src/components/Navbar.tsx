@@ -14,7 +14,7 @@ const NAV_ITEMS = [
 
 export const Navbar = memo(function Navbar() {
   const [scrolled, setScrolled] = useState(false);
-  const [activeSection, setActiveSection] = useState("hero");
+  const [activeSection, setActiveSection] = useState("profile");
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const rafRef = useRef<number | null>(null);
