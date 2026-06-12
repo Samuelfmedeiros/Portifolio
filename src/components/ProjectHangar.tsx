@@ -303,7 +303,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
 
   if (!repos || repos.length === 0) {
     return (
-      <section id="projects" className="py-8 px-6">
+      <section className="py-8 px-6">
         <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">
           ▸ Nenhum projeto encontrado
         </h2>
@@ -312,7 +312,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
   }
 
   return (
-    <section id="projects" className="py-8 px-6">
+    <section className="py-8 px-6">
       <motion.h2
         initial={{ opacity: 0 }}
         whileInView={{ opacity: 1 }}
