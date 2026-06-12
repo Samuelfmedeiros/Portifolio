@@ -35,6 +35,7 @@ pnpm-debug.log*
 
 # temp files
 _tmp_*
+*.service
 
 # typescript
 *.tsbuildinfo
