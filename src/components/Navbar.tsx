@@ -65,20 +65,13 @@ export const Navbar = memo(function Navbar() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
     const target = document.querySelector(href);
-    if (target) {
-      // Scroll to top smoothly, then to target after scroll ends
+    if (href === "#hero") {
       window.scrollTo({ top: 0, behavior: "smooth" });
-      const handleScrollEnd = () => {
-        target.scrollIntoView({ behavior: "smooth" });
-        window.removeEventListener("scrollend", handleScrollEnd);
-      };
-      // Use scrollend event if available, fallback to timeout
-      if ("onscrollend" in window) {
-        window.addEventListener("scrollend", handleScrollEnd);
-      } else {
-        // Fallback: wait for scroll to complete (approx duration for long parallax pages)
-        setTimeout(handleScrollEnd, 1200);
-      }
+      return;
+    }
+    if (target) {
+      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      window.scrollTo({ top, behavior: "smooth" });
     }
   };
 
