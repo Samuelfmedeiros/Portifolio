@@ -18,27 +18,25 @@ interface SpeedLine {
 export function SpeedLines() {
   const [intensity, setIntensity] = useState(0);
   const lastScrollRef = useRef(0);
-  const lastTimeRef = useRef(Date.now());
+  const lastTimeRef = useRef(0);
   const rafRef = useRef<number>(0);
   const shouldReduceMotion = useReducedMotion();
 
-  const lines: SpeedLine[] = useMemo(
-    () => {
-      let seed = 42;
-      const pseudoRandom = () => {
-        seed = (seed * 16807) % 2147483647;
-        return (seed - 1) / 2147483646;
-      };
-      return Array.from({ length: 20 }, (_, i) => ({
+  const lines: SpeedLine[] = useMemo(() => {
+    const mul = 16807;
+    const mod = 2147483647;
+    return Array.from({ length: 20 }, (_, i) => {
+      const seed = (42 * Math.pow(mul, i + 1)) % mod;
+      const r = (seed - 1) / (mod - 1);
+      return {
         id: i,
-        x: pseudoRandom() * 100,
-        width: pseudoRandom() * 1.5 + 0.5,
-        delay: pseudoRandom() * 2,
-        duration: pseudoRandom() * 1 + 0.5,
-      }));
-    },
-    []
-  );
+        x: r * 100,
+        width: ((seed * mul) % mod / (mod - 1)) * 1.5 + 0.5,
+        delay: ((seed * Math.pow(mul, 2)) % mod / (mod - 1)) * 2,
+        duration: ((seed * Math.pow(mul, 3)) % mod / (mod - 1)) * 1 + 0.5,
+      };
+    });
+  }, []);
 
   useEffect(() => {
     if (shouldReduceMotion) return;

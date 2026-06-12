@@ -1,7 +1,15 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+
+function seededRandom(seed: number): () => number {
+  let s = seed;
+  return () => {
+    s = (s * 16807) % 2147483647;
+    return (s - 1) / 2147483646;
+  };
+}
 
 interface Asteroid {
   id: number;
@@ -23,6 +31,14 @@ export function AsteroidDodge() {
   const animRef = useRef<number>(0);
   const lastSpawnRef = useRef(0);
   const scoreRef = useRef(0);
+
+  const stars = useMemo(() => {
+    const rand = seededRandom(42);
+    return Array.from({ length: 20 }, () => ({
+      left: rand() * 100,
+      top: rand() * 100,
+    }));
+  }, []);
 
   const spawnAsteroid = useCallback(() => {
     const newAsteroid: Asteroid = {
@@ -153,13 +169,13 @@ export function AsteroidDodge() {
       >
         {/* Stars background */}
         <div className="absolute inset-0">
-          {Array.from({ length: 20 }).map((_, i) => (
+          {stars.map((star, i) => (
             <div
               key={i}
               className="absolute w-0.5 h-0.5 rounded-full bg-[var(--accent)]/20"
               style={{
-                left: `${Math.random() * 100}%`,
-                top: `${Math.random() * 100}%`,
+                left: `${star.left}%`,
+                top: `${star.top}%`,
               }}
             />
           ))}

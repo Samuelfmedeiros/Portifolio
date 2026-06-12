@@ -70,15 +70,14 @@ vi.mock('framer-motion', async () => {
   return {
     useInView: () => true,
     useScroll: () => ({ scrollYProgress: { get: () => 0, onChange: () => {}, on: () => {}, off: () => {}, stop: () => {} } }),
-    useTransform: (input: any) => ({ get: () => 0, onChange: () => {}, on: () => {}, off: () => {}, stop: () => {} }),
+    useTransform: (_input: unknown) => ({ get: () => 0, onChange: () => {}, on: () => {}, off: () => {}, stop: () => {} }),
     useAnimation: () => ({ start: () => {}, stop: () => {}, set: () => {} }),
  useReducedMotion: () => false,
-    AnimatePresence: ({ children }: any) => children,
+    AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
     motion: new Proxy({}, {
       get: (_, prop) => {
         const tag = String(prop)
-        const Comp = (props: any) => {
-          const { children, initial, animate, whileInView, whileHover, whileTap, transition, viewport, layoutId, exit, ...rest } = props
+        const Comp = ({ children, initial, animate, whileInView, whileHover, whileTap, transition, viewport, layoutId, exit, ...rest }: { children?: React.ReactNode; initial?: unknown; animate?: unknown; whileInView?: unknown; whileHover?: unknown; whileTap?: unknown; transition?: unknown; viewport?: unknown; layoutId?: unknown; exit?: unknown; [key: string]: unknown }) => {
           return React.createElement(tag, rest, children)
         }
         Comp.displayName = `motion.${tag}`

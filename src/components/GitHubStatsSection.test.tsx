@@ -8,7 +8,7 @@ const mockFetch = vi.fn(() =>
     ok: true,
     json: () => Promise.resolve({ public_repos: 10, followers: 5 }),
   })
-) as any
+) as unknown as typeof globalThis.fetch
 
 beforeEach(() => {
   vi.stubGlobal('fetch', mockFetch)

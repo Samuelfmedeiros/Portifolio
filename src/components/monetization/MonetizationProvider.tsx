@@ -3,6 +3,7 @@
 import {
   useState,
   useEffect,
+  useMemo,
   useCallback,
   createContext,
   useContext,
@@ -61,15 +62,29 @@ export function useMonetizationConsent() {
 
 export function MonetizationProvider({ children }: { children: ReactNode }) {
   const { consent: analyticsConsent } = useAnalyticsConsent();
-  const [consent, setConsent] = useState<MonetizationConsent>(
-    DEFAULT_MONETIZATION_CONSENT
-  );
-  const [showConsentModal, setShowConsentModal] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [consent, setConsent] = useState<MonetizationConsent>(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(MONETIZATION_CONSENT_KEY);
+        const parsed = parseMonetizationConsent(stored);
+        if (parsed) return parsed;
+      } catch {}
+    }
+    return DEFAULT_MONETIZATION_CONSENT;
+  });
+  const [showConsentModal, setShowConsentModal] = useState(() => {
+    if (typeof window !== "undefined") {
+      try {
+        const stored = localStorage.getItem(MONETIZATION_CONSENT_KEY);
+        return !parseMonetizationConsent(stored);
+      } catch {}
+    }
+    return false;
+  });
+  const [mounted, setMounted] = useState(() => typeof window !== "undefined");
 
-  // Load stored consent on mount + listen for changes from CookieBanner
+  // Listen for consent changes from other tabs / CookieBanner
   useEffect(() => {
-    setMounted(true);
     const loadConsent = () => {
       const stored = localStorage.getItem(MONETIZATION_CONSENT_KEY);
       const parsed = parseMonetizationConsent(stored);
@@ -80,9 +95,6 @@ export function MonetizationProvider({ children }: { children: ReactNode }) {
         setShowConsentModal(true);
       }
     };
-    loadConsent();
-
-    // Listen for storage events from CookieBanner syncs
     const handleStorage = (e: StorageEvent) => {
       if (e.key === MONETIZATION_CONSENT_KEY) loadConsent();
     };
@@ -96,20 +108,13 @@ export function MonetizationProvider({ children }: { children: ReactNode }) {
     };
   }, []);
 
-  // Sync analytics consent — if user declines analytics, disable personalized ads
-  useEffect(() => {
-    if (!mounted) return;
+  // Enforce: can't have ads without analytics consent
+  const effectiveConsent = useMemo<MonetizationConsent>(() => {
     if (analyticsConsent === "declined" && consent.ads) {
-      // Can't have personalized ads without analytics consent
-      const updated = { ...consent, analytics: false, ads: false };
-      setConsent(updated);
-      try {
-        localStorage.setItem(MONETIZATION_CONSENT_KEY, JSON.stringify(updated));
-      } catch {
-        // localStorage unavailable
-      }
+      return { ...consent, analytics: false, ads: false };
     }
-  }, [analyticsConsent, consent, mounted]);
+    return consent;
+  }, [consent, analyticsConsent]);
 
   const saveConsent = useCallback((newConsent: MonetizationConsent) => {
     setConsent(newConsent);
@@ -162,9 +167,9 @@ export function MonetizationProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const value: MonetizationContextType = {
-    consent,
-    adsAllowed: canShowAds(consent),
-    personalizedAdsAllowed: canShowPersonalizedAds(consent),
+    consent: effectiveConsent,
+    adsAllowed: canShowAds(effectiveConsent),
+    personalizedAdsAllowed: canShowPersonalizedAds(effectiveConsent),
     acceptAll,
     acceptNonPersonalizedOnly,
     declineAds,

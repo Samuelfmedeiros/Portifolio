@@ -3,8 +3,8 @@ import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { AppWrapper } from './AppWrapper'
 
 vi.mock('framer-motion', () => ({
-  motion: new Proxy({}, { get: (_, p) => ({ children, ...rest }: any) => <div {...rest}>{children}</div> }),
-  AnimatePresence: ({ children }: any) => children,
+  motion: new Proxy({}, { get: (_, p) => ({ children, ...rest }: { children?: React.ReactNode; [key: string]: unknown }) => <div {...rest}>{children}</div> }),
+  AnimatePresence: ({ children }: { children?: React.ReactNode }) => children,
   useInView: () => true,
 }))
 

@@ -38,21 +38,30 @@ function getStoredConsent(): AnalyticsConsent {
 }
 
 export function CookieBannerProvider({ children }: { children: React.ReactNode }) {
-  const [consent, setConsent] = useState<AnalyticsConsent>(null);
-  const [showBanner, setShowBanner] = useState(false);
-  const [mounted, setMounted] = useState(false);
+  const [consent, setConsent] = useState<AnalyticsConsent>(() => {
+    try {
+      if (typeof window !== "undefined") {
+        return getStoredConsent();
+      }
+    } catch {}
+    return null;
+  });
+  const [showBanner, setShowBanner] = useState(() => {
+    try {
+      if (typeof window !== "undefined") {
+        return getStoredConsent() === null;
+      }
+    } catch {}
+    return false;
+  });
+  const [mounted, setMounted] = useState(() => typeof window !== "undefined");
   const [showAdsOptions, setShowAdsOptions] = useState(false);
 
   // We can't use useMonetizationConsent here because CookieBannerProvider
   // wraps MonetizationProvider, so we manage ads consent directly
   const [adsChoice, setAdsChoice] = useState<"none" | "non-personalized" | "personalized">("none");
 
-  useEffect(() => {
-    setMounted(true);
-    const stored = getStoredConsent();
-    setConsent(stored);
-    setShowBanner(stored === null);
-  }, []);
+  // No more need for the initialization effect — state is lazy-initialized
 
   const accept = useCallback(() => {
     try {

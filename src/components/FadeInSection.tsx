@@ -33,14 +33,6 @@ export function FadeInSection({
     margin: "-50px 0px",
   });
 
-  const [shouldAnimate, setShouldAnimate] = useState(false);
-
-  useEffect(() => {
-    if (isInView) {
-      setShouldAnimate(true);
-    }
-  }, [isInView]);
-
   const getInitialPosition = () => {
     switch (direction) {
       case "up":
@@ -69,7 +61,7 @@ export function FadeInSection({
     <motion.div
       ref={ref}
       initial="hidden"
-      animate={shouldAnimate ? "visible" : "hidden"}
+      animate={isInView ? "visible" : "hidden"}
       variants={{
         hidden: {
           ...getInitialPosition(),

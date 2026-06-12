@@ -45,11 +45,11 @@ export function GitHubStatsSection() {
         const reposData = await reposResponse.json();
 
         const totalStars = reposData.reduce(
-          (sum: number, repo: any) => sum + (repo.stargazers_count || 0),
+          (sum: number, repo: Record<string, unknown>) => sum + ((repo.stargazers_count as number) || 0),
           0
         );
         const totalForks = reposData.reduce(
-          (sum: number, repo: any) => sum + (repo.forks_count || 0),
+          (sum: number, repo: Record<string, unknown>) => sum + ((repo.forks_count as number) || 0),
           0
         );
 

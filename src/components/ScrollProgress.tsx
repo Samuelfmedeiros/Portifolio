@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useRef, useCallback, memo } from "react";
 
-function debounce<T extends (...args: any[]) => any>(fn: T, ms: number) {
+function debounce<T extends (...args: unknown[]) => unknown>(fn: T, ms: number) {
   let timer: ReturnType<typeof setTimeout>;
   return (...args: Parameters<T>) => {
     clearTimeout(timer);

@@ -19,7 +19,7 @@ beforeEach(() => {
     moveTo: vi.fn(),
     lineTo: vi.fn(),
     strokeRect: vi.fn(),
-  })) as any
+  })) as unknown as CanvasRenderingContext2D
 })
 
 afterEach(() => {

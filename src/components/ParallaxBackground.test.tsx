@@ -19,7 +19,7 @@ describe('ParallaxBackground', () => {
       stroke: vi.fn(),
       moveTo: vi.fn(),
       lineTo: vi.fn(),
-    })) as any
+    })) as unknown as CanvasRenderingContext2D
 
     // Mock requestAnimationFrame
     vi.spyOn(window, 'requestAnimationFrame').mockImplementation((cb) => {
