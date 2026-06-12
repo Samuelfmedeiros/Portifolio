@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useEffect, useState, ReactNode } from "react";
+import { ReactNode } from "react";
 
 interface ResponsiveSectionProps {
   children: ReactNode;
@@ -11,29 +11,12 @@ interface ResponsiveSectionProps {
 }
 
 // Hook to detect mobile view
-function useIsMobile(breakpoint = 768) {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < breakpoint);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, [breakpoint]);
-
-  return isMobile;
-}
-
 export function ResponsiveSection({
   children,
   id,
   className = "",
   fullHeight = false,
 }: ResponsiveSectionProps) {
-  const isMobile = useIsMobile();
 
   return (
     <section
@@ -165,13 +148,11 @@ export function ResponsiveGrid({
 export function ResponsiveText({
   children,
   size = "base",
-  weight = "normal",
   color = "primary",
   className = "",
 }: {
   children: ReactNode;
   size?: "xs" | "sm" | "base" | "lg" | "xl" | "2xl";
-  weight?: "light" | "normal" | "medium" | "semibold" | "bold";
   color?: "primary" | "secondary" | "accent";
   className?: string;
 }) {

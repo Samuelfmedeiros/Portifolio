@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Mail, Copy, Check, Shield, X, Coffee, Heart } from "lucide-react";
+import { Mail, Copy, Check, Shield, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
 import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";

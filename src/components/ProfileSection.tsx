@@ -7,7 +7,6 @@ import {
   Briefcase, GraduationCap, Award,
 } from "lucide-react";
 import { GlassCard } from "./GlassCard";
-import { Tooltip } from "./Tooltip";
 import { TypeWriter } from "./TypeWriter";
 
 /* ──────────────────── DATA ──────────────────── */

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useRef, useCallback, memo } from "react";
+import { useEffect, useState, useCallback, memo } from "react";
 
 function debounce<T extends (...args: unknown[]) => unknown>(fn: T, ms: number) {
   let timer: ReturnType<typeof setTimeout>;

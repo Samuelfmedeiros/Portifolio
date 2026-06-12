@@ -10,7 +10,7 @@ export const PalettePicker = memo(function PalettePicker() {
   const { palette, setPalette } = useTheme();
   const [open, setOpen] = useState(false);
 
-  const current = PALETTES.find((p) => p.id === palette) || PALETTES[0];
+  // current palette is derived from palette state
 
   return (
     <div className="relative">

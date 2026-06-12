@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useCallback } from "react";
 import { SplashScreen } from "./SplashScreen";
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {

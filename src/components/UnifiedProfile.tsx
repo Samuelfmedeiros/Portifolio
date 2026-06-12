@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
-  Briefcase, GraduationCap, Award, CheckCircle2,
+  Briefcase, GraduationCap, Award,
 } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { Tooltip } from "./Tooltip";

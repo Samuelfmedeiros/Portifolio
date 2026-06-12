@@ -81,7 +81,7 @@ export function MonetizationProvider({ children }: { children: ReactNode }) {
     }
     return false;
   });
-  const [mounted, setMounted] = useState(() => typeof window !== "undefined");
+  const [mounted] = useState(() => typeof window !== "undefined");
 
   // Listen for consent changes from other tabs / CookieBanner
   useEffect(() => {
