@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useCallback, useEffect } from "react";
 import { SplashScreen } from "./SplashScreen";
 
 /**
@@ -8,39 +8,38 @@ import { SplashScreen } from "./SplashScreen";
  * 1. Env var override (NEXT_PUBLIC_ENABLE_SPLASH) — for manual control
  * 2. Auto-detect: skip splash on Vercel production domains
  * 3. Default: true (splash shows on localhost, staging, etc.)
+ *
+ * Runs at module level: safe for SSR (returns true when window is undefined).
  */
 function shouldShowSplash(): boolean {
-  // Env var override — use it if explicitly set
   const envVal = process.env.NEXT_PUBLIC_ENABLE_SPLASH;
   if (envVal === "false") return false;
   if (envVal === "true") return true;
-
-  // Auto-detect: skip on Vercel production
   if (typeof window !== "undefined") {
     const host = window.location.hostname;
     if (host.endsWith(".vercel.app")) return false;
   }
-
   return true;
 }
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  const showSplash = useRef(shouldShowSplash());
+  // SSR-safe initial value (true = splash on). Client effect will correct it.
+  const [showSplash, setShowSplash] = useState(true);
+  const [isLoading, setIsLoading] = useState(true);
+  const [portalEmerge, setPortalEmerge] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(() => {
-    if (!showSplash.current) return false;
-    if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
-      return false;
+  // Run once on mount: re-evaluate splash decision on client
+  useEffect(() => {
+    const show = shouldShowSplash();
+    setShowSplash(show);
+    if (!show) {
+      setIsLoading(false);
+      setPortalEmerge(true);
+    } else if (sessionStorage.getItem("visited")) {
+      setIsLoading(false);
+      setPortalEmerge(true);
     }
-    return true;
-  });
-  const [portalEmerge, setPortalEmerge] = useState(() => {
-    if (!showSplash.current) return true;
-    if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
-      return true;
-    }
-    return false;
-  });
+  }, []);
 
   const handleComplete = useCallback(() => {
     sessionStorage.setItem("visited", "true");
@@ -53,7 +52,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {showSplash.current && isLoading && (
+      {showSplash && isLoading && (
         <SplashScreen
           onComplete={handleComplete}
           onPortalOpen={handlePortalOpen}
