@@ -3,14 +3,18 @@
 import { useState, useCallback } from "react";
 import { SplashScreen } from "./SplashScreen";
 
+const ENABLE_SPLASH = process.env.NEXT_PUBLIC_ENABLE_SPLASH !== "false";
+
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(() => {
+    if (!ENABLE_SPLASH) return false;
     if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
       return false;
     }
     return true;
   });
   const [portalEmerge, setPortalEmerge] = useState(() => {
+    if (!ENABLE_SPLASH) return true;
     if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
       return true;
     }
@@ -28,7 +32,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {isLoading && (
+      {ENABLE_SPLASH && isLoading && (
         <SplashScreen
           onComplete={handleComplete}
           onPortalOpen={handlePortalOpen}
