@@ -503,7 +503,7 @@ export function ProfileSection() {
     <motion.section
       id="profile"
       ref={containerRef}
-      className="relative min-h-screen py-8 px-4 md:px-6 overflow-hidden"
+      className="relative min-h-screen py-8 px-4 md:px-6 overflow-hidden scroll-mt-20"
       aria-labelledby="profile-heading"
     >
       {/* L0: Background parallax — grid + circles */}
