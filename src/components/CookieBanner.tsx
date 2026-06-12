@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext, useCallback } from "react";
+import { useState, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X, Eye, EyeOff, ShieldCheck } from "lucide-react";
 
@@ -54,12 +54,12 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     } catch {}
     return false;
   });
-  const [mounted, setMounted] = useState(() => typeof window !== "undefined");
+  const [mounted] = useState(() => typeof window !== "undefined");
   const [showAdsOptions, setShowAdsOptions] = useState(false);
 
   // We can't use useMonetizationConsent here because CookieBannerProvider
   // wraps MonetizationProvider, so we manage ads consent directly
-  const [adsChoice, setAdsChoice] = useState<"none" | "non-personalized" | "personalized">("none");
+  const [, setAdsChoice] = useState<"none" | "non-personalized" | "personalized">("none");
 
   // No more need for the initialization effect — state is lazy-initialized
 

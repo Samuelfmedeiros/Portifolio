@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
 import { ExternalLink, Star, GitFork, Calendar, Zap } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
@@ -127,11 +128,12 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
             {repo.imageUrl ? (
-              <img
+              <Image
                 src={repo.imageUrl}
                 alt={repo.name}
+                fill
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
-                loading="lazy"
+                unoptimized
               />
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
@@ -155,11 +157,12 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
             {repo.imageUrl ? (
-              <img
+              <Image
                 src={repo.imageUrl}
                 alt={repo.name}
-                className="absolute inset-0 w-full h-full object-cover"
-                loading="lazy"
+                fill
+                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
+                unoptimized
               />
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>

@@ -13,7 +13,7 @@ import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
-import { CookieBannerProvider, useAnalyticsConsent } from "@/components/CookieBanner";
+import { CookieBannerProvider } from "@/components/CookieBanner";
 import { MonetizationProvider, AdSense } from "@/components/monetization";
 import { SITE_URL } from "@/lib/types";
 import "./globals.css";

@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { GlassCard } from "./GlassCard";
-import { Star, GitFork, Users, Code2, BookOpen, Activity } from "lucide-react";
+import { Star, GitFork, Users, BookOpen, Activity } from "lucide-react";
 
 interface GitHubStats {
   stars: number;

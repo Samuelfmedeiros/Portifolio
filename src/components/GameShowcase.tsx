@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Star, GitFork, Calendar, Grid3X3, List } from "lucide-react";
 import { GlassCard } from "./GlassCard";

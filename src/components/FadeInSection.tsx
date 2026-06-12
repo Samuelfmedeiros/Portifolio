@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { motion, useInView } from "framer-motion";
 
 interface FadeInSectionProps {
@@ -9,14 +9,8 @@ interface FadeInSectionProps {
   delay?: number;
   direction?: "up" | "down" | "left" | "right" | "none";
   distance?: number;
-  threshold?: number;
   once?: boolean;
 }
-
-const defaultVariants = {
-  hidden: { opacity: 0 },
-  visible: { opacity: 1, y: 0, x: 0 },
-};
 
 export function FadeInSection({
   children,
@@ -24,7 +18,6 @@ export function FadeInSection({
   delay = 0,
   direction = "up",
   distance = 30,
-  threshold = 0.1,
   once = true,
 }: FadeInSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
@@ -89,14 +82,12 @@ interface StaggerContainerProps {
   children: React.ReactNode;
   className?: string;
   staggerDelay?: number;
-  threshold?: number;
 }
 
 export function StaggerContainer({
   children,
   className = "",
   staggerDelay = 0.1,
-  threshold = 0.1,
 }: StaggerContainerProps) {
   const ref = useRef<HTMLDivElement>(null);
   const isInView = useInView(ref, { once: true, margin: "-50px 0px" });

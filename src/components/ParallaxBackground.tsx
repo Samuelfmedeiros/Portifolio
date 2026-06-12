@@ -48,10 +48,9 @@ export function ParallaxBackground() {
     let animationId: number;
     let scrollY = 0;
     let lastScrollY = 0;
-    let scrollVelocity = 0;
+    let scrollVelocity = 0; // eslint-disable-line @typescript-eslint/no-unused-vars
     let mouseX = 0;
     let mouseY = 0;
-    let planetStartAngle = 0;
 
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -121,13 +120,11 @@ export function ParallaxBackground() {
 
       // Decay scroll velocity
       scrollVelocity *= 0.92;
-      const warpFactor = Math.min(scrollVelocity / 80, 1);
 
       // Update planet size relative to viewport
       planet.radius = Math.min(w, h) * 0.12;
       planet.rotation += planet.rotationSpeed;
       planet.bandOffset = Math.sin(planet.rotation * 2) * 0.3;
-      planetStartAngle += 0.001;
 
       // --- BACKGROUND ---
       if (dark) {
