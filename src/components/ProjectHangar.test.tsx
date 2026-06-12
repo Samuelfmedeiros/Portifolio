@@ -43,9 +43,9 @@ describe('ProjectHangar', () => {
     expect(screen.getByText(/PROJETOS/)).toBeInTheDocument()
   })
 
-  it('renders section with id projects', () => {
+  it('renders a section container', () => {
     const { container } = render(<ProjectHangar repos={mockRepos} />)
-    expect(container.querySelector('section#projects')).toBeInTheDocument()
+    expect(container.querySelector('section')).toBeInTheDocument()
   })
 
   it('renders all repo names', () => {

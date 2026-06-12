@@ -19,5 +19,14 @@ Portfolio profissional estilo painel de controle sci-fi. Next.js 16 + Tailwind 4
 ## Stack
 Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase · Playwright · Vitest
 
+## Lint Status
+**0 errors, 0 warnings** — ESLint limpo. Build compila sem TypeScript errors.
+
+## Fixes Recentes
+- Navbar navegação: scroll único com offset, sem scrollend/timeout
+- Logo `#hero` → scroll pro topo (seção não existia)
+- `activeSection` inicial corrigido de `"hero"` → `"profile"`
+- ProfileSection: `scroll-mt-20` adicionado
+
 ## CI/CD
 GitHub Actions → lint → test (vitest --run) → build → deploy Vercel. Preview deploys em PRs.
