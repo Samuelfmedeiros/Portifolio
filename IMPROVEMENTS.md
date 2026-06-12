@@ -106,14 +106,15 @@
 ### 🚧 Próximo Ciclo
 
 #### Performance
-- [ ] Image optimization com next/image
+- [x] Image optimization com next/image (ProjectHangar)
 - [ ] Code splitting de bundles grandes
 - [ ] Lighthouse performance audit
 
 #### Acessibilidade
-- [ ] Trap focus em modais (Terminal, UtilityDeck)
-- [ ] Teste com NVDA/VoiceOver
-- [ ] Aria-describedby em formulários
+- [x] Trap focus em modais (Terminal, UtilityDeck)
+- [x] Teste com NVDA/VoiceOver
+- [x] Aria-describedby em formulários
+- [x] profile-heading id adicionado (aria-labelledby na ProfileSection)
 
 #### SEO
 - [ ] Sitemap lastmod e priority dinâmicos

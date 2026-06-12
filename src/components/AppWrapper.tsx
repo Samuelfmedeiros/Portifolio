@@ -1,20 +1,41 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { SplashScreen } from "./SplashScreen";
 
-const ENABLE_SPLASH = process.env.NEXT_PUBLIC_ENABLE_SPLASH !== "false";
+/**
+ * Decides whether to show the splash:
+ * 1. Env var override (NEXT_PUBLIC_ENABLE_SPLASH) — for manual control
+ * 2. Auto-detect: skip splash on Vercel production domains
+ * 3. Default: true (splash shows on localhost, staging, etc.)
+ */
+function shouldShowSplash(): boolean {
+  // Env var override — use it if explicitly set
+  const envVal = process.env.NEXT_PUBLIC_ENABLE_SPLASH;
+  if (envVal === "false") return false;
+  if (envVal === "true") return true;
+
+  // Auto-detect: skip on Vercel production
+  if (typeof window !== "undefined") {
+    const host = window.location.hostname;
+    if (host.endsWith(".vercel.app")) return false;
+  }
+
+  return true;
+}
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
+  const showSplash = useRef(shouldShowSplash());
+
   const [isLoading, setIsLoading] = useState(() => {
-    if (!ENABLE_SPLASH) return false;
+    if (!showSplash.current) return false;
     if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
       return false;
     }
     return true;
   });
   const [portalEmerge, setPortalEmerge] = useState(() => {
-    if (!ENABLE_SPLASH) return true;
+    if (!showSplash.current) return true;
     if (typeof window !== "undefined" && sessionStorage.getItem("visited")) {
       return true;
     }
@@ -32,7 +53,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
 
   return (
     <>
-      {ENABLE_SPLASH && isLoading && (
+      {showSplash.current && isLoading && (
         <SplashScreen
           onComplete={handleComplete}
           onPortalOpen={handlePortalOpen}
