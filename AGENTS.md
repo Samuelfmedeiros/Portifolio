@@ -36,3 +36,14 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase �
 
 ## CI/CD
 GitHub Actions → lint → test (vitest --run) → build → deploy Vercel. Preview deploys em PRs.
+
+## ⚙️ Staging (Capivara)
+MC tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
+- **Sistema:** systemd `mission-control-staging.service` na porta 3000 (`systemctl --user enable mission-control-staging`)
+- **URL local:** http://localhost:3000
+- **Proxy Capivara:** `/api/mc-proxy/` (autenticado, só usuários logados)
+- **Dashboard:** seção "MC Staging" no capivara.seu.pet com iframe
+- **Splash:** `NEXT_PUBLIC_ENABLE_SPLASH=true` (Tatu ativo)
+- **X-Frame-Options:** `SAMEORIGIN` (permite iframe do capivara.seu.pet)
+- **Build:** `pnpm build` antes de alterações
+- **Reiniciar:** `systemctl --user restart mission-control-staging`
