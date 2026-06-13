@@ -2,13 +2,22 @@ import { render } from '@testing-library/react'
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
 import { GitHubStatsSection } from './GitHubStatsSection'
 
-// Mock fetch for GitHub API
-const mockFetch = vi.fn(() =>
-  Promise.resolve({
+// Mock fetch for GitHub API — returns different responses per URL
+const mockFetch = vi.fn((url: string) => {
+  if (url.includes("/repos")) {
+    return Promise.resolve({
+      ok: true,
+      json: () => Promise.resolve([
+        { stargazers_count: 5, forks_count: 2 },
+        { stargazers_count: 3, forks_count: 1 },
+      ]),
+    });
+  }
+  return Promise.resolve({
     ok: true,
     json: () => Promise.resolve({ public_repos: 10, followers: 5 }),
-  })
-) as unknown as typeof globalThis.fetch
+  });
+}) as unknown as typeof globalThis.fetch
 
 beforeEach(() => {
   vi.stubGlobal('fetch', mockFetch)
