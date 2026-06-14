@@ -509,11 +509,8 @@ export function ProfileSection() {
       className="relative min-h-screen py-8 px-4 md:px-6 overflow-hidden scroll-mt-20"
       aria-labelledby="profile-heading"
     >
-      {/* L0: Background parallax — grid + circles */}
+      {/* L0: Background parallax — grid + circles (sempre visível) */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
         style={{ y: bgY }}
         className="absolute inset-0 z-0"
       >
@@ -527,11 +524,8 @@ export function ProfileSection() {
         <div className="absolute bottom-1/3 right-1/3 w-1.5 h-1.5 bg-[var(--accent)] rounded-full opacity-15" />
       </motion.div>
 
-      {/* L1: Cockpit SVG overlay */}
+      {/* L1: Cockpit SVG overlay (sempre visível) */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 0.6, ease: "easeOut" }}
         style={{ y: svgY }}
         className="absolute inset-0 z-[1] pointer-events-none"
       >
