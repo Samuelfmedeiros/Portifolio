@@ -2,11 +2,15 @@
 
 ## Identity
 
-**Portfolio profissional estilo painel de controle sci-fi.** Interface imersiva com tema ciano+preto, animações cinematográficas e boot sequence estilo Tatu cavando buraco negro.
+**Portfolio profissional estilo painel de controle sci-fi.** Interface imersiva com tema ciano+preto, animações cinematográficas e boot sequence estilo Tatu cavando buraco negro. Não é um portfolio comum — é uma experiência de "painel de controle" onde o usuário pilota o sistema.
 
-**Propósito:** Apresentar Samuel Medeiros como desenvolvedor full-stack com portfólio interativo. Diferencia-se de portfolios tradicionais ao transformar a navegação em uma experiência de "painel de controle".
+**Problema que resolve:** Portfolios tradicionais são currículos fancy que não demonstram capacidade técnica real. Mission Control transforma a navegação em vitrine do que Samuel sabe fazer: animações fluidas, design system consistente, arquitetura Next.js madura, testes E2E, acessibilidade e performance.
 
-**Seções:** Profile, Skills Grid (ícones + categorias), Core Engine (About Me), Projetos (ProjectHangar com cards), Games (grid/tabs), Contato (com rate limit e validação), Footer expandido.
+**Propósito:** Apresentar Samuel Medeiros como desenvolvedor full-stack com portfólio interativo. Cada seção é um componente isolado com seu próprio micro-design — como módulos de uma nave espacial.
+
+**Seções:** Profile (hero c/ foto e bio) → Skills Grid (ícones por categoria) → Core Engine (About Me narrativo) → ProjectHangar (cards com filtro) → Games (um por vez + toggle "ver todos") → Contato (rate-limited + validação) → Footer (links, stats, navegação).
+
+**Experiência do usuário:** Splash opcional com Tatu cavando buraco negro (5 fases, skip button). Scroll suave com navbar highlight. Navegação por scroll + keyboard shortcuts (desktop). Tema escuro ciano+preto com consistência visual cinematográfica.
 
 **URL:** https://samuelmedeiros.vercel.app
 **Git:** GitHub (público) — Samuelfmedeiros/mission-control
