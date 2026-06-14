@@ -28,6 +28,18 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   const [isLoading, setIsLoading] = useState(true);
   const [portalEmerge, setPortalEmerge] = useState(false);
 
+  // Safety timeout: se portalEmerge não acontecer em 12s, força visibilidade
+  useEffect(() => {
+    const t = setTimeout(() => {
+      if (!portalEmerge) {
+        setPortalEmerge(true);
+        setIsLoading(false);
+        setShowSplash(false);
+      }
+    }, 12000);
+    return () => clearTimeout(t);
+  }, [portalEmerge]);
+
   // Run once on mount: re-evaluate splash decision on client
   useEffect(() => {
     const show = shouldShowSplash();

@@ -253,6 +253,9 @@ function DataParticles() {
     }));
   }, []);
 
+  // Altura fixa de 900px (viewport independente), sem depender de window
+  const animHeight = 900;
+
   return (
     <div className="absolute inset-0 z-[1] pointer-events-none overflow-hidden" aria-hidden="true">
       {particles.map((p) => (
@@ -267,7 +270,7 @@ function DataParticles() {
             backgroundColor: "var(--accent)",
           }}
           animate={{
-            y: [0, -(typeof window !== "undefined" ? window.innerHeight + 20 : 900)],
+            y: [0, -animHeight],
             x: [0, p.drift],
             opacity: [0, 0.5, 0.3, 0],
           }}
