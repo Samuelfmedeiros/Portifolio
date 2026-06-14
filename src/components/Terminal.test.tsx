@@ -11,7 +11,7 @@ vi.mock('./MiniGames/MissionGames', () => ({
 describe('Terminal', () => {
   it('renders initial welcome banner', () => {
     render(<Terminal />)
-    expect(screen.getByText(/MISSION CONTROL/)).toBeInTheDocument()
+    expect(screen.getByText(/PORTIFOLIO/)).toBeInTheDocument()
   })
 
   it('renders input field', () => {
