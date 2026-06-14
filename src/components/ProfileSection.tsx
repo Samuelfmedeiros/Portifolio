@@ -153,8 +153,8 @@ function FloatingHexagons({ yOffset }: { yOffset: MotionValue<string> }) {
             rotate: [0, 15, 0, -15, 0],
           }}
           transition={{
-            y: { duration: 5 + h.id * 2, repeat: Infinity, ease: "easeInOut", delay: h.delay },
-            rotate: { duration: 8 + h.id * 3, repeat: Infinity, ease: "easeInOut", delay: h.delay },
+            y: { duration: 5 + h.id * 2, repeat: Infinity, ease: "easeInOut", delay: h.delay + 2 },
+            rotate: { duration: 8 + h.id * 3, repeat: Infinity, ease: "easeInOut", delay: h.delay + 2 },
           }}
         >
           <svg width={h.size} height={h.size} viewBox="-22 -22 44 44" className="overflow-visible">
@@ -202,7 +202,7 @@ function HUDDataPanels({ yOffset }: { yOffset: MotionValue<string> }) {
             opacity: [0.04, 0.1, 0.04],
           }}
           transition={{
-            opacity: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: panel.delay },
+            opacity: { duration: 4, repeat: Infinity, ease: "easeInOut", delay: panel.delay + 2 },
           }}
         >
           <div
@@ -277,7 +277,7 @@ function DataParticles() {
           transition={{
             duration: p.duration,
             repeat: Infinity,
-            delay: p.delay,
+            delay: p.delay + 2,
             ease: "linear",
           }}
         />
@@ -305,7 +305,7 @@ function CircuitLines() {
         strokeDasharray="6 4"
         initial={{ strokeDashoffset: 0 }}
         animate={{ strokeDashoffset: -100 }}
-        transition={{ duration: 3, repeat: Infinity, ease: "linear" }}
+        transition={{ duration: 3, repeat: Infinity, ease: "linear", delay: 2 }}
       />
       {/* Circuit path 2 — top right to center */}
       <motion.path
@@ -317,7 +317,7 @@ function CircuitLines() {
         strokeDasharray="6 4"
         initial={{ strokeDashoffset: 0 }}
         animate={{ strokeDashoffset: -100 }}
-        transition={{ duration: 3.5, repeat: Infinity, ease: "linear", delay: 0.5 }}
+        transition={{ duration: 3.5, repeat: Infinity, ease: "linear", delay: 2.5 }}
       />
       {/* Circuit path 3 — bottom left */}
       <motion.path
@@ -329,7 +329,7 @@ function CircuitLines() {
         strokeDasharray="8 6"
         initial={{ strokeDashoffset: 0 }}
         animate={{ strokeDashoffset: 100 }}
-        transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 1 }}
+        transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 3 }}
       />
       {/* Circuit path 4 — bottom right */}
       <motion.path
@@ -341,7 +341,7 @@ function CircuitLines() {
         strokeDasharray="8 6"
         initial={{ strokeDashoffset: 0 }}
         animate={{ strokeDashoffset: 100 }}
-        transition={{ duration: 4.5, repeat: Infinity, ease: "linear", delay: 1.5 }}
+        transition={{ duration: 4.5, repeat: Infinity, ease: "linear", delay: 3.5 }}
       />
     </svg>
   );
