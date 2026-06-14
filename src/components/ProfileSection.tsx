@@ -557,17 +557,17 @@ export function ProfileSection() {
         >
           <motion.h1
             id="profile-heading"
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 12 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+            transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-3"
           >
             Samuel{" "}
             <motion.span
               className="text-[var(--accent)] inline"
-              initial={{ opacity: 0, y: 30 }}
+              initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.22, 1, 0.36, 1] }}
+              transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
             >
               Medeiros
             </motion.span>
@@ -581,9 +581,9 @@ export function ProfileSection() {
           />
 
           <motion.p
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6 }}
+            transition={{ duration: 0.6, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
             className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-6 h-7"
           >
             <TypeWriter
@@ -601,9 +601,9 @@ export function ProfileSection() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.1 }}
+            transition={{ duration: 0.6, delay: 1.1, ease: [0.4, 0, 0.2, 1] }}
             className="flex flex-col sm:flex-row gap-3 justify-center"
           >
             <a
