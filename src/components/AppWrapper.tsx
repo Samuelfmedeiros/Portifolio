@@ -23,33 +23,28 @@ function shouldShowSplash(): boolean {
 }
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  // SSR-safe initial value (true = splash on). Client effect will correct it.
   const [showSplash, setShowSplash] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
-  const [portalEmerge, setPortalEmerge] = useState(false);
 
-  // Safety timeout: se portalEmerge não acontecer em 12s, força visibilidade
+  // Safety timeout: força exibição do conteúdo após 5s
   useEffect(() => {
     const t = setTimeout(() => {
-      if (!portalEmerge) {
-        setPortalEmerge(true);
+      if (isLoading) {
         setIsLoading(false);
         setShowSplash(false);
       }
-    }, 12000);
+    }, 5000);
     return () => clearTimeout(t);
-  }, [portalEmerge]);
+  }, [isLoading]);
 
-  // Run once on mount: re-evaluate splash decision on client
+  // Run once on mount
   useEffect(() => {
     const show = shouldShowSplash();
     setShowSplash(show);
     if (!show) {
       setIsLoading(false);
-      setPortalEmerge(true);
     } else if (sessionStorage.getItem("visited")) {
       setIsLoading(false);
-      setPortalEmerge(true);
     }
   }, []);
 
@@ -58,79 +53,21 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
     setIsLoading(false);
   }, []);
 
-  const handlePortalOpen = useCallback(() => {
-    setPortalEmerge(true);
-  }, []);
-
   return (
     <>
       {showSplash && isLoading && (
-        <SplashScreen
-          onComplete={handleComplete}
-          onPortalOpen={handlePortalOpen}
-        />
+        <SplashScreen onComplete={handleComplete} />
       )}
 
-      {/* Children render at all times — emerge animation starts when portal opens */}
+      {/* Content fade-in */}
       <div
-        className={portalEmerge ? "portal-emerge" : ""}
         style={{
-          opacity: portalEmerge ? undefined : 0,
-          transform: portalEmerge ? undefined : "scale(0.85)",
-          filter: portalEmerge ? undefined : "blur(6px)",
+          opacity: isLoading ? 0 : undefined,
+          transition: "opacity 0.5s ease-in",
         }}
       >
         {children}
       </div>
-
-      <style>{`
-        .portal-emerge {
-          animation: portal-fade-in 0.3s ease-out forwards;
-        }
-        .portal-emerge > *:nth-child(1) {
-          animation: emerge-item 1s cubic-bezier(0.16, 1, 0.3, 1) 0.1s both;
-        }
-        .portal-emerge > *:nth-child(2) {
-          animation: emerge-item 1s cubic-bezier(0.16, 1, 0.3, 1) 0.25s both;
-        }
-        .portal-emerge > *:nth-child(3) {
-          animation: emerge-item 1s cubic-bezier(0.16, 1, 0.3, 1) 0.4s both;
-        }
-        .portal-emerge > *:nth-child(4) {
-          animation: emerge-item 1s cubic-bezier(0.16, 1, 0.3, 1) 0.55s both;
-        }
-        .portal-emerge > *:nth-child(5) {
-          animation: emerge-item 1s cubic-bezier(0.16, 1, 0.3, 1) 0.7s both;
-        }
-        .portal-emerge > *:nth-child(n+6) {
-          animation: emerge-item 1s cubic-bezier(0.16, 1, 0.3, 1) 0.85s both;
-        }
-
-        @keyframes portal-fade-in {
-          0% {
-            opacity: 0;
-          }
-          100% {
-            opacity: 1;
-          }
-        }
-
-        @keyframes emerge-item {
-          0% {
-            opacity: 0;
-            transform: scale(0.85) translateY(15px);
-            filter: blur(6px);
-          }
-          50% {
-            filter: blur(0);
-          }
-          100% {
-            opacity: 1;
-            transform: scale(1) translateY(0);
-            filter: blur(0);
-          }
-        }
-      `}</style>
     </>
   );
 }
