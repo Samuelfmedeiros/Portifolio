@@ -1,9 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 
-const TOTAL_DURATION = 600; // 0.6s — só um flash de grid
+const TOTAL_DURATION = 600;
 
 interface Props {
   onComplete: () => void;
@@ -23,51 +22,40 @@ export function SplashScreen({ onComplete }: Props) {
       if (!doneRef.current) {
         doneRef.current = true;
         setShow(false);
-        setTimeout(() => onCompleteRef.current(), 100);
+        setTimeout(() => onCompleteRef.current(), 80);
       }
     }, TOTAL_DURATION);
     return () => clearTimeout(t);
   }, []);
 
-  return (
-    <AnimatePresence>
-      {show && (
-        <motion.div
-          className="fixed inset-0 z-50 flex items-center justify-center"
-          style={{
-            background: "#000",
-          }}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.15, ease: "easeInOut" }}
-        >
-          {/* Grid de cockpit — fade in/out rápido */}
-          <div
-            className="absolute inset-0"
-            style={{
-              background: `
-                linear-gradient(to right, rgba(34,211,238,0.12) 1px, transparent 1px),
-                linear-gradient(to bottom, rgba(34,211,238,0.12) 1px, transparent 1px)
-              `,
-              backgroundSize: "60px 60px",
-              maskImage: "radial-gradient(ellipse at center, black 30%, transparent 70%)",
-              WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 70%)",
-            }}
-          />
+  if (!show) return null;
 
-          {/* Centro — glow sutil */}
-          <motion.div
-            className="absolute w-24 h-24 rounded-full"
-            style={{
-              background: "radial-gradient(circle, rgba(34,211,238,0.15) 0%, transparent 70%)",
-            }}
-            initial={{ opacity: 0, scale: 0.5 }}
-            animate={{ opacity: [0, 1, 0.5, 0], scale: [0.5, 1.2, 1, 0.8] }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          />
-        </motion.div>
-      )}
-    </AnimatePresence>
+  return (
+    <div
+      className="fixed inset-0 z-50"
+      style={{
+        background: "#000",
+        animation: "mc-splash-fade 0.6s ease-out forwards",
+      }}
+    >
+      {/* Grid repeating-linear-gradient (GPU acelerado) */}
+      <div
+        className="absolute inset-0"
+        style={{
+          opacity: 0.15,
+          backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(34,211,238,0.25) 39px, rgba(34,211,238,0.25) 40px),
+                            repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(34,211,238,0.25) 39px, rgba(34,211,238,0.25) 40px)`,
+        }}
+      />
+
+      <style>{`
+        @keyframes mc-splash-fade {
+          0%   { opacity: 0; }
+          15%  { opacity: 1; }
+          70%  { opacity: 0.7; }
+          100% { opacity: 0; }
+        }
+      `}</style>
+    </div>
   );
 }
