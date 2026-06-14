@@ -8,7 +8,7 @@ import type { Command } from "@/lib/types";
 
 const BANNER = [
   " ╔══════════════════════════════════════╗",
-  " ║     🛰️  MISSION CONTROL  v2.0      ║",
+  " ║     🛰️  PORTIFOLIO  v2.0           ║",
   " ║     Samuel Medeiros — Dev Full Stack║",
   " ╚══════════════════════════════════════╝",
   "",
@@ -176,7 +176,7 @@ Experiência:
         output = `
         ╭───────────────╮         samuel@portfolio
         │   🛰️  Portifolio v2  │         ──────────────────
-        │  Mission Ctrl │         OS: Web (Next.js 16)
+        │  Portifólio   │         OS: Web (Next.js 16)
         ╰───────────────╯         Host: ${typeof navigator !== 'undefined' ? navigator.platform : 'unknown'}
                                   Shell: Terminal React
                                   Theme: ${typeof document !== 'undefined' ? document.documentElement.classList.contains('theme-dark') ? 'Night Vision' : 'Daylight Ops' : 'unknown'}
@@ -551,7 +551,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
         </div>
       </GlassCard>
 
-      {/* Mission Games */}
+      {/* Portifolio Games */}
       <div className="max-w-3xl mx-auto mt-8">
         <MissionGames />
       </div>
