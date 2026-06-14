@@ -26,13 +26,26 @@ describe('AppWrapper', () => {
     vi.useRealTimers()
   })
 
-  it('renders children', () => {
+  it('renders children after splash completes', async () => {
+    vi.useRealTimers()
     render(
       <AppWrapper>
         <div data-testid="child-content">Hello World</div>
       </AppWrapper>
     )
-    expect(screen.getByTestId('child-content')).toBeInTheDocument()
+
+    // Initially shows splash, children not rendered yet
+    expect(screen.getByTestId('splash-screen')).toBeInTheDocument()
+    expect(screen.queryByTestId('child-content')).not.toBeInTheDocument()
+
+    // Complete splash
+    act(() => {
+      screen.getByText('Complete').click()
+    })
+
+    await waitFor(() => {
+      expect(screen.getByTestId('child-content')).toBeInTheDocument()
+    })
   })
 
   it('shows SplashScreen on first visit (no sessionStorage)', () => {
