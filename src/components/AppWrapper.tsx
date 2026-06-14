@@ -3,6 +3,9 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { SplashScreen } from "./SplashScreen";
 
+const SPLASH_MS = 1200;
+const CONTENT_MOUNT_MS = 1000; // Monta conteúdo 200ms antes do splash acabar (crossfade)
+
 function shouldShowSplashOnClient(): boolean {
   const envVal = process.env.NEXT_PUBLIC_ENABLE_SPLASH;
   if (envVal === "false") return false;
@@ -23,8 +26,16 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
       setShowSplash(false);
       setShowContent(true);
     }
-    // Senão: splash fica visível, conteúdo espera handleComplete
   }, []);
+
+  // Pré-monta conteúdo antes do splash acabar (crossfade)
+  useEffect(() => {
+    if (!showSplash || showContent) return;
+    const t = setTimeout(() => {
+      setShowContent(true);
+    }, CONTENT_MOUNT_MS);
+    return () => clearTimeout(t);
+  }, [showSplash, showContent]);
 
   // Safety timeout — evita splash infinito
   useEffect(() => {
@@ -36,7 +47,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
         setShowSplash(false);
         setShowContent(true);
       }
-    }, 5000);
+    }, SPLASH_MS + 3000);
     return () => clearTimeout(t);
   }, [showSplash, showContent]);
 
