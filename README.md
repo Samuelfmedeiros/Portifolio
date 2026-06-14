@@ -1,4 +1,4 @@
-# 🛰️ Mission Control — Portfólio Futurista
+Portfólio
 
 > Portfólio pessoal com vibe de cockpit de nave espacial — telemetria em tempo real, mini-games e terminal interativo.
 
