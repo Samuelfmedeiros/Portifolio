@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useEffect, useRef } from "react";
 
 const TOTAL_DURATION = 600;
 
@@ -9,26 +9,18 @@ interface Props {
 }
 
 export function SplashScreen({ onComplete }: Props) {
-  const [show, setShow] = useState(true);
   const doneRef = useRef(false);
-  const onCompleteRef = useRef(onComplete);
-
-  useEffect(() => {
-    onCompleteRef.current = onComplete;
-  }, [onComplete]);
 
   useEffect(() => {
     const t = setTimeout(() => {
       if (!doneRef.current) {
         doneRef.current = true;
-        setShow(false);
-        setTimeout(() => onCompleteRef.current(), 80);
+        onComplete();
       }
     }, TOTAL_DURATION);
     return () => clearTimeout(t);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  if (!show) return null;
 
   return (
     <div
