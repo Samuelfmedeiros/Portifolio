@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 
-const TOTAL_DURATION = 600;
+const TOTAL_DURATION = 1200;
 
 interface Props {
   onComplete: () => void;
@@ -29,7 +29,7 @@ export function SplashScreen({ onComplete }: Props) {
         inset: 0,
         zIndex: 50,
         background: "#000",
-        animation: "splashFade 0.6s ease-out forwards",
+        animation: `splashFade ${TOTAL_DURATION}ms ease-out forwards`,
       }}
     >
       <div
