@@ -25,7 +25,7 @@ interface BootLine {
 }
 
 const BOOT_LINES: BootLine[] = [
-  { text: "TATU PROCURE SYSTEM...",        phase: PHASES.INIT },
+  { text: "SEARCHING...",        phase: PHASES.INIT },
   { text: "SCANNING PORTFOLIO SPACE",      phase: PHASES.DESCEND },
   { text: "TARGET ACQUIRED",               phase: PHASES.CROSS, accent: true },
   { text: "EXCAVATION DRILL ARMED",        phase: PHASES.DIG },
