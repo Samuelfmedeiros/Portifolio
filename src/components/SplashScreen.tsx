@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
-const TOTAL_DURATION = 2000; // 2s — clean, minimal
+const TOTAL_DURATION = 600; // 0.6s — só um flash de grid
 
 interface Props {
   onComplete: () => void;
@@ -23,7 +23,7 @@ export function SplashScreen({ onComplete }: Props) {
       if (!doneRef.current) {
         doneRef.current = true;
         setShow(false);
-        setTimeout(() => onCompleteRef.current(), 400);
+        setTimeout(() => onCompleteRef.current(), 100);
       }
     }, TOTAL_DURATION);
     return () => clearTimeout(t);
@@ -33,54 +33,39 @@ export function SplashScreen({ onComplete }: Props) {
     <AnimatePresence>
       {show && (
         <motion.div
-          className="fixed inset-0 z-50 flex flex-col items-center justify-center select-none"
+          className="fixed inset-0 z-50 flex items-center justify-center"
           style={{
-            background: "radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%)",
+            background: "#000",
           }}
-          initial={{ opacity: 1 }}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
-          transition={{ duration: 0.4, ease: "easeInOut" }}
+          transition={{ duration: 0.15, ease: "easeInOut" }}
         >
-          {/* Central content */}
-          <motion.div
-            className="text-center"
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, ease: "easeOut" }}
-          >
-            <div className="text-5xl mb-4">🚀</div>
-            <h1
-              className="font-mono text-lg tracking-[0.3em]"
-              style={{ color: "#22d3ee", textShadow: "0 0 20px rgba(34,211,238,0.4)" }}
-            >
-              MISSION CONTROL
-            </h1>
-            <div className="mt-6 flex items-center justify-center gap-2">
-              <div
-                className="w-2 h-2 rounded-full animate-pulse"
-                style={{ backgroundColor: "#22d3ee", boxShadow: "0 0 6px #22d3ee" }}
-              />
-              <span className="font-mono text-[10px] tracking-[0.2em]" style={{ color: "rgba(34,211,238,0.5)" }}>
-                INITIALIZING SYSTEM...
-              </span>
-            </div>
-          </motion.div>
-
-          {/* Progress bar */}
+          {/* Grid de cockpit — fade in/out rápido */}
           <div
-            className="absolute bottom-[15%] left-1/2 -translate-x-1/2 w-48 h-[2px] rounded-full overflow-hidden"
-            style={{ background: "rgba(34,211,238,0.1)" }}
-          >
-            <motion.div
-              className="h-full rounded-full"
-              style={{
-                background: "linear-gradient(90deg, #6366f1, #22d3ee)",
-              }}
-              initial={{ width: "0%" }}
-              animate={{ width: "100%" }}
-              transition={{ duration: 1.8, ease: "easeInOut" }}
-            />
-          </div>
+            className="absolute inset-0"
+            style={{
+              background: `
+                linear-gradient(to right, rgba(34,211,238,0.12) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(34,211,238,0.12) 1px, transparent 1px)
+              `,
+              backgroundSize: "60px 60px",
+              maskImage: "radial-gradient(ellipse at center, black 30%, transparent 70%)",
+              WebkitMaskImage: "radial-gradient(ellipse at center, black 30%, transparent 70%)",
+            }}
+          />
+
+          {/* Centro — glow sutil */}
+          <motion.div
+            className="absolute w-24 h-24 rounded-full"
+            style={{
+              background: "radial-gradient(circle, rgba(34,211,238,0.15) 0%, transparent 70%)",
+            }}
+            initial={{ opacity: 0, scale: 0.5 }}
+            animate={{ opacity: [0, 1, 0.5, 0], scale: [0.5, 1.2, 1, 0.8] }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+          />
         </motion.div>
       )}
     </AnimatePresence>
