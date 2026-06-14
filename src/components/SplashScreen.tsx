@@ -451,19 +451,20 @@ export function SplashScreen({ onComplete, onPortalOpen }: Props) {
     return () => cancelAnimationFrame(raf);
   }, [prefersReducedMotion, onPortalOpen]);
 
-  // Force complete safety timeout
+  // Safety timeout: se o onComplete não for chamado, força saída em 8s
   useEffect(() => {
     const timer = setTimeout(() => {
       if (!doneRef.current) {
         doneRef.current = true;
         setExiting(true);
-        setTimeout(() => onCompleteRef.current(), 400);
+        setTimeout(() => onCompleteRef.current(), 200);
       }
-    }, TOTAL_DURATION + 3000);
+    }, 8000);
     return () => clearTimeout(timer);
   }, []);
 
-  // ── Tatu position from phase ──
+  // ── Transition: when exiting, fade out z-index
+  const splashZ = exiting ? 40 : 50;
   const tatuTop = (() => {
     if (phase === "init") return "12%";
     if (phase === "descend") {
@@ -500,8 +501,9 @@ export function SplashScreen({ onComplete, onPortalOpen }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50 flex flex-col items-center justify-center select-none overflow-hidden"
+      className="fixed inset-0 flex flex-col items-center justify-center select-none overflow-hidden"
       style={{
+        zIndex: splashZ,
         background: exiting ? "transparent" : "radial-gradient(ellipse at center, #0a0a1a 0%, #000 100%)",
         mask: splashMask,
         WebkitMask: splashMask,
