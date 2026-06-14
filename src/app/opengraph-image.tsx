@@ -54,7 +54,7 @@ export default function Image() {
             margin: "0 0 10px 0",
           }}
         >
-          MISSION CONTROL
+          PORTIFOLIO
         </h1>
 
         {/* Subtitle */}
