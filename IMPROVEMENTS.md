@@ -1,4 +1,4 @@
-# 🛰️ Mission Control — Melhorias Contínuas
+# 🛰️ Portifolio Samuel — Melhorias Contínuas
 
 ## Status: Correções de Consistência ✅
 
@@ -11,7 +11,7 @@
 - [x] **metadataBase** — Corrigido de Cloudflare Pages → Vercel (deploy primário)
 - [x] **sitemap.ts** — Agora inclui páginas de `/privacidade` e `/termos`
 - [x] **robots.ts** — Sitemap URL sincronizado com Vercel
-- [x] **manifest.ts** — `start_url` corrigido de `/mission-control/` → `/`
+- [x] **manifest.ts** — `start_url` corrigido de `/portifolio/` → `/`
 
 #### SEO / OG
 - [x] **OG Image** — Usa rota dinâmica `/opengraph-image` (gerada pelo next/og) em vez de `/og-image.png` estático

@@ -4,8 +4,8 @@ export const dynamic = "force-static";
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "Mission Control — Samuel Medeiros",
-    short_name: "Mission Control",
+    name: "Portifolio Samuel — Samuel Medeiros",
+    short_name: "Portifolio Samuel",
     description: "Portfólio profissional — Desenvolvedor Full Stack & Analista de Dados",
     start_url: "/",
     display: "standalone",

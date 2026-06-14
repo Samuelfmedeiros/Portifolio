@@ -1,4 +1,4 @@
-# 🚀 Deploy - Mission Control
+# 🚀 Deploy - Portifolio Samuel
 
 ## Stack
 - **Framework:** Next.js 16.2.5 (App Router)

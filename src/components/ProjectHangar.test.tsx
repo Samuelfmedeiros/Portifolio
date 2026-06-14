@@ -25,9 +25,9 @@ describe('ProjectHangar', () => {
     },
     {
       id: 2,
-      name: 'mission-control',
+      name: 'portifolio',
       description: 'Portfolio site',
-      html_url: 'https://github.com/test/mission-control',
+      html_url: 'https://github.com/test/portifolio',
       homepage: null,
       stargazers_count: 50,
       forks_count: 10,
@@ -51,7 +51,7 @@ describe('ProjectHangar', () => {
   it('renders all repo names', () => {
     render(<ProjectHangar repos={mockRepos} />)
     expect(screen.getByText('test-project')).toBeInTheDocument()
-    expect(screen.getByText('mission-control')).toBeInTheDocument()
+    expect(screen.getByText('portifolio')).toBeInTheDocument()
   })
 
   it('shows language indicator', () => {

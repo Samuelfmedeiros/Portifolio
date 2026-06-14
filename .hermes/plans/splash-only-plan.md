@@ -7,7 +7,7 @@
 
 ## Diagnóstico
 
-**Splash atual:** Tela preta + grid cyan que fade in/out em 1.2s. Genérica — não comunica "Mission Control" nem "Samuel Medeiros".
+**Splash atual:** Tela preta + grid cyan que fade in/out em 1.2s. Genérica — não comunica "Portifolio Samuel" nem "Samuel Medeiros".
 
 **O que o usuário quer:** Uma splash que:
 - Tenha personalidade (sci-fi, HUD, painel de controle)

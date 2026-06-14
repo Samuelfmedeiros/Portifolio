@@ -1,4 +1,4 @@
-# 🚀 Deploy Instructions - Mission Control
+# 🚀 Deploy Instructions - Portifolio Samuel
 
 ## ✅ Status Atual
 
@@ -32,7 +32,7 @@
 
 ```bash
 # WSL Terminal
-cd /mnt/f/SAMUEL/PROJETOS/mission-control
+cd /mnt/f/SAMUEL/PROJETOS/portifolio
 chmod +x deploy.sh
 ./deploy.sh
 ```
@@ -40,7 +40,7 @@ chmod +x deploy.sh
 ### Opção 2: Manual
 
 ```bash
-cd /mnt/f/SAMUEL/PROJETOS/mission-control
+cd /mnt/f/SAMUEL/PROJETOS/portifolio
 
 # Verificar status
 git status
@@ -59,7 +59,7 @@ git push origin master
 
 Após o push, a Vercel faz deploy automático em ~2min:
 
-1. **Build Status:** https://vercel.com/samuelfmedeiros/mission-control/activity
+1. **Build Status:** https://vercel.com/samuelfmedeiros/portifolio/activity
 2. **Live Site:** https://samuelmedeiros.vercel.app
 
 ---
@@ -119,7 +119,7 @@ curl -sL https://samuelmedeiros.vercel.app/ | grep -o "▸ HABILIDADES\|▸ JORN
 git remote -v
 
 # Se precisar reconfigurar:
-git remote set-url origin https://<TOKEN>@github.com/Samuelfmedeiros/mission-control.git
+git remote set-url origin https://<TOKEN>@github.com/Samuelfmedeiros/portifolio.git
 ```
 
 ### Build falha

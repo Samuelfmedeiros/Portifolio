@@ -37,7 +37,7 @@ const LANG_COLORS: Record<string, string> = {
 // Gradient map for known projects
 const PROJECT_GRADIENTS: Record<string, string> = {
   "seu.pet": "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
-  "mission-control": "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+  "portifolio": "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
   DogWalk: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
 };
 

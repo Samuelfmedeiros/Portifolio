@@ -4,7 +4,7 @@
 **Data:** 2026-06-11
 
 ## Contexto
-Mission Control é o portfólio profissional de Samuel. Precisava de uma identidade visual marcante, cinematográfica, que fugisse do padrão "dev portfolio genérico".
+Portifolio Samuel é o portfólio profissional de Samuel. Precisava de uma identidade visual marcante, cinematográfica, que fugisse do padrão "dev portfolio genérico".
 
 Alternativas consideradas: tema clean white/minimalista, dark padrão (Dracula, One Dark), tema retrô synthwave.
 

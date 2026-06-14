@@ -1,4 +1,4 @@
-# Mission Control — Plano de Melhorias (Arquivado)
+# Portifolio Samuel — Plano de Melhorias (Arquivado)
 
 > **Status:** COMPLETO ✅ — Todos os itens do plano original foram implementados.
 > **Data de conclusão:** 2026-05-21
@@ -13,7 +13,7 @@
 - [x] **metadataBase** — Agora usa SITE_URL (Vercel) em vez de Cloudflare Pages
 - [x] **sitemap.ts** — URLs corrigidas, add páginas de privacidade/termos
 - [x] **robots.ts** — Sitemap URL aponta pra Vercel
-- [x] **manifest.ts** — start_url='/mission-control/' → '/' (rota correta)
+- [x] **manifest.ts** — start_url='/portifolio/' → '/' (rota correta)
 - [x] **OG Image** — src relativa (`/opengraph-image`) em vez de `/og-image.png` hardcoded
 - [x] **Twitter Card image** — src relativa, resolvida via metadataBase
 - [x] **vitest.config.ts** — setupFiles adicionado (resolve matchers do jest-dom)

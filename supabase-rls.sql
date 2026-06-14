@@ -1,4 +1,4 @@
-// RLS policies for Mission Control Supabase
+// RLS policies for Portifolio Samuel Supabase
 // Run via Supabase SQL Editor or Management API
 
 // Enable RLS on tables

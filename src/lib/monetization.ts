@@ -1,4 +1,4 @@
-// === Mission Control — Monetization Configuration ===
+// === Portifolio Samuel — Monetization Configuration ===
 // Centralized config for all monetization methods.
 // All IDs are loaded from env vars for security — no hardcoded secrets.
 
@@ -106,7 +106,7 @@ export function getActiveAffiliates(category?: AffiliateLink["category"]): Affil
 /** Map project names to relevant affiliate links */
 export const PROJECT_AFFILIATES: Record<string, string[]> = {
   "seu.pet": [],
-  "mission-control": ["vercel"],
+  "portifolio": ["vercel"],
   DogWalk: ["supabase", "cloudflare"],
 };
 

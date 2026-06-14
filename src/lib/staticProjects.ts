@@ -90,5 +90,5 @@ export const STATIC_PROJECTS: Repo[] = [
   // NOTA: DogWalk removido — projeto está em fase de reformulação
 ];
 
-export const FEATURED_PROJECTS = ["mission-control", "seu.pet", "simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];
+export const FEATURED_PROJECTS = ["portifolio", "seu.pet", "simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];
 export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];

@@ -110,7 +110,7 @@ Experiência:
       case "projetos":
         output = `PROJETOS:
   🐾 DogWalk        — Plataforma de passeio de cães (Next.js + Supabase)
-  🛰️ Mission Control — Este portfólio (Next.js + Framer Motion)
+  🛰️ Portifolio Samuel — Este portfólio (Next.js + Framer Motion)
   📊 ANA Dashboards  — Dashboards de dados (Power BI + SQL)`;
         break;
 
@@ -167,7 +167,7 @@ Experiência:
 
       case "github":
         output = `GitHub: github.com/Samuelfmedeiros
-  Repos públicos: mission-control, dog-walk e mais
+  Repos públicos: portifolio, dog-walk e mais
   Linguagens: TypeScript, Python, SQL, JavaScript
   Contribuições: Frequentes`;
         break;
@@ -175,7 +175,7 @@ Experiência:
       case "neofetch":
         output = `
         ╭───────────────╮         samuel@portfolio
-        │   🛰️  MC v2  │         ──────────────────
+        │   🛰️  Portifolio v2  │         ──────────────────
         │  Mission Ctrl │         OS: Web (Next.js 16)
         ╰───────────────╯         Host: ${typeof navigator !== 'undefined' ? navigator.platform : 'unknown'}
                                   Shell: Terminal React
@@ -269,7 +269,7 @@ Exemplo: run routine:lights_out`;
 
       case "ls":
         output = ` Volume in drive C é WINDOWS
- Volume Serial Number: MC-2026
+ Volume Serial Number: PS-2026
 
  Directory of C:\\Users\\Visitor\\
 
@@ -343,7 +343,7 @@ Wireless LAN adapter Wi-Fi:
    Subnet Mask . . . . . . . . . . . : 255.0.0.0
    Default Gateway . . . . . . . . . : 10.0.0.1
 
-   🛰️ Mission Control Signal: ❚❚❚❚❚❚❚❚❚❚ 100%`;
+   🛰️ Portifolio Samuel Signal: ❚❚❚❚❚❚❚❚❚❚ 100%`;
         break;
 
       case "exit":
