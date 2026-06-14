@@ -3,12 +3,6 @@
 import { useState, useCallback, useEffect, useRef } from "react";
 import { SplashScreen } from "./SplashScreen";
 
-/**
- * Decides whether to show the splash:
- * 1. Env var override (NEXT_PUBLIC_ENABLE_SPLASH) — for manual control
- * 2. Auto-detect: skip splash on Vercel production domains
- * 3. Default: true (splash shows on localhost, staging, etc.)
- */
 function shouldShowSplash(): boolean {
   const envVal = process.env.NEXT_PUBLIC_ENABLE_SPLASH;
   if (envVal === "false") return false;
@@ -21,58 +15,48 @@ function shouldShowSplash(): boolean {
 }
 
 export function AppWrapper({ children }: { children: React.ReactNode }) {
-  const [showSplash, setShowSplash] = useState(true);
-  const [isLoading, setIsLoading] = useState(true);
-  const [contentReady, setContentReady] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+  const [splashDone, setSplashDone] = useState(false);
   const readyRef = useRef(false);
+
+  // Marca hidratação completa (padrão React para hydration)
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
+    setHydrated(true);
+  }, []);
+
+  // Se já visitou antes, pula splash direto (sem setState síncrono em efeito)
+  const skipSplash = hydrated && !shouldShowSplash();
+  const alreadyVisited = hydrated && sessionStorage.getItem("visited");
+  const showSplash = hydrated ? !skipSplash && !alreadyVisited && !splashDone : true;
 
   // Safety timeout
   useEffect(() => {
+    if (!hydrated) return;
     const t = setTimeout(() => {
       if (!readyRef.current) {
         readyRef.current = true;
-        setIsLoading(false);
-        setShowSplash(false);
-        setContentReady(true);
+        setSplashDone(true);
       }
-    }, 5000);
+    }, 4000);
     return () => clearTimeout(t);
-  }, []);
-
-  // Run once on mount
-  useEffect(() => {
-    const show = shouldShowSplash();
-    setShowSplash(show);
-    if (!show) {
-      setIsLoading(false);
-      setContentReady(true);
-    } else if (sessionStorage.getItem("visited")) {
-      setIsLoading(false);
-      setContentReady(true);
-    }
-  }, []);
+  }, [hydrated]);
 
   const handleComplete = useCallback(() => {
     if (readyRef.current) return;
     readyRef.current = true;
     sessionStorage.setItem("visited", "true");
-    setIsLoading(false);
-    // Brief delay to let exit animation play before revealing content
-    setTimeout(() => setContentReady(true), 200);
+    setTimeout(() => setSplashDone(true), 100);
   }, []);
 
   return (
     <>
-      {showSplash && isLoading && (
-        <SplashScreen onComplete={handleComplete} />
-      )}
+      {showSplash && <SplashScreen onComplete={handleComplete} />}
 
-      {/* Content: opacity transition + will-change pra GPU */}
       <div
         style={{
-          opacity: contentReady ? 1 : 0,
-          transition: "opacity 0.4s ease-out",
-          willChange: contentReady ? "auto" : "opacity",
+          opacity: splashDone || !hydrated ? 1 : 0,
+          transition: "opacity 0.3s ease-out",
         }}
       >
         {children}
