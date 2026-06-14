@@ -2,7 +2,7 @@
 
 ## Identity
 
-**Portfolio profissional estilo painel de controle sci-fi.** Interface imersiva com tema ciano+preto, animações cinematográficas e boot sequence estilo Tatu cavando buraco negro. Não é um portfolio comum — é uma experiência de "painel de controle" onde o usuário pilota o sistema.
+**Portfolio profissional estilo painel de controle sci-fi.** Interface imersiva com tema ciano+preto, animações cinematográficas e parallax scene com cockpit. Não é um portfolio comum — é uma experiência de "painel de controle" onde o usuário pilota o sistema.
 
 **Problema que resolve:** Portfolios tradicionais são currículos fancy que não demonstram capacidade técnica real. Mission Control transforma a navegação em vitrine do que Samuel sabe fazer: animações fluidas, design system consistente, arquitetura Next.js madura, testes E2E, acessibilidade e performance.
 
