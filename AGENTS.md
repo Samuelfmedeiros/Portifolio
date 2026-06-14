@@ -18,7 +18,7 @@
 
 ## Core Rules
 - **Tema visual:** ciano+preto, cinematográfico, animações fortes. ~~Treasure Planet~~ (arquivado 2026-06).
-- **Splash:** ❌ Removido (14/06/2026). Entrada integrada ao parallax — L0 (grid) e L1 (cockpit) fadeIn 0.5s + hero stagger. Splash anterior: Tatu cavando buraco negro (SVG inline, 5 fases) arquivado em `src/components/_old/SplashScreen.tsx`.
+- **Splash:** ❌ Removido (14/06/2026). Ambiente (grid + cockpit) SEMPRE visível. Hero content fadeIn com stagger por cima. Splash anterior arquivado em `src/components/_old/SplashScreen.tsx`.
 - **Sessões:** HeroSection min-h-[70vh], scroll-mt-20 pra navbar, games em abas (um por vez + toggle "ver todos").
 - **CSP:** sincronizada entre `next.config.js` e `vercel.json`. Vercel prioriza `vercel.json`.
 - **Componentes:** GameShowcase com tabs + grid toggle. KeyboardShortcuts só desktop.
