@@ -33,10 +33,11 @@ jobs:
         run: |
           echo "=== Deploy ==="
           pnpm build
-          npx vercel@latest --prod --yes --token "$VERCEL_TOKEN" \
-            --scope team_VBYjSP8brO8wOODjpp78D1jG 2>&1
+          npx vercel@latest --prod --yes --token "$VERCEL_TOKEN" 2>&1
         env:
           VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+          VERCEL_PROJECT_ID: prj_w9taccr84PPPEFxAJxZHhLI2hfsB
+          VERCEL_ORG_ID: team_VBYjSP8brO8wOODjpp78D1jG
 
       - name: Health Check
         run: |
