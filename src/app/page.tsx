@@ -5,6 +5,7 @@ import { ProjectHangar } from "@/components/ProjectHangar";
 import { GameShowcase } from "@/components/GameShowcase";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { GlassSkeleton } from "@/components/Skeleton";
+import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
@@ -45,17 +46,23 @@ export default function Home() {
     <>
       <div className="section-wrapper">
         <ProfileSection />
-        <section id="projects" className="scroll-mt-20">
-          <Suspense fallback={<HangarSkeleton />}>
-            <HangarWithData />
-          </Suspense>
-        </section>
-        <section id="terminal" className="scroll-mt-20">
-          <Terminal />
-        </section>
-        <section id="contact" className="scroll-mt-20">
-          <ContactForm />
-        </section>
+        <FadeInSection delay={0.1}>
+          <section id="projects" className="scroll-mt-20">
+            <Suspense fallback={<HangarSkeleton />}>
+              <HangarWithData />
+            </Suspense>
+          </section>
+        </FadeInSection>
+        <FadeInSection delay={0.2}>
+          <section id="terminal" className="scroll-mt-20">
+            <Terminal />
+          </section>
+        </FadeInSection>
+        <FadeInSection delay={0.3}>
+          <section id="contact" className="scroll-mt-20">
+            <ContactForm />
+          </section>
+        </FadeInSection>
       </div>
     </>
   );

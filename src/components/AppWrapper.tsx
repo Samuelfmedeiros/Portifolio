@@ -52,15 +52,7 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
   return (
     <>
       {showSplash && <SplashScreen onComplete={handleComplete} />}
-
-      <div
-        style={{
-          opacity: splashDone || !hydrated ? 1 : 0,
-          transition: "opacity 0.3s ease-out",
-        }}
-      >
-        {children}
-      </div>
+      {children}
     </>
   );
 }
