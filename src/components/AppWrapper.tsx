@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import { SplashScreen } from "./SplashScreen";
 
 /**
@@ -8,8 +8,6 @@ import { SplashScreen } from "./SplashScreen";
  * 1. Env var override (NEXT_PUBLIC_ENABLE_SPLASH) — for manual control
  * 2. Auto-detect: skip splash on Vercel production domains
  * 3. Default: true (splash shows on localhost, staging, etc.)
- *
- * Runs at module level: safe for SSR (returns true when window is undefined).
  */
 function shouldShowSplash(): boolean {
   const envVal = process.env.NEXT_PUBLIC_ENABLE_SPLASH;
@@ -25,17 +23,21 @@ function shouldShowSplash(): boolean {
 export function AppWrapper({ children }: { children: React.ReactNode }) {
   const [showSplash, setShowSplash] = useState(true);
   const [isLoading, setIsLoading] = useState(true);
+  const [contentReady, setContentReady] = useState(false);
+  const readyRef = useRef(false);
 
-  // Safety timeout: força exibição do conteúdo após 5s
+  // Safety timeout
   useEffect(() => {
     const t = setTimeout(() => {
-      if (isLoading) {
+      if (!readyRef.current) {
+        readyRef.current = true;
         setIsLoading(false);
         setShowSplash(false);
+        setContentReady(true);
       }
     }, 5000);
     return () => clearTimeout(t);
-  }, [isLoading]);
+  }, []);
 
   // Run once on mount
   useEffect(() => {
@@ -43,14 +45,20 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
     setShowSplash(show);
     if (!show) {
       setIsLoading(false);
+      setContentReady(true);
     } else if (sessionStorage.getItem("visited")) {
       setIsLoading(false);
+      setContentReady(true);
     }
   }, []);
 
   const handleComplete = useCallback(() => {
+    if (readyRef.current) return;
+    readyRef.current = true;
     sessionStorage.setItem("visited", "true");
     setIsLoading(false);
+    // Brief delay to let exit animation play before revealing content
+    setTimeout(() => setContentReady(true), 200);
   }, []);
 
   return (
@@ -59,11 +67,12 @@ export function AppWrapper({ children }: { children: React.ReactNode }) {
         <SplashScreen onComplete={handleComplete} />
       )}
 
-      {/* Content fade-in */}
+      {/* Content: opacity transition + will-change pra GPU */}
       <div
         style={{
-          opacity: isLoading ? 0 : undefined,
-          transition: "opacity 0.5s ease-in",
+          opacity: contentReady ? 1 : 0,
+          transition: "opacity 0.4s ease-out",
+          willChange: contentReady ? "auto" : "opacity",
         }}
       >
         {children}

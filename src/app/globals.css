@@ -276,6 +276,14 @@ body {
   animation: scaleIn 0.5s ease-out forwards;
 }
 
+/* ========== SPLASH ========== */
+@keyframes splashFade {
+  0%   { opacity: 0; }
+  15%  { opacity: 1; }
+  70%  { opacity: 0.6; }
+  100% { opacity: 0; }
+}
+
 /* Stagger delays for children */
 .stagger-1 { animation-delay: 100ms; }
 .stagger-2 { animation-delay: 200ms; }

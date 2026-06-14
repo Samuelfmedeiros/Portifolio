@@ -32,30 +32,23 @@ export function SplashScreen({ onComplete }: Props) {
 
   return (
     <div
-      className="fixed inset-0 z-50"
       style={{
+        position: "fixed",
+        inset: 0,
+        zIndex: 50,
         background: "#000",
-        animation: "mc-splash-fade 0.6s ease-out forwards",
+        animation: "splashFade 0.6s ease-out forwards",
       }}
     >
-      {/* Grid repeating-linear-gradient (GPU acelerado) */}
       <div
-        className="absolute inset-0"
         style={{
-          opacity: 0.15,
-          backgroundImage: `repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(34,211,238,0.25) 39px, rgba(34,211,238,0.25) 40px),
-                            repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(34,211,238,0.25) 39px, rgba(34,211,238,0.25) 40px)`,
+          position: "absolute",
+          inset: 0,
+          opacity: 0.12,
+          backgroundImage:
+            "repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(34,211,238,0.3) 39px, rgba(34,211,238,0.3) 40px), repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(34,211,238,0.3) 39px, rgba(34,211,238,0.3) 40px)",
         }}
       />
-
-      <style>{`
-        @keyframes mc-splash-fade {
-          0%   { opacity: 0; }
-          15%  { opacity: 1; }
-          70%  { opacity: 0.7; }
-          100% { opacity: 0; }
-        }
-      `}</style>
     </div>
   );
 }
