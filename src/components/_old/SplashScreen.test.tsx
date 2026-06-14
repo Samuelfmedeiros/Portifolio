@@ -25,7 +25,7 @@ describe('SplashScreen', () => {
   it('shows TATU boot message', () => {
     const onComplete = vi.fn()
     render(<SplashScreen onComplete={onComplete} />)
-    const bootMsg = screen.getByText('TATU PROCURE SYSTEM...')
+    const bootMsg = screen.getByText('SEARCHING...')
     expect(bootMsg).toBeInTheDocument()
   })
 
