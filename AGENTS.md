@@ -18,7 +18,7 @@
 
 ## Core Rules
 - **Tema visual:** ciano+preto, cinematográfico, animações fortes. ~~Treasure Planet~~ (arquivado 2026-06).
-- **Splash:** Tatu cavando buraco negro (SVG inline, 5 fases). Skip button + reduced motion.
+- **Splash:** 🚀 novo splash mínimo (2s) — antigo arquivado em `_old/` para referência. Splash anterior: Tatu cavando buraco negro (SVG inline, 5 fases) disponível em `src/components/_old/SplashScreen.tsx`.
 - **Sessões:** HeroSection min-h-[70vh], scroll-mt-20 pra navbar, games em abas (um por vez + toggle "ver todos").
 - **CSP:** sincronizada entre `next.config.js` e `vercel.json`. Vercel prioriza `vercel.json`.
 - **Componentes:** GameShowcase com tabs + grid toggle. KeyboardShortcuts só desktop.
