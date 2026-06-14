@@ -1,7 +1,13 @@
 # 🛸 Mission Control — Project Context
 
 ## Identity
-Portfolio profissional estilo painel de controle sci-fi. Next.js 16 + Tailwind 4 + Framer Motion + Supabase.
+
+**Portfolio profissional estilo painel de controle sci-fi.** Interface imersiva com tema ciano+preto, animações cinematográficas e boot sequence estilo Tatu cavando buraco negro.
+
+**Propósito:** Apresentar Samuel Medeiros como desenvolvedor full-stack com portfólio interativo. Diferencia-se de portfolios tradicionais ao transformar a navegação em uma experiência de "painel de controle".
+
+**Seções:** Profile, Skills Grid (ícones + categorias), Core Engine (About Me), Projetos (ProjectHangar com cards), Games (grid/tabs), Contato (com rate limit e validação), Footer expandido.
+
 **URL:** https://samuelmedeiros.vercel.app
 **Git:** GitHub (público) — Samuelfmedeiros/mission-control
 **Deploy:** Vercel (automático no push pra master)
