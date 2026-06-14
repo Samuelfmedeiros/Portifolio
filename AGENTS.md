@@ -37,6 +37,10 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase �
 ## CI/CD
 GitHub Actions → lint → test (vitest --run) → build → deploy Vercel. Preview deploys em PRs.
 
+## 📅 Histórico
+- **Início:** 06/05/2026 — 245+ commits
+- **Pico:** Maio/2026 (174 commits — responsivo, testes, analytics, footer)
+
 ## ⚙️ Staging (Capivara)
 MC tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Sistema:** systemd `mission-control-staging.service` na porta 3000 (`systemctl --user enable mission-control-staging`)
