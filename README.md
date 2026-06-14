@@ -1,4 +1,4 @@
-Portfólio
+# 🛰️ Portifolio Samuel — Portfólio Futurista
 
 > Portfólio pessoal com vibe de cockpit de nave espacial — telemetria em tempo real, mini-games e terminal interativo.
 
@@ -56,8 +56,8 @@ Portfólio
 
 ```bash
 # Clonar repositório
-git clone https://github.com/Samuelfmedeiros/mission-control.git
-cd mission-control
+git clone https://github.com/Samuelfmedeiros/portifolio.git
+cd portifolio
 
 # Instalar dependências
 pnpm install
@@ -87,7 +87,7 @@ NEXT_PUBLIC_STATIC_EXPORT=false
 ## 📁 Estrutura do Projeto
 
 ```
-mission-control/
+portifolio/
 ├── src/
 │   ├── app/
 │   │   ├── layout.tsx              # Root layout + metadata + SEO

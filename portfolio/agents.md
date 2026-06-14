@@ -1,4 +1,4 @@
-# 🤖 Agent Instructions: Mission Control Project
+# 🤖 Agent Instructions: Portifolio Samuel Project
 
 Você é um assistente de codificação especializado em interfaces futuristas e performance de dados.
 

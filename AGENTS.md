@@ -1,10 +1,10 @@
-# 🛸 Mission Control — Project Context
+# 🛸 Portifolio Samuel — Project Context
 
 ## Identity
 
 **Portfolio profissional estilo painel de controle sci-fi.** Interface imersiva com tema ciano+preto, animações cinematográficas e parallax scene com cockpit. Não é um portfolio comum — é uma experiência de "painel de controle" onde o usuário pilota o sistema.
 
-**Problema que resolve:** Portfolios tradicionais são currículos fancy que não demonstram capacidade técnica real. Mission Control transforma a navegação em vitrine do que Samuel sabe fazer: animações fluidas, design system consistente, arquitetura Next.js madura, testes E2E, acessibilidade e performance.
+**Problema que resolve:** Portfolios tradicionais são currículos fancy que não demonstram capacidade técnica real. Portifolio Samuel transforma a navegação em vitrine do que Samuel sabe fazer: animações fluidas, design system consistente, arquitetura Next.js madura, testes E2E, acessibilidade e performance.
 
 **Propósito:** Apresentar Samuel Medeiros como desenvolvedor full-stack com portfólio interativo. Cada seção é um componente isolado com seu próprio micro-design — como módulos de uma nave espacial.
 
@@ -13,7 +13,7 @@
 **Experiência do usuário:** Parallax scene integrada — grid + cockpit SVG + HUD panels + partículas formam a entrada. Scroll suave com parallax layers (L0-L3). Navegação por scroll + keyboard shortcuts (desktop). Tema escuro ciano+preto com consistência visual cinematográfica.
 
 **URL:** https://samuelmedeiros.vercel.app
-**Git:** GitHub (público) — Samuelfmedeiros/mission-control
+**Git:** GitHub (público) — Samuelfmedeiros/portifolio
 **Deploy:** Vercel (automático no push pra master)
 
 ## Core Rules
@@ -53,12 +53,12 @@ GitHub Actions → lint → test (vitest --run) → build → deploy Vercel. Pre
 - **Pico:** Maio/2026 (174 commits — responsivo, testes, analytics, footer)
 
 ## ⚙️ Staging (Capivara)
-MC tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
-- **Sistema:** systemd `mission-control-staging.service` na porta 3000 (`systemctl --user enable mission-control-staging`)
+Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
+- **Sistema:** systemd `portifolio-staging.service` na porta 3000 (`systemctl --user enable portifolio-staging`)
 - **URL local:** http://localhost:3000
-- **Proxy Capivara:** `/api/mc-proxy/` (autenticado, só usuários logados)
-- **Dashboard:** seção "MC Staging" no capivara.seu.pet com iframe
+- **Proxy Capivara:** `/api/portifolio-proxy/` (autenticado, só usuários logados)
+- **Dashboard:** seção "Portifolio Staging" no capivara.seu.pet com iframe
 - **Splash:** ❌ removido (parallax layers como entrada)
 - **X-Frame-Options:** `SAMEORIGIN` (permite iframe do capivara.seu.pet)
 - **Build:** `pnpm build` antes de alterações
-- **Reiniciar:** `systemctl --user restart mission-control-staging`
+- **Reiniciar:** `systemctl --user restart portifolio-staging`

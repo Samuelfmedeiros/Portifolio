@@ -1,11 +1,11 @@
-# 🛰️ Mission Control | Samuel Andrade Portfolio
+# 🛰️ Portifolio Samuel | Samuel Andrade Portfolio
 
-[![CI](https://github.com/Samuelfmedeiros/mission-control/actions/workflows/ci.yml/badge.svg)](https://github.com/Samuelfmedeiros/mission-control/actions)
+[![CI](https://github.com/Samuelfmedeiros/portifolio/actions/workflows/ci.yml/badge.svg)](https://github.com/Samuelfmedeiros/portifolio/actions)
 [![Next.js](https://img.shields.io/badge/Next.js-16-black?logo=next.js)](https://nextjs.org/)
 [![Tailwind](https://img.shields.io/badge/Tailwind-4-06b6d4?logo=tailwindcss)](https://tailwindcss.com/)
-[![Tests](https://img.shields.io/badge/tests-29%20passed-brightgreen)](https://github.com/Samuelfmedeiros/mission-control)
+[![Tests](https://img.shields.io/badge/tests-29%20passed-brightgreen)](https://github.com/Samuelfmedeiros/portifolio)
 
-Portal interativo de demonstração técnica, desenvolvido com estética de interface de comando espacial (Mission Control). Centraliza projetos de análise de dados, automação e engenharia de software em um ambiente imersivo.
+Portal interativo de demonstração técnica, desenvolvido com estética de interface de comando espacial (Portifolio Samuel). Centraliza projetos de análise de dados, automação e engenharia de software em um ambiente imersivo.
 
 ## 🚀 Tecnologias
 
@@ -35,8 +35,8 @@ Portal interativo de demonstração técnica, desenvolvido com estética de inte
 ## 📋 Setup
 
 ```bash
-git clone https://github.com/Samuelfmedeiros/mission-control.git
-cd mission-control
+git clone https://github.com/Samuelfmedeiros/portifolio.git
+cd portifolio
 pnpm install
 pnpm dev
 ```

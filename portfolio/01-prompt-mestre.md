@@ -1,14 +1,14 @@
-# 🛰️ Prompt Mestre — Mission Control Portfolio
+# 🛰️ Prompt Mestre — Portifolio Samuel Portfolio
 
 > Use este prompt em qualquer IA de código (Cursor, Claude, Gemini) para gerar a estrutura inicial do projeto.
 
 ---
 
-Aja como um desenvolvedor Full Stack Sênior. Vamos criar um Portfólio Profissional chamado **'Mission Control'**.
+Aja como um desenvolvedor Full Stack Sênior. Vamos criar um Portfólio Profissional chamado **'Portifolio Samuel'**.
 
 **Perfil do Profissional:** Samuel Andrade, Analista de Dados e Produto especializado em BI, SQL e Machine Learning.
 
-**Estética:** Ficção científica moderna (Mission Control/HUD). Deve usar efeito Parallax suave no fundo (espaço profundo).
+**Estética:** Ficção científica moderna (Portifolio Samuel/HUD). Deve usar efeito Parallax suave no fundo (espaço profundo).
 
 **Temas:** 'Night Vision' (Dark Mode com preto puro e ciano neon) e 'Daylight Ops' (Light Mode cinza NASA e azul marinho).
 

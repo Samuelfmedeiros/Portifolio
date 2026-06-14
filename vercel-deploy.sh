@@ -2,7 +2,7 @@
 # Trigger Vercel deploy via API
 # Precisa do VERCEL_TOKEN: vercel token generate
 
-VercelProjectId="prj_..."  # Pegar em https://vercel.com/samuelfmedeiros/mission-control/settings
+VercelProjectId="prj_..."  # Pegar em https://vercel.com/samuelfmedeiros/portifolio/settings
 
 echo "🚀 Triggering Vercel deploy..."
 
@@ -10,7 +10,7 @@ curl -X POST "https://api.vercel.com/v13/deployments" \
   -H "Authorization: Bearer $VERCEL_TOKEN" \
   -H "Content-Type: application/json" \
   -d '{
-    "name": "mission-control",
+    "name": "portifolio",
     "project": "'"$VercelProjectId"'",
     "target": "production",
     "gitSource": {
@@ -24,4 +24,4 @@ curl -X POST "https://api.vercel.com/v13/deployments" \
   }'
 
 echo ""
-echo "✅ Deploy triggered! Check: https://vercel.com/samuelfmedeiros/mission-control/activity"
+echo "✅ Deploy triggered! Check: https://vercel.com/samuelfmedeiros/portifolio/activity"

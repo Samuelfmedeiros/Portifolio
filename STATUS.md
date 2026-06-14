@@ -29,9 +29,9 @@
 
 ### SplashScreen
 - [x] Texto "Samuel Medeiros" removido da tela de boot
-- [x] "Mission Control v2.0" removido
+- [x] "Portifolio Samuel v2.0" removido
 - [x] "SYSTEM BOOT" → "SEJA BEM-VINDO"
-- [x] "Mission Control pronto para decolagem." → "Seja bem-vindo ao meu portfólio!"
+- [x] "Portifolio Samuel pronto para decolagem." → "Seja bem-vindo ao meu portfólio!"
 
 ### Mobile / UX
 - [x] Atalho de teclado agora não aparece mais em mobile (só desktop)
@@ -75,7 +75,7 @@
 - [x] **metadataBase** — Corrigido de Cloudflare Pages → Vercel (deploy primário)
 - [x] **sitemap.ts** — Agora inclui páginas de `/privacidade` e `/termos`
 - [x] **robots.ts** — Sitemap URL sincronizado com Vercel
-- [x] **manifest.ts** — `start_url` corrigido de `/mission-control/` → `/`
+- [x] **manifest.ts** — `start_url` corrigido de `/portifolio/` → `/`
 
 ### SEO / OG
 - [x] **OG Image** — Usa rota dinâmica `/opengraph-image` (gerada pelo next/og) em vez de `/og-image.png` estático
@@ -202,7 +202,7 @@
 | Dispositivo | URL |
 |-------------|-----|
 | Local | `http://localhost:3000` |
-| GitHub | [github.com/Samuelfmedeiros/mission-control](https://github.com/Samuelfmedeiros/mission-control) |
+| GitHub | [github.com/Samuelfmedeiros/portifolio](https://github.com/Samuelfmedeiros/portifolio) |
 | Produção (Vercel) | [samuelmedeiros.vercel.app](https://samuelmedeiros.vercel.app/) |
 
 ---

@@ -1,4 +1,4 @@
-# 🔒 Relatório de Segurança - Mission Control
+# 🔒 Relatório de Segurança - Portifolio Samuel
 
 **Data:** 28/05/2026  
 **Domain:** `samuelmedeiros.vercel.app`  

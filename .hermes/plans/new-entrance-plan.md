@@ -1,4 +1,4 @@
-# 🛸 Mission Control — Plano de Melhorias Completas
+# 🛸 Portifolio Samuel — Plano de Melhorias Completas
 
 > Gerado: 14/06/2026
 > Contexto: Samuel pediu recomeço do zero após múltiplas tentativas frustradas de splash/animação de entrada.

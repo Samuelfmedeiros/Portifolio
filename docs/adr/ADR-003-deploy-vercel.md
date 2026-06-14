@@ -4,7 +4,7 @@
 **Data:** 2026-06-11
 
 ## Contexto
-Mission Control é um Next.js SPA com SSR mínimo. Precisávamos de deploy automático e confiável com preview deployments para PRs.
+Portifolio Samuel é um Next.js SPA com SSR mínimo. Precisávamos de deploy automático e confiável com preview deployments para PRs.
 
 Alternativas consideradas: Cloudflare Pages (usado no Dogwalk), Netlify, AWS Amplify, servidor próprio.
 

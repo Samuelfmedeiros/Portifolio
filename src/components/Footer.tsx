@@ -378,7 +378,7 @@ export function Footer() {
             Última atualização: {new Date().toLocaleDateString("pt-BR")}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
-            Mission Control v2.0
+            Portifolio Samuel v2.0
           </p>
         </div>
       </div>

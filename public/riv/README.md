@@ -1,6 +1,6 @@
 # Rive Animation — Tatu Armadillo
 
-Este diretório contém o arquivo `.riv` (Rive Runtime) usado no Mission Control para
+Este diretório contém o arquivo `.riv` (Rive Runtime) usado no Portifolio Samuel para
 a animação de boot do Tatu bola.
 
 ---

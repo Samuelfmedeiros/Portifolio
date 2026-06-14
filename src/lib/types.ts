@@ -1,4 +1,4 @@
-// === Mission Control — Centralized Type Definitions ===
+// === Portifolio Samuel — Centralized Type Definitions ===
 
 /** Primary production URL — Vercel is primary deploy target */
 export const SITE_URL = "https://samuelmedeiros.vercel.app";

@@ -55,7 +55,7 @@
 
 ### PWA
 - manifest.webmanifest
-- SVG favicon "MC"
+- SVG favicon "PS"
 - theme-color #22d3ee
 
 ### Testes
@@ -64,7 +64,7 @@
 
 ## 🚧 Pendente (manual)
 
-1. **Vercel** — [vercel.com/new](https://vercel.com/new) → Importar `Samuelfmedeiros/mission-control`
+1. **Vercel** — [vercel.com/new](https://vercel.com/new) → Importar `Samuelfmedeiros/portifolio`
    - Adicionar env vars do Supabase
    - Conta atualmente "limited" — verificar email/plano
 2. **Domínio** — Comprar `samuelandrade.dev` (~R$40/ano)
@@ -76,8 +76,8 @@
 |-------------|-----|
 | Celular/Tablet | `http://192.168.0.8:3000` |
 | PC | `http://localhost:3000` |
-| GitHub | [github.com/Samuelfmedeiros/mission-control](https://github.com/Samuelfmedeiros/mission-control) |
+| GitHub | [github.com/Samuelfmedeiros/portifolio](https://github.com/Samuelfmedeiros/portifolio) |
 
 ---
 
-📁 Plano: `.hermes/plans/2026-05-07-mission-control-rebuild.md`
+📁 Plano: `.hermes/plans/2026-05-07-portifolio-rebuild.md`
