@@ -25,7 +25,7 @@ export const BMC_CONFIG = {
   /** BMC username. Set via NEXT_PUBLIC_BMC_USERNAME */
   get username(): string {
     const value = process.env.NEXT_PUBLIC_BMC_USERNAME;
-    if (value === undefined || value === null) return "samuelmedeiros";
+    if (value === undefined || value === null) return "Samuelfmedeiros";
     return value;
   },
   /** Full BMC URL */

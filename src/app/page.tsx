@@ -9,6 +9,7 @@ import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
+import { BuyMeACoffee } from "@/components/monetization/BuyMeACoffee";
 
 const Terminal = dynamic(
   () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
@@ -62,6 +63,11 @@ export default function Home() {
           <section id="contact" className="scroll-mt-20">
             <ContactForm />
           </section>
+        </FadeInSection>
+        <FadeInSection delay={0.35}>
+          <div className="flex justify-center py-8">
+            <BuyMeACoffee className="px-4 py-2 text-sm" />
+          </div>
         </FadeInSection>
       </div>
     </>
