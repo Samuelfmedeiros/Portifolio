@@ -6,6 +6,7 @@ import { Radio, Send, CheckCircle, Copy, Check } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { supabase } from "@/lib/supabase";
 import type { FormStatus } from "@/lib/types";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -16,6 +17,7 @@ export function ContactForm() {
   const [errorMessage, setErrorMessage] = useState("");
   const [copied, setCopied] = useState(false);
   const lastSentRef = useRef<number>(0);
+  const { track } = useAnalytics();
 
   const MAX_MESSAGE_LENGTH = 500;
   const messageLength = content.length;
@@ -59,12 +61,14 @@ export function ContactForm() {
     if (error) {
       console.error("Supabase error:", error);
       setStatus("error");
+      track({ type: "contact_error", error: "supabase" });
     } else {
       setStatus("sent");
       setName("");
       setEmail("");
       setContent("");
       setLgpdConsent(false);
+      track({ type: "contact_submit" });
     }
   };
 

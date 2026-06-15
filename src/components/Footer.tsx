@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
 import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
 import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -221,6 +222,7 @@ export function Footer() {
   const [copied, setCopied] = useState(false);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
+  const { track } = useAnalytics();
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
@@ -270,6 +272,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                 aria-label="GitHub"
+                onClick={() => track({ type: "external_link", url: "github", label: "GitHub" })}
               >
                 <GithubIcon className="w-5 h-5" />
               </a>
@@ -279,6 +282,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                 aria-label="LinkedIn"
+                onClick={() => track({ type: "external_link", url: "linkedin", label: "LinkedIn" })}
               >
                 <LinkedinIcon className="w-5 h-5" />
               </a>
@@ -288,6 +292,7 @@ export function Footer() {
                 rel="noopener noreferrer"
                 className="text-[var(--text-secondary)] hover:text-[var(--whatsapp)] transition-colors"
                 aria-label="WhatsApp"
+                onClick={() => track({ type: "external_link", url: "whatsapp", label: "WhatsApp" })}
               >
                 <WhatsAppIcon className="w-5 h-5" />
               </a>
@@ -311,6 +316,7 @@ export function Footer() {
               target="_blank"
               rel="noopener noreferrer"
               className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
+              onClick={() => track({ type: "external_link", url: "curriculo", label: "Currículo PDF" })}
             >
               Download em PDF ↓
             </a>

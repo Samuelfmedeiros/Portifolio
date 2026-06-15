@@ -12,10 +12,13 @@ const NAV_ITEMS = [
   { href: "#contact", label: "Contato", icon: "📡" },
 ];
 
+import { useAnalytics } from "@/hooks/useAnalytics";
+
 export const Navbar = memo(function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("profile");
   const scrollRef = useRef<HTMLDivElement>(null);
+  const { track } = useAnalytics();
 
   const rafRef = useRef<number | null>(null);
 
@@ -72,6 +75,7 @@ export const Navbar = memo(function Navbar() {
     if (target) {
       const top = target.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top, behavior: "smooth" });
+      track({ type: "nav_click", section: href.replace("#", "") as any });
     }
   };
 
