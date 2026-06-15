@@ -109,6 +109,14 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
         {/* Holo-card glow effect */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--accent-alt)]/5" />
         <div className="absolute -inset-px opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none rounded-[inherit] bg-gradient-to-br from-[var(--accent)]/20 via-transparent to-[var(--accent-alt)]/20 blur-sm" />
+        
+        {/* Scan-line effect on hover */}
+        <div className="absolute inset-0 pointer-events-none opacity-0 group-hover:opacity-[0.03] transition-opacity duration-700"
+          style={{
+            backgroundImage: "repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0, 212, 255, 0.3) 2px, rgba(0, 212, 255, 0.3) 4px)",
+            backgroundSize: "100% 4px"
+          }}
+        />
 
         {/* Featured badge */}
         {isFeatured && (
@@ -130,6 +138,13 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             onClick={() => track({ type: "project_click", project: repo.name })}
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
+            {/* Grid overlay pattern */}
+            <div className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: "linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)",
+                backgroundSize: "20px 20px"
+              }}
+            />
             {repo.imageUrl ? (
               <Image
                 src={repo.imageUrl}
@@ -159,6 +174,13 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             style={{ background: gradient }}
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
+            {/* Grid overlay pattern */}
+            <div className="absolute inset-0 opacity-[0.04]"
+              style={{
+                backgroundImage: "linear-gradient(rgba(0,212,255,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(0,212,255,0.3) 1px, transparent 1px)",
+                backgroundSize: "20px 20px"
+              }}
+            />
             {repo.imageUrl ? (
               <Image
                 src={repo.imageUrl}
