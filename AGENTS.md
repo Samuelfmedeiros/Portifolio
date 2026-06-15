@@ -27,7 +27,7 @@
 `docs/adr/ADR-001` ~~Treasure Planet~~ **Deprecado**, `ADR-002` (Splash boot sequence), `ADR-003` (Vercel deploy)
 
 ## Stack
-Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase · Playwright · Vitest
+Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase · Playwright · Vitest · Umami Analytics (self-hosted)
 
 ## Lint Status
 **0 errors, 0 warnings** — ESLint limpo. Build compila sem TypeScript errors.
@@ -46,13 +46,16 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase �
 - ProfileSection: L0 (grid) e L1 (cockpit) com `initial/animate` para fade-in de entrada
 
 ## CI/CD
-GitHub Actions → lint → test (vitest --run) → build → deploy Vercel. Preview deploys em PRs.
+GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel quebrado (token sem permissão). Produção local :3001 + staging :3000.
 
 ## 📅 Histórico
 - **Início:** 06/05/2026 — 245+ commits
 - **Pico:** Maio/2026 (174 commits — responsivo, testes, analytics, footer)
+- **14/06/2026:** Renomeado MC → Portifolio Samuel. Produção self-host :3001. Umami Analytics instalado.
 
-## ⚙️ Staging (Capivara)
+## ⚙️ Deploys
+
+### Staging (Capivara)
 Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Sistema:** systemd `portifolio-staging.service` na porta 3000 (`systemctl --user enable portifolio-staging`)
 - **URL local:** http://localhost:3000
@@ -62,3 +65,14 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **X-Frame-Options:** `SAMEORIGIN` (permite iframe do capivara.seu.pet)
 - **Build:** `pnpm build` antes de alterações
 - **Reiniciar:** `systemctl --user restart portifolio-staging`
+
+### Produção (self-host)
+- **Sistema:** systemd `portifolio.service` na porta 3001
+- **URL local:** http://localhost:3001
+- **Build:** `pnpm build` e `systemctl --user restart portifolio.service`
+- **Vercel:** `samuelmedeiros.vercel.app` ainda no ar (versão antiga), deploy quebrado
+
+## 📊 Analytics (Umami)
+- **Servidor:** Umami v3 rodando em `localhost:3100` (service `umami.service`)
+- **Acesso:** `capivara.seu.pet/api/umami/` (via proxy Capivara, precisa de login)
+- **Status:** Instalado, aguardando criar admin na UI + adicionar tracking script no site
