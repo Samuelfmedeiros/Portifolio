@@ -4,8 +4,11 @@ import { useState, useEffect, memo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
+import { useAnalytics } from "@/hooks/useAnalytics";
+
 export const BackToTop = memo(function BackToTop() {
   const [visible, setVisible] = useState(false);
+  const { track } = useAnalytics();
 
   useEffect(() => {
     let ticking = false;
@@ -24,6 +27,7 @@ export const BackToTop = memo(function BackToTop() {
 
   const handleClick = () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
+    track({ type: "back_to_top" });
   };
 
   return (

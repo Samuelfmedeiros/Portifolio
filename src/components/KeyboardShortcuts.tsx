@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { X, Command } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const SECTIONS = ["hero", "engine", "about", "skills", "projects", "terminal", "contact"];
 
@@ -27,6 +28,7 @@ export function KeyboardShortcuts() {
   const [showHints, setShowHints] = useState(false);
   const [visible, setVisible] = useState(false);
   const { toggle: themeToggle } = useTheme();
+  const { track } = useAnalytics();
 
   const getCurrentSectionIndex = useCallback(() => {
     const sectionIds = SECTIONS;
@@ -68,35 +70,42 @@ export function KeyboardShortcuts() {
         case "ArrowDown":
           e.preventDefault();
           navigateToSection("next");
+          track({ type: "keyboard_shortcut", key: "next" });
           break;
         case "k":
         case "K":
         case "ArrowUp":
           e.preventDefault();
           navigateToSection("prev");
+          track({ type: "keyboard_shortcut", key: "prev" });
           break;
         case "t":
         case "T":
           e.preventDefault();
           themeToggle();
+          track({ type: "keyboard_shortcut", key: "theme" });
           break;
         case "g":
         case "G":
           window.location.href = "#ferramentas";
+          track({ type: "keyboard_shortcut", key: "github" });
           break;
         case "p":
         case "P":
           e.preventDefault();
           window.location.href = "#projects";
+          track({ type: "keyboard_shortcut", key: "projects" });
           break;
         case "c":
         case "C":
           e.preventDefault();
           window.location.href = "#contact";
+          track({ type: "keyboard_shortcut", key: "contact" });
           break;
         case "?":
           e.preventDefault();
           setShowHints((prev) => !prev);
+          track({ type: "keyboard_shortcut", key: "help" });
           break;
         case "Escape":
           setShowHints(false);

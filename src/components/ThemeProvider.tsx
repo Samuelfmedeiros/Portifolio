@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import { createContext, useContext, useState, useLayoutEffect, useCallback, useEffect, ReactNode } from "react";
 import type { Theme } from "@/lib/types";
 import { PALETTES, DEFAULT_PALETTE, STORAGE_PALETTE_KEY } from "@/lib/palettes";
 
@@ -63,14 +63,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setThemeState] = useState<Theme>(getInitialTheme);
   const [palette, setPaletteState] = useState<string>(getInitialPalette);
 
-  // Apply theme class + palette on mount
-  useEffect(() => {
+  // Apply theme class + palette on mount (synchronous before paint)
+  useLayoutEffect(() => {
     setThemeClass(theme);
     applyPaletteToDoc(palette, theme);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Re-apply palette when theme changes
-  useEffect(() => {
+  useLayoutEffect(() => {
     setThemeClass(theme);
     applyPaletteToDoc(palette, theme);
   }, [theme, palette]);
@@ -95,7 +95,11 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   }, []);
 
   const toggle = useCallback(() => {
-    setTheme(theme === "dark" ? "light" : "dark");
+    const next = theme === "dark" ? "light" : "dark";
+    setTheme(next);
+    if (typeof window !== "undefined" && window.umami?.track) {
+      window.umami.track("theme_toggle", { theme: next });
+    }
   }, [theme, setTheme]);
 
   const setPalette = useCallback((id: string) => {

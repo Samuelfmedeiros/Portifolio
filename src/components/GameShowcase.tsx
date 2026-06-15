@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ExternalLink, Star, GitFork, Calendar, Grid3X3, List } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 // Language color map
 const LANG_COLORS: Record<string, string> = {
@@ -114,6 +115,7 @@ function GameCard({ repo }: { repo: Repo }) {
 export function GameShowcase({ repos }: { repos: Repo[] }) {
   const [activeTab, setActiveTab] = useState(repos[0]?.name || "");
   const [showAll, setShowAll] = useState(false);
+  const { track } = useAnalytics();
 
   // Determine if mobile via CSS class toggle
   const showAsTabs = !showAll;
@@ -148,7 +150,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
           {repos.map((repo) => (
             <button
               key={repo.name}
-              onClick={() => { setActiveTab(repo.name); setShowAll(false); }}
+              onClick={() => { setActiveTab(repo.name); setShowAll(false); track({ type: "game_play", game: repo.name }); }}
               className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md font-mono text-xs transition-all shrink-0 whitespace-nowrap ${
                 !showAll && activeTab === repo.name
                   ? "bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/30"

@@ -1,13 +1,14 @@
 "use client";
 
 import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
-import { useRef, useMemo } from "react";
+import { useRef, useMemo, useEffect } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
   Briefcase, GraduationCap, Award,
 } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { TypeWriter } from "./TypeWriter";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 /* ──────────────────── DATA ──────────────────── */
 
@@ -489,6 +490,24 @@ function TimelineItem({ item, index }: { item: typeof timeline[0]; index: number
 
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { track } = useAnalytics();
+
+  // Track section view
+  useEffect(() => {
+    const el = document.getElementById("profile");
+    if (!el) return;
+    const obs = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          track({ type: "section_view", section: "profile" });
+          obs.disconnect();
+        }
+      },
+      { threshold: 0.3 }
+    );
+    obs.observe(el);
+    return () => obs.disconnect();
+  }, [track]);
 
   const { scrollYProgress } = useScroll({
     target: containerRef,

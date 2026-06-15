@@ -8,6 +8,7 @@ import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const FEATURED = FEATURED_PROJECTS;
 
@@ -90,6 +91,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
     ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
     : null;
   const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
+  const { track } = useAnalytics();
 
   return (
     <motion.div
@@ -125,6 +127,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             rel="noopener noreferrer"
             className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
             style={{ background: gradient }}
+            onClick={() => track({ type: "project_click", project: repo.name })}
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
             {repo.imageUrl ? (
@@ -278,6 +281,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
 
 export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]; title?: string }) {
   const [activeFilter, setActiveFilter] = useState<string>("all");
+  const { track } = useAnalytics();
 
   // Collect all unique languages/tags for filter
   const allTags = useMemo(() => {
@@ -327,7 +331,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
           {allTags.slice(0, 12).map((tag) => (
             <button
               key={tag}
-              onClick={() => setActiveFilter(tag)}
+              onClick={() => { setActiveFilter(tag); track({ type: "project_filter", filter: tag }); }}
               className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-all shrink-0 whitespace-nowrap ${
                 activeFilter === tag
                   ? "bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/40 shadow-[0_0_10px_var(--accent)]/10"
