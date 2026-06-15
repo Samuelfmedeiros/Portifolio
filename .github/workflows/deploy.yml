@@ -32,14 +32,8 @@ jobs:
       - name: Build project
         run: pnpm build
 
-      - name: Deploy to Vercel (via Vercel Action)
-        uses: amondnet/vercel-action@v25
-        with:
-          vercel-token: ${{ secrets.VERCEL_TOKEN }}
-          vercel-org-id: team_VBYjSP8brO8wOODjpp78D1jG
-          vercel-project-id: prj_w9taccr84PPPEFxAJxZHhLI2hfsB
-          vercel-args: '--prod'
-          working-directory: ./
+      - name: Deploy to Vercel
+        run: npx vercel@latest --prod --token=${{ secrets.VERCEL_TOKEN }} --yes 2>&1
 
       - name: Health Check
         run: |
