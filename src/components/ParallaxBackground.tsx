@@ -137,7 +137,35 @@ export function ParallaxBackground() {
         ctx.fillStyle = gradient;
         ctx.fillRect(0, 0, w, h);
       } else {
-        ctx.clearRect(0, 0, w, h);
+        // Light mode — subtle atmospheric gradient (misty blue-white)
+        const gradient = ctx.createRadialGradient(w * 0.5, h * 0.2, 0, w * 0.5, h * 0.2, Math.max(w, h) * 0.9);
+        gradient.addColorStop(0, "#f0f4ff");
+        gradient.addColorStop(0.3, "#e8eef8");
+        gradient.addColorStop(0.6, "#dce4f0");
+        gradient.addColorStop(1, "#d0d8e5");
+        ctx.fillStyle = gradient;
+        ctx.fillRect(0, 0, w, h);
+
+        // Subtle soft cloud wisps for light mode
+        const cloudGrad1 = ctx.createRadialGradient(
+          w * 0.8, h * 0.9, 0,
+          w * 0.8, h * 0.9, Math.max(w, h) * 0.4
+        );
+        cloudGrad1.addColorStop(0, "rgba(255, 255, 255, 0.25)");
+        cloudGrad1.addColorStop(0.5, "rgba(220, 230, 245, 0.10)");
+        cloudGrad1.addColorStop(1, "transparent");
+        ctx.fillStyle = cloudGrad1;
+        ctx.fillRect(0, 0, w, h);
+
+        const cloudGrad2 = ctx.createRadialGradient(
+          w * 0.15, h * 0.1, 0,
+          w * 0.15, h * 0.1, Math.max(w, h) * 0.3
+        );
+        cloudGrad2.addColorStop(0, "rgba(255, 255, 255, 0.30)");
+        cloudGrad2.addColorStop(0.5, "rgba(235, 240, 250, 0.08)");
+        cloudGrad2.addColorStop(1, "transparent");
+        ctx.fillStyle = cloudGrad2;
+        ctx.fillRect(0, 0, w, h);
       }
 
       // Mouse parallax offset
@@ -150,7 +178,20 @@ export function ParallaxBackground() {
         stops: { offset: number; color: string }[],
         scrollMult: number, parallaxMult: number
       ) => {
-        if (!dark) return;
+        if (!dark) {
+          // Light mode — softer nebula with pastel tones
+          const nebulaY = (cy + scrollY * scrollMult) % h;
+          const n = ctx.createRadialGradient(
+            cx + mx * parallaxMult * 0.5, nebulaY + my * parallaxMult * 0.5, 0,
+            cx + mx * parallaxMult * 0.5, nebulaY + my * parallaxMult * 0.5, radius * 0.6
+          );
+          n.addColorStop(0, "rgba(200, 215, 240, 0.06)");
+          n.addColorStop(0.4, "rgba(180, 200, 230, 0.04)");
+          n.addColorStop(1, "transparent");
+          ctx.fillStyle = n;
+          ctx.fillRect(0, 0, w, h);
+          return;
+        }
         const nebulaY = (cy + scrollY * scrollMult) % h;
         const n = ctx.createRadialGradient(
           cx + mx * parallaxMult, nebulaY + my * parallaxMult, 0,
@@ -280,10 +321,10 @@ export function ParallaxBackground() {
         }
 
         // Star body
-        const baseOpacity = dark ? twinkleOpacity : twinkleOpacity * 0.2;
+        const baseOpacity = dark ? twinkleOpacity : twinkleOpacity * 0.5;
         ctx.fillStyle = dark
           ? `hsla(${star.hue}, 50%, ${80 + Math.random() * 20}%, ${baseOpacity})`
-          : `rgba(120, 140, 170, ${baseOpacity})`;
+          : `rgba(100, 130, 180, ${baseOpacity})`;
         ctx.beginPath();
         ctx.arc(x, y, star.size, 0, Math.PI * 2);
         ctx.fill();
