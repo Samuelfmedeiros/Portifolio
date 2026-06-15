@@ -29,13 +29,17 @@ jobs:
         continue-on-error: true
         run: pnpm test:run
 
-      - name: Build & Deploy to Vercel
-        run: |
-          echo "=== Deploy ==="
-          pnpm build
-          npx vercel@latest --prod --yes --token "$VERCEL_TOKEN" 2>&1
-        env:
-          VERCEL_TOKEN: ${{ secrets.VERCEL_TOKEN }}
+      - name: Build project
+        run: pnpm build
+
+      - name: Deploy to Vercel (via Vercel Action)
+        uses: amondnet/vercel-action@v25
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: team_VBYjSP8brO8wOODjpp78D1jG
+          vercel-project-id: prj_w9taccr84PPPEFxAJxZHhLI2hfsB
+          vercel-args: '--prod'
+          working-directory: ./
 
       - name: Health Check
         run: |
