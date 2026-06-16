@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Simon Game</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    body {
+      background: #0f0f1a;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      font-family: monospace;
+    }
+    .game-container {
+      background: #1a1a2e;
+      padding: 2rem 2rem 1.5rem;
+      border-radius: 1.5rem;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5), inset 0 0 2px rgba(255, 255, 255, 0.05);
+    }
+    .simon-title {
+      text-align: center;
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: #e0e0ff;
+      margin-bottom: 0.5rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .status-text {
+      text-align: center;
+      font-size: 0.75rem;
+      color: #8888aa;
+      margin-bottom: 0.75rem;
+      min-height: 1.2em;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+      width: 11rem;
+      height: 11rem;
+      margin: 0 auto;
+    }
+    .color-btn {
+      border: none;
+      border-radius: 0.75rem;
+      cursor: default;
+      transition: all 0.15s ease;
+      outline: 2px solid transparent;
+      outline-offset: -2px;
+    }
+    .color-btn:focus-visible {
+      outline-color: #ffffff80;
+    }
+    .color-btn.active {
+      transform: scale(1.1);
+      filter: brightness(1.5);
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.25);
+      outline-color: #ffffff40;
+    }
+    .color-btn.dim {
+      filter: brightness(0.6);
+    }
+    .color-btn.clickable {
+      cursor: pointer;
+    }
+    .color-btn.clickable:hover {
+      filter: brightness(1.1);
+    }
+    .score-text {
+      text-align: center;
+      font-size: 1.125rem;
+      font-weight: bold;
+      color: #7c7cff;
+      margin-top: 0.75rem;
+      margin-bottom: 0.5rem;
+    }
+    .btn-play {
+      display: block;
+      margin: 0 auto;
+      padding: 0.6rem 1.25rem;
+      border: none;
+      border-radius: 0.5rem;
+      background: #7c7cff;
+      color: #fff;
+      font-family: monospace;
+      font-size: 0.75rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .btn-play:hover {
+      filter: brightness(1.15);
+    }
+    .btn-play:active {
+      transform: scale(0.97);
+    }
+    .footer {
+      text-align: center;
+      margin-top: 1.25rem;
+      font-size: 0.6rem;
+      color: #444466;
+    }
+  </style>
+</head>
+<body>
+  <div class="game-container">
+    <div class="simon-title">Simon Game</div>
+    <div id="root"></div>
+    <div class="footer">memorize a sequência &bull; repita &bull; pontue</div>
+  </div>
+
+  <script type="text/babel">
+    const { useState, useEffect, useCallback, useRef } = React;
+
+    const COLORS = ["#ef4444", "#22c55e", "#3b82f6", "#f59e0b"];
+    const COLOR_LABELS = ["VERMELHO", "VERDE", "AZUL", "AMARELO"];
+
+    function MiniGame() {
+      const [sequence, setSequence] = useState([]);
+      const [playerTurn, setPlayerTurn] = useState(false);
+      const [activeIdx, setActiveIdx] = useState(null);
+      const [score, setScore] = useState(0);
+      const [phase, setPhase] = useState("idle");
+      const playerIdx = useRef(0);
+      const flashAbort = useRef(false);
+
+      const startGame = useCallback(() => {
+        const first = Math.floor(Math.random() * 4);
+        setSequence([first]);
+        setScore(0);
+        setPhase("showing");
+        playerIdx.current = 0;
+        flashAbort.current = false;
+      }, []);
+
+      const flashSequence = useCallback(async () => {
+        flashAbort.current = false;
+        for (let i = 0; i < sequence.length; i++) {
+          if (flashAbort.current) return;
+          await new Promise((r) => setTimeout(r, 400));
+          if (flashAbort.current) return;
+          setActiveIdx(sequence[i]);
+          await new Promise((r) => setTimeout(r, 300));
+          if (flashAbort.current) return;
+          setActiveIdx(null);
+        }
+        setPlayerTurn(true);
+        setPhase("playing");
+        playerIdx.current = 0;
+      }, [sequence]);
+
+      useEffect(() => {
+        if (phase === "showing" && sequence.length > 0) {
+          flashSequence();
+        }
+        return () => {
+          flashAbort.current = true;
+        };
+      }, [phase, sequence, flashSequence]);
+
+      const handleClick = useCallback(
+        (idx) => {
+          if (!playerTurn || phase !== "playing") return;
+          setActiveIdx(idx);
+          setTimeout(() => setActiveIdx(null), 250);
+          if (idx !== sequence[playerIdx.current]) {
+            setPhase("gameover");
+            setPlayerTurn(false);
+            return;
+          }
+          playerIdx.current += 1;
+          if (playerIdx.current === sequence.length) {
+            setPlayerTurn(false);
+            setScore((s) => s + 1);
+            const next = Math.floor(Math.random() * 4);
+            setSequence((seq) => [...seq, next]);
+            setPhase("showing");
+          }
+        },
+        [playerTurn, phase, sequence]
+      );
+
+      const statusMessage = () => {
+        switch (phase) {
+          case "idle":     return "Clique em Iniciar para jogar!";
+          case "showing":  return "👀 Observe a sequência...";
+          case "playing":  return "🎯 Repita a sequência!";
+          case "gameover": return "💀 Game Over! Pontuação: " + score;
+          default:         return "";
+        }
+      };
+
+      return (
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+          <p className="status-text">{statusMessage()}</p>
+
+          <div className="grid">
+            {COLORS.map((color, i) => (
+              <button
+                key={i}
+                onClick={() => handleClick(i)}
+                disabled={phase !== "playing"}
+                className={
+                  "color-btn" +
+                  (activeIdx === i ? " active" : " dim") +
+                  (phase === "playing" ? " clickable" : "")
+                }
+                style={{ backgroundColor: color }}
+                aria-label={COLOR_LABELS[i]}
+              />
+            ))}
+          </div>
+
+          <p className="score-text">Score: {score}</p>
+
+          {(phase === "idle" || phase === "gameover") && (
+            <button onClick={startGame} className="btn-play">
+              {phase === "gameover" ? "🔄 Tentar Novamente" : "▶ Iniciar Jogo"}
+            </button>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<MiniGame />);
+  </script>
+</body>
+</html>

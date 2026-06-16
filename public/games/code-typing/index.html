@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Code Typing Challenge</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+      background: #0d1117;
+      color: #e6edf3;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      padding: 2rem 1rem;
+    }
+    #root { width: 100%; max-width: 800px; }
+
+    .container {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    }
+    h1 {
+      text-align: center;
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+      background: linear-gradient(135deg, #58a6ff, #bc8cff);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .subtitle {
+      text-align: center;
+      color: #8b949e;
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Stats bar */
+    .stats-bar {
+      display: flex;
+      gap: 1.5rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      padding: 0.75rem 1rem;
+      background: #0d1117;
+      border-radius: 8px;
+      border: 1px solid #21262d;
+    }
+    .stat {
+      text-align: center;
+    }
+    .stat-value {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: #f0f6fc;
+    }
+    .stat-label {
+      font-size: 0.75rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .stat-value.green { color: #3fb950; }
+    .stat-value.blue  { color: #58a6ff; }
+    .stat-value.orange{ color: #d29922; }
+    .stat-value.purple{ color: #bc8cff; }
+
+    /* Code display */
+    .code-display {
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1rem;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      min-height: 100px;
+    }
+    .char {
+      position: relative;
+    }
+    .char.correct  { color: #7ee787; }
+    .char.incorrect{ color: #f85149; background: #3d1214; border-radius: 2px; }
+    .char.current  { 
+      color: #f0f6fc; 
+      background: #1f6feb; 
+      border-radius: 2px;
+      box-shadow: 0 0 0 1px #1f6feb;
+    }
+    .char.pending  { color: #8b949e; }
+
+    /* Input area */
+    .input-area {
+      margin-bottom: 1rem;
+    }
+    .input-area textarea {
+      width: 100%;
+      min-height: 80px;
+      padding: 0.9rem 1rem;
+      background: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 8px;
+      color: #e6edf3;
+      font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
+      font-size: 0.9rem;
+      line-height: 1.65;
+      resize: vertical;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .input-area textarea:focus {
+      border-color: #58a6ff;
+      box-shadow: 0 0 0 3px rgba(88,166,255,0.15);
+    }
+    .input-area textarea:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    /* Action buttons */
+    .actions {
+      display: flex;
+      gap: 0.75rem;
+      justify-content: center;
+      flex-wrap: wrap;
+      margin-bottom: 1rem;
+    }
+    .btn {
+      padding: 0.65rem 1.5rem;
+      border: none;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s;
+      font-family: inherit;
+    }
+    .btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+    .btn-primary {
+      background: #238636;
+      color: #fff;
+    }
+    .btn-primary:hover:not(:disabled) {
+      background: #2ea043;
+    }
+    .btn-secondary {
+      background: #21262d;
+      color: #c9d1d9;
+      border: 1px solid #30363d;
+    }
+    .btn-secondary:hover:not(:disabled) {
+      background: #30363d;
+    }
+    .btn-danger {
+      background: #da3633;
+      color: #fff;
+    }
+    .btn-danger:hover:not(:disabled) {
+      background: #f85149;
+    }
+
+    /* Progress bar */
+    .progress-bar {
+      width: 100%;
+      height: 4px;
+      background: #21262d;
+      border-radius: 2px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #238636, #2ea043);
+      border-radius: 2px;
+      transition: width 0.2s ease;
+    }
+
+    /* Snippet info */
+    .snippet-info {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.75rem;
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+    .snippet-info .badge {
+      background: #1f6feb20;
+      color: #58a6ff;
+      padding: 0.2rem 0.6rem;
+      border-radius: 4px;
+      font-size: 0.75rem;
+      font-weight: 600;
+    }
+
+    /* Results overlay */
+    .results-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 100;
+      padding: 1rem;
+    }
+    .results-card {
+      background: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 16px;
+      padding: 2.5rem 2rem;
+      max-width: 420px;
+      width: 100%;
+      text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5);
+    }
+    .results-card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    .results-card .emoji-big {
+      font-size: 3rem;
+      margin-bottom: 0.5rem;
+    }
+    .results-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin: 1.5rem 0;
+    }
+    .results-grid .item {
+      background: #0d1117;
+      padding: 0.75rem;
+      border-radius: 8px;
+    }
+    .results-grid .item .value {
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+    .results-grid .item .lbl {
+      font-size: 0.7rem;
+      color: #8b949e;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .results-grid .item .value.green { color: #3fb950; }
+    .results-grid .item .value.blue  { color: #58a6ff; }
+    .results-grid .item .value.orange{ color: #d29922; }
+
+    .footer {
+      text-align: center;
+      margin-top: 1.5rem;
+      color: #484f58;
+      font-size: 0.75rem;
+    }
+    .footer a { color: #58a6ff; text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback, useMemo } = React;
+
+    // ─── Code Snippets ─────────────────────────────────────────────
+    const SNIPPETS = [
+      {
+        lang: 'Python',
+        code: `def fibonacci(n):
+    if n <= 1:
+        return n
+    a, b = 0, 1
+    for _ in range(2, n + 1):
+        a, b = b, a + b
+    return b`,
+      },
+      {
+        lang: 'JavaScript',
+        code: `function debounce(fn, delay) {
+    let timer;
+    return function(...args) {
+        clearTimeout(timer);
+        timer = setTimeout(() => fn.apply(this, args), delay);
+    };
+}`,
+      },
+      {
+        lang: 'React',
+        code: `function Counter() {
+    const [count, setCount] = useState(0);
+    useEffect(() => {
+        document.title = \`Count: \${count}\`;
+    }, [count]);
+    return (
+        <div>
+            <p>You clicked {count} times</p>
+            <button onClick={() => setCount(c => c + 1)}>
+                Increment
+            </button>
+        </div>
+    );
+}`,
+      },
+      {
+        lang: 'Python',
+        code: `class Stack:
+    def __init__(self):
+        self._items = []
+    
+    def push(self, item):
+        self._items.append(item)
+    
+    def pop(self):
+        if self.is_empty():
+            raise IndexError("pop from empty stack")
+        return self._items.pop()
+    
+    @property
+    def is_empty(self):
+        return len(self._items) == 0`,
+      },
+      {
+        lang: 'JavaScript',
+        code: `const memoize = (fn) => {
+    const cache = new Map();
+    return (...args) => {
+        const key = JSON.stringify(args);
+        if (cache.has(key)) return cache.get(key);
+        const result = fn(...args);
+        cache.set(key, result);
+        return result;
+    };
+};`,
+      },
+      {
+        lang: 'SQL',
+        code: `SELECT
+    u.name,
+    COUNT(o.id) AS total_orders,
+    SUM(o.total) AS spent
+FROM users u
+LEFT JOIN orders o ON o.user_id = u.id
+WHERE u.active = true
+GROUP BY u.id, u.name
+HAVING COUNT(o.id) > 5
+ORDER BY spent DESC;`,
+      },
+      {
+        lang: 'Ruby',
+        code: `class BlogPost
+    attr_reader :title, :body, :created_at
+    
+    def initialize(title:, body:)
+        @title = title
+        @body = body
+        @created_at = Time.now
+        @comments = []
+    end
+    
+    def add_comment(comment)
+        @comments << comment
+    end
+end`,
+      },
+      {
+        lang: 'Go',
+        code: `func Map[T any, U any](items []T, fn func(T) U) []U {
+    result := make([]U, len(items))
+    for i, item := range items {
+        result[i] = fn(item)
+    }
+    return result
+}`,
+      },
+      {
+        lang: 'TypeScript',
+        code: `interface ApiResponse<T> {
+    data: T;
+    status: number;
+    message: string;
+}
+
+async function fetchData<T>(url: string): Promise<ApiResponse<T>> {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(res.statusText);
+    return res.json();
+}`,
+      },
+      {
+        lang: 'Rust',
+        code: `fn quicksort<T: Ord>(arr: &mut [T]) {
+    if arr.len() <= 1 { return; }
+    let pivot = partition(arr);
+    quicksort(&mut arr[..pivot]);
+    quicksort(&mut arr[pivot + 1..]);
+}
+
+fn partition<T: Ord>(arr: &mut [T]) -> usize {
+    let len = arr.len();
+    arr.swap(len / 2, len - 1);
+    let mut i = 0;
+    for j in 0..len - 1 {
+        if arr[j] <= arr[len - 1] { arr.swap(i, j); i += 1; }
+    }
+    arr.swap(i, len - 1);
+    i
+}`,
+      },
+    ];
+
+    // ─── Utility ────────────────────────────────────────────────────
+    function calcWPM(chars, seconds) {
+      if (seconds <= 0) return 0;
+      const words = chars / 5;
+      return Math.round(words / (seconds / 60));
+    }
+
+    function calcAccuracy(correct, total) {
+      if (total <= 0) return 0;
+      return Math.round((correct / total) * 100);
+    }
+
+    function formatTime(sec) {
+      const m = Math.floor(sec / 60);
+      const s = sec % 60;
+      return m > 0 ? `${m}m ${s}s` : `${s}s`;
+    }
+
+    function getRating(wpm, acc) {
+      if (wpm >= 70 && acc >= 98) return { emoji: '🏆', label: 'Legend' };
+      if (wpm >= 50 && acc >= 95) return { emoji: '🔥', label: 'Pro' };
+      if (wpm >= 35 && acc >= 90) return { emoji: '💪', label: 'Solid' };
+      if (wpm >= 20 && acc >= 80) return { emoji: '👍', label: 'Getting there' };
+      return { emoji: '🌱', label: 'Keep practicing' };
+    }
+
+    // ─── Char Component ─────────────────────────────────────────────
+    function Char({ char, state }) {
+      let cls = 'char';
+      if (state === 'correct')   cls += ' correct';
+      if (state === 'incorrect') cls += ' incorrect';
+      if (state === 'current')   cls += ' current';
+      if (state === 'pending')   cls += ' pending';
+      return <span className={cls}>{char}</span>;
+    }
+
+    // ─── Main App ──────────────────────────────────────────────────
+    function App() {
+      const [snippetIndex, setSnippetIndex] = useState(0);
+      const [input, setInput] = useState('');
+      const [startTime, setStartTime] = useState(null);
+      const [endTime, setEndTime] = useState(null);
+      const [showResults, setShowResults] = useState(false);
+      const [roundStats, setRoundStats] = useState([]);
+      const textareaRef = useRef(null);
+
+      const snippet = SNIPPETS[snippetIndex];
+      const codeChars = snippet.code;
+
+      // --- Derived ---
+      const isRunning = startTime !== null && endTime === null;
+      const isDone = endTime !== null;
+
+      // Build char states
+      const charStates = useMemo(() => {
+        const states = [];
+        for (let i = 0; i < codeChars.length; i++) {
+          if (i >= input.length) {
+            states.push('pending');
+          } else if (input[i] === codeChars[i]) {
+            states.push('correct');
+          } else {
+            states.push('incorrect');
+          }
+        }
+        return states;
+      }, [codeChars, input]);
+
+      // Current position
+      const currentPos = input.length;
+      const progress = Math.min((currentPos / codeChars.length) * 100, 100);
+
+      // Stats
+      const elapsed = isRunning && startTime
+        ? Math.floor((Date.now() - startTime) / 1000)
+        : isDone && endTime && startTime
+          ? Math.floor((endTime - startTime) / 1000)
+          : 0;
+
+      const correctCount = charStates.filter(s => s === 'correct').length;
+      const totalTyped = input.length;
+      const wpm = calcWPM(correctCount, elapsed);
+      const accuracy = calcAccuracy(correctCount, totalTyped);
+
+      // --- Handlers ---
+      const handleInput = useCallback((e) => {
+        if (isDone) return;
+        const val = e.target.value;
+        if (!startTime && val.length > 0) {
+          setStartTime(Date.now());
+        }
+        // Prevent typing past the snippet length
+        if (val.length <= codeChars.length) {
+          setInput(val);
+        }
+        // Check if complete
+        if (val.length === codeChars.length) {
+          const now = Date.now();
+          setEndTime(now);
+          const endElapsed = Math.floor((now - (startTime || now)) / 1000);
+          const endCorrect = codeChars.split('').filter((ch, i) => i < val.length && val[i] === ch).length;
+          setRoundStats(prev => [...prev, {
+            snippetIndex,
+            wpm: calcWPM(endCorrect, endElapsed),
+            accuracy: calcAccuracy(endCorrect, val.length),
+            time: endElapsed,
+            lang: snippet.lang,
+          }]);
+        }
+      }, [isDone, startTime, codeChars, snippetIndex, snippet.lang]);
+
+      const handleKeyDown = useCallback((e) => {
+        // Prevent backspace from deleting already-correct chars if desired
+        // Actually allow it — user experience is better
+      }, []);
+
+      const nextSnippet = useCallback(() => {
+        const next = (snippetIndex + 1) % SNIPPETS.length;
+        setSnippetIndex(next);
+        setInput('');
+        setStartTime(null);
+        setEndTime(null);
+        textareaRef.current?.focus();
+      }, [snippetIndex]);
+
+      const handleReset = useCallback(() => {
+        setInput('');
+        setStartTime(null);
+        setEndTime(null);
+        textareaRef.current?.focus();
+      }, []);
+
+      const handleShowResults = useCallback(() => {
+        setShowResults(true);
+      }, []);
+
+      const handleRestart = useCallback(() => {
+        setSnippetIndex(0);
+        setInput('');
+        setStartTime(null);
+        setEndTime(null);
+        setShowResults(false);
+        setRoundStats([]);
+      }, []);
+
+      // Auto focus textarea
+      useEffect(() => {
+        textareaRef.current?.focus();
+      }, [snippetIndex]);
+
+      // Handle completion detection for auto-showing results
+      useEffect(() => {
+        if (isDone) {
+          const timer = setTimeout(() => setShowResults(true), 600);
+          return () => clearTimeout(timer);
+        }
+      }, [isDone]);
+
+      const overallWpm = roundStats.length > 0
+        ? Math.round(roundStats.reduce((s, r) => s + r.wpm, 0) / roundStats.length)
+        : 0;
+      const overallAcc = roundStats.length > 0
+        ? Math.round(roundStats.reduce((s, r) => s + r.accuracy, 0) / roundStats.length)
+        : 0;
+      const totalTime = roundStats.reduce((s, r) => s + r.time, 0);
+
+      const rating = getRating(overallWpm, overallAcc);
+
+      // ─── Render ──────────────────────────────────────────────────
+      return (
+        <div className="container">
+          <h1>⌨️ Code Typing Challenge</h1>
+          <p className="subtitle">Type the code as fast and accurately as you can</p>
+
+          {/* Stats */}
+          <div className="stats-bar">
+            <div className="stat">
+              <div className="stat-value blue">{formatTime(elapsed)}</div>
+              <div className="stat-label">Time</div>
+            </div>
+            <div className="stat">
+              <div className="stat-value green">{wpm}</div>
+              <div className="stat-label">WPM</div>
+            </div>
+            <div className="stat">
+              <div className="stat-value orange">{accuracy}%</div>
+              <div className="stat-label">Accuracy</div>
+            </div>
+            <div className="stat">
+              <div className="stat-value purple">{progress.toFixed(0)}%</div>
+              <div className="stat-label">Progress</div>
+            </div>
+          </div>
+
+          {/* Progress bar */}
+          <div className="progress-bar">
+            <div className="progress-fill" style={{ width: `${progress}%` }} />
+          </div>
+
+          {/* Snippet info */}
+          <div className="snippet-info">
+            <span className="badge">{snippet.lang}</span>
+            <span>Snippet {snippetIndex + 1} of {SNIPPETS.length}</span>
+          </div>
+
+          {/* Code display */}
+          <div className="code-display">
+            {codeChars.split('').map((ch, i) => (
+              <Char key={i} char={ch} state={
+                i === currentPos && !isDone ? 'current' : charStates[i]
+              } />
+            ))}
+          </div>
+
+          {/* Input */}
+          <div className="input-area">
+            <textarea
+              ref={textareaRef}
+              value={input}
+              onChange={handleInput}
+              onKeyDown={handleKeyDown}
+              placeholder="Start typing here..."
+              disabled={isDone}
+              spellCheck={false}
+              autoComplete="off"
+              autoCorrect="off"
+              autoCapitalize="off"
+            />
+          </div>
+
+          {/* Actions */}
+          <div className="actions">
+            {isDone ? (
+              <>
+                <button className="btn btn-primary" onClick={nextSnippet}>
+                  Next Snippet →
+                </button>
+                {roundStats.length > 0 && (
+                  <button className="btn btn-secondary" onClick={handleShowResults}>
+                    View Results
+                  </button>
+                )}
+              </>
+            ) : (
+              <>
+                <button className="btn btn-danger" onClick={handleReset} disabled={!isRunning}>
+                  ↺ Reset
+                </button>
+              </>
+            )}
+          </div>
+
+          <div className="footer">
+            React 18 &middot; {SNIPPETS.length} snippets &middot;
+            {' '}<a href="https://github.com/Samuelfmedeiros/code-typing" target="_blank">GitHub</a>
+          </div>
+
+          {/* Results Modal */}
+          {showResults && roundStats.length > 0 && (
+            <div className="results-overlay" onClick={(e) => {
+              if (e.target === e.currentTarget) setShowResults(false);
+            }}>
+              <div className="results-card">
+                <div className="emoji-big">{rating.emoji}</div>
+                <h2>Session Complete!</h2>
+                <p style={{ color: '#8b949e', marginBottom: '0.5rem' }}>
+                  {rating.label} &middot; {roundStats.length} snippets
+                </p>
+
+                <div className="results-grid">
+                  <div className="item">
+                    <div className="value green">{overallWpm}</div>
+                    <div className="lbl">Avg WPM</div>
+                  </div>
+                  <div className="item">
+                    <div className="value orange">{overallAcc}%</div>
+                    <div className="lbl">Avg Accuracy</div>
+                  </div>
+                  <div className="item">
+                    <div className="value blue">{formatTime(totalTime)}</div>
+                    <div className="lbl">Total Time</div>
+                  </div>
+                  <div className="item">
+                    <div className="value">{roundStats.length}</div>
+                    <div className="lbl">Completed</div>
+                  </div>
+                </div>
+
+                <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
+                  <p style={{ fontSize: '0.8rem', color: '#8b949e', marginBottom: '0.4rem' }}>Per Snippet:</p>
+                  {roundStats.map((r, i) => (
+                    <div key={i} style={{
+                      display: 'flex', justifyContent: 'space-between',
+                      fontSize: '0.8rem', padding: '0.2rem 0',
+                      borderBottom: '1px solid #21262d'
+                    }}>
+                      <span style={{ color: '#58a6ff' }}>{r.lang} #{i + 1}</span>
+                      <span>{r.wpm} WPM &middot; {r.accuracy}% &middot; {formatTime(r.time)}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <button className="btn btn-primary" onClick={handleRestart} style={{ width: '100%' }}>
+                  🔄 Start New Session
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ─── Mount ──────────────────────────────────────────────────────
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<App />);
+  </script>
+</body>
+</html>
