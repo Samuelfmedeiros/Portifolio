@@ -302,25 +302,24 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
 }
 
 export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]; title?: string }) {
-  const [activeFilter, setActiveFilter] = useState<string>("all");
+  const [activeFilter, setActiveFilter] = useState<string>("");
   const { track } = useAnalytics();
-
   // Collect all unique languages/tags for filter
   const allTags = useMemo(() => {
     const tagSet = new Set<string>();
-    if (!repos) return ["all"];
+    if (!repos) return [] as string[];
     repos.forEach((r) => {
       if (r.language) tagSet.add(r.language);
       r.topics?.forEach((t) => {
         if (t !== "featured") tagSet.add(t);
       });
     });
-    return ["all", ...Array.from(tagSet).sort()];
+    return Array.from(tagSet).sort();
   }, [repos]);
 
   // Filter repos
   const filteredRepos = useMemo(() => {
-    if (activeFilter === "all") return repos;
+    if (!activeFilter) return repos;
     return repos.filter(
       (r) =>
         r.language === activeFilter || r.topics?.includes(activeFilter)
@@ -360,7 +359,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
                   : "text-[var(--text-secondary)] border border-transparent hover:border-[var(--border)]/50 hover:text-[var(--text-primary)] hover:bg-[var(--border)]/10"
               }`}
             >
-              {tag === "all" ? "Todos" : tag}
+              {tag}
             </button>
           ))}
         </div>
@@ -370,7 +369,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
       <div className="flex items-center justify-center gap-4 mb-6 font-mono text-xs text-[var(--text-secondary)]">
         <span>{filteredRepos.length} projeto{filteredRepos.length !== 1 ? "s" : ""}</span>
         <span className="text-[var(--border)]">|</span>
-        <span>Filtro: {activeFilter === "all" ? "Todos" : activeFilter}</span>
+        <span>Filtro: {activeFilter || "Todos"}</span>
       </div>
 
       {/* Cards grid */}
@@ -391,7 +390,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
             Nenhum projeto encontrado com o filtro {'"'}{activeFilter}{'"'}
           </p>
           <button
-            onClick={() => setActiveFilter("all")}
+            onClick={() => setActiveFilter("")}
             className="mt-4 px-4 py-2 rounded-lg font-mono text-xs text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/10 transition-colors"
           >
             Limpar filtros

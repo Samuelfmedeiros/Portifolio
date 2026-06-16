@@ -18,6 +18,12 @@ async function HangarWithData() {
   for (const r of filteredRepos) repoMap.set(r.name, r);
   for (const r of STATIC_PROJECTS) repoMap.set(r.name, r);
   const allProjects = Array.from(repoMap.values());
+  // DogWalk primeiro (Samuel: "Dog walk deve ser primeiro projeto")
+  allProjects.sort((a, b) => {
+    if (a.name === 'DogWalk') return -1;
+    if (b.name === 'DogWalk') return 1;
+    return 0;
+  });
 
   // Split games from other projects
   const games = allProjects.filter((r) => GAME_PROJECTS.includes(r.name));
