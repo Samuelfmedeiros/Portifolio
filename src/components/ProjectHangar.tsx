@@ -337,30 +337,9 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
         {title}
       </motion.h2>
 
-      {/* Filter bar */}
-      {allTags.length > 1 && (
-        <div className="flex items-center justify-center gap-1 mb-4 overflow-x-auto hide-scrollbar pb-2">
-          {allTags.slice(0, 12).map((tag) => (
-            <button
-              key={tag}
-              onClick={() => { setActiveFilter(tag); track({ type: "project_filter", filter: tag }); }}
-              className={`px-3 py-1.5 rounded-lg font-mono text-xs transition-all shrink-0 whitespace-nowrap ${
-                activeFilter === tag
-                  ? "bg-[var(--accent)]/15 text-[var(--accent)] border border-[var(--accent)]/40 shadow-[0_0_10px_var(--accent)]/10"
-                  : "text-[var(--text-secondary)] border border-transparent hover:border-[var(--border)]/50 hover:text-[var(--text-primary)] hover:bg-[var(--border)]/10"
-              }`}
-            >
-              {tag}
-            </button>
-          ))}
-        </div>
-      )}
-
       {/* Stats bar */}
       <div className="flex items-center justify-center gap-4 mb-6 font-mono text-xs text-[var(--text-secondary)]">
-        <span>{filteredRepos.length} projeto{filteredRepos.length !== 1 ? "s" : ""}</span>
-        <span className="text-[var(--border)]">|</span>
-        <span>Filtro: {activeFilter || "Todos"}</span>
+        <span>{repos.length} projeto{repos.length !== 1 ? "s" : ""}</span>
       </div>
 
       {/* Cards grid */}
@@ -369,25 +348,11 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
         layout
       >
         <AnimatePresence>
-          {filteredRepos.map((repo, i) => (
+          {repos.map((repo, i) => (
             <ProjectCard key={repo.id} repo={repo} index={i} />
           ))}
         </AnimatePresence>
       </motion.div>
-
-      {filteredRepos.length === 0 && (
-        <div className="text-center py-8">
-          <p className="font-mono text-sm text-[var(--text-secondary)]">
-            Nenhum projeto encontrado com o filtro {'"'}{activeFilter}{'"'}
-          </p>
-          <button
-            onClick={() => setActiveFilter("")}
-            className="mt-4 px-4 py-2 rounded-lg font-mono text-xs text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/10 transition-colors"
-          >
-            Limpar filtros
-          </button>
-        </div>
-      )}
     </section>
   );
 }
