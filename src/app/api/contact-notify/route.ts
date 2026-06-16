@@ -22,7 +22,7 @@ export async function POST(req: NextRequest) {
           },
           body: JSON.stringify({
             from: "Portifolio Samuel <onboarding@resend.dev>",
-            to: "samuelandrademedeiros@gmail.com",
+            to: "samuelandrademedeiros@outlook.com",
             subject: `📬 Contato do Portfólio — ${name}`,
             html: `
               <h2>Nova mensagem do portfólio</h2>
