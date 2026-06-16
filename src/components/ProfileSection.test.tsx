@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { render, screen } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { ProfileSection } from "./ProfileSection";
 
 describe("ProfileSection", () => {
@@ -47,11 +47,18 @@ describe("ProfileSection", () => {
     expect(screen.getByText("Baixar Curriculo")).toBeInTheDocument();
   });
 
-  it("renders timeline items", () => {
+  it("renders timeline items (first 4 via P2 collapse)", () => {
     render(<ProfileSection />);
     expect(screen.getByText("Analista de Dados — ANA")).toBeInTheDocument();
     expect(screen.getByText(/Agência Nacional de Águas/)).toBeInTheDocument();
     expect(screen.getByText(/Pós-graduação em Banco de Dados/)).toBeInTheDocument();
+    expect(screen.getByText(/Desenvolvedor Full Stack Autônomo/)).toBeInTheDocument();
+  });
+
+  it("expands timeline to show all items on click", () => {
+    render(<ProfileSection />);
+    expect(screen.getByText(/Ver jornada completa/)).toBeInTheDocument();
+    fireEvent.click(screen.getByText(/Ver jornada completa/));
     expect(screen.getByText(/Análise e Desenvolvimento de Sistemas/)).toBeInTheDocument();
   });
 
