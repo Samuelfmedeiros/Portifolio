@@ -39,8 +39,8 @@ describe("Navbar", () => {
     expect(inicioLinks.length).toBeGreaterThanOrEqual(1);
     // Projetos appears in both desktop and mobile
     expect(screen.getAllByText("Projetos").length).toBeGreaterThanOrEqual(1);
-    // Terminal appears in both desktop and mobile
-    expect(screen.getAllByText("Terminal").length).toBeGreaterThanOrEqual(1);
+    // Jogos appears in both desktop and mobile
+    expect(screen.getAllByText("Jogos").length).toBeGreaterThanOrEqual(1);
   });
 
   it("theme toggle is present", () => {
