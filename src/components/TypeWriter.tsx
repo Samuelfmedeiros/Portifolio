@@ -53,7 +53,11 @@ export function TypeWriter({
   }, [currentText, isDeleting, currentPhraseIndex, phrases, tick, speed, deleteSpeed, pauseDuration]);
 
   return (
-    <span className={className} aria-label={phrases[currentPhraseIndex]}>
+    <span
+      className={className}
+      role="text"
+      aria-label={phrases[currentPhraseIndex]}
+    >
       {currentText}
       <motion.span
         animate={{ opacity: [1, 0] }}

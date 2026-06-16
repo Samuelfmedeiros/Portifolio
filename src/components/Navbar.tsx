@@ -18,7 +18,7 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 export const Navbar = memo(function Navbar() {
   const [scrolled, setScrolled] = useState(false);
   const [activeSection, setActiveSection] = useState("profile");
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const scrollRef = useRef<HTMLUListElement>(null);
   const { track } = useAnalytics();
 
   const rafRef = useRef<number | null>(null);
@@ -110,34 +110,35 @@ export const Navbar = memo(function Navbar() {
           </motion.a>
 
           {/* Desktop Nav — horizontal with glass effect */}
-          <div className="hidden lg:flex items-center gap-1" role="list">
+          <ul className="hidden lg:flex items-center gap-1">
             {NAV_ITEMS.map((item) => {
               const isActive = activeId === item.href.replace("#", "");
               return (
-                <motion.a
-                  key={item.href}
-                  href={item.href}
-                  onClick={(e) => handleNavClick(e, item.href)}
-                  className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all ${
-                    isActive
-                      ? "text-[var(--accent)] bg-[var(--accent)]/10"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)]/20"
-                  }`}
-                  whileHover={{ y: -1 }}
-                  aria-current={isActive ? "true" : undefined}
-                >
-                  {item.label}
-                  {isActive && (
-                    <motion.div
-                      layoutId="navbar-indicator"
-                      className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--accent)] rounded-full"
-                      transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                    />
-                  )}
-                </motion.a>
+                <li key={item.href}>
+                  <motion.a
+                    href={item.href}
+                    onClick={(e) => handleNavClick(e, item.href)}
+                    className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all block ${
+                      isActive
+                        ? "text-[var(--accent)] bg-[var(--accent)]/10"
+                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)]/20"
+                    }`}
+                    whileHover={{ y: -1 }}
+                    aria-current={isActive ? "true" : undefined}
+                  >
+                    {item.label}
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-indicator"
+                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--accent)] rounded-full"
+                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
+                      />
+                    )}
+                  </motion.a>
+                </li>
               );
             })}
-          </div>
+          </ul>
 
           {/* Actions */}
           <div className="flex items-center gap-2 md:gap-3 shrink-0">
@@ -158,39 +159,39 @@ export const Navbar = memo(function Navbar() {
         </div>
 
         {/* Mobile Nav — horizontal scrollable, NO hamburger */}
-        <div
+        <ul
           ref={scrollRef}
           className="lg:hidden flex items-center gap-0.5 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x snap-mandatory"
-          role="list"
           aria-label="Navegação mobile"
         >
           {NAV_ITEMS.map((item) => {
             const isActive = activeId === item.href.replace("#", "");
             return (
-              <motion.a
-                key={item.href}
-                href={item.href}
-                onClick={(e) => handleNavClick(e, item.href)}
-                className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all shrink-0 whitespace-nowrap snap-start ${
-                  isActive
-                    ? "text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30"
-                    : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent"
-                }`}
-                whileTap={{ scale: 0.95 }}
-                aria-current={isActive ? "true" : undefined}
-              >
-                <span className="text-xs">{item.icon}</span>
-                <span className="sm:inline">{item.label}</span>
-                {isActive && (
-                  <motion.div
-                    className="w-1 h-1 rounded-full bg-[var(--accent)]"
-                    layoutId="mobile-active-dot"
-                  />
-                )}
-              </motion.a>
+              <li key={item.href} className="shrink-0 snap-start">
+                <motion.a
+                  href={item.href}
+                  onClick={(e) => handleNavClick(e, item.href)}
+                  className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap ${
+                    isActive
+                      ? "text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30"
+                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent"
+                  }`}
+                  whileTap={{ scale: 0.95 }}
+                  aria-current={isActive ? "true" : undefined}
+                >
+                  <span className="text-xs">{item.icon}</span>
+                  <span className="sm:inline">{item.label}</span>
+                  {isActive && (
+                    <motion.div
+                      className="w-1 h-1 rounded-full bg-[var(--accent)]"
+                      layoutId="mobile-active-dot"
+                    />
+                  )}
+                </motion.a>
+              </li>
             );
           })}
-        </div>
+        </ul>
       </div>
     </motion.nav>
   );
