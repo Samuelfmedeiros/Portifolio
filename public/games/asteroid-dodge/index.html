@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Asteroid Dodge</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      background: #0a0a1a;
+      color: #fff;
+      font-family: 'Segoe UI', system-ui, sans-serif;
+      overflow: hidden;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    #root { width: 100%; height: 100%; }
+
+    .game-container {
+      width: 100%;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      background: linear-gradient(180deg, #0a0a1a 0%, #1a0a2e 50%, #0a0a1a 100%);
+      overflow: hidden;
+    }
+
+    /* Stars */
+    .star {
+      position: absolute;
+      background: #fff;
+      border-radius: 50%;
+      animation: twinkle var(--dur) ease-in-out infinite alternate;
+    }
+    @keyframes twinkle {
+      0% { opacity: 0.2; }
+      100% { opacity: 1; }
+    }
+
+    /* Canvas area */
+    .game-canvas {
+      position: relative;
+      width: 400px;
+      height: 600px;
+      background: radial-gradient(ellipse at center, #0d0d2b 0%, #050510 100%);
+      border: 2px solid #333;
+      border-radius: 8px;
+      overflow: hidden;
+      cursor: none;
+    }
+
+    /* Player ship */
+    .ship {
+      position: absolute;
+      width: 32px;
+      height: 32px;
+      transition: left 0.15s ease-out, top 0.15s ease-out;
+      pointer-events: none;
+      z-index: 10;
+    }
+    .ship svg {
+      width: 100%;
+      height: 100%;
+      filter: drop-shadow(0 0 6px #00aaff);
+    }
+
+    /* Asteroid */
+    .asteroid {
+      position: absolute;
+      pointer-events: none;
+      z-index: 5;
+      animation: fall var(--speed) linear forwards;
+    }
+    @keyframes fall {
+      0% { transform: translateY(0) rotate(0deg); }
+      100% { transform: translateY(650px) rotate(360deg); }
+    }
+
+    /* Explosion */
+    .explosion {
+      position: absolute;
+      pointer-events: none;
+      z-index: 20;
+      animation: explode 0.6s ease-out forwards;
+    }
+    @keyframes explode {
+      0% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(2.5); opacity: 0.8; }
+      100% { transform: scale(3); opacity: 0; }
+    }
+
+    /* HUD */
+    .hud {
+      position: absolute;
+      top: 8px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      padding: 0 12px;
+      font-size: 14px;
+      font-weight: 600;
+      z-index: 30;
+      pointer-events: none;
+    }
+    .hud span {
+      background: rgba(0,0,0,0.5);
+      padding: 4px 10px;
+      border-radius: 4px;
+      border: 1px solid rgba(255,255,255,0.1);
+    }
+    .hud .score { color: #ffd700; }
+    .hud .lives { color: #ff4444; }
+    .hud .level { color: #44aaff; }
+
+    /* Start / Game Over overlay */
+    .overlay {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.75);
+      z-index: 50;
+      animation: fadeIn 0.3s ease;
+    }
+    @keyframes fadeIn {
+      0% { opacity: 0; }
+      100% { opacity: 1; }
+    }
+    .overlay h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+      background: linear-gradient(135deg, #ff6b6b, #ffd93d);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .overlay h2 {
+      font-size: 28px;
+      margin-bottom: 4px;
+      color: #ff4444;
+    }
+    .overlay p {
+      color: #aaa;
+      margin-bottom: 20px;
+      font-size: 14px;
+    }
+    .overlay .final-score {
+      color: #ffd700;
+      font-size: 18px;
+      margin-bottom: 16px;
+    }
+    .btn {
+      padding: 12px 36px;
+      font-size: 18px;
+      font-weight: 700;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      transition: transform 0.15s, box-shadow 0.15s;
+      pointer-events: all;
+    }
+    .btn:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 20px rgba(102,126,234,0.5);
+    }
+    .btn:active {
+      transform: scale(0.97);
+    }
+
+    /* Objective hint */
+    .hint {
+      position: absolute;
+      bottom: 8px;
+      left: 0;
+      right: 0;
+      text-align: center;
+      font-size: 11px;
+      color: rgba(255,255,255,0.25);
+      z-index: 1;
+      pointer-events: none;
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useRef, useCallback } = React;
+
+    // ─── Constants ───────────────────────────────────────────────
+    const CANVAS_W = 400;
+    const CANVAS_H = 600;
+    const SHIP_SIZE = 32;
+    const ASTEROID_SIZES = [24, 32, 40, 48];
+    const BASE_SPEED = 1.8;
+    const MAX_LIVES = 3;
+
+    // ─── Helpers ─────────────────────────────────────────────────
+    const rand = (min, max) => Math.random() * (max - min) + min;
+    const randInt = (min, max) => Math.floor(rand(min, max + 1));
+
+    // ─── Star background ─────────────────────────────────────────
+    function Stars() {
+      const stars = Array.from({ length: 60 }, (_, i) => ({
+        id: i,
+        left: rand(0, 100) + '%',
+        top: rand(0, 100) + '%',
+        size: rand(1, 2.5) + 'px',
+        dur: rand(1.5, 4) + 's',
+        delay: rand(0, 3) + 's',
+      }));
+      return stars.map(s => (
+        <div
+          key={s.id}
+          className="star"
+          style={{
+            left: s.left,
+            top: s.top,
+            width: s.size,
+            height: s.size,
+            '--dur': s.dur,
+            animationDelay: s.delay,
+          }}
+        />
+      ));
+    }
+
+    // ─── Ship component ──────────────────────────────────────────
+    function Ship({ x, y }) {
+      return (
+        <div
+          className="ship"
+          style={{ left: x - SHIP_SIZE / 2, top: y - SHIP_SIZE / 2 }}
+        >
+          <svg viewBox="0 0 32 32" fill="none">
+            <polygon points="16,2 6,28 16,22 26,28" fill="#44ddff" />
+            <polygon points="16,6 10,24 16,20 22,24" fill="#88eeff" />
+            <rect x="14" y="18" width="4" height="6" fill="#ff6633" rx="1" />
+          </svg>
+        </div>
+      );
+    }
+
+    // ─── Asteroid component ──────────────────────────────────────
+    function Asteroid({ x, y, size, speed, id }) {
+      const s = size;
+      return (
+        <div
+          className="asteroid"
+          key={id}
+          style={{
+            left: x - s / 2,
+            top: y - s / 2,
+            width: s,
+            height: s,
+            '--speed': speed + 's',
+          }}
+        >
+          <svg viewBox="0 0 48 48" width={s} height={s}>
+            <ellipse cx="24" cy="24" rx="22" ry="20" fill="#555" />
+            <ellipse cx="24" cy="24" rx="22" ry="20" fill="#666" opacity="0.6" />
+            <circle cx="16" cy="18" r="4" fill="#444" />
+            <circle cx="30" cy="22" r="5" fill="#3a3a3a" />
+            <circle cx="22" cy="32" r="3" fill="#4a4a4a" />
+            <ellipse cx="10" cy="14" rx="3" ry="2" fill="#3a3a3a" />
+          </svg>
+        </div>
+      );
+    }
+
+    // ─── Explosion component ─────────────────────────────────────
+    function Explosion({ x, y, id }) {
+      return (
+        <div
+          className="explosion"
+          key={id}
+          style={{ left: x - 16, top: y - 16 }}
+        >
+          <svg viewBox="0 0 32 32" width="32" height="32">
+            <circle cx="16" cy="16" r="8" fill="#ff6600" opacity="0.9" />
+            <circle cx="16" cy="16" r="4" fill="#ffcc00" />
+          </svg>
+        </div>
+      );
+    }
+
+    // ─── Main Game Component ─────────────────────────────────────
+    function Game() {
+      const [status, setStatus] = useState('start'); // start | playing | over
+      const [score, setScore] = useState(0);
+      const [lives, setLives] = useState(MAX_LIVES);
+      const [level, setLevel] = useState(1);
+      const [shipPos, setShipPos] = useState({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+      const [asteroids, setAsteroids] = useState([]);
+      const [explosions, setExplosions] = useState([]);
+      const [mousePos, setMousePos] = useState({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+
+      const frameRef = useRef(null);
+      const asteroidIdRef = useRef(0);
+      const lastSpawnRef = useRef(0);
+      const gameRef = useRef({ score: 0, lives: MAX_LIVES, level: 1 });
+      const canvasRef = useRef(null);
+
+      // ─── Keep mutable refs in sync ──────────────────────────
+      useEffect(() => { gameRef.current = { score, lives, level }; }, [score, lives, level]);
+
+      // ─── Handle mouse / touch ───────────────────────────────
+      const handlePointer = useCallback((clientX, clientY) => {
+        const rect = canvasRef.current?.getBoundingClientRect();
+        if (!rect) return;
+        const x = Math.max(SHIP_SIZE / 2, Math.min(CANVAS_W - SHIP_SIZE / 2, clientX - rect.left));
+        const y = Math.max(SHIP_SIZE / 2, Math.min(CANVAS_H - SHIP_SIZE / 2, clientY - rect.top));
+        setMousePos({ x, y });
+      }, []);
+
+      const onMouseMove = useCallback((e) => handlePointer(e.clientX, e.clientY), [handlePointer]);
+      const onTouchMove = useCallback((e) => {
+        if (e.touches.length > 0) {
+          handlePointer(e.touches[0].clientX, e.touches[0].clientY);
+        }
+      }, [handlePointer]);
+
+      // ─── Spawn asteroid ─────────────────────────────────────
+      const spawnAsteroid = useCallback(() => {
+        const size = ASTEROID_SIZES[randInt(0, ASTEROID_SIZES.length - 1)];
+        const x = rand(size / 2, CANVAS_W - size / 2);
+        const y = -size;
+        const speed = BASE_SPEED + rand(0, 1.5) - level * 0.15;
+        const spd = Math.max(1.2, speed);
+        asteroidIdRef.current += 1;
+        return { id: asteroidIdRef.current, x, y, size, speed: spd };
+      }, [level]);
+
+      // ─── Collision detection ────────────────────────────────
+      const checkCollision = useCallback((ax, ay, aSize, sx, sy) => {
+        const r = aSize / 2 + SHIP_SIZE / 2 - 4;
+        const dx = ax - sx;
+        const dy = ay - sy;
+        return dx * dx + dy * dy < r * r;
+      }, []);
+
+      // ─── Game loop ──────────────────────────────────────────
+      useEffect(() => {
+        if (status !== 'playing') return;
+
+        let spawnInterval = Math.max(300, 1200 - level * 60);
+        let running = true;
+
+        const tick = (now) => {
+          if (!running) return;
+
+          // Spawn
+          if (now - lastSpawnRef.current > spawnInterval) {
+            lastSpawnRef.current = now;
+            setAsteroids(prev => [...prev, spawnAsteroid()]);
+            // Gradually increase spawn rate
+            spawnInterval = Math.max(300, spawnInterval - 8);
+          }
+
+          // Move ship toward mouse
+          setShipPos(prev => {
+            const dx = mousePos.x - prev.x;
+            const dy = mousePos.y - prev.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < 1) return prev;
+            const speed = Math.min(dist, 12);
+            return {
+              x: prev.x + (dx / dist) * speed,
+              y: prev.y + (dy / dist) * speed,
+            };
+          });
+
+          frameRef.current = requestAnimationFrame(tick);
+        };
+
+        frameRef.current = requestAnimationFrame(tick);
+        return () => { running = false; cancelAnimationFrame(frameRef.current); };
+      }, [status, level, mousePos, spawnAsteroid]);
+
+      // ─── Collision detection loop ───────────────────────────
+      useEffect(() => {
+        if (status !== 'playing') return;
+
+        const interval = setInterval(() => {
+          setAsteroids(prev => {
+            if (prev.length === 0) return prev;
+            const g = gameRef.current;
+            let newScore = g.score;
+            let newLives = g.lives;
+            const newExplosions = [];
+            let died = false;
+
+            // Filter asteroids: check collision and out-of-bounds
+            const surviving = prev.filter(ast => {
+              const outOfBounds = ast.y > CANVAS_H + 30;
+              const hit = checkCollision(ast.x, ast.y, ast.size, shipPos.x, shipPos.y);
+
+              if (hit) {
+                newExplosions.push({ id: Date.now() + Math.random(), x: ast.x, y: ast.y });
+                newLives -= 1;
+                if (newLives <= 0) died = true;
+                return false;
+              }
+              if (outOfBounds) {
+                newScore += Math.max(1, Math.floor(ast.size / 10));
+                return false;
+              }
+              return true;
+            });
+
+            if (newScore !== g.score) setScore(newScore);
+            if (newLives !== g.lives) setLives(newLives);
+            if (newExplosions.length > 0) setExplosions(prev => [...prev, ...newExplosions]);
+
+            if (died) {
+              setStatus('over');
+              return [];
+            }
+
+            // Level up check
+            const newLevel = Math.min(20, Math.floor(newScore / 30) + 1);
+            if (newLevel !== g.level) setLevel(newLevel);
+
+            return surviving;
+          });
+        }, 30);
+
+        return () => clearInterval(interval);
+      }, [status, shipPos, checkCollision]);
+
+      // ─── Clean up explosions ────────────────────────────────
+      useEffect(() => {
+        if (explosions.length === 0) return;
+        const timer = setTimeout(() => setExplosions([]), 700);
+        return () => clearTimeout(timer);
+      }, [explosions]);
+
+      // ─── Start / Restart ────────────────────────────────────
+      const startGame = useCallback(() => {
+        setScore(0);
+        setLives(MAX_LIVES);
+        setLevel(1);
+        setAsteroids([]);
+        setExplosions([]);
+        setShipPos({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+        setMousePos({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+        asteroidIdRef.current = 0;
+        lastSpawnRef.current = 0;
+        setStatus('playing');
+      }, []);
+
+      // ─── Render ─────────────────────────────────────────────
+      return (
+        <div className="game-container">
+          <Stars />
+
+          <div
+            className="game-canvas"
+            ref={canvasRef}
+            onMouseMove={status === 'playing' ? onMouseMove : undefined}
+            onTouchMove={status === 'playing' ? onTouchMove : undefined}
+          >
+            {/* HUD */}
+            <div className="hud">
+              <span className="score">✦ {score}</span>
+              <span className="level">Lv.{level}</span>
+              <span className="lives">{'♥'.repeat(lives)}{'♡'.repeat(MAX_LIVES - lives)}</span>
+            </div>
+
+            {/* Ship */}
+            {status === 'playing' && <Ship x={shipPos.x} y={shipPos.y} />}
+
+            {/* Asteroids */}
+            {asteroids.map(a => (
+              <Asteroid key={a.id} {...a} />
+            ))}
+
+            {/* Explosions */}
+            {explosions.map(e => (
+              <Explosion key={e.id} x={e.x} y={e.y} />
+            ))}
+
+            {/* Overlays */}
+            {status === 'start' && (
+              <div className="overlay">
+                <h1>☄️ Asteroid Dodge</h1>
+                <p>Move your mouse to control the ship.<br />Dodge asteroids and survive!</p>
+                <button className="btn" onClick={startGame}>Start Game</button>
+              </div>
+            )}
+
+            {status === 'over' && (
+              <div className="overlay">
+                <h2>💥 Game Over</h2>
+                <div className="final-score">Score: {score}</div>
+                <p>Level reached: {level}</p>
+                <button className="btn" onClick={startGame}>Play Again</button>
+              </div>
+            )}
+          </div>
+
+          <div className="hint">Move mouse to navigate — dodge the asteroids!</div>
+        </div>
+      );
+    }
+
+    // ─── Mount ─────────────────────────────────────────────────
+    const root = ReactDOM.createRoot(document.getElementById('root'));
+    root.render(<Game />);
+  </script>
+</body>
+</html>

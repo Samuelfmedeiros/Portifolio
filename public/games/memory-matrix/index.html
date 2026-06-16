@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🧠 Memory Matrix</title>
+  <script crossorigin src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Courier New', monospace;
+      background: #0a0a0f;
+      color: #c8c8d4;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .game-container {
+      background: #12121a;
+      border-radius: 16px;
+      padding: 32px 28px;
+      border: 1px solid #2a2a3a;
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
+      max-width: 420px;
+      width: 100%;
+      margin: 20px;
+    }
+
+    .game-title {
+      text-align: center;
+      font-size: 14px;
+      color: #64b5f6;
+      margin-bottom: 20px;
+      letter-spacing: 2px;
+      font-weight: 700;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 8px;
+      margin-bottom: 16px;
+      font-size: 12px;
+    }
+
+    .stats span {
+      color: #8888a0;
+    }
+
+    .stats .accent {
+      color: #64b5f6;
+    }
+
+    .stats .accent-alt {
+      color: #ce93d8;
+    }
+
+    .message-area {
+      text-align: center;
+      margin-bottom: 20px;
+      min-height: 24px;
+    }
+
+    .message-area p {
+      font-size: 13px;
+      color: #8888a0;
+    }
+
+    .message-area .countdown {
+      color: #64b5f6;
+      animation: pulse 1s infinite;
+    }
+
+    .grid-wrapper {
+      display: flex;
+      justify-content: center;
+    }
+
+    .grid {
+      display: grid;
+      gap: 8px;
+    }
+
+    .cell {
+      width: 56px;
+      height: 56px;
+      border-radius: 10px;
+      border: 2px solid #2a2a3a;
+      background: rgba(18, 18, 26, 0.5);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+      outline: none;
+    }
+
+    .cell:disabled {
+      cursor: default;
+    }
+
+    .cell.revealed {
+      background: rgba(100, 181, 246, 0.2);
+      border-color: #64b5f6;
+      box-shadow: 0 0 15px rgba(100, 181, 246, 0.3);
+    }
+
+    .cell.selected-correct {
+      background: rgba(76, 175, 80, 0.15);
+      border-color: #4caf50;
+      box-shadow: 0 0 10px rgba(76, 175, 80, 0.2);
+    }
+
+    .cell.selected-wrong {
+      background: rgba(244, 67, 54, 0.15);
+      border-color: #f44336;
+      box-shadow: 0 0 10px rgba(244, 67, 54, 0.2);
+    }
+
+    .cell.idle {
+      background: rgba(18, 18, 26, 0.3);
+      border-color: #2a2a3a;
+      opacity: 0.6;
+    }
+
+    .cell.input-ready {
+      background: rgba(18, 18, 26, 0.4);
+      border-color: #2a2a3a;
+    }
+
+    .cell.input-ready:hover {
+      border-color: rgba(100, 181, 246, 0.5);
+      background: rgba(100, 181, 246, 0.1);
+    }
+
+    .cell .check-mark {
+      color: #4caf50;
+    }
+
+    .cell .cross-mark {
+      color: #f44336;
+    }
+
+    .btn-container {
+      text-align: center;
+      margin-top: 20px;
+    }
+
+    .btn {
+      padding: 10px 28px;
+      border-radius: 10px;
+      font-family: 'Courier New', monospace;
+      font-size: 13px;
+      color: #64b5f6;
+      background: rgba(100, 181, 246, 0.1);
+      border: 1px solid rgba(100, 181, 246, 0.3);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      outline: none;
+    }
+
+    .btn:hover {
+      background: rgba(100, 181, 246, 0.2);
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    @media (max-width: 480px) {
+      .game-container { padding: 20px 16px; }
+      .cell { width: 48px; height: 48px; }
+    }
+
+    @media (max-width: 380px) {
+      .cell { width: 40px; height: 40px; font-size: 14px; }
+      .grid { gap: 6px; }
+    }
+  </style>
+</head>
+<body>
+  <div id="root"></div>
+  <script type="text/babel">
+    const { useState, useEffect, useCallback } = React;
+
+    function MemoryMatrix() {
+      const [gridSize, setGridSize] = useState(3);
+      const [cells, setCells] = useState([]);
+      const [targets, setTargets] = useState([]);
+      const [phase, setPhase] = useState("idle");
+      const [level, setLevel] = useState(0);
+      const [score, setScore] = useState(0);
+      const [highScore, setHighScore] = useState(0);
+      const [message, setMessage] = useState("Pressione INICIAR para jogar");
+      const [showTimer, setShowTimer] = useState(0);
+
+      const totalCells = gridSize * gridSize;
+      const targetCount = Math.min(gridSize + level, totalCells - 1);
+
+      const generateGrid = useCallback(() => {
+        const total = gridSize * gridSize;
+        const targetSet = new Set();
+        while (targetSet.size < targetCount) {
+          targetSet.add(Math.floor(Math.random() * total));
+        }
+        const targetArr = Array.from(targetSet);
+
+        const newCells = Array.from({ length: total }, (_, i) => ({
+          index: i,
+          isTarget: targetSet.has(i),
+          revealed: false,
+          selected: false,
+          correct: null,
+        }));
+
+        return { cells: newCells, targets: targetArr };
+      }, [gridSize, targetCount]);
+
+      const showPhase = useCallback(() => {
+        const { cells: newCells, targets: newTargets } = generateGrid();
+        newCells.forEach((c) => {
+          if (c.isTarget) c.revealed = true;
+        });
+        setCells(newCells);
+        setTargets(newTargets);
+        setPhase("showing");
+        setMessage("Memorize as células destacadas...");
+
+        const showDuration = Math.max(1000, 3000 - level * 200);
+        setShowTimer(Math.ceil(showDuration / 1000));
+      }, [generateGrid, level]);
+
+      useEffect(() => {
+        if (phase !== "showing") return;
+        const timer = setInterval(() => {
+          setShowTimer((prev) => {
+            if (prev <= 1) {
+              clearInterval(timer);
+              setCells((prev) =>
+                prev.map((c) => ({ ...c, revealed: false }))
+              );
+              setPhase("input");
+              setMessage("Selecione as células que estavam destacadas!");
+              return 0;
+            }
+            return prev - 1;
+          });
+        }, 1000);
+        return () => clearInterval(timer);
+      }, [phase]);
+
+      const startGame = useCallback(() => {
+        setGridSize(3);
+        setLevel(0);
+        setScore(0);
+        setMessage("Nível 1 — Memorize!");
+        showPhase();
+      }, [showPhase]);
+
+      const handleCellClick = useCallback(
+        (index) => {
+          if (phase !== "input") return;
+          const cell = cells[index];
+          if (cell.selected || cell.revealed) return;
+
+          const isCorrect = targets.includes(index);
+
+          setCells((prev) =>
+            prev.map((c, i) =>
+              i === index
+                ? { ...c, selected: true, correct: isCorrect }
+                : c
+            )
+          );
+
+          if (isCorrect) {
+            setScore((s) => s + 10);
+          }
+
+          const newSelected = cells.filter((c) => c.selected).length + 1;
+          const correctSelected = cells.filter((c) => c.selected && c.correct).length + (isCorrect ? 1 : 0);
+
+          if (correctSelected === targetCount) {
+            setPhase("result");
+            setMessage("🎯 NÍVEL COMPLETO!");
+            setScore((s) => s + 50);
+            setHighScore((h) => Math.max(h, score + 50 + 10));
+            setTimeout(() => {
+              const nextLevel = level + 1;
+              setLevel(nextLevel);
+              if (nextLevel % 3 === 0 && gridSize < 5) {
+                setGridSize((g) => Math.min(5, g + 1));
+              }
+              setMessage(`Nível ${nextLevel + 1} — Memorize!`);
+              showPhase();
+            }, 1500);
+          } else if (!isCorrect && newSelected - correctSelected >= 2) {
+            setPhase("result");
+            setMessage(`❌ GAME OVER! Score: ${score}`);
+            setCells((prev) =>
+              prev.map((c) => ({
+                ...c,
+                revealed: c.isTarget,
+                correct: c.isTarget ? true : c.selected ? false : null,
+              }))
+            );
+            setHighScore((h) => Math.max(h, score));
+          }
+        },
+        [phase, cells, targets, targetCount, level, gridSize, score, showPhase]
+      );
+
+      function getCellClassName(cell) {
+        if (cell.revealed) return "cell revealed";
+        if (cell.selected) {
+          return cell.correct ? "cell selected-correct" : "cell selected-wrong";
+        }
+        if (phase === "input") return "cell input-ready";
+        return "cell idle";
+      }
+
+      function getCellContent(cell) {
+        if (cell.selected && cell.correct) return <span className="check-mark">✓</span>;
+        if (cell.selected && cell.correct === false) return <span className="cross-mark">✗</span>;
+        return null;
+      }
+
+      return (
+        <div className="game-container">
+          <h3 className="game-title">🧠 MEMORY MATRIX</h3>
+
+          <div className="stats">
+            <span>Nível: <span className="accent">{level + 1}</span></span>
+            <span>Score: <span className="accent">{score}</span></span>
+            <span>Best: <span className="accent-alt">{highScore}</span></span>
+          </div>
+
+          <div className="message-area">
+            <p>
+              {phase === "showing" ? (
+                <span className="countdown">{showTimer}s restantes...</span>
+              ) : (
+                message
+              )}
+            </p>
+          </div>
+
+          <div className="grid-wrapper">
+            <div
+              className="grid"
+              style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
+            >
+              {cells.map((cell) => (
+                <button
+                  key={cell.index}
+                  className={getCellClassName(cell)}
+                  onClick={() => handleCellClick(cell.index)}
+                  disabled={phase !== "input"}
+                >
+                  {getCellContent(cell)}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          {(phase === "idle" || phase === "result") && (
+            <div className="btn-container">
+              <button className="btn" onClick={startGame}>
+                {phase === "result" ? "🔄 REINICIAR" : "🚀 INICIAR"}
+              </button>
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    const root = ReactDOM.createRoot(document.getElementById("root"));
+    root.render(<MemoryMatrix />);
+  </script>
+</body>
+</html>
