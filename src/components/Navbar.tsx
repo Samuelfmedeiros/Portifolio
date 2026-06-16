@@ -7,9 +7,9 @@ import { PalettePicker } from "./PalettePicker";
 
 const NAV_ITEMS = [
   { href: "#profile", label: "Início", icon: "🚀" },
-  { href: "#projects", label: "Projetos", icon: "🛰️" },
-  { href: "#terminal", label: "Terminal", icon: "💻" },
-  { href: "#contact", label: "Contato", icon: "📡" },
+  { href: "#projects", label: "Projetos", icon: "📂" },
+  { href: "#games", label: "Jogos", icon: "🎮" },
+  { href: "#contact", label: "Contato", icon: "📬" },
 ];
 
 import { useAnalytics } from "@/hooks/useAnalytics";
