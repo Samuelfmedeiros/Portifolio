@@ -112,8 +112,8 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "terminal",
     description:
       "Terminal interativo estilo shell — navegue pelo portfólio com comandos, easter eggs e temas retrô.",
-    html_url: "https://github.com/Samuelfmedeiros/Portifolio",
-    homepage: null,
+    html_url: "https://github.com/Samuelfmedeiros/terminal",
+    homepage: "/games/terminal/index.html",
     stargazers_count: 0,
     forks_count: 0,
     language: "TypeScript",
@@ -135,4 +135,4 @@ export const FEATURED_PROJECTS = [
   "memory-matrix",
   "terminal",
 ];
-export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];
+export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix", "terminal"];
