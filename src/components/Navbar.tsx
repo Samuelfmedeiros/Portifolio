@@ -7,6 +7,7 @@ import { PalettePicker } from "./PalettePicker";
 
 const NAV_ITEMS = [
   { href: "#profile", label: "Início", icon: "🚀" },
+  { href: "#jornada", label: "Jornada", icon: "📜" },
   { href: "#projects", label: "Projetos", icon: "📂" },
   { href: "#games", label: "Jogos", icon: "🎮" },
   { href: "#contact", label: "Contato", icon: "📬" },
