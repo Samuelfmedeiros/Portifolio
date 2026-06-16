@@ -152,6 +152,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
                 fill
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
                 unoptimized
+                loading="lazy"
               />
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
@@ -188,6 +189,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
                 fill
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
                 unoptimized
+                loading="lazy"
               />
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>

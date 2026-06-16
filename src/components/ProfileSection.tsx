@@ -704,6 +704,9 @@ export function ProfileSection() {
     >
       {/* L0: Background parallax — grid + circles (sempre visível) */}
       <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: mounted ? 1 : 0 }}
+        transition={{ duration: 0.5, ease: "easeOut" }}
         style={{ y: bgY, willChange: "transform" }}
         className="absolute inset-0 z-0"
       >
@@ -719,6 +722,9 @@ export function ProfileSection() {
 
       {/* L1: Cockpit SVG overlay (sempre visível) */}
       <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: mounted ? 1 : 0 }}
+        transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
         style={{ y: svgY, willChange: "transform" }}
         className="absolute inset-0 z-[1] pointer-events-none"
       >
