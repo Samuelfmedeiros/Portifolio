@@ -19,7 +19,7 @@ describe('Navbar', () => {
 
   it('renders all navigation items on desktop', () => {
     render(<Navbar />)
-    const navItems = ['Início', 'Projetos', 'Terminal', 'Contato']
+    const navItems = ['Início', 'Projetos', 'Jogos', 'Contato']
     for (const item of navItems) {
       expect(screen.getAllByText(item).length).toBeGreaterThanOrEqual(1)
     }
@@ -64,8 +64,8 @@ describe('Navbar', () => {
   it('renders mobile nav with icon + label pairs', () => {
     render(<Navbar />)
     expect(screen.getByText('🚀')).toBeInTheDocument()
-    expect(screen.getByText('🛰️')).toBeInTheDocument()
-    expect(screen.getByText('💻')).toBeInTheDocument()
-    expect(screen.getByText('📡')).toBeInTheDocument()
+    expect(screen.getByText('📂')).toBeInTheDocument()
+    expect(screen.getByText('🎮')).toBeInTheDocument()
+    expect(screen.getByText('📬')).toBeInTheDocument()
   })
 })

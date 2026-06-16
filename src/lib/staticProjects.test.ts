@@ -23,15 +23,15 @@ describe('staticProjects', () => {
 
   it('FEATURED_PROJECTS contains expected project names', () => {
     expect(FEATURED_PROJECTS).toContain('Portifolio')
-    expect(FEATURED_PROJECTS).toContain('seu.pet')
+    expect(FEATURED_PROJECTS).toContain('DogWalk')
     expect(FEATURED_PROJECTS).toContain('simon-game')
   })
 
-  it('seu.pet has homepage and imageGradient', () => {
-    const seuPet = STATIC_PROJECTS.find(p => p.name === 'seu.pet')
-    expect(seuPet).toBeDefined()
-    expect(seuPet?.homepage).toBe('https://seu.pet')
-    expect(seuPet?.imageGradient).toBeDefined()
-    expect(seuPet?.hasDemo).toBe(true)
+  it('DogWalk has homepage and imageGradient', () => {
+    const dogWalk = STATIC_PROJECTS.find(p => p.name === 'DogWalk')
+    expect(dogWalk).toBeDefined()
+    expect(dogWalk?.homepage).toBe('https://seu.pet')
+    expect(dogWalk?.imageGradient).toBeDefined()
+    expect(dogWalk?.hasDemo).toBe(true)
   })
 })
