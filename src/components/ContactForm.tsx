@@ -63,6 +63,13 @@ export function ContactForm() {
       setStatus("error");
       track({ type: "contact_error", error: "supabase" });
     } else {
+      // Notify via API route (email + Telegram) — não bloqueia o form
+      fetch("/api/contact-notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name, email, content }),
+      }).catch(() => {}); // fire-and-forget
+
       setStatus("sent");
       setName("");
       setEmail("");
