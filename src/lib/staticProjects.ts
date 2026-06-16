@@ -3,10 +3,62 @@ import type { Repo } from "./types";
 export const STATIC_PROJECTS: Repo[] = [
   {
     id: 999001,
+    name: "seu.pet",
+    description:
+      "Plataforma de marketplace para serviços pet — React, Supabase, Stripe e Cloudflare.",
+    html_url: "https://github.com/Samuelfmedeiros/seu.pet",
+    homepage: "https://seu.pet",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "TypeScript",
+    topics: ["featured", "web"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    hasDemo: true,
+    icon: "🐾",
+    imageUrl: "/projects/seu.pet.gif",
+  },
+  {
+    id: 999002,
+    name: "Capivara",
+    description:
+      "Backend multi-tenant com autenticação JWT, convites, dashboard de analytics e portifolio integrado — FastAPI + Supabase + Cloudflare.",
+    html_url: null,
+    homepage: "https://capivara.seu.pet",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    topics: ["featured", "backend", "api"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%)",
+    hasDemo: true,
+    icon: "🐊",
+  },
+  {
+    id: 999003,
+    name: "Arachne",
+    description:
+      "Plataforma de scraping inteligente com RAG, visão computacional e pipeline de extração — async Python, SQLite e Cloudflare D1.",
+    html_url: null,
+    homepage: "https://capivara.seu.pet/api/arachne-proxy/extract-wizard",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    topics: ["featured", "scraping", "data"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
+    hasDemo: true,
+    icon: "🕷️",
+  },
+  {
+    id: 999004,
     name: "DogWalk",
     description:
       "Marketplace de serviços pet com autenticação, pagamentos e geolocalização — React, Supabase, Stripe e Cloudflare.",
-    html_url: "https://github.com/Samuelfmedeiros/dog-walk",
+    html_url: "https://github.com/Samuelfmedeiros/seu.pet",
     homepage: "https://seu.pet",
     stargazers_count: 0,
     forks_count: 0,
@@ -16,12 +68,10 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
     hasDemo: true,
-    icon: "🐾",
-    imageUrl: "/projects/seu.pet.gif",
+    icon: "🐕",
   },
-
   {
-    id: 999003,
+    id: 999005,
     name: "Portifolio",
     description:
       "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion, animações cinematográficas, tema ciano+preto.",
@@ -37,7 +87,7 @@ export const STATIC_PROJECTS: Repo[] = [
     hasDemo: true,
     icon: "🚀",
   },
-  // Games — stay as static because they need gradients/icons
+  // Games
   {
     id: 1001,
     name: "simon-game",
@@ -109,6 +159,9 @@ export const STATIC_PROJECTS: Repo[] = [
 ];
 
 export const FEATURED_PROJECTS = [
+  "seu.pet",
+  "Capivara",
+  "Arachne",
   "DogWalk",
   "Portifolio",
   "simon-game",
