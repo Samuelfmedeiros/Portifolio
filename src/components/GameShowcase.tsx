@@ -7,8 +7,14 @@ import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
-// Imagens IA — pendente de recarga da FAL.ai
-const GAME_IMAGES: Record<string, string> = {};
+// Screenshots reais dos games (capturados via Playwright)
+const GAME_IMAGES: Record<string, string> = {
+  "simon-game": "/games/simon-game.png",
+  "asteroid-dodge": "/games/asteroid-dodge.png",
+  "code-typing": "/games/code-typing.png",
+  "memory-matrix": "/games/memory-matrix.png",
+  "terminal": "/games/terminal.png",
+};
 
 export function GameShowcase({ repos }: { repos: Repo[] }) {
   const [playingGame, setPlayingGame] = useState<string | null>(null);
