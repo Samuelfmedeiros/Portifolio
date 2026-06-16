@@ -36,6 +36,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
     hasDemo: true,
     icon: "🚀",
+    imageUrl: "/projects/portifolio.png",
   },
   // Games — stay as static because they need gradients/icons
   {
