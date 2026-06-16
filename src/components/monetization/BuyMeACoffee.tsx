@@ -5,10 +5,10 @@ import { Coffee } from "lucide-react";
 import { BMC_CONFIG } from "@/lib/monetization";
 
 /**
- * Buy Me a Coffee — discrete support button.
- * Renders a small, themed button that links to BMC page.
- * No tracking, no cookies — just a link.
- * Always visible (does NOT require ad consent — it's a donation link, not an ad).
+ * Buy Me a Coffee — apoio voluntário.
+ * Botão visível que convida a apoiar o desenvolvimento open-source.
+ * Sem tracking, sem cookies — apenas um link de doação.
+ * Sempre visível (não requer consentimento de anúncios).
  */
 export function BuyMeACoffee({ className = "" }: { className?: string }) {
   if (!BMC_CONFIG.enabled) return null;
@@ -19,16 +19,24 @@ export function BuyMeACoffee({ className = "" }: { className?: string }) {
       target="_blank"
       rel="noopener noreferrer"
       aria-label="Apoie meu trabalho no Buy Me a Coffee"
-      className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg font-mono text-xs
-        border border-[var(--border)]/50
-        bg-[var(--bg-primary)]/50 hover:bg-[var(--accent)]/10
-        text-[var(--text-secondary)] hover:text-[var(--accent)]
-        transition-all duration-200 group ${className}`}
-      whileHover={{ scale: 1.05 }}
+      className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-sans text-sm
+        border border-[var(--border)]/60
+        bg-gradient-to-r from-[var(--bg-primary)]/80 to-[var(--bg-secondary)]/80
+        hover:from-amber-500/10 hover:to-amber-600/5
+        text-[var(--text-primary)] hover:text-amber-400
+        shadow-sm hover:shadow-amber-500/10
+        transition-all duration-300 group ${className}`}
+      whileHover={{ scale: 1.03, y: -1 }}
       whileTap={{ scale: 0.97 }}
     >
-      <Coffee className="w-3.5 h-3.5 group-hover:text-amber-500 transition-colors" />
-      <span>Apoie</span>
+      <Coffee className="w-5 h-5 text-amber-500/70 group-hover:text-amber-400 transition-colors" />
+      <span className="font-medium">Apoie meu trabalho</span>
+      <span className="text-[var(--text-muted)] text-xs hidden sm:inline">
+        — Buy Me a Coffee
+      </span>
+      <svg className="w-3 h-3 text-[var(--text-muted)] group-hover:translate-x-0.5 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M13 7l5 5m0 0l-5 5m5-5H6" />
+      </svg>
     </motion.a>
   );
 }
