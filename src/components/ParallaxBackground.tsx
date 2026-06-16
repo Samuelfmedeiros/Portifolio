@@ -72,7 +72,7 @@ export function ParallaxBackground() {
 
     // Generate multi-depth star field — 3× denser
     const stars: Star[] = [];
-    const starCounts = { deep: 250, mid: 150, close: 80 };
+    const starCounts = { deep: 120, mid: 60, close: 30 };
 
     for (const [depth, count] of Object.entries(starCounts)) {
       for (let i = 0; i < count; i++) {
@@ -309,21 +309,10 @@ export function ParallaxBackground() {
         star.twinkle += star.twinkleSpeed;
         const twinkleOpacity = star.opacity * (0.5 + 0.5 * Math.sin(star.twinkle));
 
-        // Star glow (bigger stars)
-        if (star.size > 1.2) {
-          const glowRadius = star.size * 4;
-          const glow = ctx.createRadialGradient(x, y, 0, x, y, glowRadius);
-          const starHue = star.hue;
-          glow.addColorStop(0, `hsla(${starHue}, 60%, 85%, ${twinkleOpacity * 0.15})`);
-          glow.addColorStop(1, "transparent");
-          ctx.fillStyle = glow;
-          ctx.fillRect(x - glowRadius, y - glowRadius, glowRadius * 2, glowRadius * 2);
-        }
-
         // Star body
         const baseOpacity = dark ? twinkleOpacity : twinkleOpacity * 0.5;
         ctx.fillStyle = dark
-          ? `hsla(${star.hue}, 50%, ${80 + Math.random() * 20}%, ${baseOpacity})`
+          ? `hsla(${star.hue}, 50%, ${80 + (star.size > 1.5 ? 10 : 0)}%, ${baseOpacity})`
           : `rgba(100, 130, 180, ${baseOpacity})`;
         ctx.beginPath();
         ctx.arc(x, y, star.size, 0, Math.PI * 2);
@@ -408,6 +397,7 @@ export function ParallaxBackground() {
     <canvas
       ref={canvasRef}
       className="fixed inset-0 -z-10 pointer-events-none"
+      style={{ willChange: "transform", transform: "translateZ(0)" }}
       aria-hidden="true"
     />
   );
