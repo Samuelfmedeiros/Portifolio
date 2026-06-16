@@ -634,7 +634,7 @@ export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
-  const [showFullTimeline, setShowFullTimeline] = useState(false);
+  const [showFullTimeline, setShowFullTimeline] = useState(true);
   const TIMELINE_DEFAULT_COUNT = 4;
 
   // Track section view
@@ -673,19 +673,20 @@ export function ProfileSection() {
     certification: { label: 'Certificação', icon: Award },
   };
 
-  const displayItems = showFullTimeline ? timeline : timeline.slice(0, TIMELINE_DEFAULT_COUNT);
-
+  // Always mount all items — Samuel: "sempre deve montar tudo, lógica é o contrário"
   const renderPlan: Array<
-    | { kind: 'item'; item: typeof timeline[0]; displayIndex: number }
-    | { kind: 'sep'; icon: React.ComponentType<{ className?: string }>; label: string }
+    | { kind: 'item'; item: typeof timeline[0]; displayIndex: number; hidden: boolean }
+    | { kind: 'sep'; icon: React.ComponentType<{ className?: string }>; label: string; hidden: boolean }
   > = [];
   let lastType: string | null = null;
-  for (const [i, item] of displayItems.entries()) {
+  let pastCutoff = false;
+  for (const [i, item] of timeline.entries()) {
+    if (!showFullTimeline && i >= TIMELINE_DEFAULT_COUNT) pastCutoff = true;
     if (lastType !== null && item.type !== lastType) {
       const cfg = typeConfig[item.type];
-      if (cfg) renderPlan.push({ kind: 'sep', icon: cfg.icon, label: cfg.label });
+      if (cfg) renderPlan.push({ kind: 'sep', icon: cfg.icon, label: cfg.label, hidden: pastCutoff });
     }
-    renderPlan.push({ kind: 'item', item, displayIndex: i });
+    renderPlan.push({ kind: 'item', item, displayIndex: i, hidden: pastCutoff });
     lastType = item.type;
   }
 
@@ -854,7 +855,7 @@ export function ProfileSection() {
                   key={`sep-${entry.label}`}
                   initial={{ opacity: 0, scaleX: 0.8 }}
                   whileInView={{ opacity: 1, scaleX: 1 }}
-                  className="flex items-center gap-2 py-1.5"
+                  className={`flex items-center gap-2 py-1.5 ${entry.hidden ? 'hidden' : ''}`}
                 >
                   <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--accent)]/30 to-transparent" />
                   <span className="text-[9px] font-mono text-[var(--accent)]/50 tracking-[0.2em] uppercase whitespace-nowrap flex items-center gap-1">
@@ -864,7 +865,7 @@ export function ProfileSection() {
                   <div className="h-px flex-1 bg-gradient-to-r from-[var(--accent)]/30 via-transparent to-transparent" />
                 </motion.div>
               ) : (
-                <div key={`item-${entry.item.title}-${entry.displayIndex}`}>
+                <div key={`item-${entry.item.title}-${entry.displayIndex}`} className={entry.hidden ? 'hidden' : ''}>
                   <TimelineItem
                     item={entry.item}
                     index={entry.displayIndex}
@@ -875,7 +876,21 @@ export function ProfileSection() {
               )
             )}
 
-            {/* P2: Botão "mostrar mais" no final quando colapsado */}
+            {/* P2: Botão "mostrar menos" quando expandido (sempre visível) */}
+            {showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                onClick={() => setShowFullTimeline(false)}
+                className="w-full py-3 text-center text-[10px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                ⏶ Mostrar menos
+              </motion.button>
+            )}
+
+            {/* P2: Botão "ver completa" no final quando colapsado */}
             {!showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
               <motion.button
                 initial={{ opacity: 0 }}
@@ -885,21 +900,7 @@ export function ProfileSection() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
-                ⏷ Mostrar todos os {timeline.length} itens
-              </motion.button>
-            )}
-
-            {/* P2: Botão recolher quando expandido */}
-            {showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
-              <motion.button
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                onClick={() => setShowFullTimeline(false)}
-                className="w-full py-2 text-center text-[10px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors"
-                whileHover={{ scale: 1.01 }}
-                whileTap={{ scale: 0.98 }}
-              >
-                ⏶ Mostrar menos
+                ⏷ Ver jornada completa ({timeline.length - TIMELINE_DEFAULT_COUNT} itens)
               </motion.button>
             )}
 
