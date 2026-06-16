@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
-import { useRef, useMemo, useEffect } from "react";
+import { motion, AnimatePresence, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useRef, useMemo, useState, useEffect } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
   Briefcase, GraduationCap, Award,
@@ -445,14 +445,19 @@ function SkillsCompact() {
 
 /* ──────────────────── TIMELINE ITEM ──────────────────── */
 
-function TimelineItem({ item, index }: { item: typeof timeline[0]; index: number }) {
+function TimelineItem({ item, index, onSelect, isSelected }: { 
+  item: typeof timeline[0]; 
+  index: number; 
+  onSelect?: (item: typeof timeline[0]) => void;
+  isSelected?: boolean;
+}) {
   const isLast = index === timeline.length - 1;
 
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.05 }}
+      transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.3) }}
       className="relative pl-6"
     >
       {!isLast && (
@@ -461,7 +466,21 @@ function TimelineItem({ item, index }: { item: typeof timeline[0]; index: number
       <div className="absolute left-0 top-5 w-3.5 h-3.5 rounded-full border-2 border-[var(--accent)] bg-[var(--bg-primary)] flex items-center justify-center">
         <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
       </div>
-      <GlassCard className="py-2.5 px-3.5 hover:border-[var(--accent)]/40 transition-colors">
+      <GlassCard 
+        onClick={() => onSelect?.(item)}
+        className={`py-2.5 px-3.5 cursor-pointer transition-all duration-200
+          hover:border-[var(--accent)]/60 hover:shadow-lg hover:shadow-[var(--accent)]/5
+          ${isSelected ? 'border-[var(--accent)] ring-1 ring-[var(--accent)]/30' : ''}`}
+        role="button"
+        tabIndex={0}
+        aria-expanded={isSelected}
+        onKeyDown={(e: React.KeyboardEvent) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            onSelect?.(item);
+          }
+        }}
+      >
         <div className="flex items-start gap-3">
           <div className="shrink-0 w-7 h-7 rounded-md bg-[var(--accent)]/10 flex items-center justify-center">
             <item.icon className="w-3.5 h-3.5 text-[var(--accent)]" />
@@ -506,11 +525,115 @@ function TimelineItem({ item, index }: { item: typeof timeline[0]; index: number
   );
 }
 
+/* ──────────────────── TIMELINE MODAL ──────────────────── */
+
+function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: () => void }) {
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/60"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={`Detalhes: ${item.title}`}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+        className="bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-5">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
+                <item.icon className="w-5 h-5 text-[var(--accent)]" />
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm md:text-base">{item.title}</h3>
+                {item.company && (
+                  <p className="text-xs font-mono text-[var(--text-secondary)]">{item.company}</p>
+                )}
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
+              aria-label="Fechar"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Period badge */}
+          <div className="mb-3">
+            <span className="text-[10px] font-mono text-[var(--accent)] bg-[var(--accent)]/10 px-2 py-1 rounded">
+              {item.period}
+            </span>
+          </div>
+
+          {/* Description */}
+          <p className="text-xs md:text-sm text-[var(--text-primary)] leading-relaxed mb-4">
+            {item.description}
+          </p>
+
+          {/* Skills */}
+          {item.skillsUsed && item.skillsUsed.length > 0 && (
+            <div className="mb-3">
+              <h4 className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider mb-2">Habilidades</h4>
+              <div className="flex flex-wrap gap-1.5">
+                {item.skillsUsed.map((skill) => (
+                  <span key={skill} className="text-[10px] font-mono px-2 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">
+                    {skill}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Tags */}
+          {item.tags && item.tags.length > 0 && (
+            <div>
+              <h4 className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider mb-2">Tags</h4>
+              <div className="flex flex-wrap gap-1.5">
+                {item.tags.map((tag) => (
+                  <span key={tag} className="text-[10px] font-mono px-2 py-1 rounded-full bg-[var(--border)]/50 text-[var(--text-secondary)]">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ──────────────────── MAIN COMPONENT ──────────────────── */
 
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
+  const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
 
   // Track section view
   useEffect(() => {
@@ -684,11 +807,49 @@ export function ProfileSection() {
           </motion.h3>
           <div className="space-y-3">
             {timeline.map((item, i) => (
-              <TimelineItem key={`${item.title}-${i}`} item={item} index={i} />
+              <TimelineItem 
+                key={`${item.title}-${i}`} 
+                item={item} 
+                index={i} 
+                onSelect={setSelectedItem}
+                isSelected={selectedItem?.title === item.title && selectedItem?.period === item.period}
+              />
             ))}
+            {/* Fecho visual da Jornada */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="flex flex-col items-center pt-1 pb-4"
+            >
+              <div className="w-px h-10 bg-gradient-to-b from-[var(--accent)]/40 via-[var(--accent)]/10 to-transparent" />
+              <motion.div
+                initial={{ scale: 0 }}
+                whileInView={{ scale: 1 }}
+                transition={{ delay: 0.5, type: "spring", stiffness: 200 }}
+                className="w-5 h-5 rounded-full border border-[var(--accent)]/30 bg-[var(--bg-primary)]/80 flex items-center justify-center mt-1"
+              >
+                <div className="w-2 h-2 rounded-full bg-[var(--accent)]/60" />
+              </motion.div>
+              <motion.span
+                initial={{ opacity: 0, y: 5 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.6, duration: 0.4 }}
+                className="text-[10px] font-mono text-[var(--text-muted)] mt-3 tracking-wider"
+              >
+                ∞ Continuo evoluindo
+              </motion.span>
+            </motion.div>
           </div>
         </div>
       </motion.div>
+
+      {/* Timeline Modal */}
+      <AnimatePresence>
+        {selectedItem && (
+          <TimelineModal item={selectedItem} onClose={() => setSelectedItem(null)} />
+        )}
+      </AnimatePresence>
 
     </motion.section>
   );
