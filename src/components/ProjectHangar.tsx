@@ -251,17 +251,6 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
 
           {/* Action links */}
           <div className="flex gap-3">
-            {repo.html_url && (
-              <a
-                href={repo.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-[10px] font-mono text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
-              >
-                <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                REPO
-              </a>
-            )}
             {(repo.homepage || repo.hasDemo) && (
               <a
                 href={repo.homepage || "#"}
