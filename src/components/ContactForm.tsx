@@ -52,7 +52,7 @@ export function ContactForm() {
       return;
     }
 
-    const { error } = await supabase.from("messages").insert({
+    const { error } = await supabase.from("contact_messages").insert({
       name,
       email,
       content,
