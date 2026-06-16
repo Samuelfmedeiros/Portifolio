@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ProfileSection } from "@/components/ProfileSection";
 import { ProjectHangar } from "@/components/ProjectHangar";
-import { GameShowcase } from "@/components/GameShowcase";
+import { GameShowcaseNoSSR } from "@/components/GameShowcaseNoSSR";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
@@ -12,7 +12,7 @@ import { BuyMeACoffee } from "@/components/monetization/BuyMeACoffee";
 async function HangarWithData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter((r) => r.name !== "SamuelFmedeiros");
-  
+
   // Merge static + API, deduplicating by name (static data takes precedence for featured fields)
   const repoMap = new Map<string, typeof STATIC_PROJECTS[0]>();
   for (const r of filteredRepos) repoMap.set(r.name, r);
@@ -34,7 +34,7 @@ async function HangarWithData() {
       <ProjectHangar repos={projects} title="▸ PROJETOS" />
       {games.length > 0 && (
         <section id="games" className="scroll-mt-20">
-          <GameShowcase repos={games} />
+          <GameShowcaseNoSSR repos={games} />
         </section>
       )}
     </>
