@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import { ProfileSection } from "@/components/ProfileSection";
 import { ProjectHangar } from "@/components/ProjectHangar";
-import { GameShowcaseNoSSR } from "@/components/GameShowcaseNoSSR";
+import { GameShowcase } from "@/components/GameShowcase";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
@@ -34,7 +34,7 @@ async function HangarWithData() {
       <ProjectHangar repos={projects} title="▸ PROJETOS" />
       {games.length > 0 && (
         <section id="games" className="scroll-mt-20">
-          <GameShowcaseNoSSR repos={games} />
+          <GameShowcase repos={games} />
         </section>
       )}
     </>
