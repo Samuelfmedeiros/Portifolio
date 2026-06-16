@@ -45,10 +45,16 @@ export function ParallaxBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
+    // Disable heavy canvas on mobile (< 768px)
+    const isMobile = window.innerWidth < 768;
+    const activeStarCounts = isMobile
+      ? { deep: 30, mid: 15, close: 8 }
+      : { deep: 120, mid: 60, close: 30 };
+
     let animationId: number;
     let scrollY = 0;
     let lastScrollY = 0;
-    let scrollVelocity = 0; // eslint-disable-line @typescript-eslint/no-unused-vars
+    let scrollVelocity = 0;
     let mouseX = 0;
     let mouseY = 0;
 
@@ -70,9 +76,9 @@ export function ParallaxBackground() {
       bandOffset: 0,
     };
 
-    // Generate multi-depth star field — 3× denser
+    // Generate multi-depth star field
     const stars: Star[] = [];
-    const starCounts = { deep: 120, mid: 60, close: 30 };
+    const starCounts = activeStarCounts;
 
     for (const [depth, count] of Object.entries(starCounts)) {
       for (let i = 0; i < count; i++) {
@@ -226,7 +232,7 @@ export function ParallaxBackground() {
       ], 0.03, 0.5);
 
       // === PLANET ===
-      if (dark) {
+      if (dark && !isMobile) {
         const px = w * planet.x + mx * 0.3;
         const py = h * planet.y + scrollY * 0.008 + my * 0.2;
         const pr = planet.radius;
@@ -320,7 +326,7 @@ export function ParallaxBackground() {
       }
 
       // === SHOOTING STARS ===
-      if (dark && Math.random() < 0.006) {
+      if (dark && !isMobile && Math.random() < 0.006) {
         const trailHue = 200 + Math.random() * 100;
         shootingStars.push({
           x: Math.random() * w * 0.7,

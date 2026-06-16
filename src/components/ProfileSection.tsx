@@ -633,6 +633,11 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
   const TIMELINE_DEFAULT_COUNT = 4;
@@ -721,16 +726,24 @@ export function ProfileSection() {
       </motion.div>
 
       {/* L1b: Floating hexagons */}
-      <FloatingHexagons yOffset={floatY} />
+      <div className="hidden md:block">
+        <FloatingHexagons yOffset={floatY} />
+      </div>
 
       {/* L1c: HUD data panels */}
-      <HUDDataPanels yOffset={floatY} />
+      <div className="hidden md:block">
+        <HUDDataPanels yOffset={floatY} />
+      </div>
 
       {/* L2: Data particles */}
-      <DataParticles />
+      <div className="hidden md:block">
+        <DataParticles />
+      </div>
 
       {/* L2b: Circuit trace lines */}
-      <CircuitLines />
+      <div className="hidden md:block">
+        <CircuitLines />
+      </div>
 
       {/* L3: Hero content — parallax mais rápido, fade out */}
       <motion.div
