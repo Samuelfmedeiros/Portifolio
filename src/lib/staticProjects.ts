@@ -6,7 +6,7 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "DogWalk",
     description:
       "Marketplace de serviços pet com autenticação, pagamentos e geolocalização — React, Supabase, Stripe e Cloudflare.",
-    html_url: "https://github.com/Samuelfmedeiros/dog-walk",
+    html_url: "",
     homepage: "https://seu.pet",
     stargazers_count: 0,
     forks_count: 0,
