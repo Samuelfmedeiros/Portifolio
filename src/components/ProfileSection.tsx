@@ -8,6 +8,7 @@ import {
 } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { TypeWriter } from "./TypeWriter";
+import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
 /* ──────────────────── DATA ──────────────────── */
@@ -631,6 +632,7 @@ export function ProfileSection() {
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
   const TIMELINE_DEFAULT_COUNT = 4;
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   // Track section view
   useEffect(() => {
@@ -809,10 +811,8 @@ export function ProfileSection() {
             >
               Ver Projetos
             </a>
-            <a
-              href="/Samuel_Andrade_2026.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setShowDownloadModal(true)}
               className="px-6 py-3 rounded-lg border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm hover:bg-[var(--border)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               style={{
                 backdropFilter: "blur(8px)",
@@ -820,7 +820,7 @@ export function ProfileSection() {
               }}
             >
               Baixar Curriculo
-            </a>
+            </button>
           </motion.div>
         </div>
       </motion.div>
@@ -948,6 +948,11 @@ export function ProfileSection() {
           <TimelineModal item={selectedItem} onClose={() => setSelectedItem(null)} />
         )}
       </AnimatePresence>
+
+      <DownloadModal
+        open={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+      />
 
     </motion.section>
   );

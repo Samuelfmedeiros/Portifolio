@@ -40,7 +40,8 @@ export type AnalyticsEvent =
   | { type: "keyboard_shortcut"; key: string }
   | { type: "nav_click"; section: SectionName }
   | { type: "back_to_top" }
-  | { type: "cursor_magnet"; target: string };
+  | { type: "cursor_magnet"; target: string }
+  | { type: "cv_download"; hasName: boolean; hasEmail: boolean };
 
 const EVENT_NAMES: Record<AnalyticsEvent["type"], string> = {
   section_view: "section_view",
@@ -56,6 +57,7 @@ const EVENT_NAMES: Record<AnalyticsEvent["type"], string> = {
   nav_click: "nav_click",
   back_to_top: "back_to_top",
   cursor_magnet: "cursor_magnet",
+  cv_download: "cv_download",
 };
 
 function sendEvent(event: AnalyticsEvent) {
