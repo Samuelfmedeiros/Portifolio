@@ -128,9 +128,9 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
         )}
 
         {/* Project image header — clickable if has demo */}
-        {repo.homepage || repo.hasDemo ? (
+        {(repo.homepage || repo.hasDemo) ? (
           <a
-            href={repo.homepage || "#"}
+            href={repo.name === "Portifolio" ? (repo.html_url || "#") : (repo.homepage || "#")}
             target="_blank"
             rel="noopener noreferrer"
             className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
