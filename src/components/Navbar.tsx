@@ -160,7 +160,7 @@ export const Navbar = memo(function Navbar() {
         {/* Mobile Nav — horizontal scrollable, NO hamburger */}
         <div
           ref={scrollRef}
-          className="lg:hidden flex items-center gap-1 overflow-x-auto hide-scrollbar pb-2 -mx-3 px-3"
+          className="lg:hidden flex items-center gap-0.5 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x snap-mandatory"
           role="list"
           aria-label="Navegação mobile"
         >
@@ -171,7 +171,7 @@ export const Navbar = memo(function Navbar() {
                 key={item.href}
                 href={item.href}
                 onClick={(e) => handleNavClick(e, item.href)}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-medium transition-all shrink-0 whitespace-nowrap ${
+                className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all shrink-0 whitespace-nowrap snap-start ${
                   isActive
                     ? "text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30"
                     : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent"
@@ -179,8 +179,8 @@ export const Navbar = memo(function Navbar() {
                 whileTap={{ scale: 0.95 }}
                 aria-current={isActive ? "true" : undefined}
               >
-                <span className="text-sm">{item.icon}</span>
-                <span>{item.label}</span>
+                <span className="text-xs">{item.icon}</span>
+                <span className="sm:inline">{item.label}</span>
                 {isActive && (
                   <motion.div
                     className="w-1 h-1 rounded-full bg-[var(--accent)]"
