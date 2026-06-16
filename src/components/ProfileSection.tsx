@@ -16,6 +16,16 @@ const timeline = [
   {
     type: "experience" as const,
     icon: Briefcase,
+    period: "2025 — Atual",
+    title: "Desenvolvedor Full Stack Autônomo",
+    company: "Capivara / Arachne / DogWalk",
+    description: "Arquitetura e desenvolvimento de plataformas completas: scraper inteligente com RAG, backend multi-tenant FastAPI, marketplace pet com Supabase e Cloudflare.",
+    tags: ["Next.js", "FastAPI", "Supabase", "Cloudflare", "Python"],
+    skillsUsed: ["Next.js & React", "Python", "SQL & PostgreSQL", "Docker", "Git & GitHub"],
+  },
+  {
+    type: "experience" as const,
+    icon: Briefcase,
     period: "2025",
     title: "Analista de Dados — ANA",
     company: "Agência Nacional de Águas",
@@ -61,6 +71,16 @@ const timeline = [
     description: "ML, LLMs, Docker, Git, CI/CD, Linux, Power BI Avançado",
     tags: ["ML", "LLMs", "Docker", "Git", "Python"],
     skillsUsed: ["LLMs Locais", "Docker", "Git & GitHub"],
+  },
+  {
+    type: "experience" as const,
+    icon: Bot,
+    period: "2025",
+    title: "Hermes Agent — Agente Autônomo",
+    company: "Projeto Pessoal",
+    description: "Desenvolvimento de agente de IA autônomo com Hermes Agent, integração multi-plataforma, deploy WSL e Cloudflare.",
+    tags: ["IA", "Automação", "Agent", "Cloudflare"],
+    skillsUsed: ["Next.js & React", "Python", "Docker", "Git & GitHub"],
   },
 ];
 
@@ -530,7 +550,7 @@ export function ProfileSection() {
     >
       {/* L0: Background parallax — grid + circles (sempre visível) */}
       <motion.div
-        style={{ y: bgY }}
+        style={{ y: bgY, willChange: "transform" }}
         className="absolute inset-0 z-0"
       >
         <div className="absolute inset-0 bg-[linear-gradient(to_right,var(--border)_1px,transparent_1px),linear-gradient(to_bottom,var(--border)_1px,transparent_1px)] bg-[size:4rem_4rem] opacity-20" />
@@ -545,7 +565,7 @@ export function ProfileSection() {
 
       {/* L1: Cockpit SVG overlay (sempre visível) */}
       <motion.div
-        style={{ y: svgY }}
+        style={{ y: svgY, willChange: "transform" }}
         className="absolute inset-0 z-[1] pointer-events-none"
       >
         <CockpitSVG />
@@ -565,7 +585,7 @@ export function ProfileSection() {
 
       {/* L3: Hero content — parallax mais rápido, fade out */}
       <motion.div
-        style={{ y: heroY, opacity: heroOpacity }}
+        style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
         className="relative z-10 text-center max-w-3xl mx-auto mb-8"
       >
         <div

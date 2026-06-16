@@ -43,16 +43,18 @@ export const GITHUB_SPONSORS_CONFIG = {
   /** GitHub username for sponsors */
   get username(): string {
     const value = process.env.NEXT_PUBLIC_GITHUB_SPONSORS_USERNAME;
-    if (value === undefined || value === null) return "Samuelfmedeiros";
+    if (value === undefined || value === null) return "";
     return value;
   },
   /** Full sponsors URL */
   get url(): string {
     return `https://github.com/sponsors/${this.username}`;
   },
-  /** Whether GitHub Sponsors is enabled */
+  /** Whether GitHub Sponsors is enabled — only if env var explicitly set */
   get enabled(): boolean {
-    return !!this.username;
+    const value = process.env.NEXT_PUBLIC_GITHUB_SPONSORS_USERNAME;
+    if (value === undefined || value === null) return false;
+    return !!value;
   },
 };
 
