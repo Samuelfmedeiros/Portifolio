@@ -50,15 +50,9 @@ export async function POST(req: NextRequest) {
     if (botToken) {
       try {
         const text = [
-          `📬 *Nova mensagem do Portfólio*`,
+          `📬 *${name}* <${email}>`,
           ``,
-          `*Nome:* ${name.replace(/_/g, "\\_")}`,
-          `*Email:* ${email.replace(/_/g, "\\_")}`,
-          ``,
-          `*Mensagem:*`,
           content.replace(/_/g, "\\_"),
-          ``,
-          `— samuelmedeiros.vercel.app`,
         ].join("\n");
 
         const res = await fetch(
