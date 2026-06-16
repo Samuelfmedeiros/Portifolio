@@ -1,0 +1,4 @@
+Mas uma pequena mudança, em jogos, lá nos cartes, deve ter um pequeno botão, escrito repol,
+para a gente poder ir direto pro repositorio do mini-gain.
+Para a pessoa poder enxergar e ver o repositorio, poder apertar no ir direto lá pro Github.
+Entendeu?

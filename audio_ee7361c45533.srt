@@ -1,0 +1,16 @@
+1
+00:00:00,000 --> 00:00:08,000
+Mas uma pequena mudança, em jogos, lá nos cartes, deve ter um pequeno botão, escrito repol,
+
+2
+00:00:08,000 --> 00:00:12,000
+para a gente poder ir direto pro repositorio do mini-gain.
+
+3
+00:00:12,000 --> 00:00:21,000
+Para a pessoa poder enxergar e ver o repositorio, poder apertar no ir direto lá pro Github.
+
+4
+00:00:21,000 --> 00:00:22,000
+Entendeu?
+
