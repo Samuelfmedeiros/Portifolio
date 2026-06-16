@@ -70,10 +70,30 @@ export async function POST(req: NextRequest) {
     const chatId = process.env.TELEGRAM_CHAT_ID || "-1003963506968"; // Portifólio group
     if (botToken) {
       try {
+        const now = new Date().toLocaleString("pt-BR", {
+          timeZone: "America/Sao_Paulo",
+          day: "2-digit",
+          month: "2-digit",
+          year: "numeric",
+          hour: "2-digit",
+          minute: "2-digit",
+        });
         const text = [
-          `📬 *${name}* <${email}>`,
-          ``,
-          content.replace(/_/g, "\\_"),
+          "🚀 *NOVA MENSAGEM — PORTIFOLIO*",
+          "━━━━━━━━━━━━━━━━━━━━━━━━",
+          "",
+          "👤 *Nome*",
+          `\`\`${name}\`\``,
+          "",
+          "📧 *Email*",
+          `\`\`${email}\`\``,
+          "",
+          "💬 *Mensagem*",
+          `\`\`\`\n${content.replace(/```/g, "'''")}\n\`\`\``,
+          "",
+          "━━━━━━━━━━━━━━━━━━━━━━━━",
+          `🕐 ${now}`,
+          `📎 samuelmedeiros.vercel.app`,
         ].join("\n");
 
         const res = await fetch(
