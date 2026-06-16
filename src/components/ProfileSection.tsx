@@ -634,6 +634,8 @@ export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
+  const [showFullTimeline, setShowFullTimeline] = useState(false);
+  const TIMELINE_DEFAULT_COUNT = 4;
 
   // Track section view
   useEffect(() => {
@@ -663,6 +665,29 @@ export function ProfileSection() {
   const heroY = useTransform(scrollYProgress, [0, 0.5], ["0%", "60%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
+
+  // P1 + P2: grouped timeline + collapse
+  const typeConfig: Record<string, { label: string; icon: React.ComponentType<{ className?: string }> }> = {
+    experience: { label: 'Experiência', icon: Briefcase },
+    education: { label: 'Educação', icon: GraduationCap },
+    certification: { label: 'Certificação', icon: Award },
+  };
+
+  const displayItems = showFullTimeline ? timeline : timeline.slice(0, TIMELINE_DEFAULT_COUNT);
+
+  const renderPlan: Array<
+    | { kind: 'item'; item: typeof timeline[0]; displayIndex: number }
+    | { kind: 'sep'; icon: React.ComponentType<{ className?: string }>; label: string }
+  > = [];
+  let lastType: string | null = null;
+  for (const [i, item] of displayItems.entries()) {
+    if (lastType !== null && item.type !== lastType) {
+      const cfg = typeConfig[item.type];
+      if (cfg) renderPlan.push({ kind: 'sep', icon: cfg.icon, label: cfg.label });
+    }
+    renderPlan.push({ kind: 'item', item, displayIndex: i });
+    lastType = item.type;
+  }
 
   return (
     <motion.section
@@ -797,6 +822,7 @@ export function ProfileSection() {
       >
         <SkillsCompact />
 
+        {/* Timeline com P1 (separadores) + P2 (collapse) */}
         <div>
           <motion.h3
             initial={{ opacity: 0, y: 10 }}
@@ -805,16 +831,78 @@ export function ProfileSection() {
           >
             ▸ JORNADA
           </motion.h3>
+
+          {/* P2: CTA expandir quando colapsado */}
+          {!showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+            <motion.button
+              initial={{ opacity: 0, y: 8 }}
+              animate={{ opacity: 1, y: 0 }}
+              onClick={() => setShowFullTimeline(true)}
+              className="w-full text-left px-1 py-1.5 mb-2 text-[11px] font-mono text-[var(--accent)]/70 hover:text-[var(--accent)] transition-colors flex items-center gap-1.5"
+              whileHover={{ x: 2 }}
+              whileTap={{ scale: 0.98 }}
+            >
+              <span className="text-[var(--accent)] opacity-60">⏵</span>
+              Ver jornada completa ({timeline.length - TIMELINE_DEFAULT_COUNT} itens)
+            </motion.button>
+          )}
+
           <div className="space-y-3">
-            {timeline.map((item, i) => (
-              <TimelineItem 
-                key={`${item.title}-${i}`} 
-                item={item} 
-                index={i} 
-                onSelect={setSelectedItem}
-                isSelected={selectedItem?.title === item.title && selectedItem?.period === item.period}
-              />
-            ))}
+            {renderPlan.map((entry) =>
+              entry.kind === 'sep' ? (
+                <motion.div
+                  key={`sep-${entry.label}`}
+                  initial={{ opacity: 0, scaleX: 0.8 }}
+                  whileInView={{ opacity: 1, scaleX: 1 }}
+                  className="flex items-center gap-2 py-1.5"
+                >
+                  <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[var(--accent)]/30 to-transparent" />
+                  <span className="text-[9px] font-mono text-[var(--accent)]/50 tracking-[0.2em] uppercase whitespace-nowrap flex items-center gap-1">
+                    <entry.icon className="w-2.5 h-2.5" />
+                    {entry.label}
+                  </span>
+                  <div className="h-px flex-1 bg-gradient-to-r from-[var(--accent)]/30 via-transparent to-transparent" />
+                </motion.div>
+              ) : (
+                <div key={`item-${entry.item.title}-${entry.displayIndex}`}>
+                  <TimelineItem
+                    item={entry.item}
+                    index={entry.displayIndex}
+                    onSelect={setSelectedItem}
+                    isSelected={selectedItem?.title === entry.item.title && selectedItem?.period === entry.item.period}
+                  />
+                </div>
+              )
+            )}
+
+            {/* P2: Botão "mostrar mais" no final quando colapsado */}
+            {!showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                onClick={() => setShowFullTimeline(true)}
+                className="w-full py-2 text-center text-[10px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                ⏷ Mostrar todos os {timeline.length} itens
+              </motion.button>
+            )}
+
+            {/* P2: Botão recolher quando expandido */}
+            {showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+              <motion.button
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                onClick={() => setShowFullTimeline(false)}
+                className="w-full py-2 text-center text-[10px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors"
+                whileHover={{ scale: 1.01 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                ⏶ Mostrar menos
+              </motion.button>
+            )}
+
             {/* Fecho visual da Jornada */}
             <motion.div
               initial={{ opacity: 0 }}
