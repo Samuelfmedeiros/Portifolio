@@ -11,7 +11,6 @@ import { ScrollProgress } from "@/components/ScrollProgress";
 import { ScrollRestoration } from "@/components/ScrollRestoration";
 import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
-import { KeyboardShortcuts } from "@/components/KeyboardShortcuts";
 import { BackToTop } from "@/components/BackToTop";
 import { CookieBannerProvider } from "@/components/CookieBanner";
 import { MonetizationProvider, AdSense } from "@/components/monetization";
@@ -165,7 +164,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </MonetizationProvider>
           </CookieBannerProvider>
         </ThemeProvider>
-        <KeyboardShortcuts />
         <JsonLd />
         <BackToTop />
 

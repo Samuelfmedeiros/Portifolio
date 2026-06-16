@@ -6,6 +6,7 @@ export default defineConfig({
     environment: 'jsdom',
     globals: true,
     include: ['src/**/*.{test,spec}.{ts,tsx}'],
+    exclude: ['src/components/_old/**', 'node_modules'],
     setupFiles: ['src/test/setup.tsx'],
     testTimeout: 60000,
     hookTimeout: 60000,
