@@ -1,13 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
-// Screenshots reais dos games (capturados via Playwright)
 const GAME_IMAGES: Record<string, string> = {
   "simon-game": "/games/simon-game.png",
   "asteroid-dodge": "/games/asteroid-dodge.png",
@@ -19,9 +18,30 @@ const GAME_IMAGES: Record<string, string> = {
 export function GameShowcase({ repos }: { repos: Repo[] }) {
   const [playingGame, setPlayingGame] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const [canScrollLeft, setCanScrollLeft] = useState(false);
+  const [canScrollRight, setCanScrollRight] = useState(false);
   const { track } = useAnalytics();
 
   if (!repos || repos.length === 0) return null;
+
+  const updateScrollButtons = useCallback(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    setCanScrollLeft(el.scrollLeft > 4);
+    setCanScrollRight(el.scrollLeft + el.clientWidth < el.scrollWidth - 4);
+  }, []);
+
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    updateScrollButtons();
+    el.addEventListener("scroll", updateScrollButtons, { passive: true });
+    window.addEventListener("resize", updateScrollButtons);
+    return () => {
+      el.removeEventListener("scroll", updateScrollButtons);
+      window.removeEventListener("resize", updateScrollButtons);
+    };
+  }, [updateScrollButtons, repos]);
 
   const handlePlay = (repo: Repo) => {
     setPlayingGame(repo.name);
@@ -35,6 +55,8 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
       left: dir === "left" ? -amount : amount,
       behavior: "smooth",
     });
+    // Update buttons after scroll animation
+    setTimeout(updateScrollButtons, 350);
   };
 
   const playingRepo = repos.find((r) => r.name === playingGame);
@@ -52,15 +74,17 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
         </motion.h2>
 
         {/* Horizontal scroll with arrows */}
-        <div className="relative group/scroll">
-          {/* Left arrow */}
-          <button
-            onClick={() => scroll("left")}
-            className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/40"
-            aria-label="Rolar para esquerda"
-          >
-            <ChevronLeft className="w-3.5 h-3.5" />
-          </button>
+        <div className="relative">
+          {/* Left arrow — só aparece se tem conteúdo pra esquerda */}
+          {canScrollLeft && (
+            <button
+              onClick={() => scroll("left")}
+              className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center transition-all hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/40 shadow-md"
+              aria-label="Rolar para esquerda"
+            >
+              <ChevronLeft className="w-3.5 h-3.5" />
+            </button>
+          )}
 
           {/* Cards row */}
           <div
@@ -69,7 +93,9 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
           >
             {repos.map((repo) => {
               const imgSrc = GAME_IMAGES[repo.name];
-              const gradient = repo.imageGradient || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
+              const gradient =
+                repo.imageGradient ||
+                "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
 
               return (
                 <div
@@ -77,24 +103,27 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                   className="flex-shrink-0 w-[180px] snap-start"
                 >
                   <GlassCard className="overflow-hidden group/card h-full">
-                    {/* Image header */}
-                    <div
-                      className="relative h-[110px] w-full overflow-hidden"
+                    {/* Image header — clicável */}
+                    <button
+                      onClick={() => handlePlay(repo)}
+                      className="relative h-[110px] w-full overflow-hidden block text-left cursor-pointer"
                       style={
                         imgSrc
                           ? { background: gradient }
                           : { background: gradient }
                       }
+                      aria-label={`Jogar ${repo.name}`}
                     >
                       {imgSrc ? (
                         <img
                           src={imgSrc}
                           alt={repo.name}
-                          className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110"
+                          className="w-full h-full object-cover transition-transform duration-500 group-hover/card:scale-110 pointer-events-none"
                           loading="lazy"
+                          draggable={false}
                         />
                       ) : (
-                        <div className="w-full h-full flex flex-col items-center justify-center gap-1">
+                        <div className="w-full h-full flex flex-col items-center justify-center gap-1 pointer-events-none">
                           <span className="text-3xl drop-shadow-lg">
                             {repo.icon || "🎮"}
                           </span>
@@ -104,23 +133,22 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                         </div>
                       )}
 
-                      {/* Hover play overlay */}
-                      <div className="absolute inset-0 bg-black/0 group-hover/card:bg-black/50 transition-all duration-300 flex items-center justify-center">
-                        <button
-                          onClick={() => handlePlay(repo)}
-                          className="opacity-0 group-hover/card:opacity-100 bg-[var(--accent)] text-[var(--bg-primary)] px-4 py-2 rounded-lg font-mono text-xs font-bold tracking-wider transition-all hover:scale-110 active:scale-95 shadow-lg shadow-[var(--accent)]/30"
-                        >
+                      {/* Botão JOGAR sempre visível */}
+                      <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
+                        <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-white drop-shadow-lg">
                           ▶ JOGAR
-                        </button>
+                        </span>
                       </div>
-                      <div className="absolute bottom-0 left-0 right-0 h-6 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
-                    </div>
+                    </button>
 
-                    {/* Info */}
+                    {/* Nome — clicável */}
                     <div className="p-2.5">
-                      <p className="text-xs font-mono font-semibold text-[var(--text-primary)] truncate">
+                      <button
+                        onClick={() => handlePlay(repo)}
+                        className="text-xs font-mono font-semibold text-[var(--text-primary)] truncate w-full text-left hover:text-[var(--accent)] transition-colors cursor-pointer"
+                      >
                         {repo.name}
-                      </p>
+                      </button>
                       <p className="text-[10px] text-[var(--text-secondary)] line-clamp-1 mt-0.5 leading-relaxed">
                         {repo.description}
                       </p>
@@ -131,14 +159,16 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
             })}
           </div>
 
-          {/* Right arrow */}
-          <button
-            onClick={() => scroll("right")}
-            className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-0 group-hover/scroll:opacity-100 transition-all hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/40"
-            aria-label="Rolar para direita"
-          >
-            <ChevronRight className="w-3.5 h-3.5" />
-          </button>
+          {/* Right arrow — só aparece se tem conteúdo pra direita */}
+          {canScrollRight && (
+            <button
+              onClick={() => scroll("right")}
+              className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center transition-all hover:bg-[var(--accent)]/20 hover:border-[var(--accent)]/40 shadow-md"
+              aria-label="Rolar para direita"
+            >
+              <ChevronRight className="w-3.5 h-3.5" />
+            </button>
+          )}
         </div>
 
         {/* Game embed area */}
