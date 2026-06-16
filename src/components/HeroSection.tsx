@@ -1,8 +1,9 @@
 "use client";
 
 import { motion, useScroll, useTransform } from "framer-motion";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { TypeWriter } from "./TypeWriter";
+import { DownloadModal } from "./DownloadModal";
 
 // Decorative cockpit SVG as inline component
 function CockpitSVG() {
@@ -122,8 +123,10 @@ export function HeroSection() {
   const svgY = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   return (
+    <>
     <section ref={containerRef} className="relative min-h-[70vh] flex items-center justify-center px-4 md:px-6 overflow-hidden">
       {/* Background layer with parallax - grid + circles */}
       <motion.div
@@ -250,10 +253,8 @@ export function HeroSection() {
             >
               Ver Projetos
             </a>
-            <a
-              href="/Samuel_Andrade_2026.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setShowDownloadModal(true)}
               className="px-6 py-3 rounded-lg border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm hover:bg-[var(--border)] hover:scale-[1.02] active:scale-[0.98] transition-all"
               style={{
                 backdropFilter: "blur(8px)",
@@ -261,7 +262,7 @@ export function HeroSection() {
               }}
             >
               Baixar Curriculo
-            </a>
+            </button>
           </motion.div>
         </div>
 
@@ -289,5 +290,11 @@ export function HeroSection() {
         </motion.div>
       </motion.div>
     </section>
+
+      <DownloadModal
+        open={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+      />
+    </>
   );
 }

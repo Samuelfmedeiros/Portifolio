@@ -7,6 +7,7 @@ import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
 import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
 import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { DownloadModal } from "./DownloadModal";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -223,6 +224,7 @@ export function Footer() {
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
   const { track } = useAnalytics();
+  const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
@@ -311,15 +313,12 @@ export function Footer() {
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
               Currículo
             </h3>
-            <a
-              href="/Samuel_Andrade_2026.pdf"
-              target="_blank"
-              rel="noopener noreferrer"
+            <button
+              onClick={() => setShowDownloadModal(true)}
               className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
-              onClick={() => track({ type: "external_link", url: "curriculo", label: "Currículo PDF" })}
             >
               Download em PDF ↓
-            </a>
+            </button>
             {/* Support buttons — discreet, no consent needed */}
             <div className="flex items-center gap-3 mt-3">
               {BMC_CONFIG.enabled && (
@@ -391,6 +390,10 @@ export function Footer() {
 
       {/* Privacy/Terms Modal */}
       <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} activeTab={activeTab} />
+      <DownloadModal
+        open={showDownloadModal}
+        onClose={() => setShowDownloadModal(false)}
+      />
     </footer>
   );
 }

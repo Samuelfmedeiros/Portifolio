@@ -85,9 +85,9 @@ describe("ProfileSection", () => {
     expect(link.closest("a")).toHaveAttribute("href", "#projects");
   });
 
-  it("renders Baixar Curriculo link pointing to PDF", () => {
+  it("renders Baixar Curriculo as button that opens download modal", () => {
     render(<ProfileSection />);
-    const link = screen.getByText("Baixar Curriculo");
-    expect(link.closest("a")).toHaveAttribute("href", "/Samuel_Andrade_2026.pdf");
+    const btn = screen.getByText("Baixar Curriculo");
+    expect(btn.tagName).toBe("BUTTON");
   });
 });
