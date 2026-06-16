@@ -47,19 +47,36 @@ describe("ProfileSection", () => {
     expect(screen.getByText("Baixar Curriculo")).toBeInTheDocument();
   });
 
-  it("renders timeline items (first 4 via P2 collapse)", () => {
+  it("renders all 7 timeline items (default expanded via P2)", () => {
     render(<ProfileSection />);
     expect(screen.getByText("Analista de Dados — ANA")).toBeInTheDocument();
     expect(screen.getByText(/Agência Nacional de Águas/)).toBeInTheDocument();
     expect(screen.getByText(/Pós-graduação em Banco de Dados/)).toBeInTheDocument();
+    expect(screen.getByText(/Análise e Desenvolvimento de Sistemas/)).toBeInTheDocument();
     expect(screen.getByText(/Desenvolvedor Full Stack Autônomo/)).toBeInTheDocument();
   });
 
-  it("expands timeline to show all items on click", () => {
+  it("shows 'Mostrar menos' button when expanded (default P2)", () => {
     render(<ProfileSection />);
-    expect(screen.getByText(/Ver jornada completa/)).toBeInTheDocument();
-    fireEvent.click(screen.getByText(/Ver jornada completa/));
-    expect(screen.getByText(/Análise e Desenvolvimento de Sistemas/)).toBeInTheDocument();
+    expect(screen.getByText(/Mostrar menos/)).toBeInTheDocument();
+    expect(screen.queryByText(/Ver jornada completa/)).toBeNull();
+  });
+
+  it("shows 'Ver jornada completa' after collapsing", () => {
+    render(<ProfileSection />);
+    fireEvent.click(screen.getByText(/Mostrar menos/));
+    expect(screen.queryByText(/Mostrar menos/)).toBeNull();
+    expect(screen.getAllByText(/Ver jornada completa/).length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("toggles back and forth between collapsed and expanded", () => {
+    render(<ProfileSection />);
+    // Collapse
+    fireEvent.click(screen.getByText(/Mostrar menos/));
+    expect(screen.getAllByText(/Ver jornada completa/).length).toBeGreaterThanOrEqual(1);
+    // Re-expand - click the first "Ver jornada completa"
+    fireEvent.click(screen.getAllByText(/Ver jornada completa/)[0]);
+    expect(screen.getByText(/Mostrar menos/)).toBeInTheDocument();
   });
 
   it("renders Ver Projetos link pointing to #projects", () => {
