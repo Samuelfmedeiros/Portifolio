@@ -1,20 +1,13 @@
 import { Suspense } from "react";
-import dynamic from "next/dynamic";
 import { ProfileSection } from "@/components/ProfileSection";
 import { ProjectHangar } from "@/components/ProjectHangar";
 import { GameShowcase } from "@/components/GameShowcase";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
-import { GlassSkeleton } from "@/components/Skeleton";
 import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
 import { BuyMeACoffee } from "@/components/monetization/BuyMeACoffee";
-
-const Terminal = dynamic(
-  () => import("@/components/Terminal").then((m) => ({ default: m.Terminal })),
-  { loading: () => <GlassSkeleton className="max-w-3xl mx-auto mt-12" /> }
-);
 
 async function HangarWithData() {
   const repos = await getRepos();
@@ -52,11 +45,6 @@ export default function Home() {
             <Suspense fallback={<HangarSkeleton />}>
               <HangarWithData />
             </Suspense>
-          </section>
-        </FadeInSection>
-        <FadeInSection delay={0.2}>
-          <section id="terminal" className="scroll-mt-20">
-            <Terminal />
           </section>
         </FadeInSection>
         <FadeInSection delay={0.3}>
