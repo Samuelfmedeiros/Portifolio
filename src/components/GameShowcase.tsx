@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useRef, useCallback, useEffect } from "react";
-import { motion, AnimatePresence } from "framer-motion";
 import { X, ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
@@ -15,9 +14,14 @@ const GAME_IMAGES: Record<string, string> = {
   "terminal": "/games/terminal.png",
 };
 
+function getGameUrl(name: string): string {
+  return `/api/game/${name}`;
+}
+
 export function GameShowcase({ repos }: { repos: Repo[] }) {
   const [playingGame, setPlayingGame] = useState<string | null>(null);
   const scrollRef = useRef<HTMLDivElement>(null);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
   const [canScrollLeft, setCanScrollLeft] = useState(false);
   const [canScrollRight, setCanScrollRight] = useState(false);
   const { track } = useAnalytics();
@@ -46,6 +50,10 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   const handlePlay = (repo: Repo) => {
     setPlayingGame(repo.name);
     track({ type: "game_play", game: repo.name });
+    // Set iframe src via ref, avoiding React controlled/uncontrolled issues
+    if (iframeRef.current && repo.homepage) {
+      iframeRef.current.src = getGameUrl(repo.name);
+    }
   };
 
   const scroll = (dir: "left" | "right") => {
@@ -55,27 +63,20 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
       left: dir === "left" ? -amount : amount,
       behavior: "smooth",
     });
-    // Update buttons after scroll animation
     setTimeout(updateScrollButtons, 350);
   };
 
-  const playingRepo = repos.find((r) => r.name === playingGame);
+  const isVisible = playingGame !== null;
+  const playingRepo = playingGame ? repos.find((r) => r.name === playingGame) : null;
 
   return (
     <div className="py-6 px-6">
       <div className="max-w-6xl mx-auto">
-        {/* Header */}
-        <motion.h2
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          className="text-xl font-mono text-[var(--accent)] mb-4"
-        >
+        <h2 className="text-xl font-mono text-[var(--accent)] mb-4">
           🎮 JOGOS
-        </motion.h2>
+        </h2>
 
-        {/* Horizontal scroll with arrows */}
         <div className="relative">
-          {/* Left arrow — só aparece se tem conteúdo pra esquerda */}
           {canScrollLeft && (
             <button
               onClick={() => scroll("left")}
@@ -86,7 +87,6 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
             </button>
           )}
 
-          {/* Cards row */}
           <div
             ref={scrollRef}
             className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 snap-x snap-mandatory scroll-smooth"
@@ -98,20 +98,12 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                 "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
 
               return (
-                <div
-                  key={repo.name}
-                  className="flex-shrink-0 w-[180px] snap-start"
-                >
+                <div key={repo.name} className="flex-shrink-0 w-[180px] snap-start">
                   <GlassCard className="overflow-hidden group/card h-full">
-                    {/* Image header — clicável */}
                     <button
                       onClick={() => handlePlay(repo)}
                       className="relative h-[110px] w-full overflow-hidden block text-left cursor-pointer"
-                      style={
-                        imgSrc
-                          ? { background: gradient }
-                          : { background: gradient }
-                      }
+                      style={{ background: gradient }}
                       aria-label={`Jogar ${repo.name}`}
                     >
                       {imgSrc ? (
@@ -124,24 +116,14 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                         />
                       ) : (
                         <div className="w-full h-full flex flex-col items-center justify-center gap-1 pointer-events-none">
-                          <span className="text-3xl drop-shadow-lg">
-                            {repo.icon || "🎮"}
-                          </span>
-                          <span className="text-[9px] font-mono text-white/70">
-                            {repo.name}
-                          </span>
+                          <span className="text-3xl drop-shadow-lg">{repo.icon || "🎮"}</span>
+                          <span className="text-[9px] font-mono text-white/70">{repo.name}</span>
                         </div>
                       )}
-
-                      {/* Botão JOGAR sempre visível */}
                       <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
-                        <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-white drop-shadow-lg">
-                          ▶ JOGAR
-                        </span>
+                        <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-white drop-shadow-lg">▶ JOGAR</span>
                       </div>
                     </button>
-
-                    {/* Nome — clicável */}
                     <div className="p-2.5">
                       <button
                         onClick={() => handlePlay(repo)}
@@ -149,9 +131,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                       >
                         {repo.name}
                       </button>
-                      <p className="text-[10px] text-[var(--text-secondary)] line-clamp-1 mt-0.5 leading-relaxed">
-                        {repo.description}
-                      </p>
+                      <p className="text-[10px] text-[var(--text-secondary)] line-clamp-1 mt-0.5 leading-relaxed">{repo.description}</p>
                     </div>
                   </GlassCard>
                 </div>
@@ -159,7 +139,6 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
             })}
           </div>
 
-          {/* Right arrow — só aparece se tem conteúdo pra direita */}
           {canScrollRight && (
             <button
               onClick={() => scroll("right")}
@@ -171,61 +150,33 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
           )}
         </div>
 
-        {/* Game embed area */}
-        <AnimatePresence>
-          {playingGame && playingRepo && (
-            <motion.div
-              key={playingGame}
-              initial={{ opacity: 0, height: 0 }}
-              animate={{ opacity: 1, height: "auto" }}
-              exit={{ opacity: 0, height: 0 }}
-              transition={{ duration: 0.25, ease: "easeInOut" }}
-              className="mt-4 overflow-hidden"
-            >
-              <div className="relative rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg-primary)]">
-                {/* Top bar */}
-                <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)] bg-[var(--bg-primary)]/50">
-                  <div className="flex items-center gap-2">
-                    <span className="w-2 h-2 rounded-full bg-emerald-500" />
-                    <span className="text-xs font-mono text-[var(--accent)]">
-                      {playingGame}
-                    </span>
-                  </div>
-                  <button
-                    onClick={() => setPlayingGame(null)}
-                    className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
-                    aria-label="Fechar jogo"
-                  >
-                    <X className="w-3.5 h-3.5" />
-                  </button>
-                </div>
-
-                {/* Iframe for external games */}
-                {playingRepo.homepage && (
-                  <iframe
-                    src={playingRepo.homepage}
-                    className="w-full h-[450px] md:h-[550px]"
-                    allow="accelerometer; autoplay; encrypted-media; gyroscope"
-                    title={playingGame}
-                    sandbox="allow-scripts allow-same-origin allow-popups"
-                  />
-                )}
-
-                {/* Terminal placeholder */}
-                {playingGame === "terminal" && (
-                  <div className="flex items-center justify-center h-[300px] bg-[#0a0a0a]">
-                    <div className="text-center">
-                      <span className="text-4xl mb-2 block">💻</span>
-                      <p className="font-mono text-xs text-[var(--text-secondary)]">
-                        Terminal será embutido como componente
-                      </p>
-                    </div>
-                  </div>
-                )}
+        {/* Embed area: always mounted, hidden via display */}
+        <div className={isVisible ? "mt-4" : "hidden"}>
+          <div className="relative rounded-xl border border-[var(--border)] overflow-hidden bg-[var(--bg-primary)]">
+            <div className="flex items-center justify-between px-3 py-2 border-b border-[var(--border)] bg-[var(--bg-primary)]/50">
+              <div className="flex items-center gap-2">
+                <span className="w-2 h-2 rounded-full bg-emerald-500" />
+                <span className="text-xs font-mono text-[var(--accent)]">{playingGame || ""}</span>
               </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
+              <button
+                onClick={() => {
+                  setPlayingGame(null);
+                  if (iframeRef.current) iframeRef.current.src = "";
+                }}
+                className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]"
+                aria-label="Fechar jogo"
+              >
+                <X className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            <iframe
+              ref={iframeRef}
+              className="w-full h-[450px] md:h-[550px]"
+              title={playingGame || "game"}
+            />
+          </div>
+        </div>
       </div>
     </div>
   );
