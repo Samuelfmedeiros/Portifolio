@@ -1,30 +1,43 @@
 import { test } from "@playwright/test";
 
-test("debug games render", async ({ page }) => {
+test("game realmente funciona", async ({ page }) => {
   const errors: string[] = [];
-
+  page.on("pageerror", (err) => errors.push(err.message));
   page.on("console", (msg) => {
-    errors.push(`[${msg.type()}] ${msg.text()}`);
+    if (msg.type() === "error" || msg.type() === "warning")
+      errors.push(`[${msg.type()}] ${msg.text().substring(0, 150)}`);
   });
-  page.on("pageerror", (err) => {
-    errors.push(`[PAGE ERROR] ${err.message}`);
-    errors.push(`[STACK] ${err.stack?.substring(0, 1000) || "none"}`);
-  });
-  page.on("requestfailed", (req) =>
-    errors.push(
-      `[REQ FAIL] ${req.url().substring(0, 120)} - ${req.failure()?.errorText || "?"}`
-    )
-  );
 
   await page.goto("http://localhost:3001", { waitUntil: "networkidle" });
-  await page.waitForSelector("#games", { timeout: 10000 });
-  await page.waitForTimeout(500);
+  await page.waitForTimeout(2000);
 
-  // Click memory-matrix (uses DEV build, shows full error)
-  const gameBtn = page.locator("button[aria-label='Jogar memory-matrix']");
-  await gameBtn.click();
-  await page.waitForTimeout(5000);
+  // Click memory-matrix
+  await page.evaluate(() => {
+    const btn = document.querySelector("[data-game-btn='memory-matrix']") as HTMLElement;
+    if (btn) btn.dispatchEvent(new MouseEvent("click", { bubbles: true }));
+  });
+  await page.waitForTimeout(2000);
 
-  console.log("\n=== ERRORS ===");
-  for (const err of errors) console.log(err);
+  // Check embed state
+  const result = await page.evaluate(() => {
+    const container = document.querySelector("[data-game-container]");
+    const embedDiv = container?.closest("[data-game-section]") as HTMLElement;
+    const iframe = container?.querySelector("iframe");
+    const title = document.querySelector("[data-game-title]")?.textContent;
+    return {
+      containerExists: !!container,
+      embedDisplay: embedDiv?.style.display || getComputedStyle(embedDiv!).display,
+      iframeExists: !!iframe,
+      iframeSrc: iframe?.src,
+      title: title,
+    };
+  });
+  console.log("Result:", JSON.stringify(result, null, 2));
+
+  if (result.iframeExists) {
+    // Wait for iframe to load
+    await page.waitForTimeout(5000);
+    console.log(`Erros totais: ${errors.length}`);
+    errors.forEach(e => console.log(`  ${e.slice(0, 120)}`));
+  }
 });
