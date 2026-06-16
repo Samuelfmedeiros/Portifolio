@@ -72,16 +72,6 @@ const timeline = [
     tags: ["ML", "LLMs", "Docker", "Git", "Python"],
     skillsUsed: ["LLMs Locais", "Docker", "Git & GitHub"],
   },
-  {
-    type: "experience" as const,
-    icon: Bot,
-    period: "2025",
-    title: "Hermes Agent — Agente Autônomo",
-    company: "Projeto Pessoal",
-    description: "Desenvolvimento de agente de IA autônomo com Hermes Agent, integração multi-plataforma, deploy WSL e Cloudflare.",
-    tags: ["IA", "Automação", "Agent", "Cloudflare"],
-    skillsUsed: ["Next.js & React", "Python", "Docker", "Git & GitHub"],
-  },
 ];
 
 const skills = [
