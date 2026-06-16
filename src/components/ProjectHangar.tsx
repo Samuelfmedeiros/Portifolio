@@ -163,7 +163,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             {/* Play overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-all duration-300 flex items-center justify-center">
               <span className="opacity-0 group-hover/image:opacity-100 text-white font-mono text-xs tracking-widest transition-opacity duration-300 flex items-center gap-1">
-                ▶ ABRIR DEMO
+                ▶ ACESSAR
               </span>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
@@ -270,7 +270,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
                 className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
               >
                 <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                DEMO
+                SITE
               </a>
             )}
           </div>

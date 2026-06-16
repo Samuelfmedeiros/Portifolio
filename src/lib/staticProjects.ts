@@ -19,30 +19,14 @@ export const STATIC_PROJECTS: Repo[] = [
     icon: "🐾",
     imageUrl: "/projects/seu.pet.gif",
   },
-  {
-    id: 999002,
-    name: "Capivara",
-    description:
-      "Backend multi-tenant com autenticação JWT, convites, dashboard de analytics e portifolio integrado — FastAPI + Supabase + Cloudflare.",
-    html_url: "https://github.com/Samuelfmedeiros/capivara",
-    homepage: "https://capivara.seu.pet",
-    stargazers_count: 0,
-    forks_count: 0,
-    language: "Python",
-    topics: ["featured", "backend", "api"],
-    pushed_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    imageGradient: "linear-gradient(135deg, #0f766e 0%, #0d9488 50%, #14b8a6 100%)",
-    hasDemo: true,
-    icon: "🐊",
-  },
+
   {
     id: 999003,
     name: "Arachne",
     description:
       "Plataforma de scraping inteligente com RAG, visão computacional e pipeline de extração — async Python, SQLite e Cloudflare D1.",
-    html_url: "https://github.com/Samuelfmedeiros/arachne",
-    homepage: null,
+    html_url: null,
+    homepage: "https://capivara.seu.pet/api/arachne-proxy/extract-wizard",
     stargazers_count: 0,
     forks_count: 0,
     language: "Python",
@@ -50,7 +34,7 @@ export const STATIC_PROJECTS: Repo[] = [
     pushed_at: new Date().toISOString(),
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #1e1b4b 0%, #312e81 50%, #4338ca 100%)",
-    hasDemo: false,
+    hasDemo: true,
     icon: "🕷️",
   },
   {
@@ -160,7 +144,6 @@ export const STATIC_PROJECTS: Repo[] = [
 
 export const FEATURED_PROJECTS = [
   "seu.pet",
-  "Capivara",
   "Arachne",
   "DogWalk",
   "Portifolio",
