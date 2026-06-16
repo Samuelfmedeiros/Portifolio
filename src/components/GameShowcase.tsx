@@ -7,11 +7,11 @@ import type { Repo } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
 const GAME_IMAGES: Record<string, string> = {
-  "simon-game": "/games/simon-game.png",
-  "asteroid-dodge": "/games/asteroid-dodge.png",
-  "code-typing": "/games/code-typing.png",
-  "memory-matrix": "/games/memory-matrix.png",
-  "terminal": "/games/terminal.png",
+  "simon-game": "/games/simon-game.webp",
+  "asteroid-dodge": "/games/asteroid-dodge.webp",
+  "code-typing": "/games/code-typing.webp",
+  "memory-matrix": "/games/memory-matrix.webp",
+  "terminal": "/games/terminal.webp",
 };
 
 export function GameShowcase({ repos }: { repos: Repo[] }) {

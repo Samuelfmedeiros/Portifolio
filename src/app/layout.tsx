@@ -153,7 +153,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <CockpitBackground />
                 <ScrollProgress />
                 <Navbar />
-                <main id="main-content" className="pt-20 md:pt-24">
+                <main id="main-content" tabIndex={-1} className="pt-20 md:pt-24">
                   <ErrorBoundary>{children}</ErrorBoundary>
                 </main>
                 {/* AdSense banner — só aparece quando configurado no .env.local */}

@@ -36,7 +36,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
     hasDemo: true,
     icon: "🚀",
-    imageUrl: "/projects/portifolio.png",
+    imageUrl: "/projects/portifolio.webp",
   },
   // Games — stay as static because they need gradients/icons
   {
@@ -135,4 +135,4 @@ export const FEATURED_PROJECTS = [
   "memory-matrix",
   "terminal",
 ];
-export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix", "terminal"];
+export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix"];

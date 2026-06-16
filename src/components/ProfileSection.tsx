@@ -363,13 +363,13 @@ function CircuitLines() {
 function SkillsCompact() {
   return (
     <div className="mb-8">
-      <motion.h3
+      <motion.h2
         initial={{ opacity: 0, y: 10 }}
         whileInView={{ opacity: 1, y: 0 }}
         className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
       >
         ▸ HABILIDADES
-      </motion.h3>
+      </motion.h2>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
         {skills.map((skill, i) => (
           <motion.div
@@ -477,7 +477,7 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <h4 className="font-semibold text-xs md:text-sm truncate">{item.title}</h4>
+              <h3 className="font-semibold text-xs md:text-sm truncate">{item.title}</h3>
               <span className="text-[9px] font-mono text-[var(--accent)] bg-[var(--accent)]/10 px-1.5 py-0.5 rounded whitespace-nowrap">
                 {item.period}
               </span>
@@ -834,13 +834,13 @@ export function ProfileSection() {
 
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
         <div id="jornada" className="scroll-mt-20">
-          <motion.h3
+          <motion.h2
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
             className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-4"
           >
             ▸ JORNADA
-          </motion.h3>
+          </motion.h2>
 
           {/* P2: CTA expandir quando colapsado */}
           {!showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
