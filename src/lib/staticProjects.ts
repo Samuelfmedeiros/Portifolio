@@ -38,9 +38,26 @@ export const STATIC_PROJECTS: Repo[] = [
     icon: "🚀",
     imageUrl: "/projects/portifolio.webp",
   },
-  // Games — stay as static because they need gradients/icons
+  // Games — ordem definida pelo Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge
   {
     id: 1001,
+    name: "memory-matrix",
+    description:
+      "Jogo de memória visual. Memorize as células destacadas e recrie o padrão!",
+    html_url: "https://github.com/Samuelfmedeiros/memory-matrix",
+    homepage: "/games/memory-matrix/index.html",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["game", "react"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
+    hasDemo: false,
+    icon: "🔲",
+  },
+  {
+    id: 1002,
     name: "simon-game",
     description:
       "Jogo clássico de memorização de sequência de cores. Repita a sequência para pontuar!",
@@ -55,23 +72,6 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: false,
     icon: "🧠",
-  },
-  {
-    id: 1002,
-    name: "asteroid-dodge",
-    description:
-      "Jogo de desviar de asteroides. Controle a nave com o mouse e sobreviva o máximo possível!",
-    html_url: "https://github.com/Samuelfmedeiros/asteroid-dodge",
-    homepage: "/games/asteroid-dodge/index.html",
-    stargazers_count: 0,
-    forks_count: 0,
-    language: "JavaScript",
-    topics: ["game", "react"],
-    pushed_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
-    hasDemo: false,
-    icon: "🚀",
   },
   {
     id: 1003,
@@ -92,23 +92,6 @@ export const STATIC_PROJECTS: Repo[] = [
   },
   {
     id: 1004,
-    name: "memory-matrix",
-    description:
-      "Jogo de memória visual. Memorize as células destacadas e recrie o padrão!",
-    html_url: "https://github.com/Samuelfmedeiros/memory-matrix",
-    homepage: "/games/memory-matrix/index.html",
-    stargazers_count: 0,
-    forks_count: 0,
-    language: "JavaScript",
-    topics: ["game", "react"],
-    pushed_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
-    hasDemo: false,
-    icon: "🔲",
-  },
-  {
-    id: 1005,
     name: "terminal",
     description:
       "Terminal interativo estilo shell — navegue pelo portfólio com comandos, easter eggs e temas retrô.",
@@ -124,15 +107,32 @@ export const STATIC_PROJECTS: Repo[] = [
     hasDemo: false,
     icon: "💻",
   },
+  {
+    id: 1005,
+    name: "asteroid-dodge",
+    description:
+      "Jogo de desviar de asteroides. Controle a nave com o mouse e sobreviva o máximo possível!",
+    html_url: "https://github.com/Samuelfmedeiros/asteroid-dodge",
+    homepage: "/games/asteroid-dodge/index.html",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["game", "react"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
+    hasDemo: false,
+    icon: "🚀",
+  },
 ];
 
 export const FEATURED_PROJECTS = [
   "DogWalk",
   "Portifolio",
-  "simon-game",
-  "asteroid-dodge",
-  "code-typing",
   "memory-matrix",
+  "simon-game",
+  "code-typing",
   "terminal",
+  "asteroid-dodge",
 ];
-export const GAME_PROJECTS = ["simon-game", "asteroid-dodge", "code-typing", "memory-matrix", "terminal"];
+export const GAME_PROJECTS = ["memory-matrix", "simon-game", "code-typing", "terminal", "asteroid-dodge"];

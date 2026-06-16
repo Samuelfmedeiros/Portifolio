@@ -28,6 +28,8 @@ async function HangarWithData() {
 
   // Split games from other projects
   const games = allProjects.filter((r) => GAME_PROJECTS.includes(r.name));
+  // Sort games by GAME_PROJECTS order (Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge)
+  games.sort((a, b) => GAME_PROJECTS.indexOf(a.name) - GAME_PROJECTS.indexOf(b.name));
   const projects = allProjects.filter((r) => !GAME_PROJECTS.includes(r.name));
 
   return (
