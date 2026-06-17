@@ -730,7 +730,7 @@ export function ProfileSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: mounted ? 1 : 0 }}
-        transition={{ duration: 0.5, ease: "easeOut" }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ y: bgY, willChange: "transform" }}
         className="absolute inset-0 z-0"
       >
@@ -748,7 +748,7 @@ export function ProfileSection() {
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: mounted ? 1 : 0 }}
-        transition={{ duration: 0.6, delay: 0.15, ease: "easeOut" }}
+        transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
         style={{ y: svgY, willChange: "transform" }}
         className="absolute inset-0 z-[1] pointer-events-none"
       >
@@ -798,7 +798,7 @@ export function ProfileSection() {
               className="text-[var(--accent)] inline"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.3, ease: [0.4, 0, 0.2, 1] }}
+              transition={{ duration: 0.6, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
             >
               Medeiros
             </motion.span>
@@ -807,14 +807,14 @@ export function ProfileSection() {
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
             className="h-px w-24 md:w-32 mx-auto bg-[var(--accent)] mb-4"
           />
 
           <motion.p
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.6, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.4, delay: 0.25, ease: [0.4, 0, 0.2, 1] }}
             className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-6 h-7"
           >
             <TypeWriter
@@ -834,7 +834,7 @@ export function ProfileSection() {
           <motion.div
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 1.1, ease: [0.4, 0, 0.2, 1] }}
+            transition={{ duration: 0.4, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
             className="flex flex-col sm:flex-row gap-3 justify-center"
           >
             <a
