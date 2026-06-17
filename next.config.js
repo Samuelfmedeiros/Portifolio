@@ -13,10 +13,16 @@ const nextConfig = {
   },
 
   // Base path para servir atrás do reverse proxy (/api/portifolio-proxy/ → Next.js)
-  // Usa BASE_PATH env var (padrão: /api/portifolio-proxy para staging)
-  basePath: process.env.VERCEL ? undefined : (process.env.BASE_PATH || '/api/portifolio-proxy'),
+  // Usa BASE_PATH env var (default: /api/portifolio-proxy para staging)
+  // Produção: setar BASE_PATH= (vazio) → basePath undefined → serve na raiz
+  // Staging: setar BASE_PATH=/api/portifolio-proxy ou omitir
+  basePath: process.env.VERCEL
+    ? undefined
+    : (process.env.BASE_PATH === '' ? undefined : (process.env.BASE_PATH || '/api/portifolio-proxy')),
   // Asset prefix para os assets estáticos (necessário em produção - next start)
-  assetPrefix: process.env.VERCEL ? undefined : (process.env.BASE_PATH || '/api/portifolio-proxy'),
+  assetPrefix: process.env.VERCEL
+    ? undefined
+    : (process.env.BASE_PATH === '' ? undefined : (process.env.BASE_PATH || '/api/portifolio-proxy')),
   
   // Otimização de imagens → WebP/AVIF automático
   images: {
