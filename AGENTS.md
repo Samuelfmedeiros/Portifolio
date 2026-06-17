@@ -33,6 +33,11 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase �
 **0 errors, 0 warnings** — ESLint limpo. Build compila sem TypeScript errors.
 
 ## Fixes Recentes
+- **Scroll vertical cards jogos (17/06):** `overflow-y-hidden` nos cards (não rolam pra cima/baixo) + `min-h-[160px]` (evita layout shift no load). SEM `touchAction:pan-x` — scroll vertical propaga pra página.
+- **Loading state jogos (17/06):** Spinner + "Carregando jogo..." enquanto iframe carrega CDNs (React + Babel do unpkg). `useState(false)` inicial, reset ao fechar.
+- **Deploy Vercel (17/06):** GSAP adicionado ao `package.json` (faltava nas dependencies, quebrava build na Vercel). Buffer→Uint8Array no download-cv. Fix imports MotionValue/useScroll/useTransform no ProfileSection.
+- **Umami tracking (17/06):** Eventos nos botões Apoiar (`support-modal`) e Consultoria Técnica. Evento `click-consulting-cta` já existia.
+- **Centralização (17/06):** Título "🎮 Games" e heading "▸ JORNADA" centralizados. Cards de jogos com `justify-center`.
 - **Parallax Intro (14/06):** SplashScreen deletado. Entrada integrada: L0/L1 fadeIn 0.5-0.6s + hero stagger + background delays.
 - Feature flag `NEXT_PUBLIC_ENABLE_SPLASH` ~~obsoleta~~ — splash removido
 - Navbar navegação: scroll único com offset, sem scrollend/timeout
@@ -46,7 +51,7 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase �
 - ProfileSection: L0 (grid) e L1 (cockpit) com `initial/animate` para fade-in de entrada
 
 ## CI/CD
-GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel quebrado (token sem permissão). Produção local :3001 + staging :3000.
+GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel automático via GitHub (push pra master). Produção local :3001 + staging :3000.
 
 ## 📅 Histórico
 - **Início:** 06/05/2026 — 245+ commits
@@ -70,9 +75,12 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Sistema:** systemd `portifolio.service` na porta 3001
 - **URL local:** http://localhost:3001
 - **Build:** `pnpm build` e `systemctl --user restart portifolio.service`
-- **Vercel:** `samuelmedeiros.vercel.app` ainda no ar (versão antiga), deploy quebrado
+- **Vercel:** `samuelmedeiros.vercel.app` (deploy automático via push pra master, build funcional após adicionar gsap ao package.json)
 
 ## 📊 Analytics (Umami)
 - **Servidor:** Umami v3 rodando em `localhost:3100` (service `umami.service`)
-- **Acesso:** `capivara.seu.pet/api/umami/` (via proxy Capivara, precisa de login)
-- **Status:** Instalado, aguardando criar admin na UI + adicionar tracking script no site
+- **Acesso:** `capivara.seu.pet/api/umami/` (via proxy Capivara, precisa de login admin/umami)
+- **Admin:** Configurado (usuário: admin, senha: umami — resetada 17/06)
+- **Tracking script:** Injetado no `<head>` do layout (data-website-id dde11802-...)
+- **Dados:** 4 sites monitorados (Portifolio Samuel, Capivara, Arachne, Dogwalk)
+- **Eventos:** section_view, theme_toggle, cv_download, nav_click, contact_submit, click-consulting-cta
