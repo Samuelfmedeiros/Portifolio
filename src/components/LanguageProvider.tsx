@@ -16,7 +16,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   const toggle = () => setLocaleState((prev) => (prev === "pt" ? "en" : "pt"));
 
   const t = useCallback(
-    (key: string, fallback?: string) => translate(locale, key as any, fallback),
+    (key: string, fallback?: string) => translate(locale, key, fallback),
     [locale]
   );
 
