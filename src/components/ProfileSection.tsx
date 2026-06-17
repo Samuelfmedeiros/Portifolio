@@ -813,13 +813,23 @@ export function ProfileSection() {
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}
-              className="px-6 py-3 rounded-lg border border-[var(--border)] text-[var(--text-primary)] font-mono text-sm hover:bg-[var(--border)] hover:scale-[1.02] active:scale-[0.98] transition-all"
-              style={{
-                backdropFilter: "blur(8px)",
-                WebkitBackdropFilter: "blur(8px)",
-              }}
+              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-sans text-sm font-semibold
+                bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
+                border border-[var(--accent)]/40 hover:border-[var(--accent)]/70
+                text-[var(--accent)] hover:text-white
+                shadow-lg shadow-[var(--accent)]/10 hover:shadow-[var(--accent)]/25
+                hover:scale-[1.04] active:scale-[0.97]
+                transition-all duration-300 overflow-hidden"
             >
-              Baixar Curriculo
+              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <svg className="w-5 h-5 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span className="relative z-10">Baixar Curriculo</span>
+              <span className="relative z-10 text-[var(--accent)]/60 group-hover:text-white/70 text-xs hidden sm:inline">— PDF</span>
+              <span className="absolute inset-0 rounded-xl border border-[var(--accent)]/0 group-hover:border-[var(--accent)]/50 transition-all duration-500" />
             </button>
           </motion.div>
         </div>
