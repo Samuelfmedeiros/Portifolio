@@ -249,15 +249,37 @@ export function HeroSection() {
           >
             <a
               href="#projects"
-              className="w-full sm:w-auto text-center px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="group relative inline-flex items-center justify-center px-6 py-3 rounded-xl font-sans text-sm font-semibold overflow-hidden
+                bg-[var(--bg-primary)]/50 border border-[var(--accent)]/30 hover:border-[var(--accent)]/60
+                text-[var(--accent)] hover:text-white
+                shadow-lg shadow-[var(--accent)]/5 hover:shadow-[var(--accent)]/20
+                hover:scale-[1.04] active:scale-[0.98]
+                transition-all duration-300"
             >
-              Ver Projetos
+              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/5 to-[var(--accent)]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative z-10">Ver Projetos</span>
+              <svg className="w-4 h-4 relative z-10 ml-1.5 group-hover:translate-x-0.5 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M5 12h14" />
+                <path d="m12 5 7 7-7 7" />
+              </svg>
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}
-              className="w-full sm:w-auto text-center px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="group relative inline-flex items-center justify-center px-6 py-3 rounded-xl font-sans text-sm font-semibold overflow-hidden
+                bg-gradient-to-br from-[var(--accent)] via-[var(--accent)]/90 to-[var(--accent-alt)]/40
+                text-black
+                shadow-lg shadow-[var(--accent)]/30 hover:shadow-[var(--accent)]/50
+                hover:scale-[1.04] active:scale-[0.97]
+                transition-all duration-300"
             >
-              Baixar Curriculo
+              <span className="absolute inset-0 bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <svg className="w-4 h-4 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+                <polyline points="7 10 12 15 17 10" />
+                <line x1="12" y1="15" x2="12" y2="3" />
+              </svg>
+              <span className="relative z-10 font-semibold ml-1.5">Baixar Curriculo</span>
+              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">— PDF</span>
             </button>
           </motion.div>
         </div>
