@@ -68,11 +68,11 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   return (
     <div className="py-6 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-xl font-mono text-[var(--accent)] mb-4">🎮 {t("games.section.title")}</h2>
-        <div className="relative">
+        <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">🎮 {t("games.section.title")}</h2>
+        <div className="relative max-w-5xl mx-auto">
           <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.left")}><ChevronLeft className="w-3.5 h-3.5" /></button>
 
-          <div ref={scrollRef} className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 scroll-smooth snap-x snap-mandatory" style={{ overscrollBehaviorX: "contain", WebkitOverflowScrolling: "touch" }}>
+          <div ref={scrollRef} className="flex gap-4 overflow-x-auto hide-scrollbar pb-2 scroll-smooth snap-x snap-mandatory justify-center" style={{ overscrollBehaviorX: "contain", WebkitOverflowScrolling: "touch" }}>
             {repos.map((repo) => (
               <div key={repo.name} className="flex-shrink-0 w-[180px] snap-start" style={{ touchAction: "manipulation" }}>
                 <GlassCard className="overflow-hidden h-full">

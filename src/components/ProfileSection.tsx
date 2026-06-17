@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, MotionValue, useScroll, useTransform } from "framer-motion";
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
@@ -888,7 +888,7 @@ export function ProfileSection() {
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
-            className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-4"
+            className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
           >
             ▸ JORNADA
           </motion.h2>

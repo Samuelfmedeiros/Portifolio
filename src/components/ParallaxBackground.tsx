@@ -54,13 +54,14 @@ export function ParallaxBackground() {
     window.addEventListener("resize", resize);
 
     // ── Render loop ────────────────────────────────────────
+    const c = ctx; // narrowed in closure scope
     function draw() {
       const w = canvas!.width;
       const h = canvas!.height;
       const dark = document.documentElement.classList.contains("theme-dark");
 
       // Fundo
-      const grad = ctx.createRadialGradient(w * 0.5, h * 0.25, 0, w * 0.5, h * 0.25, Math.max(w, h) * 0.8);
+      const grad = c.createRadialGradient(w * 0.5, h * 0.25, 0, w * 0.5, h * 0.25, Math.max(w, h) * 0.8);
       if (dark) {
         grad.addColorStop(0, "#020c1a");
         grad.addColorStop(0.5, "#010612");
@@ -70,18 +71,18 @@ export function ParallaxBackground() {
         grad.addColorStop(0.5, "#e0e8f5");
         grad.addColorStop(1, "#d0d8e5");
       }
-      ctx.fillStyle = grad;
-      ctx.fillRect(0, 0, w, h);
+      c.fillStyle = grad;
+      c.fillRect(0, 0, w, h);
 
       // Nebulosas
       for (const neb of nebulae) {
         const nx = w * neb.x;
         const ny = h * neb.y + scrollProgress * 300 * neb.speed;
-        const ng = ctx.createRadialGradient(nx, ny, 0, nx, ny, Math.max(w, h) * neb.r);
+        const ng = c.createRadialGradient(nx, ny, 0, nx, ny, Math.max(w, h) * neb.r);
         ng.addColorStop(0, neb.color);
         ng.addColorStop(1, "transparent");
-        ctx.fillStyle = ng;
-        ctx.fillRect(0, 0, w, h);
+        c.fillStyle = ng;
+        c.fillRect(0, 0, w, h);
       }
 
       // Estrelas
@@ -92,13 +93,13 @@ export function ParallaxBackground() {
         const sx = star.x % w;
 
         if (dark) {
-          ctx.fillStyle = `hsla(${star.hue}, 50%, 80%, ${tOpacity})`;
+          c.fillStyle = `hsla(${star.hue}, 50%, 80%, ${tOpacity})`;
         } else {
-          ctx.fillStyle = `rgba(100, 130, 180, ${tOpacity * 0.4})`;
+          c.fillStyle = `rgba(100, 130, 180, ${tOpacity * 0.4})`;
         }
-        ctx.beginPath();
-        ctx.arc(sx, sy, star.size, 0, Math.PI * 2);
-        ctx.fill();
+        c.beginPath();
+        c.arc(sx, sy, star.size, 0, Math.PI * 2);
+        c.fill();
       }
 
       animId = requestAnimationFrame(draw);
