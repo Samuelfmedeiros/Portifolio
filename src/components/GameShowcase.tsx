@@ -70,9 +70,9 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
         <div className="relative">
           <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label="Esquerda"><ChevronLeft className="w-3.5 h-3.5" /></button>
 
-          <div ref={scrollRef} className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
+          <div ref={scrollRef} className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 touch-pan-y">
             {repos.map((repo) => (
-              <div key={repo.name} className="flex-shrink-0 w-[180px] snap-start">
+              <div key={repo.name} className="flex-shrink-0 w-[180px]">
                 <GlassCard className="overflow-hidden h-full">
                   <button data-game-btn={repo.name} data-game-url={repo.homepage || ""} className="relative h-[110px] w-full overflow-hidden block text-left cursor-pointer" style={{ background: repo.imageGradient || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)" }}>
                     {GAME_IMAGES[repo.name] ? (
