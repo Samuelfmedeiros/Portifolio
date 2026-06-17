@@ -1,12 +1,15 @@
 import type { Metadata } from "next";
 import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
+import { LanguageProvider } from "@/components/LanguageProvider";
 import { CockpitBackground } from "@/components/CockpitBackground";
 import { AppWrapper } from "@/components/AppWrapper";
 import { Navbar } from "@/components/Navbar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
 import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
 import { Footer } from "@/components/Footer";
+import { SupportButton } from "@/components/SupportButton";
+import { ConsultingButton } from "@/components/ConsultingButton";
 import { ScrollProgress } from "@/components/ScrollProgress";
 import { ScrollRestoration } from "@/components/ScrollRestoration";
 import { SkipLink } from "@/components/SkipLink";
@@ -145,7 +148,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="relative min-h-screen antialiased" style={{ touchAction: "manipulation" } as React.CSSProperties}>
         <SkipLink />
         <ThemeProvider>
-          <CookieBannerProvider>
+          <LanguageProvider>
+            <CookieBannerProvider>
             <MonetizationProvider>
               <ConditionalAnalytics />
               <AppWrapper>
@@ -159,10 +163,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
                   <AdSense slot={ADSENSE_CONFIG.footerSlot || "footer"} format="horizontal" className="min-h-[90px]" />
                 </div>
+                <div className="flex flex-wrap justify-center gap-4 px-4 pb-6">
+                  <SupportButton />
+                  <ConsultingButton />
+                </div>
                 <Footer />
               </AppWrapper>
             </MonetizationProvider>
           </CookieBannerProvider>
+          </LanguageProvider>
         </ThemeProvider>
         <JsonLd />
         <BackToTop />

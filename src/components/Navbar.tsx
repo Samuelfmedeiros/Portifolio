@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef, memo } from "react";
 import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
+import { LanguageToggle } from "./LanguageToggle";
 import { PalettePicker } from "./PalettePicker";
 
 const NAV_ITEMS = [
@@ -154,6 +155,7 @@ export const Navbar = memo(function Navbar() {
               </svg>
             </a>
             <PalettePicker />
+            <LanguageToggle />
             <ThemeToggle />
           </div>
         </div>
