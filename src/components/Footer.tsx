@@ -35,6 +35,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms' }) {
+  const { t } = useLanguage();
   if (!open) return null;
 
   return (
