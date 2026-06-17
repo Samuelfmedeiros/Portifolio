@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback } from "react";
+import { useRef, useEffect, useCallback, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
@@ -18,6 +18,7 @@ const GAME_IMAGES: Record<string, string> = {
 export function GameShowcase({ repos }: { repos: Repo[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const embedRef = useRef<HTMLDivElement>(null);
+  const [loading, setLoading] = useState(true);
   const { track } = useAnalytics();
   const { t } = useLanguage();
 
@@ -30,6 +31,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
     const match = url?.match(/\/games\/([^/]+)/);
     const apiUrl = match ? `/api/game/${match[1]}` : null;
     if (!apiUrl) return;
+    setLoading(true);
     const titleEl = el.querySelector("[data-game-title]");
     if (titleEl) titleEl.textContent = name;
     let iframe = el.querySelector("iframe") as HTMLIFrameElement | null;
@@ -37,6 +39,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
       iframe = document.createElement("iframe");
       iframe.className = "w-full h-[450px] md:h-[550px]";
       iframe.title = name;
+      iframe.onload = () => setLoading(false);
       el.querySelector("[data-game-container]")?.appendChild(iframe);
     }
     iframe.src = apiUrl;
@@ -122,7 +125,15 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
               </div>
               <button onClick={closeGame} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]" aria-label={t("games.embed.close")}>✕</button>
             </div>
-            <div data-game-container />
+            {loading && (
+              <div className="flex items-center justify-center h-[450px] md:h-[550px] bg-[var(--bg-primary)]">
+                <div className="flex flex-col items-center gap-3">
+                  <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
+                  <span className="text-xs font-mono text-[var(--text-secondary)] animate-pulse">Carregando jogo...</span>
+                </div>
+              </div>
+            )}
+            <div data-game-container className={loading ? "hidden" : ""} />
           </div>
         </div>
       </div>
