@@ -1,7 +1,45 @@
 import { NextRequest, NextResponse } from "next/server";
 
+// Simple in-memory rate limiter
+const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 5; // max requests per window
+
+function getClientIp(req: NextRequest): string {
+  const forwarded = req.headers.get("x-forwarded-for");
+  if (forwarded) return forwarded.split(",")[0].trim();
+  return req.headers.get("x-real-ip") ?? req.headers.get("x-vercel-forwarded-for") ?? "unknown";
+}
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimit.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  entry.count++;
+  return entry.count <= RATE_LIMIT_MAX;
+}
+
+// Cleanup stale entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  rateLimit.forEach((val, key) => {
+    if (now > val.resetAt) rateLimit.delete(key);
+  });
+}, 300_000);
+
 export async function POST(req: NextRequest) {
   try {
+    const ip = getClientIp(req);
+    if (!checkRateLimit(ip)) {
+      return NextResponse.json(
+        { error: "Muitas requisições. Aguarde um minuto." },
+        { status: 429 }
+      );
+    }
+
     const { name, email, content } = await req.json();
 
     if (!name || !email || !content) {

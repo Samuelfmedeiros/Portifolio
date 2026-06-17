@@ -7,6 +7,13 @@ export async function GET(
   { params }: { params: Promise<{ slug: string }> }
 ) {
   const { slug } = await params;
+
+  // Security: prevent path traversal
+  const sanitized = slug.replace(/\.\.\//g, "").replace(/\.\.\\/g, "").replace(/\//g, "").replace(/\\/g, "");
+  if (sanitized !== slug) {
+    return new NextResponse("Invalid game slug", { status: 400 });
+  }
+
   const filePath = path.join(process.cwd(), "public/games", slug, "index.html");
 
   if (!fs.existsSync(filePath)) {
