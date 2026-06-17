@@ -51,7 +51,7 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Supabase �
 - ProfileSection: L0 (grid) e L1 (cockpit) com `initial/animate` para fade-in de entrada
 
 ## CI/CD
-GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel automático via GitHub (push pra master). Produção local :3001 + staging :3000.
+GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel manual via CLI (`vercel --token "$VERCEL_TOKEN" --prod`). Automático ainda não configurado. Produção local :3001 + staging :3000.
 
 ## 📅 Histórico
 - **Início:** 06/05/2026 — 245+ commits
@@ -75,7 +75,7 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Sistema:** systemd `portifolio.service` na porta 3001
 - **URL local:** http://localhost:3001
 - **Build:** `pnpm build` e `systemctl --user restart portifolio.service`
-- **Vercel:** `samuelmedeiros.vercel.app` (deploy automático via push pra master, build funcional após adicionar gsap ao package.json)
+- **Vercel:** `samuelmedeiros.vercel.app` (deploy manual via CLI, build funcional após adicionar gsap ao package.json)
 
 ## 📊 Analytics (Umami)
 - **Servidor:** Umami v3 rodando em `localhost:3100` (service `umami.service`)
