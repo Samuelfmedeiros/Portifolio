@@ -49,10 +49,10 @@ export function ParallaxBackground() {
 
     // Defer canvas init — deixa a UI principal renderizar primeiro
     const frame = requestAnimationFrame(() => {
-      requestAnimationFrame(() => { cleanup = initCanvas(); });
+      requestAnimationFrame(() => { cleanup = initCanvas(canvas!, ctx!); });
     });
 
-    function initCanvas() {
+    function initCanvas(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D) {
       // Disable heavy canvas on mobile (< 768px)
       const isMobile = window.innerWidth < 768;
       const activeStarCounts = isMobile
