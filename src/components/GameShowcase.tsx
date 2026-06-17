@@ -70,7 +70,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
         <div className="relative">
           <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label="Esquerda"><ChevronLeft className="w-3.5 h-3.5" /></button>
 
-          <div ref={scrollRef} className="flex gap-3 overflow-x-auto hide-scrollbar pb-2 snap-x snap-mandatory scroll-smooth">
+          <div ref={scrollRef} className="flex gap-3 overflow-x-auto hide-scrollbar pb-2">
             {repos.map((repo) => (
               <div key={repo.name} className="flex-shrink-0 w-[180px] snap-start">
                 <GlassCard className="overflow-hidden h-full">
