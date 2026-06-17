@@ -33,7 +33,7 @@
     .terminal-title {
       text-align: center;
       font-size: 1rem;
-      color: #00ffff;
+      color: #22d3ee;
       margin-bottom: 1rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
@@ -53,8 +53,8 @@
     .terminal-output::-webkit-scrollbar-track { background: transparent; }
     .terminal-output::-webkit-scrollbar-thumb { background: rgba(0, 255, 255, 0.2); border-radius: 2px; }
     .history-entry { margin-bottom: 0.5rem; }
-    .history-cmd { color: #00ffff; font-size: 0.75rem; }
-    .history-prompt { color: #00ffff; }
+    .history-cmd { color: #22d3ee; font-size: 0.75rem; }
+    .history-prompt { color: #22d3ee; }
     .history-output {
       font-size: 0.675rem;
       color: #8888aa;
@@ -66,12 +66,12 @@
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #00ffff;
+      color: #22d3ee;
     }
     .input-prompt {
       font-size: 0.75rem;
       flex-shrink: 0;
-      color: #00ffff;
+      color: #22d3ee;
     }
     .input-field {
       flex: 1;
@@ -81,7 +81,7 @@
       color: #e0e0f0;
       font-family: monospace;
       font-size: 0.75rem;
-      caret-color: #00ffff;
+      caret-color: #22d3ee;
     }
     .input-field::placeholder {
       color: #444466;
@@ -113,7 +113,7 @@
     <div class="terminal-card">
       <div class="terminal-title">▸ TERMINAL v2.0</div>
       <div id="root"></div>
-      <div class="help-hint">digite <strong style="color:#00ffff;">help</strong> para comandos &middot; Tab para autocomplete</div>
+      <div class="help-hint">digite <strong style="color:#22d3ee;">help</strong> para comandos &middot; Tab para autocomplete</div>
     </div>
     <div class="footer">
       <a href="https://github.com/Samuelfmedeiros/terminal" target="_blank" rel="noopener noreferrer">código fonte →</a>
@@ -599,8 +599,8 @@ Digite 'ajuda' para ver os comandos dispon\u00edveis.`;
             {history.map((entry, i) => (
               <div key={i} style={{ marginBottom: '0.5rem' }}>
                 {entry.cmd && (
-                  <div style={{ color: '#00ffff', fontSize: '0.75rem' }}>
-                    <span style={{ color: '#00ffff' }}>{PROMPT}&gt;</span>{' '}
+                  <div style={{ color: '#22d3ee', fontSize: '0.75rem' }}>
+                    <span style={{ color: '#22d3ee' }}>{PROMPT}&gt;</span>{' '}
                     {entry.cmd}
                   </div>
                 )}
@@ -618,8 +618,8 @@ Digite 'ajuda' para ver os comandos dispon\u00edveis.`;
             ))}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#00ffff' }}>
-            <span style={{ fontSize: '0.75rem', flexShrink: 0, color: '#00ffff' }}>{PROMPT}&gt;</span>
+          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#22d3ee' }}>
+            <span style={{ fontSize: '0.75rem', flexShrink: 0, color: '#22d3ee' }}>{PROMPT}&gt;</span>
             <input
               ref={inputRef}
               type="text"
@@ -636,7 +636,7 @@ Digite 'ajuda' para ver os comandos dispon\u00edveis.`;
                 color: '#e0e0f0',
                 fontFamily: 'monospace',
                 fontSize: '0.75rem',
-                caretColor: '#00ffff',
+                caretColor: '#22d3ee',
               }}
             />
           </div>
