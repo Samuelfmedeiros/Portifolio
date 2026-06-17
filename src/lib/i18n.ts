@@ -10,7 +10,7 @@ export interface LanguageContextType {
   locale: Locale;
   setLocale: (locale: Locale) => void;
   toggle: () => void;
-  t: (key: DictKey, fallback?: string) => string;
+  t: (key: string, fallback?: string) => string;
 }
 
 export const STORAGE_KEY = "mc-locale";
@@ -40,10 +40,10 @@ export function getInitialLocale(): Locale {
 }
 
 /** Translate a key using the dictionary (for non-hook contexts) */
-export function translate(locale: Locale, key: DictKey, fallback?: string): string {
-  const value = dict[locale]?.[key];
+export function translate(locale: Locale, key: string, fallback?: string): string {
+  const value = (dict[locale] as any)?.[key];
   if (value) return value;
-  const ptValue = dict.pt[key];
+  const ptValue = (dict.pt as any)?.[key];
   if (ptValue) return ptValue;
   return fallback ?? key;
 }
