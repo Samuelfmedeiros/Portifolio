@@ -8,15 +8,17 @@ import { MissionClock } from "./MissionClock";
 // DataCalculator removido no cleanup
 import { MiniGame } from "./MiniGames/MiniGame";
 import type { Widget } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 const WIDGETS = [
-  { key: "clock" as const, icon: Clock, label: "Relógio" },
-  { key: "calculator" as const, icon: Calculator, label: "Calculadora" },
-  { key: "game" as const, icon: Gamepad2, label: "Mini-game" },
+  { key: "clock" as const, icon: Clock, labelKey: "utility.clock" },
+  { key: "calculator" as const, icon: Calculator, labelKey: "utility.calculator" },
+  { key: "game" as const, icon: Gamepad2, labelKey: "games.label.terminal" },
 ];
 
 export const UtilityDeck = memo(function UtilityDeck() {
   const [activeWidget, setActiveWidget] = useState<Widget>(null);
+  const { t } = useLanguage();
 
   return (
     <section id="utility" className="py-16 md:py-20 px-4 md:px-6">
@@ -26,7 +28,7 @@ export const UtilityDeck = memo(function UtilityDeck() {
 
       <div className="max-w-xl mx-auto">
         <div className="grid grid-cols-3 gap-2 md:gap-4" role="group" aria-label="Utilitários">
-          {WIDGETS.map(({ key, icon: Icon, label }) => {
+          {WIDGETS.map(({ key, icon: Icon, labelKey }) => {
             const isActive = activeWidget === key;
             return (
               <button
@@ -39,7 +41,7 @@ export const UtilityDeck = memo(function UtilityDeck() {
                 }`}
               >
                 <Icon className="w-5 h-5 md:w-6 md:h-6 mx-auto mb-1 md:mb-2 text-[var(--accent)]" />
-                <span className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)]">{label}</span>
+                <span className="font-mono text-[10px] md:text-xs text-[var(--text-secondary)]">{t(labelKey)}</span>
               </button>
             );
           })}

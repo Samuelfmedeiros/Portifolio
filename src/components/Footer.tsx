@@ -8,6 +8,7 @@ import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
 import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { DownloadModal } from "./DownloadModal";
+import { useLanguage } from "@/lib/i18n";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -57,20 +58,20 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
             className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
             role="dialog"
             aria-modal="true"
-            aria-label={activeTab === 'privacy' ? 'Política de Privacidade' : 'Termos de Uso'}
+            aria-label={activeTab === 'privacy' ? t("modal.privacy.title") : t("modal.terms.title")}
           >
             <div onClick={(e) => e.stopPropagation()} className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
               <div className="flex items-center justify-between mb-6">
                 <div className="flex items-center gap-2">
                   <Shield className="w-5 h-5 text-[var(--accent)]" />
                   <h2 className="font-mono text-lg text-[var(--accent)]">
-                    {activeTab === 'privacy' ? 'Política de Privacidade' : 'Termos de Uso'}
+                    {activeTab === 'privacy' ? t("modal.privacy.title") : t("modal.terms.title")}
                   </h2>
                 </div>
                 <button
                   onClick={onClose}
                   className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                  aria-label="Fechar modal"
+                  aria-label={t("modal.close")}
                 >
                   <X className="w-5 h-5" />
                 </button>
@@ -82,13 +83,13 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                   className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'privacy' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
                   aria-current={activeTab === 'privacy' ? 'page' : undefined}
                 >
-                  Política de Privacidade
+                  {t("modal.tab.privacy")}
                 </button>
                 <button
                   className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'terms' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
                   aria-current={activeTab === 'terms' ? 'page' : undefined}
                 >
-                  Termos de Uso
+                  {t("modal.tab.terms")}
                 </button>
               </div>
 
@@ -97,20 +98,17 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                 {activeTab === 'privacy' && (
                   <>
                     <p>
-                      <strong className="text-[var(--text-primary)]">Última atualização:</strong> {new Date().toLocaleDateString("pt-BR")}
+                      <strong className="text-[var(--text-primary)]">{t("modal.updated")}:</strong> {new Date().toLocaleDateString("pt-BR")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)] mt-4">1. Coleta de Dados</h3>
+                    <h3 className="text-sm text-[var(--accent)] mt-4">{t("privacy.section1.title")}</h3>
                     <p>
-                      Este portfólio coleta apenas dados necessários para funcionamento:
-                      mensagens enviadas pelo formulário de contato (nome, email e conteúdo)
-                      e dados de navegação anonimizados (page views) apenas com seu consentimento.
+                      {t("privacy.section1.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">2. Uso dos Dados</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("privacy.section2.title")}</h3>
                     <p>
-                      Os dados do formulário são utilizados exclusivamente para retorno de contato profissional.
-                      Dados de navegação (analytics) são usados apenas para entender quais páginas são mais acessadas.
+                      {t("privacy.section2.text")}
                     </p>
 
                     <h3 className="text-sm text-[var(--accent)]">3. Armazenamento</h3>
@@ -165,7 +163,7 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                     {activeTab === 'terms' && (
                   <>
                     <p>
-                      <strong className="text-[var(--text-primary)]">Última atualização:</strong> {new Date().toLocaleDateString("pt-BR")}
+                      <strong className="text-[var(--text-primary)]">{t("modal.updated")}:</strong> {new Date().toLocaleDateString("pt-BR")}
                     </p>
 
                     <h3 className="text-sm text-[var(--accent)] mt-4">1. Aceitação dos Termos</h3>
@@ -225,6 +223,7 @@ export function Footer() {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
   const { track } = useAnalytics();
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const { t } = useLanguage();
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
@@ -242,22 +241,22 @@ export function Footer() {
               Samuel Medeiros
             </h3>
             <p className="text-xs font-mono text-[var(--text-secondary)]">
-              Analista de Dados — Brasília/DF.
+              {t("footer.brand.desc")}
             </p>
             <button
               onClick={handleCopyEmail}
               className="relative group flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-              aria-label="Copiar email"
+              aria-label={t("footer.copy.email")}
             >
               {copied ? (
                 <Check className="w-3.5 h-3.5 text-[var(--success)]" />
               ) : (
                 <Copy className="w-3.5 h-3.5" />
               )}
-              <span>{copied ? "Copiado!" : "samuelandrademedeiros@gmail.com"}</span>
+              <span>{copied ? t("footer.copied") : "samuelandrademedeiros@gmail.com"}</span>
               {/* Tooltip */}
               <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-[var(--bg-secondary)]/90 text-[var(--text-primary)] whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
-                {copied ? "✓ Copiado!" : "Clique para copiar"}
+                {copied ? "✓ " + t("footer.copied") : t("footer.copy.tooltip")}
               </span>
             </button>
           </div>
@@ -265,7 +264,7 @@ export function Footer() {
           {/* Links */}
           <div>
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
-              Redes
+              {t("footer.social.title")}
             </h3>
             <div className="flex gap-4">
               <a
@@ -311,13 +310,13 @@ export function Footer() {
           {/* Info */}
           <div>
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
-              Currículo
+              {t("footer.cv.title")}
             </h3>
             <button
               onClick={() => setShowDownloadModal(true)}
               className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
             >
-              Download em PDF ↓
+              {t("footer.cv.download")}
             </button>
             {/* Support buttons — discreet, no consent needed */}
             <div className="flex items-center gap-3 mt-3">
@@ -355,11 +354,10 @@ export function Footer() {
             <Shield className="w-4 h-4 text-[var(--accent)] shrink-0 mt-0.5" />
             <div>
               <h3 className="font-mono text-xs text-[var(--accent)] mb-1">
-                Proteção de Dados (LGPD)
+                {t("footer.lgpd.title")}
               </h3>
               <p className="text-[11px] font-mono text-[var(--text-secondary)] leading-relaxed">
-                Seus dados estão protegidos conforme a LGPD (Lei 13.709/2018). Não compartilhamos seus dados com terceiros.
-                Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento.
+                {t("footer.lgpd.text")}
               </p>
               <button
                 onClick={() => {
@@ -368,7 +366,7 @@ export function Footer() {
                 }}
                 className="mt-2 text-[11px] font-mono text-[var(--accent)] hover:underline transition-colors"
               >
-                Leia a Política de Privacidade completa →
+                {t("footer.lgpd.link")}
               </button>
             </div>
           </div>
@@ -377,13 +375,13 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs font-mono text-[var(--text-secondary)]/50">
-            © {new Date().getFullYear()} Samuel Medeiros
+            © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
-            Última atualização: {new Date().toLocaleDateString("pt-BR")}
+            {t("footer.updated")}: {new Date().toLocaleDateString("pt-BR")}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
-            Portifolio Samuel v2.0
+            {t("footer.version")}
           </p>
         </div>
       </div>
