@@ -120,7 +120,6 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
             {/* Header */}
             <div className="text-center mb-5">
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
-                <Download size={22} className="text-[var(--accent)]" />
               </div>
               <h2 className="text-lg font-semibold text-[var(--text-primary)] font-mono">
                 Baixar Currículo
@@ -219,7 +218,6 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     </>
                   ) : (
                     <>
-                      <Download size={16} />
                       Baixar Currículo
                     </>
                   )}

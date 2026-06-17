@@ -359,9 +359,17 @@ function CircuitLines() {
   );
 }
 
+const levelDescriptions: Record<string, string> = {
+  Expert: "Domínio completo — anos de experiência prática",
+  Advanced: "Sólida experiência — projetos complexos e autonomia",
+  Proficient: "Boa base — uso regular em produção",
+};
+
 /* ──────────────────── SKILLS GRID ──────────────────── */
 
 function SkillsCompact() {
+  const [activeSkill, setActiveSkill] = useState<string | null>(null);
+  
   return (
     <div className="mb-8">
       <motion.h2
@@ -373,61 +381,90 @@ function SkillsCompact() {
       </motion.h2>
       <div className="grid grid-cols-1 min-[480px]:grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
         {skills.map((skill, i) => (
-          <motion.div
-            key={skill.name}
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.08 }}
-            viewport={{ once: true }}
-            className="group relative"
-          >
-            {/* Glow border on hover */}
-            <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-[var(--accent)]/0 via-[var(--accent)]/0 to-[var(--accent)]/0 group-hover:from-[var(--accent)]/20 group-hover:via-[var(--accent)]/5 group-hover:to-[var(--accent-alt)]/20 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-sm" />
-            
-            <div className="relative glass rounded-xl p-4 md:p-5 border border-[var(--border)] group-hover:border-[var(--accent)]/40 transition-all duration-300 h-full flex flex-col">
-              {/* Icon with colored glow */}
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center group-hover:bg-[var(--accent)]/20 transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_15px_var(--accent)]/20">
-                  <skill.icon className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent)] group-hover:scale-110 transition-transform duration-300" />
+          <div key={skill.name} className="relative">
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.4, delay: i * 0.08 }}
+              viewport={{ once: true }}
+              className="group relative cursor-pointer"
+              onClick={() => setActiveSkill(activeSkill === skill.name ? null : skill.name)}
+            >
+              {/* Glow border on hover */}
+              <div className="absolute -inset-[1px] rounded-xl bg-gradient-to-br from-[var(--accent)]/0 via-[var(--accent)]/0 to-[var(--accent)]/0 group-hover:from-[var(--accent)]/20 group-hover:via-[var(--accent)]/5 group-hover:to-[var(--accent-alt)]/20 opacity-0 group-hover:opacity-100 transition-all duration-500 blur-sm" />
+              
+              <div className="relative glass rounded-xl p-4 md:p-5 border border-[var(--border)] group-hover:border-[var(--accent)]/40 transition-all duration-300 h-full flex flex-col">
+                {/* Icon with colored glow */}
+                <div className="flex items-center gap-3 mb-3">
+                  <div className="w-9 h-9 md:w-10 md:h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center group-hover:bg-[var(--accent)]/20 transition-all duration-300 group-hover:scale-110 group-hover:shadow-[0_0_15px_var(--accent)]/20">
+                    <skill.icon className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent)] group-hover:scale-110 transition-transform duration-300" />
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <span className="font-semibold text-sm md:text-base text-[var(--text-primary)] block truncate">
+                      {skill.name}
+                    </span>
+                  </div>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <span className="font-semibold text-sm md:text-base text-[var(--text-primary)] block truncate">
-                    {skill.name}
-                  </span>
-                </div>
-              </div>
 
-              {/* Category badge */}
-              <div className="mb-auto">
-                <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-full bg-[var(--accent)]/8 text-[var(--accent)]/70 border border-[var(--accent)]/15">
-                  {skill.category}
-                </span>
-              </div>
+                {/* Category badge */}
+                <div className="mb-auto">
+                  <span className="inline-block text-[9px] font-mono px-2 py-0.5 rounded-full bg-[var(--accent)]/8 text-[var(--accent)]/70 border border-[var(--accent)]/15">
+                    {skill.category}
+                  </span>
+                </div>
 
-              {/* Level bar */}
-              <div className="mt-3 pt-3 border-t border-[var(--border)]/30">
-                <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-mono text-[var(--text-secondary)]/60 uppercase tracking-wider">
-                    Nível
-                  </span>
-                  <span className="text-[10px] font-mono font-semibold" style={{ color: `var(--proficiency-${skill.level.toLowerCase()}, var(--accent))` }}>
-                    {skill.level}
-                  </span>
-                </div>
-                <div className="w-full h-1.5 rounded-full bg-[var(--border)]/30 overflow-hidden">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    whileInView={{ width: `${levelWidth[skill.level]}%` }}
-                    transition={{ duration: 1, delay: 0.3 + i * 0.08, ease: "easeOut" }}
-                    className="h-full rounded-full bg-gradient-to-r"
-                    style={{
-                      background: `linear-gradient(90deg, var(--accent), var(--accent-alt, #7c3aed))`,
-                    }}
-                  />
+                {/* Level bar */}
+                <div className="mt-3 pt-3 border-t border-[var(--border)]/30">
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className="text-[10px] font-mono text-[var(--text-secondary)]/60 uppercase tracking-wider">
+                      Nível
+                    </span>
+                    <span className="text-[10px] font-mono font-semibold" style={{ color: `var(--proficiency-${skill.level.toLowerCase()}, var(--accent))` }}>
+                      {skill.level}
+                    </span>
+                  </div>
+                  <div className="w-full h-1.5 rounded-full bg-[var(--border)]/30 overflow-hidden">
+                    <motion.div
+                      initial={{ width: 0 }}
+                      whileInView={{ width: `${levelWidth[skill.level]}%` }}
+                      transition={{ duration: 1, delay: 0.3 + i * 0.08, ease: "easeOut" }}
+                      className="h-full rounded-full bg-gradient-to-r"
+                      style={{
+                        background: `linear-gradient(90deg, var(--accent), var(--accent-alt, #7c3aed))`,
+                      }}
+                    />
+                  </div>
                 </div>
               </div>
-            </div>
-          </motion.div>
+            </motion.div>
+
+            {/* Balão de detalhes */}
+            {activeSkill === skill.name && (
+              <motion.div
+                initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                className="absolute z-20 left-0 right-0 mt-2 p-3 rounded-xl bg-[var(--bg-secondary)] border border-[var(--accent)]/30 shadow-xl shadow-[var(--accent)]/10"
+                style={{ backdropFilter: "blur(12px)" }}
+              >
+                <div className="flex items-center gap-2 mb-2">
+                  <skill.icon className="w-4 h-4 text-[var(--accent)]" />
+                  <span className="text-xs font-mono font-semibold text-[var(--accent)]">{skill.name}</span>
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setActiveSkill(null); }}
+                    className="ml-auto w-5 h-5 rounded flex items-center justify-center text-[var(--text-secondary)]/50 hover:text-[var(--text-primary)] transition-colors"
+                    aria-label="Fechar"
+                  >✕</button>
+                </div>
+                <p className="text-[11px] font-mono text-[var(--text-secondary)] leading-relaxed">
+                  {levelDescriptions[skill.level] || `${skill.level} — ${skill.category}`}
+                </p>
+                <div className="flex items-center gap-2 mt-2 pt-2 border-t border-[var(--border)]/20">
+                  <span className="text-[9px] font-mono px-1.5 py-0.5 rounded bg-[var(--accent)]/10 text-[var(--accent)]/70">{skill.category}</span>
+                  <span className="text-[9px] font-mono text-[var(--text-secondary)]/50">{skill.level}</span>
+                </div>
+              </motion.div>
+            )}
+          </div>
         ))}
       </div>
     </div>
@@ -807,29 +844,15 @@ export function ProfileSection() {
           >
             <a
               href="#projects"
-              className="px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
+              className="w-full sm:w-auto text-center px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
               Ver Projetos
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}
-              className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-sans text-sm font-semibold
-                bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
-                border border-[var(--accent)]/40 hover:border-[var(--accent)]/70
-                text-[var(--accent)] hover:text-white
-                shadow-lg shadow-[var(--accent)]/10 hover:shadow-[var(--accent)]/25
-                hover:scale-[1.04] active:scale-[0.97]
-                transition-all duration-300 overflow-hidden"
+              className="w-full sm:w-auto text-center px-6 py-3 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 hover:scale-[1.02] active:scale-[0.98] transition-all"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <svg className="w-5 h-5 relative z-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
-                <polyline points="7 10 12 15 17 10" />
-                <line x1="12" y1="15" x2="12" y2="3" />
-              </svg>
-              <span className="relative z-10">Baixar Curriculo</span>
-              <span className="relative z-10 text-[var(--accent)]/60 group-hover:text-white/70 text-xs hidden sm:inline">— PDF</span>
-              <span className="absolute inset-0 rounded-xl border border-[var(--accent)]/0 group-hover:border-[var(--accent)]/50 transition-all duration-500" />
+              Baixar Curriculo
             </button>
           </motion.div>
         </div>
