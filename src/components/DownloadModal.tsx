@@ -4,6 +4,7 @@ import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, X, User, Mail, Shield } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 
 interface DownloadModalProps {
   open: boolean;
@@ -18,6 +19,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const downloadingRef = useRef(false);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -39,8 +41,8 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({ error: "Erro ao baixar" }));
-        throw new Error(err.error || "Erro ao baixar currículo");
+        const err = await res.json().catch(() => ({ error: t("cv.error.generic") }));
+        throw new Error(err.error || t("cv.error.generic"));
       }
 
       // Track no Umami
@@ -68,7 +70,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
       }, 1500);
     } catch (err) {
       setStatus("error");
-      setErrorMsg(err instanceof Error ? err.message : "Erro desconhecido");
+      setErrorMsg(err instanceof Error ? err.message : t("cv.error.generic"));
     } finally {
       downloadingRef.current = false;
     }
@@ -122,10 +124,10 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
               <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
               </div>
               <h2 className="text-lg font-semibold text-[var(--text-primary)] font-mono">
-                Baixar Currículo
+                {t("cv.title")}
               </h2>
               <p className="text-xs text-[var(--text-secondary)] mt-1">
-                Samuel Medeiros — Currículo 2026
+                {t("cv.subtitle")}
               </p>
             </div>
 
@@ -147,14 +149,14 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] mb-1.5"
                   >
                     <User size={12} />
-                    Nome <span className="text-[var(--text-secondary)]/50">(opcional)</span>
+                    {t("cv.name")} <span className="text-[var(--text-secondary)]/50">{t("cv.name.optional")}</span>
                   </label>
                   <input
                     id="cv-name"
                     type="text"
                     value={name}
                     onChange={(e) => setName(e.target.value)}
-                    placeholder="Seu nome"
+                    placeholder={t("cv.name.placeholder")}
                     className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
                   />
                 </div>
@@ -166,14 +168,14 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] mb-1.5"
                   >
                     <Mail size={12} />
-                    Email <span className="text-[var(--text-secondary)]/50">(opcional)</span>
+                    {t("cv.email")} <span className="text-[var(--text-secondary)]/50">{t("cv.name.optional")}</span>
                   </label>
                   <input
                     id="cv-email"
                     type="email"
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    placeholder="seu@email.com"
+                    placeholder={t("cv.email.placeholder")}
                     className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
                   />
                 </div>
@@ -189,13 +191,11 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                   />
                   <label htmlFor="cv-consent" className="text-[11px] text-[var(--text-secondary)] leading-snug cursor-pointer">
                     <span className="flex items-center gap-1 font-medium text-[var(--text-primary)] mb-0.5">
-                      <Shield size={11} /> Consentimento de coleta
+                      <Shield size={11} /> {t("cv.consent.title")}
                     </span>
-                    Autorizo a coleta de dados de navegação (IP, User-Agent,
-                    navegador) e das informações fornecidas acima para fins
-                    estatísticos de download do currículo.{' '}
+                    {t("cv.consent.text")}{" "}
                     <a href="/privacidade" target="_blank" className="text-[var(--accent)] hover:underline">
-                      Política de Privacidade
+                      {t("cv.privacy.link")}
                     </a>
                   </label>
                 </div>
@@ -214,17 +214,17 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                   {status === "loading" ? (
                     <>
                       <span className="w-4 h-4 border-2 border-[var(--bg-primary)] border-t-transparent rounded-full animate-spin" />
-                      Preparando...
+                      {t("cv.btn.loading")}
                     </>
                   ) : (
                     <>
-                      Baixar Currículo
+                      {t("cv.btn.download")}
                     </>
                   )}
                 </button>
 
                 <p className="text-[10px] text-center text-[var(--text-secondary)]/50 font-mono">
-                  Seus dados não serão compartilhados com terceiros
+                  {t("cv.privacy.note")}
                 </p>
               </form>
             )}

@@ -7,6 +7,7 @@ import { GlassCard } from "./GlassCard";
 import { supabase } from "@/lib/supabase";
 import type { FormStatus } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -18,6 +19,7 @@ export function ContactForm() {
   const [copied, setCopied] = useState(false);
   const lastSentRef = useRef<number>(0);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
 
   const MAX_MESSAGE_LENGTH = 500;
   const messageLength = content.length;
@@ -88,7 +90,7 @@ export function ContactForm() {
         viewport={{ once: true }}
         className="font-mono text-lg md:text-xl tracking-[0.3em] text-[var(--accent)] mb-8 text-center"
       >
-        ▸ CONTATO
+        ▸ {t("contact.section.title")}
       </motion.h2>
 
       {/* Status announcements for screen readers */}
@@ -109,7 +111,7 @@ export function ContactForm() {
           <svg className="w-5 h-5" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
             <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
           </svg>
-          Conversar no WhatsApp
+          {t("contact.whatsapp.cta")}
         </a>
       </div>
 
@@ -144,7 +146,7 @@ export function ContactForm() {
           className="flex items-center gap-2 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
         >
           {copied ? <Check className="w-4 h-4 text-[var(--success)]" /> : <Copy className="w-4 h-4" />}
-          {copied ? "Copiado!" : "samuelandrademedeiros@gmail.com"}
+          {copied ? t("contact.email.copied") : "samuelandrademedeiros@gmail.com"}
         </button>
       </div>
 
@@ -152,7 +154,7 @@ export function ContactForm() {
         <div className="flex items-center gap-3 mb-5">
           <Radio className="w-4 h-4 text-[var(--accent)] animate-pulse" />
           <span className="font-mono text-xs text-[var(--text-secondary)]">
-            Entre em contato
+            {t("contact.form.message.placeholder")}
           </span>
         </div>
 
@@ -165,19 +167,19 @@ export function ContactForm() {
             aria-label="Mensagem enviada com sucesso"
           >
             <CheckCircle className="w-12 h-12 mx-auto mb-4 text-[var(--success)]" />
-            <p className="font-mono text-sm text-[var(--accent)]">Mensagem enviada</p>
+            <p className="font-mono text-sm text-[var(--accent)]">{t("contact.form.success")}</p>
             <button
               onClick={() => { setStatus("idle"); setErrorMessage(""); }}
               className="mt-4 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)]"
             >
-              Enviar outra mensagem
+              {t("contact.form.send.another")}
             </button>
           </motion.div>
         ) : (
           <form onSubmit={handleSubmit} className="space-y-4" aria-label="Formulário de contato">
             <div>
               <label htmlFor="contact-name" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
-                Nome
+                {t("contact.form.name")}
               </label>
               <input
                 id="contact-name"
@@ -186,7 +188,7 @@ export function ContactForm() {
                 onChange={(e) => setName(e.target.value)}
                 required
                 className="w-full bg-[var(--bg-primary)]/30 border border-[var(--border)] rounded-lg px-4 py-2 font-mono text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition-colors"
-                placeholder="Seu nome"
+                placeholder={t("contact.form.name.placeholder")}
                 aria-describedby="contact-name-desc"
               />
               <span id="contact-name-desc" className="sr-only">Digite seu nome completo</span>
@@ -194,7 +196,7 @@ export function ContactForm() {
 
             <div>
               <label htmlFor="contact-email" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
-                Email
+                {t("contact.form.email")}
               </label>
               <input
                 id="contact-email"
@@ -203,7 +205,7 @@ export function ContactForm() {
                 onChange={(e) => setEmail(e.target.value)}
                 required
                 className="w-full bg-[var(--bg-primary)]/30 border border-[var(--border)] rounded-lg px-4 py-2 font-mono text-sm text-[var(--text-primary)] outline-none focus:border-[var(--accent)] transition-colors"
-                placeholder="seu@email.com"
+                placeholder={t("contact.form.email.placeholder")}
                 aria-describedby="contact-email-desc"
               />
               <span id="contact-email-desc" className="sr-only">Formato esperado: seu@email.com</span>
@@ -211,7 +213,7 @@ export function ContactForm() {
 
             <div>
               <label htmlFor="contact-message" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
-                Mensagem
+                {t("contact.form.message")}
               </label>
               <textarea
                 id="contact-message"
@@ -225,13 +227,13 @@ export function ContactForm() {
                     ? "border-[var(--error)] focus:border-[var(--error)]"
                     : "border-[var(--border)] focus:border-[var(--accent)]"
                 }`}
-                placeholder="Digite sua mensagem..."
+                placeholder={t("contact.form.message.placeholder")}
                 aria-describedby="contact-message-desc"
               />
-              <span id="contact-message-desc" className="sr-only">Máximo de {MAX_MESSAGE_LENGTH} caracteres</span>
+              <span id="contact-message-desc" className="sr-only">{t("contact.form.message.placeholder")} — {t("contact.form.message.min")}</span>
               <div className="flex justify-between mt-1">
                 <span className="text-[10px] font-mono text-[var(--text-secondary)]">
-                  {messageLength === 0 ? "Mínimo 10 caracteres" : ""}
+                  {messageLength === 0 ? t("contact.form.message.min") : ""}
                 </span>
                 <span
                   className={`text-[10px] font-mono ${
@@ -258,11 +260,11 @@ export function ContactForm() {
                 className="mt-0.5 w-4 h-4 rounded accent-[var(--accent)] cursor-pointer shrink-0"
               />
               <label htmlFor="contact-lgpd-consent" className="text-[11px] font-mono text-[var(--text-secondary)] leading-snug cursor-pointer">
-                Concordo com a{" "}
+                {t("contact.lgpd.text")}{" "}
                 <a href="#privacidade" className="text-[var(--accent)] hover:underline">
-                  Política de Privacidade
+                  {t("cv.privacy.link")}
                 </a>{" "}
-                e autorizo o uso dos meus dados para contato.
+                {t("contact.lgpd.suffix")}
               </label>
             </div>
 
@@ -277,17 +279,17 @@ export function ContactForm() {
               } disabled:opacity-50`}
             >
               {status === "sending" ? (
-                "Enviando..."
+                t("contact.form.sending")
               ) : (
                 <>
-                  <Send className="w-4 h-4" aria-hidden="true" /> Enviar mensagem
+                  <Send className="w-4 h-4" aria-hidden="true" /> {t("contact.form.submit")}
                 </>
               )}
             </button>
 
             {status === "error" && (
               <p className="text-xs font-mono text-[var(--error)] text-center">
-                {errorMessage || "Aguarde um momento e tente novamente."}
+                {errorMessage || t("contact.form.error.default")}
               </p>
             )}
           </form>

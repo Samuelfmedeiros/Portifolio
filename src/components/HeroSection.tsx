@@ -4,6 +4,7 @@ import { motion, useScroll, useTransform } from "framer-motion";
 import { useRef, useState } from "react";
 import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
+import { useLanguage } from "@/lib/i18n";
 
 // Decorative cockpit SVG as inline component
 function CockpitSVG() {
@@ -124,6 +125,7 @@ export function HeroSection() {
   const textY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const opacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const { t } = useLanguage();
 
   return (
     <>
@@ -196,11 +198,11 @@ export function HeroSection() {
           >
             <TypeWriter
               phrases={[
-                "Desenvolvedor Full Stack & Analista de Dados — Brasília/DF",
-                "Transformando dados em decisões estratégicas 📊",
-                "Python • SQL • Power BI • Machine Learning",
-                "Next.js • React • TypeScript • Node.js",
-                "4+ anos transformando negócios com dados 🚀",
+                t("hero.typewriter.1"),
+                t("hero.typewriter.2"),
+                t("hero.typewriter.3"),
+                t("hero.typewriter.4"),
+                t("hero.typewriter.5"),
               ]}
               speed={35}
               deleteSpeed={20}
@@ -214,7 +216,7 @@ export function HeroSection() {
             transition={{ duration: 0.6, delay: 0.7 }}
             className="text-xs sm:text-sm text-[var(--text-secondary)] mb-6"
           >
-            Next.js, React, Python, SQL e Machine Learning — transformando dados em decisões estratégicas.
+            {t("hero.tagline")}
           </motion.p>
 
           <motion.div
@@ -257,7 +259,7 @@ export function HeroSection() {
                 transition-all duration-300"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/5 to-[var(--accent)]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10">Ver Projetos</span>
+              <span className="relative z-10">{t("hero.btn.projects")}</span>
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}
@@ -274,8 +276,8 @@ export function HeroSection() {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              <span className="relative z-10 font-semibold ml-1.5">Baixar Curriculo</span>
-              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">— PDF</span>
+              <span className="relative z-10 font-semibold ml-1.5">{t("hero.btn.cv")}</span>
+              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">— {t("hero.btn.cv.pdf")}</span>
             </button>
           </motion.div>
         </div>

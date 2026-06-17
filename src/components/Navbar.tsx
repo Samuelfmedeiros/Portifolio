@@ -5,13 +5,14 @@ import { motion } from "framer-motion";
 import { ThemeToggle } from "./ThemeToggle";
 import { LanguageToggle } from "./LanguageToggle";
 import { PalettePicker } from "./PalettePicker";
+import { useLanguage } from "@/lib/i18n";
 
 const NAV_ITEMS = [
-  { href: "#profile", label: "Início", icon: "🚀" },
-  { href: "#jornada", label: "Jornada", icon: "📜" },
-  { href: "#projects", label: "Projetos", icon: "📂" },
-  { href: "#games", label: "Jogos", icon: "🎮" },
-  { href: "#contact", label: "Contato", icon: "📬" },
+  { href: "#profile", key: "nav.home", icon: "🚀" },
+  { href: "#jornada", key: "nav.journey", icon: "📜" },
+  { href: "#projects", key: "nav.projects", icon: "📂" },
+  { href: "#games", key: "nav.games", icon: "🎮" },
+  { href: "#contact", key: "nav.contact", icon: "📬" },
 ];
 
 import { useAnalytics } from "@/hooks/useAnalytics";
@@ -21,6 +22,7 @@ export const Navbar = memo(function Navbar() {
   const [activeSection, setActiveSection] = useState("profile");
   const scrollRef = useRef<HTMLUListElement>(null);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
 
   const rafRef = useRef<number | null>(null);
 
@@ -94,7 +96,7 @@ export const Navbar = memo(function Navbar() {
           : "bg-[var(--bg-primary)]/60 backdrop-blur-sm border-b border-[var(--border)]/30"
       }`}
       role="navigation"
-      aria-label="Navegação principal"
+      aria-label={t("nav.aria.main")}
     >
       <div className="max-w-7xl mx-auto px-3 md:px-6">
         <div className="flex items-center justify-between h-14 md:h-16">
@@ -127,7 +129,7 @@ export const Navbar = memo(function Navbar() {
                     whileHover={{ y: -1 }}
                     aria-current={isActive ? "true" : undefined}
                   >
-                    {item.label}
+                    {t(item.key)}
                     {isActive && (
                       <motion.div
                         layoutId="navbar-indicator"
@@ -164,7 +166,7 @@ export const Navbar = memo(function Navbar() {
         <ul
           ref={scrollRef}
           className="lg:hidden flex items-center gap-0.5 overflow-x-auto hide-scrollbar pb-2 -mx-2 px-2 snap-x snap-mandatory"
-          aria-label="Navegação mobile"
+          aria-label={t("nav.aria.mobile")}
         >
           {NAV_ITEMS.map((item) => {
             const isActive = activeId === item.href.replace("#", "");
@@ -182,7 +184,7 @@ export const Navbar = memo(function Navbar() {
                   aria-current={isActive ? "true" : undefined}
                 >
                   <span className="text-xs">{item.icon}</span>
-                  <span className="sm:inline">{item.label}</span>
+                  <span className="sm:inline">{t(item.key)}</span>
                   {isActive && (
                     <motion.div
                       className="w-1 h-1 rounded-full bg-[var(--accent)]"

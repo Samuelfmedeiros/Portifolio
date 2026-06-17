@@ -5,6 +5,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 
 const GAME_IMAGES: Record<string, string> = {
   "simon-game": "/games/simon-game.webp",
@@ -18,6 +19,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const embedRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
 
   if (!repos || repos.length === 0) return null;
 
@@ -66,9 +68,9 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   return (
     <div className="py-6 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-xl font-mono text-[var(--accent)] mb-4">🎮 JOGOS</h2>
+        <h2 className="text-xl font-mono text-[var(--accent)] mb-4">🎮 {t("games.section.title")}</h2>
         <div className="relative">
-          <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label="Esquerda"><ChevronLeft className="w-3.5 h-3.5" /></button>
+          <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.left")}><ChevronLeft className="w-3.5 h-3.5" /></button>
 
           <div ref={scrollRef} className="flex gap-3 overflow-x-auto hide-scrollbar pb-2" style={{ touchAction: "pan-x pan-y" }}>
             {repos.map((repo) => (
@@ -84,7 +86,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
-                      <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-white drop-shadow-lg">▶ JOGAR</span>
+                      <span className="inline-flex items-center gap-1 text-[11px] font-mono font-bold text-white drop-shadow-lg">▶ {t("games.play")}</span>
                     </div>
                   </button>
                   <div className="p-2.5">
@@ -108,7 +110,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
             ))}
           </div>
 
-          <button onClick={() => scrollRef.current?.scrollBy({ left: 220, behavior: "smooth" })} className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label="Direita"><ChevronRight className="w-3.5 h-3.5" /></button>
+          <button onClick={() => scrollRef.current?.scrollBy({ left: 220, behavior: "smooth" })} className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.right")}><ChevronRight className="w-3.5 h-3.5" /></button>
         </div>
 
         <div ref={embedRef} data-game-section style={{ display: "none" }} className="mt-4">
@@ -118,7 +120,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span data-game-title className="text-xs font-mono text-[var(--accent)]" />
               </div>
-              <button onClick={closeGame} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]" aria-label="Fechar">✕</button>
+              <button onClick={closeGame} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]" aria-label={t("games.embed.close")}>✕</button>
             </div>
             <div data-game-container />
           </div>

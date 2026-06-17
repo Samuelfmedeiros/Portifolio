@@ -6,6 +6,7 @@ import { useLanguage } from "@/lib/i18n";
 
 export const LanguageToggle = memo(function LanguageToggle() {
   const { locale, toggle } = useLanguage();
+  const { t } = useLanguage();
   const [hover, setHover] = useState(false);
   const next = locale === "pt" ? "EN" : "PT";
 
@@ -29,7 +30,7 @@ export const LanguageToggle = memo(function LanguageToggle() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full min-w-[36px] flex items-center justify-center"
-        aria-label={locale === "pt" ? "Mudar para inglês" : "Switch to Portuguese"}
+        aria-label={locale === "pt" ? t("aria.language.toggle") : "Mudar para português"}
       >
         <AnimatePresence mode="wait">
           <motion.span
