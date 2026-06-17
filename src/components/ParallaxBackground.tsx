@@ -45,11 +45,19 @@ export function ParallaxBackground() {
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Disable heavy canvas on mobile (< 768px)
-    const isMobile = window.innerWidth < 768;
-    const activeStarCounts = isMobile
-      ? { deep: 30, mid: 15, close: 8 }
-      : { deep: 120, mid: 60, close: 30 };
+    let cleanup: (() => void) | null = null;
+
+    // Defer canvas init — deixa a UI principal renderizar primeiro
+    const frame = requestAnimationFrame(() => {
+      requestAnimationFrame(() => { cleanup = initCanvas(); });
+    });
+
+    function initCanvas() {
+      // Disable heavy canvas on mobile (< 768px)
+      const isMobile = window.innerWidth < 768;
+      const activeStarCounts = isMobile
+        ? { deep: 15, mid: 8, close: 4 }
+        : { deep: 60, mid: 30, close: 15 };
 
     let animationId: number;
     let scrollY = 0;
@@ -231,69 +239,50 @@ export function ParallaxBackground() {
         { offset: 1, color: "transparent" },
       ], 0.03, 0.5);
 
-      // === PLANET ===
+      // === PLANET (leve) ===
       if (dark && !isMobile) {
         const px = w * planet.x + mx * 0.3;
         const py = h * planet.y + scrollY * 0.008 + my * 0.2;
         const pr = planet.radius;
 
-        // Outer atmosphere glow
-        const atmosGlow = ctx.createRadialGradient(px, py, pr * 0.7, px, py, pr * 2.5);
+        // Atmosphere glow
+        const atmosGlow = ctx.createRadialGradient(px, py, pr * 0.7, px, py, pr * 2);
         const atmosHue = planet.hue + Math.sin(planet.rotation * 0.5) * 5;
-        atmosGlow.addColorStop(0, `hsla(${atmosHue}, 70%, 60%, 0.06)`);
-        atmosGlow.addColorStop(0.5, `hsla(${atmosHue + 20}, 60%, 50%, 0.03)`);
+        atmosGlow.addColorStop(0, `hsla(${atmosHue}, 70%, 60%, 0.05)`);
+        atmosGlow.addColorStop(0.5, `hsla(${atmosHue + 20}, 60%, 50%, 0.02)`);
         atmosGlow.addColorStop(1, "transparent");
         ctx.fillStyle = atmosGlow;
         ctx.beginPath();
-        ctx.arc(px, py, pr * 2.5, 0, Math.PI * 2);
+        ctx.arc(px, py, pr * 2, 0, Math.PI * 2);
         ctx.fill();
 
-        // Planet body
+        // Planet body (gradient simples)
         ctx.save();
         ctx.beginPath();
         ctx.arc(px, py, pr, 0, Math.PI * 2);
         ctx.clip();
-
-        // Base gradient — spherical
-        const bodyGrad = ctx.createRadialGradient(
-          px - pr * 0.3, py - pr * 0.3, 0,
-          px, py, pr
-        );
         const baseHue = planet.hue + Math.sin(planet.rotation) * 3;
+        const bodyGrad = ctx.createRadialGradient(px - pr * 0.3, py - pr * 0.3, 0, px, py, pr);
         bodyGrad.addColorStop(0, `hsla(${baseHue}, 40%, 35%, 0.5)`);
-        bodyGrad.addColorStop(0.5, `hsla(${baseHue - 10}, 30%, 22%, 0.7)`);
         bodyGrad.addColorStop(1, `hsla(${baseHue - 20}, 25%, 12%, 0.8)`);
         ctx.fillStyle = bodyGrad;
         ctx.fillRect(px - pr, py - pr, pr * 2, pr * 2);
 
-        // Surface bands
-        for (let i = 0; i < 6; i++) {
-          const bandY = py - pr + (pr * 2 * (0.15 + i * 0.14)) + Math.sin(planet.rotation * 3 + i) * pr * 0.04;
-          const bandH = pr * 0.06 + Math.sin(i * 2 + planet.rotation) * pr * 0.02;
-          const bandHue = baseHue + Math.sin(i + planet.bandOffset) * 15;
-          ctx.fillStyle = `hsla(${bandHue}, 35%, ${20 + (i % 2) * 8}%, 0.25)`;
+        // Surface bands (3)
+        for (let i = 0; i < 3; i++) {
+          const bandY = py - pr + (pr * 2 * (0.2 + i * 0.25));
+          const bandH = pr * 0.05;
+          const bandHue = baseHue + Math.sin(i + planet.bandOffset) * 20;
+          ctx.fillStyle = `hsla(${bandHue}, 35%, ${20 + (i % 2) * 8}%, 0.2)`;
           ctx.fillRect(px - pr, bandY, pr * 2, bandH);
         }
-
-        // Atmosphere rim light (top)
-        const rimGrad = ctx.createRadialGradient(px, py - pr * 0.3, pr * 0.1, px, py - pr * 0.3, pr * 1.1);
-        rimGrad.addColorStop(0, "transparent");
-        rimGrad.addColorStop(0.6, "transparent");
-        rimGrad.addColorStop(0.85, `hsla(${baseHue + 30}, 80%, 70%, 0.04)`);
-        rimGrad.addColorStop(1, `hsla(${baseHue + 30}, 80%, 70%, 0)`);
-        ctx.fillStyle = rimGrad;
-        ctx.fillRect(px - pr, py - pr, pr * 2, pr * 2);
-
         ctx.restore();
 
-        // Planet inner shadow (crescent dark side)
-        const shadowGrad = ctx.createRadialGradient(
-          px + pr * 0.5, py, 0,
-          px, py, pr
-        );
+        // Inner shadow
+        const shadowGrad = ctx.createRadialGradient(px + pr * 0.5, py, 0, px, py, pr);
         shadowGrad.addColorStop(0, "transparent");
         shadowGrad.addColorStop(0.7, "transparent");
-        shadowGrad.addColorStop(1, "rgba(0, 0, 0, 0.25)");
+        shadowGrad.addColorStop(1, "rgba(0, 0, 0, 0.2)");
         ctx.fillStyle = shadowGrad;
         ctx.beginPath();
         ctx.arc(px, py, pr, 0, Math.PI * 2);
@@ -396,6 +385,12 @@ export function ParallaxBackground() {
       window.removeEventListener("resize", resize);
       window.removeEventListener("scroll", handleScroll);
       window.removeEventListener("mousemove", handleMouse);
+    };
+    }
+
+    return () => {
+      cancelAnimationFrame(frame);
+      if (cleanup) cleanup();
     };
   }, []);
 
