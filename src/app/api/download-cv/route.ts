@@ -55,23 +55,28 @@ export async function POST(req: NextRequest) {
     // Log em background (não bloqueia o download)
     appendLog(entry);
 
-    // ── Telemetry (fire & forget) ──────────────────────────────
-    fetch("https://capivara.seu.pet/api/telemetry/ingest", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        event_type: "cv_download",
-        source: "portifolio",
-        payload: {
-          name: entry.name || "anonimo",
-          ip: entry.ip,
-          user_agent: entry.userAgent,
-          referrer: entry.referrer,
-        },
-      }),
-    }).catch(() => {});
+    // ── Notificações (await para garantir no Vercel) ──────────
+    const notifications: Promise<void>[] = [];
 
-    // ── Telegram notification ─────────────────────────────────
+    // Telemetry
+    notifications.push(
+      fetch("https://capivara.seu.pet/api/telemetry/ingest", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          event_type: "cv_download",
+          source: "portifolio",
+          payload: {
+            name: entry.name || "anonimo",
+            ip: entry.ip,
+            user_agent: entry.userAgent,
+            referrer: entry.referrer,
+          },
+        }),
+      }).then(() => {}).catch(() => {})
+    );
+
+    // Telegram
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID || "-1003963506968";
     if (botToken) {
@@ -100,19 +105,24 @@ export async function POST(req: NextRequest) {
         `📎 samuelmedeiros.vercel.app`,
       ].join("\n");
 
-      fetch(
-        `https://api.telegram.org/bot${botToken}/sendMessage`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            chat_id: chatId,
-            text,
-            parse_mode: "Markdown",
-          }),
-        }
-      ).catch(() => {});
+      notifications.push(
+        fetch(
+          `https://api.telegram.org/bot${botToken}/sendMessage`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              chat_id: chatId,
+              text,
+              parse_mode: "Markdown",
+            }),
+          }
+        ).then(() => {}).catch(() => {})
+      );
     }
+
+    // Aguarda notificações antes de responder (evita corte do Vercel)
+    await Promise.allSettled(notifications);
 
     // Serve o PDF
     const pdfPath = path.join(process.cwd(), "public", "Samuel_Andrade_2026.pdf");
