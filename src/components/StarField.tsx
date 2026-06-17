@@ -1,99 +1,109 @@
 "use client";
 
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { useMemo } from "react";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
 interface Star {
-  id: number;
   x: number;
   y: number;
   size: number;
   opacity: number;
-  depth: 1 | 2 | 3;
+  depth: number;
 }
 
-const generateStars = (count: number): Star[] => {
-  const stars: Star[] = [];
-  for (let i = 0; i < count; i++) {
-    const depth = (i % 3) + 1 as Star["depth"];
-    stars.push({
-      id: i,
-      x: Math.random() * 100,
-      y: Math.random() * 100,
-      size: depth === 1 ? 1 : depth === 2 ? 1.5 : 2,
-      opacity: depth === 1 ? 0.3 : depth === 2 ? 0.5 : 0.8,
-      depth,
-    });
-  }
-  return stars;
-};
-
-const depthSpeed: Record<Star["depth"], [string, string]> = {
-  1: ["0%", "8%"],
-  2: ["0%", "20%"],
-  3: ["0%", "40%"],
-};
-
+/**
+ * StarField — Campo estelar com GSAP + ScrollTrigger parallax
+ *
+ * 3 camadas de profundidade com velocidades diferentes.
+ * Substitui framer-motion por animações CSS + GSAP.
+ */
 export function StarField() {
-  const { scrollYProgress } = useScroll();
+  const containerRef = useRef<HTMLDivElement>(null);
 
-  const shouldReduceMotion = useReducedMotion();
-  const stars = useMemo(() => generateStars(60), []);
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
 
-  const layers = useMemo(() => {
-    const grouped: Record<number, Star[]> = { 1: [], 2: [], 3: [] };
-    stars.forEach((s) => grouped[s.depth].push(s));
-    return grouped;
-  }, [stars]);
+    const layers = container.querySelectorAll<HTMLElement>("[data-depth]");
+    if (!layers.length) return;
 
-  const speed1 = shouldReduceMotion ? '0%' : depthSpeed[1][1];
-  const speed2 = shouldReduceMotion ? '0%' : depthSpeed[2][1];
-  const speed3 = shouldReduceMotion ? '0%' : depthSpeed[3][1];
+    const ctx = gsap.context(() => {
+      layers.forEach((layer) => {
+        const depth = parseFloat(layer.dataset.depth || "1");
+        const speed = depth * 0.15; // 0.15 / 0.3 / 0.45
 
-  const y1 = useTransform(scrollYProgress, [0, 1], ['0%', speed1]);
-  const y2 = useTransform(scrollYProgress, [0, 1], ['0%', speed2]);
-  const y3 = useTransform(scrollYProgress, [0, 1], ['0%', speed3]);
+        gsap.to(layer, {
+          y: () => `${speed * 100}%`,
+          ease: "none",
+          scrollTrigger: {
+            trigger: container,
+            start: "top top",
+            end: "bottom bottom",
+            scrub: 1.5,
+          },
+        });
+      });
+    });
 
-  const depthY = { 1: y1, 2: y2, 3: y3 } as const;
+    return () => ctx.revert();
+  }, []);
 
   return (
-    <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
-      {([1, 2, 3] as const).map((depth) => {
-        const y = depthY[depth];
-        return (
-          <motion.div
-            key={depth}
-            style={{ y }}
-            className="absolute inset-0"
-          >
-            {layers[depth].map((star) => (
-              <motion.div
-                key={star.id}
-                className="absolute rounded-full bg-[var(--accent)]"
-                style={{
-                  left: `${star.x}%`,
-                  top: `${star.y}%`,
-                  width: star.size,
-                  height: star.size,
-                  opacity: star.opacity,
-                }}
-                animate={
-                  shouldReduceMotion
-                    ? {}
-                    : {
-                        opacity: [star.opacity, star.opacity * 0.5, star.opacity],
-                      }
-                }
-                transition={{
-                  duration: 2 + ((star.id * 7 + 13) % 10) / 10 * 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                }}
-              />
-            ))}
-          </motion.div>
-        );
-      })}
+    <div
+      ref={containerRef}
+      className="fixed inset-0 z-0 overflow-hidden pointer-events-none"
+      aria-hidden="true"
+    >
+      {/* Depth 1 — deep (slow) */}
+      <div data-depth="1" className="absolute inset-0 will-change-transform">
+        {Array.from({ length: 20 }, (_, i) => (
+          <div
+            key={`d1-${i}`}
+            className="absolute rounded-full bg-[var(--accent)]"
+            style={{
+              left: `${((i * 37 + 13) % 100)}%`,
+              top: `${((i * 53 + 7) % 100)}%`,
+              width: "1px",
+              height: "1px",
+              opacity: 0.3,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Depth 2 — mid */}
+      <div data-depth="2" className="absolute inset-0 will-change-transform">
+        {Array.from({ length: 15 }, (_, i) => (
+          <div
+            key={`d2-${i}`}
+            className="absolute rounded-full bg-[var(--accent)]"
+            style={{
+              left: `${((i * 41 + 19) % 100)}%`,
+              top: `${((i * 59 + 11) % 100)}%`,
+              width: "1.5px",
+              height: "1.5px",
+              opacity: 0.5,
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Depth 3 — close (fast) */}
+      <div data-depth="3" className="absolute inset-0 will-change-transform">
+        {Array.from({ length: 10 }, (_, i) => (
+          <div
+            key={`d3-${i}`}
+            className="absolute rounded-full bg-[var(--accent)]"
+            style={{
+              left: `${((i * 29 + 31) % 100)}%`,
+              top: `${((i * 67 + 23) % 100)}%`,
+              width: "2px",
+              height: "2px",
+              opacity: 0.7,
+            }}
+          />
+        ))}
+      </div>
     </div>
   );
 }

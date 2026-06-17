@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef } from "react";
-import { motion, useInView } from "framer-motion";
+import { useEffect, useRef } from "react";
+import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
 interface FadeInSectionProps {
   children: React.ReactNode;
@@ -12,6 +12,18 @@ interface FadeInSectionProps {
   once?: boolean;
 }
 
+const directionMap = {
+  up: { y: 1, x: 0 },
+  down: { y: -1, x: 0 },
+  left: { x: 1, y: 0 },
+  right: { x: -1, y: 0 },
+  none: { x: 0, y: 0 },
+};
+
+/**
+ * FadeInSection — GSAP ScrollTrigger reveal
+ * Substitui framer-motion para fade-in ao scroll.
+ */
 export function FadeInSection({
   children,
   className = "",
@@ -21,148 +33,97 @@ export function FadeInSection({
   once = true,
 }: FadeInSectionProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, {
-    once,
-    margin: "-50px 0px",
-  });
 
-  const getInitialPosition = () => {
-    switch (direction) {
-      case "up":
-        return { y: distance, x: 0 };
-      case "down":
-        return { y: -distance, x: 0 };
-      case "left":
-        return { x: distance, y: 0 };
-      case "right":
-        return { x: -distance, y: 0 };
-      case "none":
-        return { opacity: 0 };
-      default:
-        return { y: distance, x: 0 };
-    }
-  };
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
 
-  const getFinalPosition = () => {
-    if (direction === "none") {
-      return { opacity: 1 };
-    }
-    return { y: 0, x: 0, opacity: 1 };
-  };
+    const dir = directionMap[direction];
+    const ctx = gsap.context(() => {
+      gsap.from(el, {
+        x: dir.x * distance,
+        y: dir.y * distance,
+        opacity: 0,
+        duration: 0.6,
+        delay,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          toggleActions: once ? "play none none none" : "play reverse play reverse",
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, [delay, direction, distance, once]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={{
-        hidden: {
-          ...getInitialPosition(),
-          opacity: 0,
-        },
-        visible: {
-          ...getFinalPosition(),
-          opacity: 1,
-          transition: {
-            duration: 0.6,
-            delay,
-            ease: [0.22, 1, 0.36, 1],
-          },
-        },
-      }}
-      className={className}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
-// Staggered container for multiple items
-interface StaggerContainerProps {
-  children: React.ReactNode;
-  className?: string;
-  staggerDelay?: number;
-}
-
+/**
+ * StaggerContainer — container para múltiplos itens com stagger
+ */
 export function StaggerContainer({
   children,
   className = "",
   staggerDelay = 0.1,
-}: StaggerContainerProps) {
+}: {
+  children: React.ReactNode;
+  className?: string;
+  staggerDelay?: number;
+}) {
   const ref = useRef<HTMLDivElement>(null);
-  const isInView = useInView(ref, { once: true, margin: "-50px 0px" });
+
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
+
+    const items = el.querySelectorAll("[data-stagger-item]");
+    if (!items.length) return;
+
+    const ctx = gsap.context(() => {
+      gsap.from(items, {
+        y: 20,
+        opacity: 0,
+        duration: 0.5,
+        stagger: staggerDelay,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: el,
+          start: "top 85%",
+          toggleActions: "play none none none",
+        },
+      });
+    });
+
+    return () => ctx.revert();
+  }, [staggerDelay]);
 
   return (
-    <motion.div
-      ref={ref}
-      initial="hidden"
-      animate={isInView ? "visible" : "hidden"}
-      variants={{
-        hidden: {},
-        visible: {
-          transition: {
-            staggerChildren: staggerDelay,
-          },
-        },
-      }}
-      className={className}
-    >
+    <div ref={ref} className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }
 
-// Stagger item for use inside StaggerContainer
-interface StaggerItemProps {
-  children: React.ReactNode;
-  className?: string;
-  direction?: "up" | "down" | "left" | "right" | "none";
-  distance?: number;
-}
-
+/**
+ * StaggerItem — item dentro de StaggerContainer
+ */
 export function StaggerItem({
   children,
   className = "",
-  direction = "up",
-  distance = 30,
-}: StaggerItemProps) {
-  const getInitialPosition = () => {
-    switch (direction) {
-      case "up":
-        return { y: distance };
-      case "down":
-        return { y: -distance };
-      case "left":
-        return { x: distance };
-      case "right":
-        return { x: -distance };
-      case "none":
-        return { opacity: 0 };
-      default:
-        return { y: distance };
-    }
-  };
-
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <motion.div
-      variants={{
-        hidden: {
-          ...getInitialPosition(),
-          opacity: 0,
-        },
-        visible: {
-          opacity: 1,
-          y: 0,
-          x: 0,
-          transition: {
-            duration: 0.5,
-            ease: [0.22, 1, 0.36, 1],
-          },
-        },
-      }}
-      className={className}
-    >
+    <div data-stagger-item className={className}>
       {children}
-    </motion.div>
+    </div>
   );
 }

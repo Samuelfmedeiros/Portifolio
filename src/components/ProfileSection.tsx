@@ -1,7 +1,7 @@
 "use client";
 
-import { motion, AnimatePresence, useScroll, useTransform, type MotionValue } from "framer-motion";
-import { useRef, useMemo, useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
   Cpu, Flame, Zap, GitMerge, RefreshCw, HardDrive, Sigma, FileJson,
@@ -11,6 +11,7 @@ import { GlassCard } from "./GlassCard";
 import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
 /* ──────────────────── DATA ──────────────────── */
 
