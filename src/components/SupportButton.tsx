@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { Wallet, Copy, Check, X, Heart, Coffee } from "lucide-react";
 import { useState } from "react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { BMC_CONFIG } from "@/lib/monetization";
 
 const PIX_KEY = "samuelandrademedeiros@gmail.com";
@@ -15,6 +16,12 @@ const PIX_CITY = "Brasilia";
 export function SupportButton() {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
+  const { track } = useAnalytics();
+
+  const handleOpen = () => {
+    setOpen(true);
+    track({ type: "external_link", url: "support-modal", label: "Apoiar" });
+  };
 
   const handleCopy = async () => {
     try {
@@ -38,7 +45,7 @@ export function SupportButton() {
     <>
       {/* Botão Apoiar */}
       <motion.button
-        onClick={() => setOpen(true)}
+        onClick={handleOpen}
         className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-sans font-semibold
           bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
           border border-[var(--accent)]/40 hover:border-[var(--accent)]/70

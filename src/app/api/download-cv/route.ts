@@ -131,7 +131,8 @@ export async function POST(req: NextRequest) {
     }
 
     const pdfBuffer = fs.readFileSync(pdfPath);
-    return new NextResponse(pdfBuffer, {
+    const uint8 = new Uint8Array(pdfBuffer);
+    return new NextResponse(uint8, {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",

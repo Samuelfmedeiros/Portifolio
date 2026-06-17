@@ -2,12 +2,14 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, ExternalLink } from "lucide-react";
+import { useAnalytics } from "@/hooks/useAnalytics";
 import { STRIPE_CONSULTING_CONFIG } from "@/lib/stripe-consulting";
 
 /**
  * Botão "Consultoria Técnica" — link direto pro Stripe Payment Link
  */
 export function ConsultingButton() {
+  const { track } = useAnalytics();
   if (!STRIPE_CONSULTING_CONFIG.enabled) return null;
 
   return (
@@ -15,6 +17,7 @@ export function ConsultingButton() {
       href={STRIPE_CONSULTING_CONFIG.paymentLink}
       target="_blank"
       rel="noopener noreferrer"
+      onClick={() => track({ type: "external_link", url: STRIPE_CONSULTING_CONFIG.paymentLink, label: "Consultoria Técnica" })}
       className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-sans font-semibold
         bg-gradient-to-r from-[var(--accent)]/10 to-transparent
         border border-[var(--border)]/60 hover:border-[var(--accent)]/50
