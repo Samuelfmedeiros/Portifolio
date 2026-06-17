@@ -7,7 +7,6 @@ import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
-import { SupportButton } from "@/components/SupportButton";
 
 async function HangarWithData() {
   const repos = await getRepos();
@@ -59,11 +58,6 @@ export default function Home() {
           <section id="contact" className="scroll-mt-20">
             <ContactForm />
           </section>
-        </FadeInSection>
-        <FadeInSection delay={0.35}>
-          <div className="flex flex-wrap justify-center gap-4 py-8">
-            <SupportButton />
-          </div>
         </FadeInSection>
       </div>
     </>

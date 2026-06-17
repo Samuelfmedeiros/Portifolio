@@ -12,8 +12,11 @@ const nextConfig = {
     root: path.resolve(__dirname),
   },
 
-  // Asset prefix para proxy reverso do Capivara
-  assetPrefix: '/api/portifolio-proxy',
+  // Base path para servir atrás do reverse proxy (/api/portifolio-proxy/ → Next.js)
+  // Usa BASE_PATH env var (padrão: /api/portifolio-proxy para staging)
+  basePath: process.env.VERCEL ? undefined : (process.env.BASE_PATH || '/api/portifolio-proxy'),
+  // Asset prefix para os assets estáticos (necessário em produção - next start)
+  assetPrefix: process.env.VERCEL ? undefined : (process.env.BASE_PATH || '/api/portifolio-proxy'),
   
   // Otimização de imagens → WebP/AVIF automático
   images: {

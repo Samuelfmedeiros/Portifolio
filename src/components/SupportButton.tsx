@@ -1,20 +1,19 @@
 "use client";
 
 import { motion, AnimatePresence } from "framer-motion";
-import { CreditCard, Wallet, Copy, Check, X, Heart, ExternalLink } from "lucide-react";
+import { Wallet, Copy, Check, X, Heart, Coffee } from "lucide-react";
 import { useState } from "react";
-import { STRIPE_CONSULTING_CONFIG } from "@/lib/stripe-consulting";
+import { BMC_CONFIG } from "@/lib/monetization";
 
 const PIX_KEY = "samuelandrademedeiros@gmail.com";
 const PIX_NAME = "Samuel Andrade Fonseca de Medeiros";
 const PIX_CITY = "Brasilia";
 
 /**
- * Modal de apoio financeiro — Cartão (Stripe) ou Pix
+ * Botão "Apoiar" — modal com Pix + Buy Me a Coffee
  */
 export function SupportButton() {
   const [open, setOpen] = useState(false);
-  const [pixTab, setPixTab] = useState(false);
   const [copied, setCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -37,10 +36,10 @@ export function SupportButton() {
 
   return (
     <>
-      {/* Botão principal */}
+      {/* Botão Apoiar */}
       <motion.button
         onClick={() => setOpen(true)}
-        className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-sans text-sm font-semibold
+        className="group relative inline-flex items-center gap-2 px-6 py-3 rounded-xl font-sans font-semibold
           bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
           border border-[var(--accent)]/40 hover:border-[var(--accent)]/70
           text-[var(--accent)] hover:text-white
@@ -50,11 +49,8 @@ export function SupportButton() {
         whileTap={{ scale: 0.97 }}
       >
         <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-        <Heart className="w-5 h-5 relative z-10" />
+        <Heart className="w-4 h-4 relative z-10" />
         <span className="relative z-10">Apoiar</span>
-        <span className="text-[var(--accent)]/60 group-hover:text-white/70 text-xs hidden sm:inline relative z-10">
-          — Contribua com o projeto
-        </span>
       </motion.button>
 
       {/* Modal */}
@@ -68,123 +64,91 @@ export function SupportButton() {
               className="absolute inset-0 bg-black/70 backdrop-blur-sm"
               onClick={() => setOpen(false)}
             />
-
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-md rounded-xl border border-[var(--accent)]/30 bg-[#0a0a0f] p-6 shadow-2xl shadow-[var(--accent)]/10"
+              className="relative w-full max-w-sm rounded-xl border border-[var(--accent)]/30 bg-[#0a0a0f] p-5 shadow-2xl shadow-[var(--accent)]/10"
             >
               {/* Fechar */}
               <button
-                onClick={() => { setOpen(false); setPixTab(false); setCopied(false); }}
+                onClick={() => { setOpen(false); setCopied(false); }}
                 className="absolute top-3 right-3 p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)] transition-colors"
               >
                 <X size={18} />
               </button>
 
               {/* Header */}
-              <div className="text-center mb-6">
-                <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
-                  <Heart className="w-6 h-6 text-[var(--accent)]" />
+              <div className="text-center mb-5">
+                <div className="w-10 h-10 mx-auto mb-2 rounded-xl bg-[var(--accent)]/10 flex items-center justify-center">
+                  <Heart className="w-5 h-5 text-[var(--accent)]" />
                 </div>
-                <h2 className="text-lg font-semibold text-[var(--text-primary)] font-mono">
+                <h2 className="text-base font-semibold text-[var(--text-primary)] font-mono">
                   Apoie este projeto
                 </h2>
-                <p className="text-xs text-[var(--text-secondary)] mt-1">
+                <p className="text-[11px] text-[var(--text-secondary)] mt-1">
                   Sua contribuição mantém o portfólio e os projetos open-source ativos 🚀
                 </p>
               </div>
 
-              {!pixTab ? (
-                /* Opções de pagamento */
-                <div className="space-y-3">
-                  {/* Cartão */}
-                  <motion.a
-                    href={STRIPE_CONSULTING_CONFIG.paymentLink}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="flex items-center gap-4 p-4 rounded-xl border border-[var(--border)]/60 hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5 transition-all cursor-pointer group"
-                    whileHover={{ scale: 1.02, x: 2 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
-                      <CreditCard className="w-5 h-5 text-[var(--accent)]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Cartão de Crédito</p>
-                      <p className="text-[10px] text-[var(--text-secondary)]">Pagamento via Stripe — internacional</p>
-                    </div>
-                    <ExternalLink className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors shrink-0" />
-                  </motion.a>
+              {/* Opções */}
+              <div className="space-y-3">
+                {/* Pix */}
+                <div className="flex flex-col items-center gap-3 p-4 rounded-xl border border-[var(--border)]/60">
+                  {/* QR Code */}
+                  <div className="w-[120px] h-[120px] rounded-xl overflow-hidden border border-[var(--border)]/60 bg-white p-1.5">
+                    <img src={qrUrl} alt="Pix QR Code" className="w-full h-full object-contain" loading="lazy" />
+                  </div>
 
-                  {/* Pix */}
-                  <motion.button
-                    onClick={() => setPixTab(true)}
-                    className="w-full flex items-center gap-4 p-4 rounded-xl border border-[var(--border)]/60 hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5 transition-all cursor-pointer group text-left"
-                    whileHover={{ scale: 1.02, x: 2 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center shrink-0">
-                      <Wallet className="w-5 h-5 text-[var(--accent)]" />
+                  {/* Chave */}
+                  <div className="w-full">
+                    <p className="text-[9px] font-mono text-[var(--text-secondary)] mb-1 text-center uppercase tracking-wider">
+                      Chave Pix (email)
+                    </p>
+                    <div className="flex items-center gap-1.5">
+                      <code className="flex-1 text-[11px] font-mono text-[var(--accent)] truncate bg-[var(--bg-primary)]/80 px-2.5 py-1.5 rounded-lg border border-[var(--border)]/40">
+                        {PIX_KEY}
+                      </code>
+                      <button
+                        onClick={handleCopy}
+                        className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-[var(--border)]/60 hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5 transition-all"
+                        aria-label="Copiar chave"
+                      >
+                        {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[var(--text-secondary)]" />}
+                      </button>
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-semibold text-[var(--text-primary)]">Pix</p>
-                      <p className="text-[10px] text-[var(--text-secondary)]">Pagamento instantâneo — Brasil</p>
-                    </div>
-                    <svg className="w-4 h-4 text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
-                    </svg>
-                  </motion.button>
+                  </div>
 
-                  <p className="text-[10px] text-center text-[var(--text-secondary)]/50 mt-4">
-                    Pagamento 100% seguro • Você escolhe o valor • Sem taxa escondida
+                  <p className="text-[9px] text-[var(--text-secondary)] text-center">
+                    Escaneie o QR Code ou copie a chave e pague pelo app do seu banco 💙
                   </p>
                 </div>
-              ) : (
-                /* Tela do Pix */
-                <div className="space-y-4">
-                  <button
-                    onClick={() => setPixTab(false)}
-                    className="text-xs font-mono text-[var(--accent)] hover:underline flex items-center gap-1"
+
+                {/* Buy Me a Coffee */}
+                {BMC_CONFIG.enabled && (
+                  <a
+                    href={BMC_CONFIG.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-3 p-3 rounded-xl border border-[var(--border)]/60 hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5 transition-all cursor-pointer group"
                   >
-                    <svg className="w-3 h-3 rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center shrink-0">
+                      <Coffee className="w-4 h-5 text-amber-400" />
+                    </div>
+                    <div className="flex-1 min-w-0">
+                      <p className="text-sm font-semibold text-[var(--text-primary)]">Buy Me a Coffee</p>
+                      <p className="text-[9px] text-[var(--text-secondary)]">Contribuição única — internacional</p>
+                    </div>
+                    <svg className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
                     </svg>
-                    Voltar
-                  </button>
+                  </a>
+                )}
 
-                  <div className="flex flex-col items-center gap-4">
-                    {/* QR Code */}
-                    <div className="w-[140px] h-[140px] rounded-xl overflow-hidden border border-[var(--border)]/60 bg-white p-2">
-                      <img src={qrUrl} alt="Pix QR Code" className="w-full h-full object-contain" loading="lazy" />
-                    </div>
-
-                    {/* Chave */}
-                    <div className="w-full">
-                      <p className="text-[10px] font-mono text-[var(--text-secondary)] mb-1.5 text-center uppercase tracking-wider">
-                        Chave Pix (email)
-                      </p>
-                      <div className="flex items-center gap-2">
-                        <code className="flex-1 text-xs font-mono text-[var(--accent)] truncate bg-[var(--bg-primary)]/80 px-3 py-2 rounded-lg border border-[var(--border)]/40">
-                          {PIX_KEY}
-                        </code>
-                        <button
-                          onClick={handleCopy}
-                          className="shrink-0 w-9 h-9 rounded-lg flex items-center justify-center border border-[var(--border)]/60 hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5 transition-all"
-                          aria-label="Copiar chave"
-                        >
-                          {copied ? <Check className="w-4 h-4 text-emerald-400" /> : <Copy className="w-4 h-4 text-[var(--text-secondary)]" />}
-                        </button>
-                      </div>
-                    </div>
-
-                    <p className="text-[10px] text-[var(--text-secondary)] text-center">
-                      Escaneie o QR Code ou copie a chave e pague pelo app do seu banco 💙
-                    </p>
-                  </div>
-                </div>
-              )}
+                <p className="text-[9px] text-center text-[var(--text-secondary)]/50 pt-1">
+                  Pagamento 100% seguro • Você escolhe o valor
+                </p>
+              </div>
             </motion.div>
           </div>
         )}

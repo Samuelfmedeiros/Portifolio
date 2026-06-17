@@ -97,6 +97,7 @@ const timeline = [
 ];
 
 const skills = [
+  // Core
   { icon: BarChart3, name: "Power BI", category: "BI", level: "Expert", color: "from-cyan-400 to-emerald-400" },
   { icon: Database, name: "SQL", category: "Data", level: "Expert", color: "from-cyan-400 to-emerald-400" },
   { icon: Code2, name: "Python", category: "Backend", level: "Advanced", color: "from-cyan-400 to-blue-400" },
@@ -105,14 +106,16 @@ const skills = [
   { icon: Bot, name: "LLMs Locais", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400" },
   { icon: Container, name: "Docker", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
   { icon: GitBranch, name: "Git", category: "Tools", level: "Advanced", color: "from-cyan-400 to-blue-400" },
-  { icon: GitMerge, name: "GitLab", category: "Tools", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: RefreshCw, name: "CI/CD", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: Cpu, name: "TensorFlow", category: "ML", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: Flame, name: "PyTorch", category: "ML", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: Flame, name: "Spark", category: "Data", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: HardDrive, name: "Hadoop", category: "Data", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: Sigma, name: "R", category: "ML", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: FileJson, name: "XML/JSON", category: "Data", level: "Advanced", color: "from-cyan-400 to-blue-400" },
+  // Fundidos
+  { icon: Brain, name: "ML Frameworks", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: GitBranch, name: "Git & CI/CD", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  // Adicionados
+  { icon: Globe, name: "Cloudflare", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: Code2, name: "TypeScript", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400" },
+  // Arquivados
+  // TensorFlow + PyTorch → ML Frameworks
+  // GitLab + CI/CD → Git & CI/CD
+  // Spark, Hadoop, R, XML/JSON → removidos (não refletem stack atual)
 ];
 
 const levelWidth: Record<string, number> = { Expert: 95, Advanced: 78, Proficient: 60 };
