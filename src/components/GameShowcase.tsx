@@ -18,7 +18,7 @@ const GAME_IMAGES: Record<string, string> = {
 export function GameShowcase({ repos }: { repos: Repo[] }) {
   const scrollRef = useRef<HTMLDivElement>(null);
   const embedRef = useRef<HTMLDivElement>(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { track } = useAnalytics();
   const { t } = useLanguage();
 
@@ -52,6 +52,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
     el.style.display = "none";
     const iframe = el.querySelector("iframe");
     if (iframe) iframe.src = "";
+    setLoading(false);
   }, []);
 
   useEffect(() => {
