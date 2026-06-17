@@ -8,7 +8,22 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
 
-    const results: { email?: string; telegram?: string } = {};
+    const results: { email?: string; telegram?: string; telemetry?: string } = {};
+
+    // ── Telemetry (fire & forget) ──────────────────────────────
+    fetch("https://capivara.seu.pet/api/telemetry/ingest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event_type: "contact_submit",
+        source: "portifolio",
+        payload: { name, email, message: content },
+      }),
+    }).then((r) => {
+      results.telemetry = r.ok ? "sent" : `falha: ${r.status}`;
+    }).catch(() => {
+      results.telemetry = "erro: network";
+    });
 
     // ── Email via Resend (se configurado) ──────────────────────
     const resendKey = process.env.RESEND_API_KEY;

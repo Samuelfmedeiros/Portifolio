@@ -55,6 +55,22 @@ export async function POST(req: NextRequest) {
     // Log em background (não bloqueia o download)
     appendLog(entry);
 
+    // ── Telemetry (fire & forget) ──────────────────────────────
+    fetch("https://capivara.seu.pet/api/telemetry/ingest", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        event_type: "cv_download",
+        source: "portifolio",
+        payload: {
+          name: entry.name || "anonimo",
+          ip: entry.ip,
+          user_agent: entry.userAgent,
+          referrer: entry.referrer,
+        },
+      }),
+    }).catch(() => {});
+
     // Serve o PDF
     const pdfPath = path.join(process.cwd(), "public", "Samuel_Andrade_2026.pdf");
     if (!fs.existsSync(pdfPath)) {
