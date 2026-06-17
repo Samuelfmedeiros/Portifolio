@@ -1,10 +1,9 @@
 import { describe, it, expect } from 'vitest'
 
 describe('supabase', () => {
-  it('exports null when env vars are missing', async () => {
-    // The module reads env vars at import time, so we need to check the behavior
-    // In test environment without env vars, supabase should be null
+  it('exports a supabase client with fallback config', async () => {
     const { supabase } = await import('./supabase')
-    expect(supabase).toBeNull()
+    expect(supabase).not.toBeNull()
+    expect(supabase).toBeDefined()
   })
 })

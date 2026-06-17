@@ -98,7 +98,7 @@ Especialidades:
   • IA Generativa e LLMs
 
 Formação:
-  • Pós-graduação em Banco de Dados e BI — IESB
+  • Pós-graduação em Ciência de Dados e Machine Learning Engineering — IESB
   • Análise e Desenvolvimento de Sistemas — IESB
 
 Experiência:

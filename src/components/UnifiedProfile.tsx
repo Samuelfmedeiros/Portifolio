@@ -34,7 +34,7 @@ const timeline = [
     type: "education" as const,
     icon: GraduationCap,
     period: "Em Andamento",
-    title: "Pós-graduação em Banco de Dados e BI",
+    title: "Pós-graduação em Ciência de Dados e Machine Learning Engineering",
     company: "IESB",
     description: "SQL Server, PostgreSQL, Power BI, DAX, ETL",
     tags: ["SQL", "Power BI", "BI"],
