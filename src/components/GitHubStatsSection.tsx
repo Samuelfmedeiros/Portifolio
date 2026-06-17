@@ -41,7 +41,7 @@ export function GitHubStatsSection({ stats, loading }: GitHubStatsSectionProps) 
     );
   }
 
-  const items = [
+  const items: { icon: React.ComponentType<{ className?: string }>; labelKey: "github.stars" | "github.forks" | "github.repos" | "github.followers" | "github.contributions"; value: string | number; color: string }[] = [
     { icon: Star, labelKey: "github.stars", value: displayStats.stars, color: "text-yellow-400" },
     { icon: GitFork, labelKey: "github.forks", value: displayStats.forks, color: "text-blue-400" },
     { icon: BookOpen, labelKey: "github.repos", value: displayStats.repos, color: "text-emerald-400" },
