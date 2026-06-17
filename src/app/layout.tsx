@@ -145,7 +145,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Umami Analytics — sem cookies, LGPD-safe */}
         <script async src="https://capivara.seu.pet/api/umami/script.js" data-website-id="dde11802-0852-42ab-8c07-c5d50142a13f"></script>
       </head>
-      <body className="relative min-h-screen antialiased" style={{ touchAction: "manipulation" } as React.CSSProperties}>
+      <body className="relative min-h-screen antialiased" style={{ backgroundColor: '#020617', touchAction: 'manipulation' } as React.CSSProperties}>
         <SkipLink />
         <ThemeProvider>
           <LanguageProvider>
