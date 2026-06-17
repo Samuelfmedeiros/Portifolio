@@ -56,7 +56,7 @@ export const UtilityDeck = memo(function UtilityDeck() {
               className="mt-4 md:mt-6 overflow-hidden"
               id={`widget-${activeWidget}`}
               role="region"
-              aria-label={`Widget: ${WIDGETS.find((w) => w.key === activeWidget)?.label}`}
+              aria-label={`Widget: ${WIDGETS.find((w) => w.key === activeWidget)?.labelKey}`}
             >
               <GlassCard className="relative">
                 <button
