@@ -87,7 +87,7 @@ describe("ProfileSection", () => {
 
   it("renders Baixar Curriculo as button that opens download modal", () => {
     render(<ProfileSection />);
-    const btn = screen.getByText("Baixar Curriculo");
-    expect(btn.tagName).toBe("BUTTON");
+    const btn = screen.getByRole("button", { name: /Baixar Curriculo/i });
+    expect(btn).toBeInTheDocument();
   });
 });
