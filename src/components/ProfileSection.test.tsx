@@ -51,7 +51,7 @@ describe("ProfileSection", () => {
     render(<ProfileSection />);
     expect(screen.getByText("Analista de Dados — ANA")).toBeInTheDocument();
     expect(screen.getByText(/Agência Nacional de Águas/)).toBeInTheDocument();
-    expect(screen.getByText(/Pós-graduação em Banco de Dados/)).toBeInTheDocument();
+    expect(screen.getByText(/Pós-graduação em Ciência de Dados/)).toBeInTheDocument();
     expect(screen.getByText(/Análise e Desenvolvimento de Sistemas/)).toBeInTheDocument();
     expect(screen.getByText(/Desenvolvedor Full Stack Autônomo/)).toBeInTheDocument();
   });

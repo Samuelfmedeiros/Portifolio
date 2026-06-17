@@ -258,10 +258,6 @@ export function HeroSection() {
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/5 to-[var(--accent)]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
               <span className="relative z-10">Ver Projetos</span>
-              <svg className="w-4 h-4 relative z-10 ml-1.5 group-hover:translate-x-0.5 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M5 12h14" />
-                <path d="m12 5 7 7-7 7" />
-              </svg>
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}

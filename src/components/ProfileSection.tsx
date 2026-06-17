@@ -4,6 +4,7 @@ import { motion, AnimatePresence, useScroll, useTransform, type MotionValue } fr
 import { useRef, useMemo, useState, useEffect } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
+  Cpu, Flame, Zap, GitMerge, RefreshCw, HardDrive, Sigma, FileJson,
   Briefcase, GraduationCap, Award,
 } from "lucide-react";
 import { GlassCard } from "./GlassCard";
@@ -47,11 +48,11 @@ const timeline = [
     type: "education" as const,
     icon: GraduationCap,
     period: "Em Andamento",
-    title: "Pós-graduação em Banco de Dados e BI",
+    title: "Pós-graduação em Ciência de Dados e Machine Learning Engineering",
     company: "IESB",
-    description: "SQL Server, PostgreSQL, Power BI, DAX, ETL",
-    tags: ["SQL", "Power BI", "BI"],
-    skillsUsed: ["SQL & PostgreSQL", "Power BI"],
+    description: "Ciência de Dados, ML Engineering, SQL, Power BI, ETL",
+    tags: ["Data Science", "Machine Learning", "SQL", "Python"],
+    skillsUsed: ["Python", "Machine Learning", "SQL & PostgreSQL"],
   },
   {
     type: "education" as const,
@@ -73,6 +74,26 @@ const timeline = [
     tags: ["ML", "LLMs", "Docker", "Git", "Python"],
     skillsUsed: ["LLMs Locais", "Docker", "Git & GitHub"],
   },
+  {
+    type: "experience" as const,
+    icon: Briefcase,
+    period: "2021 — 2023",
+    title: "Auxiliar Técnico Freelancer",
+    company: "Autônomo",
+    description: "Instalação, configuração e manutenção de computadores, impressoras e periféricos. Suporte técnico presencial/remoto, implantação de sistemas.",
+    tags: ["Suporte Técnico", "Hardware", "Redes"],
+    skillsUsed: ["Suporte Técnico"],
+  },
+  {
+    type: "experience" as const,
+    icon: Briefcase,
+    period: "2017 — 2020",
+    title: "Auxiliar Técnico",
+    company: "TRT 10ª Região (CETEFE)",
+    description: "Digitalização e organização de documentos judiciais, controle logístico de armazenamento digital, verificação de integridade de informações.",
+    tags: ["Documentação", "Gestão Digital", "Processos"],
+    skillsUsed: ["Gestão de Documentos"],
+  },
 ];
 
 const skills = [
@@ -84,6 +105,14 @@ const skills = [
   { icon: Bot, name: "LLMs Locais", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400" },
   { icon: Container, name: "Docker", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
   { icon: GitBranch, name: "Git", category: "Tools", level: "Advanced", color: "from-cyan-400 to-blue-400" },
+  { icon: GitMerge, name: "GitLab", category: "Tools", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: RefreshCw, name: "CI/CD", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: Cpu, name: "TensorFlow", category: "ML", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: Flame, name: "PyTorch", category: "ML", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: Flame, name: "Spark", category: "Data", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: HardDrive, name: "Hadoop", category: "Data", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: Sigma, name: "R", category: "ML", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: FileJson, name: "XML/JSON", category: "Data", level: "Advanced", color: "from-cyan-400 to-blue-400" },
 ];
 
 const levelWidth: Record<string, number> = { Expert: 95, Advanced: 78, Proficient: 60 };
