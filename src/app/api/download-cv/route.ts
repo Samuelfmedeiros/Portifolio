@@ -71,6 +71,49 @@ export async function POST(req: NextRequest) {
       }),
     }).catch(() => {});
 
+    // ── Telegram notification ─────────────────────────────────
+    const botToken = process.env.TELEGRAM_BOT_TOKEN;
+    const chatId = process.env.TELEGRAM_CHAT_ID || "-1003963506968";
+    if (botToken) {
+      const nome = entry.name || "Anônimo";
+      const email = entry.email || "—";
+      const now = new Date().toLocaleString("pt-BR", {
+        timeZone: "America/Sao_Paulo",
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const ref = entry.referrer !== "direct" ? entry.referrer : "—";
+      const text = [
+        "📄 *CURRÍCULO BAIXADO*",
+        "━━━━━━━━━━━━━━━━━━━━━━━━",
+        "",
+        `👤 *Nome:* ${nome}`,
+        `📧 *Email:* ${email}`,
+        `🌐 *IP:* ${entry.ip}`,
+        `🔗 *Referrer:* ${ref}`,
+        "",
+        "━━━━━━━━━━━━━━━━━━━━━━━━",
+        `🕐 ${now}`,
+        `📎 samuelmedeiros.vercel.app`,
+      ].join("\n");
+
+      fetch(
+        `https://api.telegram.org/bot${botToken}/sendMessage`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            chat_id: chatId,
+            text,
+            parse_mode: "Markdown",
+          }),
+        }
+      ).catch(() => {});
+    }
+
     // Serve o PDF
     const pdfPath = path.join(process.cwd(), "public", "Samuel_Andrade_2026.pdf");
     if (!fs.existsSync(pdfPath)) {
