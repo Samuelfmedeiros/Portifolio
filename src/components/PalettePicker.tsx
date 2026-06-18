@@ -6,23 +6,25 @@ import { Palette } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { PALETTES } from "@/lib/palettes";
 import { useLanguage } from "@/lib/i18n";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 export const PalettePicker = memo(function PalettePicker() {
   const { palette, setPalette } = useTheme();
   const [open, setOpen] = useState(false);
   const { t } = useLanguage();
+  const { track } = useAnalytics();
 
   // current palette is derived from palette state
 
   return (
     <div className="relative">
       <motion.button
-        onClick={() => setOpen((v) => !v)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full"
         aria-label={t("palette.toggle", "Trocar paleta de cores")}
         title="Paleta de cores"
+        onClick={() => { setOpen((v) => !v); track({ type: "external_link", url: "palette", label: "Abrir paleta" }); }}
       >
         <Palette className="w-4 h-4 text-[var(--accent)]" />
       </motion.button>
