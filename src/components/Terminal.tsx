@@ -7,6 +7,7 @@ import { useTheme } from "./ThemeProvider";
 import { MissionGames } from "./MiniGames/MissionGames";
 import type { Command } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const BANNER = [
   " ╔══════════════════════════════════════╗",
@@ -34,6 +35,7 @@ export function Terminal() {
   const [isFocused, setIsFocused] = useState(false);
   const { toggle: themeToggle } = useTheme();
   const { t } = useLanguage();
+  const { track } = useAnalytics();
 
   useEffect(() => {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
@@ -447,6 +449,7 @@ Approximate round trip times in milli-seconds:
 Digite 'ajuda' para ver os comandos disponíveis.`;
     }
     setHistory((prev) => [...prev, { cmd, output }]);
+    track({ type: "external_link", url: "terminal", label: `Comando: ${trimmed || "(vazio)"}` });
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {

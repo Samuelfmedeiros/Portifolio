@@ -233,6 +233,7 @@ export function Footer() {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
     setCopied(true);
+    track({ type: "external_link", url: "email", label: "Copiar email" });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -306,6 +307,7 @@ export function Footer() {
                 href="mailto:samuelandrademedeiros@gmail.com"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                 aria-label="Email"
+                onClick={() => track({ type: "external_link", url: "mail", label: "Email" })}
               >
                 <Mail className="w-5 h-5" />
               </a>
@@ -318,7 +320,7 @@ export function Footer() {
               {t("footer.cv.title")}
             </h3>
             <button
-              onClick={() => setShowDownloadModal(true)}
+              onClick={() => { setShowDownloadModal(true); track({ type: "external_link", url: "cv-download", label: "Baixar Currículo" }); }}
               className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
             >
               {t("footer.cv.download")}
@@ -332,6 +334,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
                   aria-label="Buy me a coffee"
+                  onClick={() => track({ type: "external_link", url: "buymeacoffee", label: "Buy me a coffee" })}
                 >
                   <BuyMeACoffeeIcon className="w-3.5 h-3.5" />
                   <span>Coffee</span>
@@ -344,6 +347,7 @@ export function Footer() {
                   rel="noopener noreferrer"
                   className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
                   aria-label="GitHub Sponsors"
+                  onClick={() => track({ type: "external_link", url: "github-sponsors", label: "GitHub Sponsors" })}
                 >
                   <GitHubSponsorsIcon className="w-3.5 h-3.5" />
                   <span>Sponsor</span>
@@ -368,6 +372,7 @@ export function Footer() {
                 onClick={() => {
                   setPrivacyOpen(true);
                   setActiveTab('privacy');
+                  track({ type: "external_link", url: "privacy", label: "Política de Privacidade" });
                 }}
                 className="mt-2 text-[11px] font-mono text-[var(--accent)] hover:underline transition-colors"
               >

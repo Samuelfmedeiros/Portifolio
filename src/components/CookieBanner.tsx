@@ -4,6 +4,7 @@ import { useState, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X, Eye, EyeOff, ShieldCheck } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const CONSENT_KEY = "mc-analytics-consent";
 
@@ -58,6 +59,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   const [mounted] = useState(() => typeof window !== "undefined");
   const [showAdsOptions, setShowAdsOptions] = useState(false);
   const { t } = useLanguage();
+  const { track } = useAnalytics();
 
   // We can't use useMonetizationConsent here because CookieBannerProvider
   // wraps MonetizationProvider, so we manage ads consent directly
@@ -142,20 +144,20 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                   {!showAdsOptions ? (
                     <div className="flex gap-2 flex-wrap">
                       <button
-                        onClick={() => setShowAdsOptions(true)}
+                        onClick={() => { setShowAdsOptions(true); track({ type: "external_link", url: "cookie-customize", label: "Personalizar cookies" }); }}
                         className="px-4 py-2 rounded-lg font-mono text-xs bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/40 hover:bg-[var(--accent)]/30 transition-colors flex items-center gap-1.5"
                       >
                         <ShieldCheck className="w-3.5 h-3.5" />
                         Personalizar
                       </button>
                       <button
-                        onClick={() => acceptWithAds("non-personalized")}
+                        onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-accept-all", label: "Aceitar tudo cookies" }); }}
                         className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)]/50 hover:bg-[var(--border)]/10 transition-colors"
                       >
                         Aceitar tudo
                       </button>
                       <button
-                        onClick={decline}
+                        onClick={() => { decline(); track({ type: "external_link", url: "cookie-decline", label: "Recusar cookies" }); }}
                         className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors"
                       >
                         Recusar
@@ -168,7 +170,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                       </p>
                       <div className="flex flex-col gap-2">
                         <button
-                          onClick={() => acceptWithAds("personalized")}
+                          onClick={() => { acceptWithAds("personalized"); track({ type: "external_link", url: "cookie-ads-personalized", label: "Anúncios personalizados" }); }}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors text-left"
                         >
                           <Eye className="w-3.5 h-3.5 shrink-0" />
@@ -178,7 +180,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                           </div>
                         </button>
                         <button
-                          onClick={() => acceptWithAds("non-personalized")}
+                          onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-ads-nonpersonalized", label: "Anúncios não personalizados" }); }}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)]/50 hover:bg-[var(--border)]/10 transition-colors text-left"
                         >
                           <EyeOff className="w-3.5 h-3.5 shrink-0" />
@@ -188,7 +190,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                           </div>
                         </button>
                         <button
-                          onClick={() => acceptWithAds("none")}
+                          onClick={() => { acceptWithAds("none"); track({ type: "external_link", url: "cookie-analytics-only", label: "Só analytics" }); }}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors text-left"
                         >
                           <Cookie className="w-3.5 h-3.5 shrink-0" />
@@ -199,7 +201,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                         </button>
                       </div>
                       <button
-                        onClick={() => setShowAdsOptions(false)}
+                        onClick={() => { setShowAdsOptions(false); track({ type: "external_link", url: "cookie-back", label: "Voltar cookies" }); }}
                         className="text-[10px] font-mono text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors mt-1"
                       >
                         ← Voltar
@@ -208,7 +210,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                   )}
                 </div>
                 <button
-                  onClick={decline}
+                  onClick={() => { decline(); track({ type: "external_link", url: "cookie-close", label: "Fechar banner cookies" }); }}
                   className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                   aria-label={t("cookie.close", "Fechar banner de cookies")}
                 >

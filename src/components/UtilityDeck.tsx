@@ -9,6 +9,7 @@ import { MissionClock } from "./MissionClock";
 import { MiniGame } from "./MiniGames/MiniGame";
 import type { Widget } from "@/lib/types";
 import { useLanguage } from "@/lib/i18n";
+import { useAnalytics } from "@/hooks/useAnalytics";
 
 const WIDGETS = [
   { key: "clock" as const, icon: Clock, labelKey: "utility.clock" },
@@ -19,6 +20,7 @@ const WIDGETS = [
 export const UtilityDeck = memo(function UtilityDeck() {
   const [activeWidget, setActiveWidget] = useState<Widget>(null);
   const { t } = useLanguage();
+  const { track } = useAnalytics();
 
   return (
     <section id="utility" className="py-16 md:py-20 px-4 md:px-6">
@@ -33,7 +35,7 @@ export const UtilityDeck = memo(function UtilityDeck() {
             return (
               <button
                 key={key}
-                onClick={() => setActiveWidget(isActive ? null : key)}
+                onClick={() => { setActiveWidget(isActive ? null : key); track({ type: "external_link", url: `widget-${key}`, label: `Abrir ${key}` }); }}
                 aria-expanded={isActive}
                 aria-controls={`widget-${key}`}
                 className={`glass p-4 md:p-6 rounded-xl text-center transition-all hover:scale-105 border-[var(--border)] ${
