@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Mail, Copy, Check, Shield, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
@@ -9,6 +9,7 @@ import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { DownloadModal } from "./DownloadModal";
 import { useLanguage } from "@/lib/i18n";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 function GithubIcon({ className }: { className?: string }) {
   return (
@@ -36,6 +37,8 @@ function WhatsAppIcon({ className }: { className?: string }) {
 
 export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms' }) {
   const { t } = useLanguage();
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, open, onClose);
   if (!open) return null;
 
   return (
@@ -52,6 +55,7 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
           />
           {/* Modal */}
           <motion.div
+            ref={modalRef}
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
@@ -375,13 +379,13 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs font-mono text-[var(--text-secondary)]/50">
+          <p className="text-xs font-mono text-[var(--text-secondary)]/70">
             © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
-          <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
+          <p className="text-[10px] font-mono text-[var(--text-secondary)]/60">
             {t("footer.updated")}: {new Date().toLocaleDateString("pt-BR")}
           </p>
-          <p className="text-[10px] font-mono text-[var(--text-secondary)]/30">
+          <p className="text-[10px] font-mono text-[var(--text-secondary)]/60">
             {t("footer.version")}
           </p>
         </div>

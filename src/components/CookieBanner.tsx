@@ -3,6 +3,7 @@
 import { useState, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 
 const CONSENT_KEY = "mc-analytics-consent";
 
@@ -56,6 +57,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   });
   const [mounted] = useState(() => typeof window !== "undefined");
   const [showAdsOptions, setShowAdsOptions] = useState(false);
+  const { t } = useLanguage();
 
   // We can't use useMonetizationConsent here because CookieBannerProvider
   // wraps MonetizationProvider, so we manage ads consent directly
@@ -208,7 +210,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                 <button
                   onClick={decline}
                   className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
-                  aria-label="Fechar banner de cookies"
+                  aria-label={t("cookie.close", "Fechar banner de cookies")}
                 >
                   <X className="w-4 h-4" />
                 </button>

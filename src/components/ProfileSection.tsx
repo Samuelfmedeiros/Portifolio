@@ -12,6 +12,7 @@ import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
 /* ──────────────────── DATA ──────────────────── */
@@ -556,6 +557,8 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
 /* ──────────────────── TIMELINE MODAL ──────────────────── */
 
 function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: () => void }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, true, onClose);
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleKey);
@@ -568,6 +571,7 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
 
   return (
     <motion.div
+      ref={modalRef}
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
@@ -919,6 +923,9 @@ export function ProfileSection() {
               exit={{ height: 0, opacity: 0 }}
               transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
               className="overflow-hidden"
+              role="region"
+              aria-live="polite"
+              aria-label={t("profile.about.aria", "Sobre mim")}
             >
               <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-4 mt-3 border-t border-[var(--border)]/30">
                 <p>
@@ -971,7 +978,7 @@ export function ProfileSection() {
             </motion.button>
           )}
 
-          <div className="space-y-3">
+          <div className="space-y-3" role="region" aria-live="polite" aria-label={t("profile.journey.heading", "▸ JORNADA")}>
             {renderPlan.map((entry) =>
               entry.kind === 'sep' ? (
                 <motion.div

@@ -149,7 +149,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             {repo.imageUrl ? (
               <Image
                 src={repo.imageUrl}
-                alt={repo.name}
+                alt={repo.description ? `${repo.name} — ${repo.description.slice(0, 80)}` : `Projeto ${repo.name}`}
                 fill
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
                 unoptimized
@@ -186,7 +186,7 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             {repo.imageUrl ? (
               <Image
                 src={repo.imageUrl}
-                alt={repo.name}
+                alt={repo.description ? `${repo.name} — ${repo.description.slice(0, 80)}` : `Projeto ${repo.name}`}
                 fill
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
                 unoptimized
