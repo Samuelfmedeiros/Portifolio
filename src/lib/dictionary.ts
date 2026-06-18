@@ -234,6 +234,18 @@ export const dict = {
     "aria.scroll.top": "Voltar ao topo",
     "aria.skip.content": "Pular para o conteúdo",
     "aria.copy": "Copiar",
+
+    // ── Profile Section (textos que faltavam) ──
+    "profile.skills.heading": "▸ HABILIDADES",
+    "profile.level": "Nível",
+    "profile.journey.heading": "▸ JORNADA",
+    "profile.about.heading": "▸ SOBRE",
+    "profile.evolving": "∞ Continuo evoluindo",
+    "profile.show.less": "Mostrar menos",
+    "profile.show.full": "Ver jornada completa ({count} itens)",
+    "profile.label.experience": "Experiência",
+    "profile.label.education": "Educação",
+    "profile.label.certification": "Certificação",
   },
 
   en: {
@@ -464,5 +476,17 @@ export const dict = {
     "aria.scroll.top": "Scroll to top",
     "aria.skip.content": "Skip to content",
     "aria.copy": "Copy",
+
+    // ── Profile Section ──
+    "profile.skills.heading": "▸ SKILLS",
+    "profile.level": "Level",
+    "profile.journey.heading": "▸ JOURNEY",
+    "profile.about.heading": "▸ ABOUT",
+    "profile.evolving": "∞ Always evolving",
+    "profile.show.less": "Show less",
+    "profile.show.full": "View full journey ({count} items)",
+    "profile.label.experience": "Experience",
+    "profile.label.education": "Education",
+    "profile.label.certification": "Certification",
   },
 };
