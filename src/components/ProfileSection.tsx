@@ -22,7 +22,7 @@ const timeline = [
     period: "2025 — Atual",
     title: "Desenvolvedor Full Stack Autônomo",
     company: "Capivara / Arachne / DogWalk",
-    description: "Arquitetura e desenvolvimento de plataformas completas: scraper inteligente com RAG, backend multi-tenant FastAPI, marketplace pet com Supabase e Cloudflare.",
+    description: "Arquitetura e desenvolvimento de plataformas completas do zero: Arachne (scraper inteligente com RAG), Capivara (hub pessoal multi-tenant com FastAPI e autenticação JWT), DogWalk (marketplace pet com Supabase, Stripe, Cloudflare Workers). Responsável por todo o ciclo — modelagem de dados, APIs REST, deploy em produção, CI/CD, testes automatizados e documentação técnica. Stack principal: Next.js, React, FastAPI, Supabase, Cloudflare, Docker, Python, TypeScript, PostgreSQL.",
     tags: ["Next.js", "FastAPI", "Supabase", "Cloudflare", "Python"],
     skillsUsed: ["Next.js & React", "Python", "SQL & PostgreSQL", "Docker", "Git & GitHub"],
   },
@@ -32,7 +32,7 @@ const timeline = [
     period: "2025",
     title: "Analista de Dados — ANA",
     company: "Agência Nacional de Águas",
-    description: "Análise de dados hídricos, dashboards Power BI, automação Python/SQL",
+    description: "Análise de dados hídricos em larga escala na Agência Nacional de Águas. Desenvolvimento de dashboards interativos no Power BI para monitoramento de recursos hídricos, automação de pipelines de ETL com Python e SQL, integração de fontes de dados heterogêneas (sensores, estações, bases históricas). Criação de relatórios executivos e técnicos para tomada de decisão em políticas públicas de recursos hídricos.",
     tags: ["Power BI", "Python", "SQL", "ETL"],
     skillsUsed: ["Power BI", "SQL & PostgreSQL", "Python"],
   },
@@ -41,7 +41,7 @@ const timeline = [
     icon: Briefcase,
     period: "2024 — 2025",
     title: "Técnico de Suporte N1 — Global Hitss",
-    description: "Suporte hardware/software/redes, Azure, M365",
+    description: "Atendimento de suporte técnico N1 para funcionários da Global Hitss em ambiente corporativo com mais de 2.000 usuários. Diagnóstico e resolução de problemas de hardware, software, redes e periféricos. Administração de usuários e dispositivos no Azure Active Directory e Microsoft 365. Configuração e manutenção de estações de trabalho, impressoras e equipamentos de rede. Suporte presencial e remoto com SLA de até 4 horas.",
     tags: ["Azure", "Microsoft 365", "Suporte"],
     skillsUsed: ["Docker", "Git & GitHub"],
   },
@@ -51,7 +51,7 @@ const timeline = [
     period: "Em Andamento",
     title: "Pós-graduação em Ciência de Dados e Machine Learning Engineering",
     company: "IESB",
-    description: "Ciência de Dados, ML Engineering, SQL, Power BI, ETL",
+    description: "Curso de pós-graduação focado em Ciência de Dados e Machine Learning Engineering no IESB. Estudo aprofundado de algoritmos de ML (regressão, classificação, clustering, redes neurais), engenharia de features, avaliação de modelos, deployment em produção. Domínio de SQL para análise exploratória, Power BI para visualização de dados, Python (pandas, numpy, scikit-learn, tensorflow) para modelagem preditiva e ETL.",
     tags: ["Data Science", "Machine Learning", "SQL", "Python"],
     skillsUsed: ["Python", "Machine Learning", "SQL & PostgreSQL"],
   },
@@ -61,7 +61,7 @@ const timeline = [
     period: "2022 — 2024",
     title: "Análise e Desenvolvimento de Sistemas",
     company: "IESB — Data & ML",
-    description: "Data science, ML, desenvolvimento full-stack",
+    description: "Graduação tecnológica em Análise e Desenvolvimento de Sistemas com ênfase em Data & ML pelo IESB. Formação abrangente em ciência da computação: algoritmos, estruturas de dados, banco de dados relacionais e não-relacionais, engenharia de software, desenvolvimento web full-stack. Disciplinas específicas em machine learning, inteligência artificial, estatística aplicada e visualização de dados. Projetos práticos utilizando Python, SQL, React e Next.js.",
     tags: ["Python", "Machine Learning", "Data Science"],
     skillsUsed: ["Python", "Machine Learning", "Next.js & React"],
   },
@@ -71,7 +71,7 @@ const timeline = [
     period: "2023 — 2025",
     title: "Certificações",
     company: "Coursera / Udemy / DIO",
-    description: "ML, LLMs, Docker, Git, CI/CD, Linux, Power BI Avançado",
+    description: "Certificações em Machine Learning, LLMs Locais, Docker, Git e CI/CD, Linux e Power BI Avançado por plataformas como Coursera, Udemy e DIO. Aprendizado contínuo em tecnologias emergentes: deployment de modelos de linguagem local (Ollama, llama.cpp), automação de infraestrutura com Docker e GitHub Actions, análise de dados avançada com Power BI (DAX, M, modelagem dimensional), e administração de sistemas Linux para ambientes de produção.",
     tags: ["ML", "LLMs", "Docker", "Git", "Python"],
     skillsUsed: ["LLMs Locais", "Docker", "Git & GitHub"],
   },
@@ -873,6 +873,32 @@ export function ProfileSection() {
               <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">— PDF</span>
             </button>
           </motion.div>
+        </div>
+      </motion.div>
+
+      {/* Bio — conteúdo textual rico para SEO e AdSense */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        viewport={{ once: true }}
+        className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12"
+      >
+        <div className="glass rounded-xl p-6 md:p-8 border border-[var(--border)]/50">
+          <h2 className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-4 text-center">▸ SOBRE</h2>
+          <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+            <p>
+              Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
+            </p>
+            <p>
+              No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
+            </p>
+            <p>
+              Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
+            </p>
+            <p>
+              Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
+            </p>
+          </div>
         </div>
       </motion.div>
 
