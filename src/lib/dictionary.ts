@@ -202,6 +202,9 @@ export const dict = {
     "utility.clock": "Relógio",
     "utility.calculator": "Calculadora",
     "utility.aria": "Utilitários",
+    "utility.deck.title": "▸ Utilitários",
+    "utility.deck.aria": "Utilitários",
+    "utility.close": "Fechar widget",
 
     // ── GitHub Stats ──
     "github.stars": "Stars",
@@ -240,6 +243,7 @@ export const dict = {
     "profile.level": "Nível",
     "profile.journey.heading": "▸ JORNADA",
     "profile.about.heading": "▸ SOBRE",
+    "profile.about.aria": "Sobre mim",
     "profile.evolving": "∞ Continuo evoluindo",
     "profile.show.less": "Mostrar menos",
     "profile.show.full": "Ver jornada completa ({count} itens)",
@@ -444,6 +448,9 @@ export const dict = {
     "utility.clock": "Clock",
     "utility.calculator": "Calculator",
     "utility.aria": "Utilities",
+    "utility.deck.title": "▸ UTILITIES",
+    "utility.deck.aria": "Utilities",
+    "utility.close": "Close widget",
 
     // ── GitHub Stats ──
     "github.stars": "Stars",
@@ -482,6 +489,7 @@ export const dict = {
     "profile.level": "Level",
     "profile.journey.heading": "▸ JOURNEY",
     "profile.about.heading": "▸ ABOUT",
+    "profile.about.aria": "About me",
     "profile.evolving": "∞ Always evolving",
     "profile.show.less": "Show less",
     "profile.show.full": "View full journey ({count} items)",

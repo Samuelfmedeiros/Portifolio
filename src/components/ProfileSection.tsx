@@ -730,7 +730,7 @@ export function ProfileSection() {
     <motion.section
       id="profile"
       ref={containerRef}
-      className="relative min-h-screen py-8 px-4 md:px-6 overflow-x-hidden scroll-mt-20"
+      className="relative min-h-screen py-8 px-4 md:px-6 overflow-hidden scroll-mt-20"
       aria-labelledby="profile-heading"
     >
       {/* L0: Background parallax — grid + circles (sempre visível) */}
@@ -895,10 +895,10 @@ export function ProfileSection() {
             onClick={() => setShowBio(!showBio)}
             className="w-full text-center focus:outline-none group cursor-pointer"
             aria-expanded={showBio}
-            aria-label="Sobre mim"
+            aria-label={t("profile.about.aria", "Sobre mim")}
           >
             <div className="flex items-center justify-center gap-3">
-              <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">▸ SOBRE</h2>
+              <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "▸ SOBRE")}</h2>
               <motion.span
                 animate={{ rotate: showBio ? 180 : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}

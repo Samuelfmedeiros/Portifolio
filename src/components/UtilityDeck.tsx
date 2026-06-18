@@ -23,11 +23,11 @@ export const UtilityDeck = memo(function UtilityDeck() {
   return (
     <section id="utility" className="py-16 md:py-20 px-4 md:px-6">
       <h2 className="text-2xl md:text-3xl font-mono text-[var(--accent)] mb-8 md:mb-12 text-center">
-        ▸ Utilitários
+        {t("utility.deck.title", "▸ Utilitários")}
       </h2>
 
       <div className="max-w-xl mx-auto">
-        <div className="grid grid-cols-3 gap-2 md:gap-4" role="group" aria-label="Utilitários">
+        <div className="grid grid-cols-3 gap-2 md:gap-4" role="group" aria-label={t("utility.deck.aria", "Utilitários")}>
           {WIDGETS.map(({ key, icon: Icon, labelKey }) => {
             const isActive = activeWidget === key;
             return (
@@ -62,7 +62,7 @@ export const UtilityDeck = memo(function UtilityDeck() {
                 <button
                   onClick={() => setActiveWidget(null)}
                   className="absolute top-3 right-3 text-[var(--text-secondary)] hover:text-[var(--accent)]"
-                  aria-label="Fechar widget"
+                  aria-label={t("utility.close", "Fechar widget")}
                 >
                   <X className="w-4 h-4" />
                 </button>
