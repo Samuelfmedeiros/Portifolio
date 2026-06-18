@@ -730,7 +730,7 @@ export function ProfileSection() {
     <motion.section
       id="profile"
       ref={containerRef}
-      className="relative min-h-screen py-8 px-4 md:px-6 scroll-mt-20"
+      className="relative min-h-screen py-8 px-4 md:px-6 overflow-x-hidden scroll-mt-20"
       aria-labelledby="profile-heading"
     >
       {/* L0: Background parallax — grid + circles (sempre visível) */}
@@ -1055,6 +1055,9 @@ export function ProfileSection() {
           </div>
         </div>
       </motion.div>
+
+      {/* Spacer entre timeline e próxima seção */}
+      <div className="h-16 md:h-20" />
 
       {/* Timeline Modal */}
       <AnimatePresence>
