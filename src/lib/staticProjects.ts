@@ -21,6 +21,24 @@ export const STATIC_PROJECTS: Repo[] = [
   },
 
   {
+    id: 999002,
+    name: "Arachne",
+    description:
+      "Plataforma de scraping inteligente com RAG semântico — extraia, transforme e consulte dados da web usando IA.",
+    html_url: "",
+    homepage: "",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    topics: ["featured", "web", "ai", "data", "fastapi", "python", "langchain", "crawl4ai"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0d1117 0%, #1a1a2e 50%, #16213e 100%)",
+    hasDemo: false,
+    icon: "🕷️",
+  },
+
+  {
     id: 999003,
     name: "Portifolio",
     description:
@@ -128,6 +146,7 @@ export const STATIC_PROJECTS: Repo[] = [
 
 export const FEATURED_PROJECTS = [
   "DogWalk",
+  "Arachne",
   "Portifolio",
   "memory-matrix",
   "simon-game",

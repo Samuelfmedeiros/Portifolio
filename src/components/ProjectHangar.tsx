@@ -10,6 +10,7 @@ import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { ProjectModal } from "./ProjectModal";
 
 const FEATURED = FEATURED_PROJECTS;
 
@@ -84,7 +85,7 @@ const extractTechTags = (repo: Repo): string[] => {
   return [...new Set(tags)].slice(0, 5);
 };
 
-function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
+function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; onSelect?: (repo: Repo) => void }) {
   const isFeatured = FEATURED.includes(repo.name);
   const techTags = extractTechTags(repo);
   const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
@@ -171,9 +172,11 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
           </a>
         ) : (
-          <div
-            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center"
+          <button
+            onClick={() => onSelect?.(repo)}
+            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center cursor-pointer text-left"
             style={{ background: gradient }}
+            aria-label={`Detalhes: ${repo.name}`}
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
             {/* Grid overlay pattern */}
@@ -199,8 +202,14 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
                 {repo.name}
               </span>
             )}
+            {/* Play overlay on hover */}
+            <div className="absolute inset-0 bg-black/0 hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
+              <span className="opacity-0 hover:opacity-100 text-white font-mono text-xs tracking-widest transition-opacity duration-300 flex items-center gap-1">
+                ▶ DETALHES
+              </span>
+            </div>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
-          </div>
+          </button>
         )}
 
         <div className="relative p-1 flex flex-col flex-1">
@@ -307,6 +316,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
   const { t } = useLanguage();
   const resolvedTitle = title || t("projects.section.title", "▸ PROJETOS");
   const [activeFilter, setActiveFilter] = useState<string>("");
+  const [selectedProject, setSelectedProject] = useState<Repo | null>(null);
   const { track } = useAnalytics();
   // Collect all unique languages/tags for filter
   const allTags = useMemo(() => {
@@ -362,10 +372,14 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
       >
         <AnimatePresence>
           {repos.map((repo, i) => (
-            <ProjectCard key={repo.id} repo={repo} index={i} />
+            <ProjectCard key={repo.id} repo={repo} index={i} onSelect={setSelectedProject} />
           ))}
         </AnimatePresence>
       </motion.div>
+
+      {selectedProject && (
+        <ProjectModal repo={selectedProject} open={!!selectedProject} onClose={() => setSelectedProject(null)} />
+      )}
     </section>
   );
 }

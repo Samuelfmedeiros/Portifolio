@@ -554,6 +554,89 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
   );
 }
 
+/* ──────────────────── ABOUT MODAL ──────────────────── */
+
+function AboutModal({ onClose }: { onClose: () => void }) {
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, true, onClose);
+  useEffect(() => {
+    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
+    window.addEventListener('keydown', handleKey);
+    document.body.style.overflow = 'hidden';
+    return () => {
+      window.removeEventListener('keydown', handleKey);
+      document.body.style.overflow = '';
+    };
+  }, [onClose]);
+  const { t } = useLanguage();
+
+  return (
+    <motion.div
+      ref={modalRef}
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      transition={{ duration: 0.2 }}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/60"
+      onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-label={t("profile.about.heading", "Sobre")}
+    >
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 10 }}
+        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
+        className="bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="p-5">
+          {/* Header */}
+          <div className="flex items-start justify-between mb-4">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
+                <svg className="w-5 h-5 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                </svg>
+              </div>
+              <div>
+                <h3 className="font-semibold text-sm md:text-base">Sobre Samuel Medeiros</h3>
+                <p className="text-xs font-mono text-[var(--text-secondary)]">Desenvolvedor Full Stack & Analista de Dados</p>
+              </div>
+            </div>
+            <button
+              onClick={onClose}
+              className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
+              aria-label="Fechar"
+            >
+              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Content */}
+          <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
+            <p>
+              Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
+            </p>
+            <p>
+              No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
+            </p>
+            <p>
+              Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
+            </p>
+            <p>
+              Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
+            </p>
+          </div>
+        </div>
+      </motion.div>
+    </motion.div>
+  );
+}
+
 /* ──────────────────── TIMELINE MODAL ──────────────────── */
 
 function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: () => void }) {
@@ -673,7 +756,7 @@ export function ProfileSection() {
   }, []);
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
-  const [showBio, setShowBio] = useState(false);
+  const [showAboutModal, setShowAboutModal] = useState(false);
   const TIMELINE_DEFAULT_COUNT = 4;
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
@@ -887,7 +970,7 @@ export function ProfileSection() {
         </div>
       </motion.div>
 
-      {/* Bio — conteúdo textual rico, expansível */}
+      {/* Bio — conteúdo textual rico, em modal */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -896,53 +979,23 @@ export function ProfileSection() {
       >
         <div className="glass rounded-xl p-6 md:p-8 border border-[var(--border)]/50">
           <button
-            onClick={() => setShowBio(!showBio)}
+            onClick={() => setShowAboutModal(true)}
             className="w-full text-center focus:outline-none group cursor-pointer"
-            aria-expanded={showBio}
+            aria-expanded={false}
             aria-label={t("profile.about.aria", "Sobre mim")}
           >
             <div className="flex items-center justify-center gap-3">
               <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "▸ SOBRE")}</h2>
               <motion.span
-                animate={{ rotate: showBio ? 180 : 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
                 className="text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-colors inline-flex"
               >
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m6 9 6 6 6-6" />
+                  <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
               </motion.span>
             </div>
+            <p className="text-[10px] font-mono text-[var(--text-secondary)]/50 mt-1">Clique para ler sobre mim</p>
           </button>
-
-          <AnimatePresence initial={false}>
-            <motion.div
-              key="bio-content"
-              initial={{ height: 0, opacity: 0 }}
-              animate={showBio ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
-              exit={{ height: 0, opacity: 0 }}
-              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
-              className="overflow-hidden"
-              role="region"
-              aria-live="polite"
-              aria-label={t("profile.about.aria", "Sobre mim")}
-            >
-              <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-4 mt-3 border-t border-[var(--border)]/30">
-                <p>
-                  Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
-                </p>
-                <p>
-                  No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
-                </p>
-                <p>
-                  Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
-                </p>
-                <p>
-                  Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
-                </p>
-              </div>
-            </motion.div>
-          </AnimatePresence>
         </div>
       </motion.div>
 
@@ -1062,6 +1115,11 @@ export function ProfileSection() {
           </div>
         </div>
       </motion.div>
+
+      {/* About Modal */}
+      <AnimatePresence>
+        {showAboutModal && <AboutModal onClose={() => setShowAboutModal(false)} />}
+      </AnimatePresence>
 
       {/* Timeline Modal */}
       <AnimatePresence>
