@@ -24,7 +24,7 @@ export const STATIC_PROJECTS: Repo[] = [
     id: 999002,
     name: "Arachne",
     description:
-      "Plataforma de scraping inteligente com RAG semântico — extraia, transforme e consulte dados da web usando IA.",
+      "Scraping inteligente + RAG semântico + parsing de 44 formatos de documento, busca web híbrida, MCP server e exportação multi-formato.",
     html_url: "",
     homepage: "",
     stargazers_count: 0,
