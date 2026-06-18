@@ -11,6 +11,7 @@ import { GlassCard } from "./GlassCard";
 import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
 /* ──────────────────── DATA ──────────────────── */
@@ -381,11 +382,6 @@ function CircuitLines() {
         d="M1460,700 L1340,700 L1260,620 L1260,500"
         fill="none"
         stroke="var(--accent)"
-        strokeWidth="0.5"
-        opacity={0.05}
-        strokeDasharray="8 6"
-        initial={{ strokeDashoffset: 0 }}
-        animate={{ strokeDashoffset: 100 }}
         transition={{ duration: 4.5, repeat: Infinity, ease: "linear", delay: 3.5 }}
       />
     </svg>
@@ -395,6 +391,7 @@ function CircuitLines() {
 /* ──────────────────── SKILLS GRID ──────────────────── */
 
 function SkillsCompact() {
+  const { t } = useLanguage();
   return (
     <div className="mb-8">
       <motion.h2
@@ -402,7 +399,7 @@ function SkillsCompact() {
         whileInView={{ opacity: 1, y: 0 }}
         className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
       >
-        ▸ HABILIDADES
+        {t("profile.skills.heading", "▸ HABILIDADES")}
       </motion.h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
         {skills.map((skill, i) => (
@@ -448,7 +445,7 @@ function SkillsCompact() {
               <div className="mt-3 pt-3 border-t border-[var(--border)]/30">
                 <div className="flex items-center justify-between mb-1.5">
                   <span className="text-[10px] font-mono text-[var(--text-secondary)]/60 uppercase tracking-wider">
-                    Nível
+                    {t("profile.level", "Nível")}
                   </span>
                   <span className="text-[10px] font-mono font-semibold" style={{ color: `var(--proficiency-${skill.level.toLowerCase()}, var(--accent))` }}>
                     {skill.level}
@@ -487,8 +484,7 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
   return (
     <motion.div
       initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      viewport={{ once: true }}
+      animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.04, 0.25) }}
       className="relative pl-6"
     >
@@ -665,6 +661,7 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -707,9 +704,9 @@ export function ProfileSection() {
 
   // P1 + P2: grouped timeline + collapse
   const typeConfig: Record<string, { label: string; icon: React.ComponentType<{ className?: string }> }> = {
-    experience: { label: 'Experiência', icon: Briefcase },
-    education: { label: 'Educação', icon: GraduationCap },
-    certification: { label: 'Certificação', icon: Award },
+    experience: { label: t("profile.label.experience", "Experiência"), icon: Briefcase },
+    education: { label: t("profile.label.education", "Educação"), icon: GraduationCap },
+    certification: { label: t("profile.label.certification", "Certificação"), icon: Award },
   };
 
   // Always mount all items — Samuel: "sempre deve montar tudo, lógica é o contrário"
@@ -956,7 +953,7 @@ export function ProfileSection() {
             whileInView={{ opacity: 1, y: 0 }}
             className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
           >
-            ▸ JORNADA
+            {t("profile.journey.heading", "▸ JORNADA")}
           </motion.h2>
 
           {/* P2: CTA expandir quando colapsado */}
@@ -970,7 +967,7 @@ export function ProfileSection() {
               whileTap={{ scale: 0.98 }}
             >
               <span className="text-[var(--accent)] opacity-60">⏵</span>
-              Ver jornada completa ({timeline.length - TIMELINE_DEFAULT_COUNT} itens)
+              {t("profile.show.full", "Ver jornada completa ({count} itens)").replace("{count}", String(timeline.length - TIMELINE_DEFAULT_COUNT))}
             </motion.button>
           )}
 
@@ -1012,7 +1009,7 @@ export function ProfileSection() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
-                ⏶ Mostrar menos
+                {t("profile.show.less", "Mostrar menos")}
               </motion.button>
             )}
 
@@ -1026,7 +1023,7 @@ export function ProfileSection() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
-                ⏷ Ver jornada completa ({timeline.length - TIMELINE_DEFAULT_COUNT} itens)
+                ⏷ {t("profile.show.full", "Ver jornada completa ({count} itens)").replace("{count}", String(timeline.length - TIMELINE_DEFAULT_COUNT))}
               </motion.button>
             )}
 
@@ -1052,7 +1049,7 @@ export function ProfileSection() {
                 transition={{ delay: 0.6, duration: 0.4 }}
                 className="text-[10px] font-mono text-[var(--text-muted)] mt-3 tracking-wider"
               >
-                ∞ Continuo evoluindo
+                {t("profile.evolving", "∞ Continuo evoluindo")}
               </motion.span>
             </motion.div>
           </div>
