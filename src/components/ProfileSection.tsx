@@ -859,7 +859,7 @@ export function ProfileSection() {
                 transition-all duration-300"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10 font-semibold tracking-wide">Ver meus projetos</span>
+              <span className="relative z-10 font-semibold tracking-wide">Ver projetos</span>
               <svg className="w-5 h-5 relative z-10 ml-2 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />

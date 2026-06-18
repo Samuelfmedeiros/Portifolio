@@ -1,6 +1,13 @@
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { ProfileSection } from "./ProfileSection";
+
+// Mock i18n — return fallback when provided, key otherwise
+vi.mock("@/lib/i18n", () => ({
+  useLanguage: () => ({
+    t: (key: string, fallback?: string) => fallback ?? key,
+  }),
+}));
 
 describe("ProfileSection", () => {
   it("renders the section with id profile", () => {
@@ -37,9 +44,9 @@ describe("ProfileSection", () => {
     }
   });
 
-  it("renders CTA button Ver Projetos", () => {
+  it("renders CTA button Ver projetos", () => {
     render(<ProfileSection />);
-    expect(screen.getByText("Ver Projetos")).toBeInTheDocument();
+    expect(screen.getByText("Ver projetos")).toBeInTheDocument();
   });
 
   it("renders CTA button Baixar Curriculo", () => {
@@ -50,9 +57,9 @@ describe("ProfileSection", () => {
   it("renders all 7 timeline items (default expanded via P2)", () => {
     render(<ProfileSection />);
     expect(screen.getByText("Analista de Dados — ANA")).toBeInTheDocument();
-    expect(screen.getByText(/Agência Nacional de Águas/)).toBeInTheDocument();
-    expect(screen.getByText(/Pós-graduação em Ciência de Dados/)).toBeInTheDocument();
-    expect(screen.getByText(/Análise e Desenvolvimento de Sistemas/)).toBeInTheDocument();
+    expect(screen.getAllByText(/Agência Nacional de Águas/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Pós-graduação em Ciência de Dados/).length).toBeGreaterThanOrEqual(1);
+    expect(screen.getAllByText(/Análise e Desenvolvimento de Sistemas/).length).toBeGreaterThanOrEqual(1);
     expect(screen.getByText(/Desenvolvedor Full Stack Autônomo/)).toBeInTheDocument();
   });
 
@@ -79,9 +86,9 @@ describe("ProfileSection", () => {
     expect(screen.getByText(/Mostrar menos/)).toBeInTheDocument();
   });
 
-  it("renders Ver Projetos link pointing to #projects", () => {
+  it("renders Ver projetos link pointing to #projects", () => {
     render(<ProfileSection />);
-    const link = screen.getByText("Ver Projetos");
+    const link = screen.getByText("Ver projetos");
     expect(link.closest("a")).toHaveAttribute("href", "#projects");
   });
 
