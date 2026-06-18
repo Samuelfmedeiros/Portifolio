@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
@@ -80,7 +81,9 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
     .filter((t) => t !== "featured")
     .slice(0, 8);
 
-  return (
+  if (typeof document === "undefined") return null;
+
+  return createPortal(
     <AnimatePresence>
       {open && (
         <motion.div
@@ -167,6 +170,7 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
           </motion.div>
         </motion.div>
       )}
-    </AnimatePresence>
+    </AnimatePresence>,
+    document.body
   );
 }
