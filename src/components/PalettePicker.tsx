@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Palette } from "lucide-react";
 import { useTheme } from "./ThemeProvider";
 import { PALETTES } from "@/lib/palettes";
+import { useLanguage } from "@/lib/i18n";
 
 export const PalettePicker = memo(function PalettePicker() {
   const { palette, setPalette } = useTheme();
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
 
   // current palette is derived from palette state
 
@@ -19,7 +21,7 @@ export const PalettePicker = memo(function PalettePicker() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full"
-        aria-label="Trocar paleta de cores"
+        aria-label={t("palette.toggle", "Trocar paleta de cores")}
         title="Paleta de cores"
       >
         <Palette className="w-4 h-4 text-[var(--accent)]" />

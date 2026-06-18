@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useRef, useEffect, KeyboardEvent } from "react";
+import { useState, useRef, useEffect, type KeyboardEvent } from "react";
+import { Terminal as TerminalIcon } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { useTheme } from "./ThemeProvider";
 import { MissionGames } from "./MiniGames/MissionGames";
 import type { Command } from "@/lib/types";
+import { useLanguage } from "@/lib/i18n";
 
 const BANNER = [
   " ╔══════════════════════════════════════╗",
@@ -31,6 +33,7 @@ export function Terminal() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
   const { toggle: themeToggle } = useTheme();
+  const { t } = useLanguage();
 
   useEffect(() => {
     scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
@@ -544,7 +547,7 @@ Digite 'ajuda' para ver os comandos disponíveis.`;
               isFocused ? "caret-[var(--accent)]" : ""
             }`}
             placeholder="digite um comando..."
-            aria-label="Digite um comando"
+            aria-label={t("terminal.input", "Digite um comando")}
             role="textbox"
             autoFocus
           />

@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Download, X, User, Mail, Shield } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
 
 interface DownloadModalProps {
   open: boolean;
@@ -20,6 +21,8 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   const downloadingRef = useRef(false);
   const { track } = useAnalytics();
   const { t } = useLanguage();
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, open, () => { if (status !== "loading") onClose(); });
 
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -93,7 +96,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   return (
     <AnimatePresence>
       {open && (
-        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+        <div className="fixed inset-0 z-[100] flex items-center justify-center p-4" ref={modalRef}>
           {/* Overlay */}
           <motion.div
             initial={{ opacity: 0 }}

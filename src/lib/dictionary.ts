@@ -250,6 +250,11 @@ export const dict = {
     "profile.label.experience": "Experiência",
     "profile.label.education": "Educação",
     "profile.label.certification": "Certificação",
+
+    // ── Cookie / Terminal / Palette ──
+    "cookie.close": "Fechar banner de cookies",
+    "terminal.input": "Digite um comando",
+    "palette.toggle": "Trocar paleta de cores",
   },
 
   en: {
@@ -496,5 +501,10 @@ export const dict = {
     "profile.label.experience": "Experience",
     "profile.label.education": "Education",
     "profile.label.certification": "Certification",
+
+    // ── Cookie / Terminal / Palette ──
+    "cookie.close": "Close cookie banner",
+    "terminal.input": "Type a command",
+    "palette.toggle": "Change color palette",
   },
 };
