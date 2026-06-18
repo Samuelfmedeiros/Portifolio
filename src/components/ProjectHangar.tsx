@@ -87,6 +87,7 @@ const extractTechTags = (repo: Repo): string[] => {
 
 function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; onSelect?: (repo: Repo) => void }) {
   const isFeatured = FEATURED.includes(repo.name);
+  const hasLink = !!(repo.homepage || repo.hasDemo);
   const techTags = extractTechTags(repo);
   const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
   const updated = repo.pushed_at
@@ -94,6 +95,12 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
     : null;
   const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
   const { track } = useAnalytics();
+
+  const handleClick = () => {
+    if (!hasLink && onSelect) {
+      onSelect(repo);
+    }
+  };
 
   return (
     <motion.div
@@ -106,7 +113,12 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
     >
       <GlassCard
         delay={0}
-        className="group relative h-full flex flex-col overflow-hidden hover:scale-[1.03] transition-all duration-300"
+        onClick={!hasLink ? handleClick : undefined}
+        className={`group relative h-full flex flex-col overflow-hidden transition-all duration-300 ${
+          hasLink ? 'hover:scale-[1.03]' : 'hover:scale-[1.03] cursor-pointer'
+        }`}
+        tabIndex={!hasLink ? 0 : undefined}
+        onKeyDown={!hasLink ? (e: React.KeyboardEvent) => { if (e.key === 'Enter') handleClick(); } : undefined}
       >
         {/* Holo-card glow effect */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--accent-alt)]/5" />
@@ -172,11 +184,10 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
           </a>
         ) : (
-          <button
-            onClick={() => onSelect?.(repo)}
-            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center cursor-pointer text-left"
+          <div
+            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center"
             style={{ background: gradient }}
-            aria-label={`Detalhes: ${repo.name}`}
+            aria-hidden="true"
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
             {/* Grid overlay pattern */}
@@ -191,7 +202,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 src={repo.imageUrl}
                 alt={repo.description ? `${repo.name} — ${repo.description.slice(0, 80)}` : `Projeto ${repo.name}`}
                 fill
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
+                className="absolute inset-0 w-full h-full object-cover"
                 unoptimized
                 loading="lazy"
               />
@@ -202,14 +213,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 {repo.name}
               </span>
             )}
-            {/* Play overlay on hover */}
-            <div className="absolute inset-0 bg-black/0 hover:bg-black/30 transition-all duration-300 flex items-center justify-center">
-              <span className="opacity-0 hover:opacity-100 text-white font-mono text-xs tracking-widest transition-opacity duration-300 flex items-center gap-1">
-                ▶ DETALHES
-              </span>
-            </div>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
-          </button>
+          </div>
         )}
 
         <div className="relative p-1 flex flex-col flex-1">
