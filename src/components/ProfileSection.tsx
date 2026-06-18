@@ -886,8 +886,8 @@ export function ProfileSection() {
       {/* Bio — conteúdo textual rico, expansível */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        viewport={{ once: true }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
         className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12"
       >
         <div className="glass rounded-xl p-6 md:p-8 border border-[var(--border)]/50">
@@ -947,7 +947,7 @@ export function ProfileSection() {
         <SkillsCompact />
 
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
-        <div id="jornada" className="scroll-mt-20">
+        <div id="jornada" className="scroll-mt-20 pb-16 md:pb-20">
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -1055,9 +1055,6 @@ export function ProfileSection() {
           </div>
         </div>
       </motion.div>
-
-      {/* Spacer entre timeline e próxima seção */}
-      <div className="h-16 md:h-20" />
 
       {/* Timeline Modal */}
       <AnimatePresence>
