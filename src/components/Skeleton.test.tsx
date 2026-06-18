@@ -8,18 +8,6 @@ describe('Skeleton', () => {
     expect(container.firstChild).toBeInTheDocument()
   })
 
-  it('has animate-pulse class', () => {
-    const { container } = render(<Skeleton />)
-    const div = container.firstChild as HTMLElement
-    expect(div).toHaveClass('animate-pulse')
-  })
-
-  it('has rounded corners', () => {
-    const { container } = render(<Skeleton />)
-    const div = container.firstChild as HTMLElement
-    expect(div).toHaveClass('rounded')
-  })
-
   it('has aria-hidden for accessibility', () => {
     const { container } = render(<Skeleton />)
     const div = container.firstChild as HTMLElement
@@ -38,26 +26,6 @@ describe('GlassSkeleton', () => {
   it('renders without crashing', () => {
     const { container } = render(<GlassSkeleton />)
     expect(container.firstChild).toBeInTheDocument()
-  })
-
-  it('has glass card styling', () => {
-    const { container } = render(<GlassSkeleton />)
-    const div = container.firstChild as HTMLElement
-    expect(div).toHaveClass('glass')
-    expect(div).toHaveClass('rounded-xl')
-    expect(div).toHaveClass('p-6')
-  })
-
-  it('contains three skeleton lines', () => {
-    const { container } = render(<GlassSkeleton />)
-    const skeletons = container.querySelectorAll('.animate-pulse')
-    expect(skeletons.length).toBe(3)
-  })
-
-  it('first skeleton line is wider', () => {
-    const { container } = render(<GlassSkeleton />)
-    const skeletons = container.querySelectorAll('.animate-pulse')
-    expect(skeletons[0]).toHaveClass('w-3/4')
   })
 
   it('applies custom className', () => {

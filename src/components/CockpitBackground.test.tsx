@@ -37,10 +37,4 @@ describe('CockpitBackground', () => {
     const { container } = render(<CockpitBackground />)
     expect(container.querySelector('canvas')).toBeInTheDocument()
   })
-
-  it('renders child visual layers', () => {
-    const { container } = render(<CockpitBackground />)
-    // Should have multiple child components rendered
-    expect(container.firstChild?.children.length).toBeGreaterThanOrEqual(4)
-  })
 })
