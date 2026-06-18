@@ -481,6 +481,7 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
+      viewport={{ once: true }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.04, 0.25) }}
       className="relative pl-6"
     >
@@ -841,16 +842,17 @@ export function ProfileSection() {
           >
             <a
               href="#projects"
-              className="group relative inline-flex items-center justify-center px-6 py-3 rounded-xl font-sans text-sm font-semibold overflow-hidden
-                bg-[var(--bg-primary)]/50 border border-[var(--accent)]/30 hover:border-[var(--accent)]/60
+              className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-sans text-base font-bold overflow-hidden
+                bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
+                border-2 border-[var(--accent)]/50 hover:border-[var(--accent)]
                 text-[var(--accent)] hover:text-white
-                shadow-lg shadow-[var(--accent)]/5 hover:shadow-[var(--accent)]/20
-                hover:scale-[1.04] active:scale-[0.98]
+                shadow-lg shadow-[var(--accent)]/20 hover:shadow-[var(--accent)]/40
+                hover:scale-[1.06] active:scale-[0.97]
                 transition-all duration-300"
             >
-              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/0 via-[var(--accent)]/5 to-[var(--accent)]/0 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10">Ver Projetos</span>
-              <svg className="w-4 h-4 relative z-10 ml-1.5 group-hover:translate-x-0.5 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+              <span className="relative z-10 font-semibold tracking-wide">Ver meus projetos</span>
+              <svg className="w-5 h-5 relative z-10 ml-2 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
               </svg>
@@ -891,8 +893,8 @@ export function ProfileSection() {
             aria-expanded={showBio}
             aria-label="Sobre mim"
           >
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="font-mono text-xs tracking-[0.25em] text-[var(--accent)]">▸ SOBRE</h2>
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <h2 className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] text-center">▸ SOBRE</h2>
               <motion.span
                 animate={{ rotate: showBio ? 180 : 0 }}
                 transition={{ duration: 0.3 }}
