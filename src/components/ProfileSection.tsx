@@ -481,7 +481,7 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
     <motion.div
       initial={{ opacity: 0, x: -20 }}
       whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.3) }}
+      transition={{ duration: 0.4, delay: Math.min(index * 0.04, 0.25) }}
       className="relative pl-6"
     >
       {!isLast && (
@@ -1054,7 +1054,7 @@ export function ProfileSection() {
               initial={{ opacity: 0 }}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="flex flex-col items-center pt-1 pb-4"
+              className="flex flex-col items-center pt-1 pb-8"
             >
               <div className="w-px h-10 bg-gradient-to-b from-[var(--accent)]/40 via-[var(--accent)]/10 to-transparent" />
               <motion.div
