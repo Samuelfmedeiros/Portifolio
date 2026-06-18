@@ -11,7 +11,7 @@ const NAV_ITEMS = [
   { href: "#profile", key: "nav.home", icon: "🚀" },
   { href: "#jornada", key: "nav.journey", icon: "📜" },
   { href: "#projects", key: "nav.projects", icon: "📂" },
-  { href: "#games", key: "nav.games", icon: "🎮" },
+  { href: "#games", key: "nav.games", icon: "" },
   { href: "#contact", key: "nav.contact", icon: "📬" },
 ];
 

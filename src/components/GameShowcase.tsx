@@ -72,7 +72,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   return (
     <div className="py-6 px-6">
       <div className="max-w-6xl mx-auto">
-        <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">🎮 {t("games.section.title")}</h2>
+        <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">{t("games.section.title")}</h2>
         <div className="relative max-w-5xl mx-auto">
           <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.left")}><ChevronLeft className="w-3.5 h-3.5" /></button>
 
