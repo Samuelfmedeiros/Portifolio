@@ -3,6 +3,13 @@ import { render, screen } from '@testing-library/react'
 import { Navbar } from './Navbar'
 import React from 'react'
 
+// Mock i18n — return fallback when provided, key otherwise
+vi.mock('@/lib/i18n', () => ({
+  useLanguage: () => ({
+    t: (key: string, fallback?: string) => fallback ?? key,
+  }),
+}))
+
 describe('Navbar', () => {
   beforeEach(() => {
     global.IntersectionObserver = class IntersectionObserver {
@@ -19,7 +26,7 @@ describe('Navbar', () => {
 
   it('renders all navigation items on desktop', () => {
     render(<Navbar />)
-    const navItems = ['Início', 'Projetos', 'Jogos', 'Contato']
+    const navItems = ['nav.home', 'nav.projects', 'nav.games', 'nav.contact']
     for (const item of navItems) {
       expect(screen.getAllByText(item).length).toBeGreaterThanOrEqual(1)
     }
@@ -27,14 +34,14 @@ describe('Navbar', () => {
 
   it('renders mobile nav items', () => {
     render(<Navbar />)
-    expect(screen.getAllByText('Início').length).toBeGreaterThanOrEqual(1)
-    expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'Navegação principal')
+    expect(screen.getAllByText('nav.home').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getByRole('navigation')).toHaveAttribute('aria-label', 'nav.aria.main')
   })
 
   it('has proper aria-label for navigation', () => {
     render(<Navbar />)
     const nav = screen.getByRole('navigation')
-    expect(nav).toHaveAttribute('aria-label', 'Navegação principal')
+    expect(nav).toHaveAttribute('aria-label', 'nav.aria.main')
   })
 
   it('has GitHub link', () => {
