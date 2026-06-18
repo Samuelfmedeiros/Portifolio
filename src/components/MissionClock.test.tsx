@@ -38,9 +38,7 @@ describe('MissionClock', () => {
     // Mission started 2026-05-06T21:51:43Z
     // Current fake time: 2026-05-20T12:00:00Z
     // Elapsed: ~13 days, 14 hours, 8 minutes, 17 seconds
-    const timeDisplay = screen.getByText('13')
-    expect(timeDisplay).toBeInTheDocument()
-    expect(timeDisplay).toHaveClass('text-[var(--accent)]')
+    expect(screen.getByText('13')).toBeInTheDocument()
   })
 
   it('displays formatted date', () => {

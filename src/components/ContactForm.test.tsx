@@ -11,6 +11,13 @@ vi.mock('@/lib/supabase', () => ({
   },
 }))
 
+// Mock i18n — return fallback when provided, key otherwise
+vi.mock('@/lib/i18n', () => ({
+  useLanguage: () => ({
+    t: (key: string, fallback?: string) => fallback ?? key,
+  }),
+}))
+
 describe('ContactForm', () => {
   beforeEach(() => {
     vi.clearAllMocks()
@@ -18,15 +25,15 @@ describe('ContactForm', () => {
 
   it('renders form fields correctly', () => {
     render(<ContactForm />)
-    expect(screen.getByLabelText('Nome')).toBeInTheDocument()
-    expect(screen.getByLabelText('Email')).toBeInTheDocument()
-    expect(screen.getByLabelText('Mensagem')).toBeInTheDocument()
-    expect(screen.getByRole('button', { name: /enviar mensagem/i })).toBeInTheDocument()
+    expect(screen.getByLabelText('contact.form.name')).toBeInTheDocument()
+    expect(screen.getByLabelText('contact.form.email')).toBeInTheDocument()
+    expect(screen.getByLabelText('contact.form.message')).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /contact.form.submit/i })).toBeInTheDocument()
   })
 
   it('renders WhatsApp CTA button', () => {
     render(<ContactForm />)
-    const whatsappLink = screen.getByRole('link', { name: /conversar no whatsapp/i })
+    const whatsappLink = screen.getByRole('link', { name: /contact.whatsapp.cta/i })
     expect(whatsappLink).toBeInTheDocument()
     expect(whatsappLink).toHaveAttribute('href', expect.stringContaining('wa.me'))
   })
@@ -39,7 +46,7 @@ describe('ContactForm', () => {
 
   it('shows email validation error for invalid email', () => {
     render(<ContactForm />)
-    const emailInput = screen.getByLabelText('Email')
+    const emailInput = screen.getByLabelText('contact.form.email')
     fireEvent.change(emailInput, { target: { value: 'invalid-email' } })
     // Native HTML validation will handle this on submit
     expect(emailInput).toHaveAttribute('type', 'email')

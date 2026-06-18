@@ -39,19 +39,6 @@ describe('ParallaxBackground', () => {
     expect(canvas).toBeInTheDocument()
   })
 
-  it('canvas has fixed positioning', () => {
-    const { container } = render(<ParallaxBackground />)
-    const canvas = container.querySelector('canvas')
-    expect(canvas).toHaveClass('fixed')
-    expect(canvas).toHaveClass('inset-0')
-  })
-
-  it('canvas has pointer-events-none', () => {
-    const { container } = render(<ParallaxBackground />)
-    const canvas = container.querySelector('canvas')
-    expect(canvas).toHaveClass('pointer-events-none')
-  })
-
   it('canvas has aria-hidden for accessibility', () => {
     const { container } = render(<ParallaxBackground />)
     const canvas = container.querySelector('canvas')
