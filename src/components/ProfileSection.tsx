@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, MotionValue, useScroll, useTransform } from "framer-motion";
+import { motion, AnimatePresence, MotionValue, useScroll, useTransform, useInView } from "framer-motion";
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
@@ -481,6 +481,8 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
   isSelected?: boolean;
 }) {
   const isLast = index === timeline.length - 1;
+  const dotRef = useRef<HTMLDivElement>(null);
+  const isInView = useInView(dotRef, { amount: 0.5, once: false });
 
   return (
     <motion.div
@@ -492,9 +494,23 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
       {!isLast && (
         <div className="absolute left-[11px] top-6 bottom-0 w-px bg-gradient-to-b from-[var(--accent)]/60 to-transparent" />
       )}
-      <div className="absolute left-0 top-5 w-3.5 h-3.5 rounded-full border-2 border-[var(--accent)] bg-[var(--bg-primary)] flex items-center justify-center">
-        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
-      </div>
+      <motion.div
+        ref={dotRef}
+        className="absolute left-0 top-5 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center"
+        style={{ borderColor: isInView ? "var(--accent)" : "var(--border)" }}
+        animate={{
+          scale: isInView ? 1.3 : 1,
+          backgroundColor: isInView ? "var(--accent)" : "var(--bg-primary)",
+        }}
+        transition={{ duration: 0.3, ease: "easeOut" }}
+      >
+        <motion.div
+          className="w-1.5 h-1.5 rounded-full"
+          style={{ backgroundColor: isInView ? "var(--bg-primary)" : "var(--accent)" }}
+          animate={{ scale: isInView ? 1.2 : 1 }}
+          transition={{ duration: 0.3 }}
+        />
+      </motion.div>
       <GlassCard 
         onClick={() => onSelect?.(item)}
         className={`py-2.5 px-3.5 cursor-pointer transition-all duration-200
