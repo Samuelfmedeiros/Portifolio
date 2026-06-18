@@ -334,7 +334,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
     return (
       <section className="py-8 px-6">
         <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">
-          ▸ Nenhum projeto encontrado
+          {t("projects.empty", "▸ Nenhum projeto encontrado")}
         </h2>
       </section>
     );
