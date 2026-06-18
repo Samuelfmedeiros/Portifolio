@@ -9,6 +9,7 @@ import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 
 const FEATURED = FEATURED_PROJECTS;
 
@@ -302,7 +303,9 @@ function ProjectCard({ repo, index: i }: { repo: Repo; index: number }) {
   );
 }
 
-export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]; title?: string }) {
+export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string }) {
+  const { t } = useLanguage();
+  const resolvedTitle = title || t("projects.section.title", "▸ PROJETOS");
   const [activeFilter, setActiveFilter] = useState<string>("");
   const { track } = useAnalytics();
   // Collect all unique languages/tags for filter
@@ -344,7 +347,7 @@ export function ProjectHangar({ repos, title = "▸ PROJETOS" }: { repos: Repo[]
         whileInView={{ opacity: 1 }}
         className="text-xl font-mono text-[var(--accent)] mb-4 text-center"
       >
-        {title}
+        {resolvedTitle}
       </motion.h2>
 
       {/* Stats bar */}
