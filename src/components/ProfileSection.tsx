@@ -664,6 +664,7 @@ export function ProfileSection() {
   }, []);
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
+  const [showBio, setShowBio] = useState(false);
   const TIMELINE_DEFAULT_COUNT = 4;
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
@@ -876,7 +877,7 @@ export function ProfileSection() {
         </div>
       </motion.div>
 
-      {/* Bio — conteúdo textual rico para SEO e AdSense */}
+      {/* Bio — conteúdo textual rico, expansível */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
@@ -884,21 +885,79 @@ export function ProfileSection() {
         className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12"
       >
         <div className="glass rounded-xl p-6 md:p-8 border border-[var(--border)]/50">
-          <h2 className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-4 text-center">▸ SOBRE</h2>
-          <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
-            <p>
-              Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
-            </p>
-            <p>
-              No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
-            </p>
-            <p>
-              Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
-            </p>
-            <p>
-              Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
-            </p>
-          </div>
+          <button
+            onClick={() => setShowBio(!showBio)}
+            className="w-full text-left focus:outline-none group"
+            aria-expanded={showBio}
+            aria-label="Sobre mim"
+          >
+            <div className="flex items-center justify-between mb-4">
+              <h2 className="font-mono text-xs tracking-[0.25em] text-[var(--accent)]">▸ SOBRE</h2>
+              <motion.span
+                animate={{ rotate: showBio ? 180 : 0 }}
+                transition={{ duration: 0.3 }}
+                className="text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-colors"
+              >
+                <svg className="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                  <path d="m6 9 6 6 6-6" />
+                </svg>
+              </motion.span>
+            </div>
+          </button>
+
+          <AnimatePresence initial={false}>
+            <motion.div
+              key="bio-content"
+              initial={{ height: 0, opacity: 0 }}
+              animate={showBio ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+              className="overflow-hidden"
+            >
+              <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-2 border-t border-[var(--border)]/30">
+                <p>
+                  Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
+                </p>
+                <p>
+                  No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
+                </p>
+                <p>
+                  Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
+                </p>
+                <p>
+                  Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
+
+          {/* Botão expandir/recolher no final */}
+          {!showBio && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => setShowBio(true)}
+              className="mt-3 w-full text-center py-2 text-[11px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors flex items-center justify-center gap-1.5"
+            >
+              <span>Ler mais</span>
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m6 9 6 6 6-6" />
+              </svg>
+            </motion.button>
+          )}
+          {showBio && (
+            <motion.button
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              onClick={() => setShowBio(false)}
+              className="mt-3 w-full text-center py-2 text-[11px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors flex items-center justify-center gap-1.5"
+            >
+              <svg className="w-3 h-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                <path d="m18 15-6-6-6 6" />
+              </svg>
+              <span>Mostrar menos</span>
+            </motion.button>
+          )}
         </div>
       </motion.div>
 
