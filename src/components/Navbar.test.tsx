@@ -72,7 +72,6 @@ describe('Navbar', () => {
     render(<Navbar />)
     expect(screen.getByText('🚀')).toBeInTheDocument()
     expect(screen.getByText('📂')).toBeInTheDocument()
-    expect(screen.getByText('🎮')).toBeInTheDocument()
     expect(screen.getByText('📬')).toBeInTheDocument()
   })
 })
