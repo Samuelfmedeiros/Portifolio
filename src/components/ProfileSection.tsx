@@ -99,20 +99,20 @@ const timeline = [
 
 const skills = [
   // Core
-  { icon: BarChart3, name: "Power BI", category: "BI", level: "Expert", color: "from-cyan-400 to-emerald-400" },
-  { icon: Database, name: "SQL", category: "Data", level: "Expert", color: "from-cyan-400 to-emerald-400" },
-  { icon: Code2, name: "Python", category: "Backend", level: "Advanced", color: "from-cyan-400 to-blue-400" },
-  { icon: Brain, name: "Machine Learning", category: "AI", level: "Advanced", color: "from-cyan-400 to-blue-400" },
-  { icon: Globe, name: "Next.js", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400" },
-  { icon: Bot, name: "LLMs Locais", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: Container, name: "Docker", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: GitBranch, name: "Git", category: "Tools", level: "Advanced", color: "from-cyan-400 to-blue-400" },
+  { icon: BarChart3, name: "Power BI", category: "BI", level: "Expert", color: "from-cyan-400 to-emerald-400", description: "Dashboards interativos, DAX, M, modelagem dimensional" },
+  { icon: Database, name: "SQL", category: "Data", level: "Expert", color: "from-cyan-400 to-emerald-400", description: "Consultas complexas, otimização, schema design, PostgreSQL" },
+  { icon: Code2, name: "Python", category: "Backend", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "FastAPI, automação, ETL, pandas, scikit-learn" },
+  { icon: Brain, name: "Machine Learning", category: "AI", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "Regressão, classificação, clustering, redes neurais" },
+  { icon: Globe, name: "Next.js", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "SSR, SSG, API Routes, App Router, Turbopack" },
+  { icon: Bot, name: "LLMs Locais", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400", description: "Ollama, llama.cpp, RAG, embedding, fine-tuning" },
+  { icon: Container, name: "Docker", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400", description: "Containerização, Docker Compose, multi-stage builds" },
+  { icon: GitBranch, name: "Git", category: "Tools", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "Versionamento, branching, rebase, hooks, workflow" },
   // Fundidos
-  { icon: Brain, name: "ML Frameworks", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: GitBranch, name: "Git & CI/CD", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
+  { icon: Brain, name: "ML Frameworks", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400", description: "TensorFlow, PyTorch, scikit-learn, Hugging Face" },
+  { icon: GitBranch, name: "Git & CI/CD", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400", description: "GitHub Actions, pipelines, deploy automatizado" },
   // Adicionados
-  { icon: Globe, name: "Cloudflare", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400" },
-  { icon: Code2, name: "TypeScript", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400" },
+  { icon: Globe, name: "Cloudflare", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400", description: "Pages, Workers, D1, Tunnel, DNS, edge computing" },
+  { icon: Code2, name: "TypeScript", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "Tipagem estática, genéricos, interfaces, strict mode" },
   // Arquivados
   // TensorFlow + PyTorch → ML Frameworks
   // GitLab + CI/CD → Git & CI/CD
@@ -436,6 +436,13 @@ function SkillsCompact() {
                   {skill.category}
                 </span>
               </div>
+
+              {/* Description — textual content for SEO */}
+              {'description' in skill && skill.description && (
+                <p className="text-[10px] text-[var(--text-secondary)]/70 leading-relaxed mt-2 line-clamp-2">
+                  {skill.description}
+                </p>
+              )}
 
               {/* Level bar */}
               <div className="mt-3 pt-3 border-t border-[var(--border)]/30">
