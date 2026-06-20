@@ -104,4 +104,13 @@ const nextConfig = {
   }
 };
 
-module.exports = nextConfig;
+
+// Bind only to localhost
+const localConfig = {
+  ...nextConfig,
+  server: {
+    host: '127.0.0.1',
+  },
+};
+
+module.exports = localConfig;
