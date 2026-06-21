@@ -6,7 +6,7 @@ import { useLanguage } from "@/lib/i18n";
 export function HangarSkeleton() {
   const { t } = useLanguage();
   return (
-    <section id="projects" className="py-20 px-6">
+    <section className="py-20 px-6">
       <h2 className="text-3xl font-mono text-[var(--accent)] mb-12 text-center">
         {t("projects.section.title", "▸ PROJETOS")}
       </h2>
