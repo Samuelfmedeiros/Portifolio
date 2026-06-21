@@ -773,7 +773,7 @@ export function ProfileSection() {
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
   const [showAboutModal, setShowAboutModal] = useState(false);
-  const TIMELINE_DEFAULT_COUNT = 4;
+  const TIMELINE_DEFAULT_COUNT = 7;
   const [showDownloadModal, setShowDownloadModal] = useState(false);
 
   // Track section view
@@ -987,12 +987,7 @@ export function ProfileSection() {
       </motion.div>
 
       {/* Bio — conteúdo textual rico, em modal */}
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.5, delay: 0.2 }}
-        className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12"
-      >
+      <div className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12">
         <div className="glass rounded-xl p-6 md:p-8 border border-[var(--border)]/50">
           <button
             onClick={() => setShowAboutModal(true)}
@@ -1002,18 +997,16 @@ export function ProfileSection() {
           >
             <div className="flex items-center justify-center gap-3">
               <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "▸ SOBRE")}</h2>
-              <motion.span
-                className="text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-colors inline-flex"
-              >
+              <span className="text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-colors inline-flex">
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                 </svg>
-              </motion.span>
+              </span>
             </div>
             <p className="text-[10px] font-mono text-[var(--text-secondary)]/50 mt-1">Clique para ler sobre mim</p>
           </button>
         </div>
-      </motion.div>
+      </div>
 
       {/* L4: Skills + Timeline — parallax sutil */}
       <motion.div
