@@ -137,29 +137,28 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                 <Cookie className="w-5 h-5 text-[var(--accent)] shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
                   <p className="text-xs md:text-sm font-mono text-[var(--text-primary)] mb-3">
-                    Utilizamos analytics para melhorar sua experiência. E anúncios para sustentar o site.
-                    Aceita?
+                    {t("cookie.banner.text")}
                   </p>
 
                   {!showAdsOptions ? (
                     <div className="flex items-center gap-2 flex-nowrap">
                       <button
-                        onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-accept-all", label: "Aceitar tudo cookies" }); }}
+                        onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-accept-all", label: "Accept all cookies" }); }}
                         className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
                       >
-                        Aceitar tudo
+                        {t("cookie.banner.accept_all")}
                       </button>
                       <button
-                        onClick={() => { decline(); track({ type: "external_link", url: "cookie-decline", label: "Recusar cookies" }); }}
+                        onClick={() => { decline(); track({ type: "external_link", url: "cookie-decline", label: "Decline cookies" }); }}
                         className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
                       >
-                        Recusar
+                        {t("cookie.banner.decline")}
                       </button>
                       <button
-                        onClick={() => { setShowAdsOptions(true); track({ type: "external_link", url: "cookie-customize", label: "Personalizar cookies" }); }}
+                        onClick={() => { setShowAdsOptions(true); track({ type: "external_link", url: "cookie-customize", label: "Customize cookies" }); }}
                         className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors shrink-0"
                       >
-                        Personalizar
+                        {t("cookie.banner.customize")}
                       </button>
                     </div>
                   ) : (

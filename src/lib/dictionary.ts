@@ -84,6 +84,9 @@ export const dict = {
 
     // ── Projects (ProjectHangar) ──
     "projects.section.title": "▸ PROJETOS",
+    "projects.featured": "★ DESTAQUE",
+    "projects.access": "▶ ACESSAR",
+    "projects.powered_by": "powered by",
     "projects.filter.all": "Todos",
     "projects.filter.web": "Web",
     "projects.filter.data": "Dados",
@@ -221,9 +224,11 @@ export const dict = {
     "monetization.consulting": "Consultoria Técnica",
 
     // ── Misc ──
-    "cookie.banner.text": "Este site usa cookies para melhorar sua experiência. Ao continuar, você concorda com nossa",
+    "cookie.banner.text": "Utilizamos analytics para melhorar sua experiência. E anúncios para sustentar o site. Aceita?",
     "cookie.banner.accept": "Aceitar",
     "cookie.banner.decline": "Recusar",
+    "cookie.banner.accept_all": "Aceitar tudo",
+    "cookie.banner.customize": "Personalizar",
     "cookie.banner.privacy": "Política de Privacidade",
 
     // ── Accessibility ──
@@ -244,6 +249,7 @@ export const dict = {
     "profile.journey.heading": "▸ JORNADA",
     "profile.about.heading": "▸ SOBRE",
     "profile.about.aria": "Sobre mim",
+    "profile.about.click_hint": "Clique para ler sobre mim",
     "profile.evolving": "∞ Continuo evoluindo",
     "profile.show.less": "Mostrar menos",
     "profile.show.full": "Ver jornada completa ({count} itens)",
@@ -335,6 +341,9 @@ export const dict = {
 
     // ── Projects ──
     "projects.section.title": "▸ PROJECTS",
+    "projects.featured": "★ FEATURED",
+    "projects.access": "▶ ACCESS",
+    "projects.powered_by": "powered by",
     "projects.filter.all": "All",
     "projects.filter.web": "Web",
     "projects.filter.data": "Data",
@@ -472,9 +481,11 @@ export const dict = {
     "monetization.consulting": "Technical Consulting",
 
     // ── Misc ──
-    "cookie.banner.text": "This site uses cookies to improve your experience. By continuing, you agree to our",
+    "cookie.banner.text": "We use analytics to improve your experience. And ads to support the site. Accept?",
     "cookie.banner.accept": "Accept",
     "cookie.banner.decline": "Decline",
+    "cookie.banner.accept_all": "Accept all",
+    "cookie.banner.customize": "Customize",
     "cookie.banner.privacy": "Privacy Policy",
 
     // ── Accessibility ──
@@ -495,6 +506,7 @@ export const dict = {
     "profile.journey.heading": "▸ JOURNEY",
     "profile.about.heading": "▸ ABOUT",
     "profile.about.aria": "About me",
+    "profile.about.click_hint": "Click to read about me",
     "profile.evolving": "∞ Always evolving",
     "profile.show.less": "Show less",
     "profile.show.full": "View full journey ({count} items)",
