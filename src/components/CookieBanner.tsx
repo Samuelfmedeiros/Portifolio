@@ -164,45 +164,45 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                   ) : (
                     <div className="space-y-2">
                       <p className="text-[10px] font-mono text-[var(--text-secondary)] mb-2">
-                        Escolha o nível de anúncios:
+                        {t("cookie.banner.ads_choice")}
                       </p>
                       <div className="flex flex-col gap-2">
                         <button
-                          onClick={() => { acceptWithAds("personalized"); track({ type: "external_link", url: "cookie-ads-personalized", label: "Anúncios personalizados" }); }}
+                          onClick={() => { acceptWithAds("personalized"); track({ type: "external_link", url: "cookie-ads-personalized", label: "Personalized ads" }); }}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors text-left"
                         >
                           <Eye className="w-3.5 h-3.5 shrink-0" />
                           <div>
-                            <span className="block">Anúncios personalizados</span>
-                            <span className="block text-[9px] text-[var(--text-secondary)]">Melhores sugestões, usam cookies</span>
+                            <span className="block">{t("cookie.banner.ads_personalized")}</span>
+                            <span className="block text-[9px] text-[var(--text-secondary)]">{t("cookie.banner.ads_personalized_hint")}</span>
                           </div>
                         </button>
                         <button
-                          onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-ads-nonpersonalized", label: "Anúncios não personalizados" }); }}
+                          onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-ads-nonpersonalized", label: "Non-personalized ads" }); }}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)]/50 hover:bg-[var(--border)]/10 transition-colors text-left"
                         >
                           <EyeOff className="w-3.5 h-3.5 shrink-0" />
                           <div>
-                            <span className="block">Anúncios não personalizados</span>
-                            <span className="block text-[9px] text-[var(--text-secondary)]">Sem rastreamento, relevantes por contexto</span>
+                            <span className="block">{t("cookie.banner.ads_nonpersonalized")}</span>
+                            <span className="block text-[9px] text-[var(--text-secondary)]">{t("cookie.banner.ads_nonpersonalized_hint")}</span>
                           </div>
                         </button>
                         <button
-                          onClick={() => { acceptWithAds("none"); track({ type: "external_link", url: "cookie-analytics-only", label: "Só analytics" }); }}
+                          onClick={() => { acceptWithAds("none"); track({ type: "external_link", url: "cookie-analytics-only", label: "Analytics only" }); }}
                           className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors text-left"
                         >
                           <Cookie className="w-3.5 h-3.5 shrink-0" />
                           <div>
-                            <span className="block">Só analytics, sem anúncios</span>
-                            <span className="block text-[9px] text-[var(--text-secondary)]">Apenas page views anônimos</span>
+                            <span className="block">{t("cookie.banner.analytics_only")}</span>
+                            <span className="block text-[9px] text-[var(--text-secondary)]">{t("cookie.banner.analytics_only_hint")}</span>
                           </div>
                         </button>
                       </div>
                       <button
-                        onClick={() => { setShowAdsOptions(false); track({ type: "external_link", url: "cookie-back", label: "Voltar cookies" }); }}
+                        onClick={() => { setShowAdsOptions(false); track({ type: "external_link", url: "cookie-back", label: "Back to cookie choices" }); }}
                         className="text-[10px] font-mono text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors mt-1"
                       >
-                        ← Voltar
+                        {t("cookie.banner.back")}
                       </button>
                     </div>
                   )}

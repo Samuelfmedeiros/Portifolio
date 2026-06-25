@@ -230,6 +230,14 @@ export const dict = {
     "cookie.banner.decline": "Recusar",
     "cookie.banner.accept_all": "Aceitar tudo",
     "cookie.banner.customize": "Personalizar",
+    "cookie.banner.ads_choice": "Escolha o nível de anúncios:",
+    "cookie.banner.ads_personalized": "Anúncios personalizados",
+    "cookie.banner.ads_personalized_hint": "Melhores sugestões, usam cookies",
+    "cookie.banner.ads_nonpersonalized": "Anúncios não personalizados",
+    "cookie.banner.ads_nonpersonalized_hint": "Sem rastreamento, relevantes por contexto",
+    "cookie.banner.analytics_only": "Só analytics, sem anúncios",
+    "cookie.banner.analytics_only_hint": "Apenas page views anônimos",
+    "cookie.banner.back": "← Voltar",
     "cookie.banner.privacy": "Política de Privacidade",
 
     // ── Accessibility ──
@@ -488,6 +496,14 @@ export const dict = {
     "cookie.banner.decline": "Decline",
     "cookie.banner.accept_all": "Accept all",
     "cookie.banner.customize": "Customize",
+    "cookie.banner.ads_choice": "Choose ad level:",
+    "cookie.banner.ads_personalized": "Personalized ads",
+    "cookie.banner.ads_personalized_hint": "Better suggestions, use cookies",
+    "cookie.banner.ads_nonpersonalized": "Non-personalized ads",
+    "cookie.banner.ads_nonpersonalized_hint": "No tracking, context-relevant",
+    "cookie.banner.analytics_only": "Analytics only, no ads",
+    "cookie.banner.analytics_only_hint": "Anonymous page views only",
+    "cookie.banner.back": "← Back",
     "cookie.banner.privacy": "Privacy Policy",
 
     // ── Accessibility ──
