@@ -238,6 +238,34 @@ const PROJECTS_EN: Record<string, ProjectI18n> = {
   },
 };
 
+/* ──────────────────── ABOUT TEXT ──────────────────── */
+
+const ABOUT_PT = {
+  title: "Sobre Samuel Medeiros",
+  role: "Desenvolvedor Full Stack & Analista de Dados",
+  paragraphs: [
+    'Sou <strong>Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.',
+    'No desenvolvimento, trabalho com <strong>Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).',
+    'Na análise de dados, sou especialista em <strong>Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.',
+    'Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.',
+  ],
+};
+
+const ABOUT_EN = {
+  title: "About Samuel Medeiros",
+  role: "Full Stack Developer & Data Analyst",
+  paragraphs: [
+    'I\'m <strong>Samuel Medeiros</strong>, a Full Stack Developer and Data Analyst based in Brasília/DF. My work combines software engineering with data analysis — I build complete web platforms while extracting strategic insights from complex data.',
+    'In development, I work with <strong>Next.js, React, TypeScript, FastAPI and Python</strong> to build scalable applications. My stack includes Supabase for backend-as-a-service, Cloudflare for deployment and edge computing, Docker for containerization, and PostgreSQL for relational databases. I\'ve delivered projects like an intelligent scraper with semantic RAG (Arachne), a multi-tenant personal hub (Capivara), and a pet marketplace with Stripe payments (DogWalk).',
+    'In data analysis, I specialize in <strong>Power BI, SQL and Python</strong> — creating interactive dashboards, ETL pipelines, and predictive models with machine learning. My experience at the National Water Agency (ANA) involved large-scale water data analysis, process automation and executive reports for decision-making in public policy.',
+    'I\'m currently pursuing a Postgraduate degree in Data Science and Machine Learning Engineering at IESB, and maintain continuous learning in local LLMs (Ollama, llama.cpp), CI/CD with GitHub Actions, and serverless architectures. I believe quality technology starts with clean code, automated testing and clear documentation.',
+  ],
+};
+
+export function getAbout(locale: Locale) {
+  return locale === "en" ? ABOUT_EN : ABOUT_PT;
+}
+
 /* ──────────────────── EXPORTS ──────────────────── */
 
 export type Locale = "pt" | "en";

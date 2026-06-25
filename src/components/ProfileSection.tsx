@@ -12,7 +12,7 @@ import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
-import { getTimeline, getSkills } from "@/lib/profileData";
+import { getTimeline, getSkills, getAbout } from "@/lib/profileData";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
@@ -586,7 +586,8 @@ function AboutModal({ onClose }: { onClose: () => void }) {
       document.body.style.overflow = '';
     };
   }, [onClose]);
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const about = getAbout(locale || "pt");
 
   return (
     <motion.div
@@ -619,8 +620,8 @@ function AboutModal({ onClose }: { onClose: () => void }) {
                 </svg>
               </div>
               <div>
-                <h3 className="font-semibold text-sm md:text-base">Sobre Samuel Medeiros</h3>
-                <p className="text-xs font-mono text-[var(--text-secondary)]">Desenvolvedor Full Stack & Analista de Dados</p>
+                <h3 className="font-semibold text-sm md:text-base">{about.title}</h3>
+                <p className="text-xs font-mono text-[var(--text-secondary)]">{about.role}</p>
               </div>
             </div>
             <button
@@ -636,18 +637,9 @@ function AboutModal({ onClose }: { onClose: () => void }) {
 
           {/* Content */}
           <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
-            <p>
-              Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
-            </p>
-            <p>
-              No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
-            </p>
-            <p>
-              Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
-            </p>
-            <p>
-              Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
-            </p>
+            {about.paragraphs.map((p, i) => (
+              <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
+            ))}
           </div>
         </div>
       </motion.div>
