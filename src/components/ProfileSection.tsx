@@ -958,7 +958,7 @@ export function ProfileSection() {
                 transition-all duration-300"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10 font-semibold tracking-wide">Ver projetos</span>
+              <span className="relative z-10 font-semibold tracking-wide">{t("hero.btn.projects")}</span>
               <svg className="w-5 h-5 relative z-10 ml-2 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -979,8 +979,8 @@ export function ProfileSection() {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              <span className="relative z-10 font-semibold ml-1.5">Baixar Curriculo</span>
-              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">— PDF</span>
+              <span className="relative z-10 font-semibold ml-1.5">{t("hero.btn.cv")}</span>
+              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">{t("hero.btn.cv.pdf")}</span>
             </button>
           </motion.div>
         </div>
@@ -1003,7 +1003,7 @@ export function ProfileSection() {
                 </svg>
               </span>
             </div>
-            <p className="text-[10px] font-mono text-[var(--text-secondary)]/50 mt-1">Clique para ler sobre mim</p>
+            <p className="text-[10px] font-mono text-[var(--text-secondary)]/50 mt-1">{t("profile.about.click_hint")}</p>
           </button>
         </div>
       </div>

@@ -86,6 +86,7 @@ const extractTechTags = (repo: Repo): string[] => {
 };
 
 function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; onSelect?: (repo: Repo) => void }) {
+  const { t } = useLanguage();
   const isFeatured = FEATURED.includes(repo.name);
   const hasLink = !!(repo.homepage || repo.hasDemo);
   const techTags = extractTechTags(repo);
@@ -136,7 +137,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
         {isFeatured && (
           <div className="absolute top-3 right-3 z-20">
             <span className="text-[9px] font-mono text-[var(--accent)] border border-[var(--accent)]/40 px-2 py-0.5 rounded bg-[var(--accent)]/10 backdrop-blur-sm">
-              ★ FEATURED
+              {t("projects.featured")}
             </span>
           </div>
         )}
@@ -178,7 +179,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             {/* Play overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-all duration-300 flex items-center justify-center">
               <span className="opacity-0 group-hover/image:opacity-100 text-white font-mono text-xs tracking-widest transition-opacity duration-300 flex items-center gap-1">
-                ▶ ACESSAR
+                {t("projects.access")}
               </span>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
@@ -276,7 +277,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
               >
                 <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                VER REPOSITÓRIO
+                {t("projects.view.github")}
               </a>
             ) : (repo.homepage || repo.hasDemo) ? (
               <a
@@ -286,7 +287,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
               >
                 <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
-                SITE
+                {t("projects.view.live")}
               </a>
             ) : null}
           </div>
@@ -295,7 +296,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
           {getProjectAffiliates(repo.name).length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-[var(--border)]/20">
               <span className="text-[8px] font-mono text-[var(--text-secondary)]/40 self-center">
-                powered by
+                {t("projects.powered_by")}
               </span>
               {getProjectAffiliates(repo.name).map((aff) => (
                 <a
