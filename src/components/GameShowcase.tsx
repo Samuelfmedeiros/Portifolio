@@ -130,7 +130,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
               <div className="flex items-center justify-center h-[450px] md:h-[550px] bg-[var(--bg-primary)]">
                 <div className="flex flex-col items-center gap-3">
                   <div className="w-8 h-8 border-2 border-[var(--accent)] border-t-transparent rounded-full animate-spin" />
-                  <span className="text-xs font-mono text-[var(--text-secondary)] animate-pulse">Carregando jogo...</span>
+                  <span className="text-xs font-mono text-[var(--text-secondary)] animate-pulse">{t("games.loading", "Carregando jogo...")}</span>
                 </div>
               </div>
             )}

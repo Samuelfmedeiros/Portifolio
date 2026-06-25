@@ -12,6 +12,7 @@ import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { getTimeline, getSkills } from "@/lib/profileData";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
@@ -391,8 +392,9 @@ function CircuitLines() {
 
 /* ──────────────────── SKILLS GRID ──────────────────── */
 
-function SkillsCompact() {
+function SkillsCompact({ items }: { items?: typeof skills }) {
   const { t } = useLanguage();
+  const data = items || skills;
   return (
     <div className="mb-8">
       <motion.h2
@@ -403,7 +405,7 @@ function SkillsCompact() {
         {t("profile.skills.heading", "▸ HABILIDADES")}
       </motion.h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
-        {skills.map((skill, i) => (
+        {data.map((skill, i) => (
           <motion.div
             key={skill.name}
             initial={{ opacity: 0, y: 20 }}
@@ -624,7 +626,7 @@ function AboutModal({ onClose }: { onClose: () => void }) {
             <button
               onClick={onClose}
               className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
-              aria-label="Fechar"
+              aria-label={t("aria.close")}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -658,6 +660,7 @@ function AboutModal({ onClose }: { onClose: () => void }) {
 function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true, onClose);
+  const { t } = useLanguage();
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleKey);
@@ -706,7 +709,7 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
             <button
               onClick={onClose}
               className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
-              aria-label="Fechar"
+              aria-label={t("aria.close")}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -764,7 +767,7 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -775,6 +778,18 @@ export function ProfileSection() {
   const [showAboutModal, setShowAboutModal] = useState(false);
   const TIMELINE_DEFAULT_COUNT = 7;
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+
+  // Locale-aware data
+  const lang = locale || "pt";
+  const localizedSkills = useMemo(() => {
+    if (lang === "pt") return skills;
+    return getSkills("en").items.map((en, i) => ({
+      ...skills[i],
+      name: en.name ?? skills[i].name,
+      description: en.description ?? skills[i].description,
+      category: en.category ?? skills[i].category,
+    }));
+  }, [lang]);
 
   // Track section view
   useEffect(() => {
@@ -1013,7 +1028,7 @@ export function ProfileSection() {
         style={{ y: contentY }}
         className="relative z-10 max-w-4xl mx-auto"
       >
-        <SkillsCompact />
+        <SkillsCompact items={localizedSkills} />
 
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
         <div id="jornada" className="scroll-mt-20 pb-16 md:pb-20">

@@ -5,10 +5,12 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 
 export const BackToTop = memo(function BackToTop() {
   const [visible, setVisible] = useState(false);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
 
   useEffect(() => {
     let ticking = false;
@@ -40,8 +42,8 @@ export const BackToTop = memo(function BackToTop() {
           transition={{ duration: 0.2 }}
           onClick={handleClick}
           className="fixed bottom-6 right-6 z-50 p-3 rounded-full bg-[var(--accent)]/20 backdrop-blur-md border border-[var(--accent)]/40 text-[var(--accent)] hover:bg-[var(--accent)]/30 transition-colors shadow-lg"
-          aria-label="Voltar ao topo"
-          title="Voltar ao topo"
+          aria-label={t("aria.scroll.top")}
+          title={t("aria.scroll.top")}
         >
           <ArrowUp className="w-5 h-5" aria-hidden="true" />
         </motion.button>
