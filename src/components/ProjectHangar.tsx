@@ -368,7 +368,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
 
       {/* Stats bar */}
       <div className="flex items-center justify-center gap-4 mb-6 font-mono text-xs text-[var(--text-secondary)]">
-        <span>{repos.length} projeto{repos.length !== 1 ? "s" : ""}</span>
+        <span>{t("projects.count").replace("{count}", String(repos.length))}</span>
       </div>
 
       {/* Cards grid */}

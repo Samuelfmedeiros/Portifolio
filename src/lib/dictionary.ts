@@ -84,6 +84,7 @@ export const dict = {
 
     // ── Projects (ProjectHangar) ──
     "projects.section.title": "▸ PROJETOS",
+    "projects.count": "{count} projetos",
     "projects.featured": "★ DESTAQUE",
     "projects.access": "▶ ACESSAR",
     "projects.powered_by": "powered by",
@@ -341,6 +342,7 @@ export const dict = {
 
     // ── Projects ──
     "projects.section.title": "▸ PROJECTS",
+    "projects.count": "{count} projects",
     "projects.featured": "★ FEATURED",
     "projects.access": "▶ ACCESS",
     "projects.powered_by": "powered by",

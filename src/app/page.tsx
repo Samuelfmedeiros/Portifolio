@@ -34,7 +34,7 @@ async function HangarWithData() {
 
   return (
     <>
-      <ProjectHangar repos={projects} title="▸ PROJETOS" />
+      <ProjectHangar repos={projects} />
       {games.length > 0 && (
         <section id="games" className="scroll-mt-20">
           <GameShowcase repos={games} />
