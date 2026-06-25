@@ -790,6 +790,19 @@ export function ProfileSection() {
       category: en.category ?? skills[i].category,
     }));
   }, [lang]);
+  const localizedTimeline = useMemo(() => {
+    if (lang === "pt") return timeline;
+    const enTimeline = getTimeline("en");
+    return timeline.map((item, i) => ({
+      ...item,
+      title: enTimeline[i]?.title ?? item.title,
+      company: enTimeline[i]?.company ?? item.company,
+      description: enTimeline[i]?.description ?? item.description,
+      period: enTimeline[i]?.period ?? item.period,
+      tags: enTimeline[i]?.tags ?? item.tags,
+      skillsUsed: enTimeline[i]?.skillsUsed ?? item.skillsUsed,
+    }));
+  }, [lang]);
 
   // Track section view
   useEffect(() => {
@@ -834,7 +847,7 @@ export function ProfileSection() {
   > = [];
   let lastType: string | null = null;
   let pastCutoff = false;
-  for (const [i, item] of timeline.entries()) {
+  for (const [i, item] of localizedTimeline.entries()) {
     if (!showFullTimeline && i >= TIMELINE_DEFAULT_COUNT) pastCutoff = true;
     if (lastType !== null && item.type !== lastType) {
       const cfg = typeConfig[item.type];
