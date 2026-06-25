@@ -2,7 +2,7 @@
 
 import { useState, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cookie, X, Eye, EyeOff, ShieldCheck } from "lucide-react";
+import { Cookie, X, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { useAnalytics } from "@/hooks/useAnalytics";
 
@@ -142,25 +142,24 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                   </p>
 
                   {!showAdsOptions ? (
-                    <div className="flex gap-2 flex-wrap">
-                      <button
-                        onClick={() => { setShowAdsOptions(true); track({ type: "external_link", url: "cookie-customize", label: "Personalizar cookies" }); }}
-                        className="px-4 py-2 rounded-lg font-mono text-xs bg-[var(--accent)]/20 text-[var(--accent)] border border-[var(--accent)]/40 hover:bg-[var(--accent)]/30 transition-colors flex items-center gap-1.5"
-                      >
-                        <ShieldCheck className="w-3.5 h-3.5" />
-                        Personalizar
-                      </button>
+                    <div className="flex items-center gap-2 flex-nowrap">
                       <button
                         onClick={() => { acceptWithAds("non-personalized"); track({ type: "external_link", url: "cookie-accept-all", label: "Aceitar tudo cookies" }); }}
-                        className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)]/50 hover:bg-[var(--border)]/10 transition-colors"
+                        className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
                       >
                         Aceitar tudo
                       </button>
                       <button
                         onClick={() => { decline(); track({ type: "external_link", url: "cookie-decline", label: "Recusar cookies" }); }}
-                        className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors"
+                        className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
                       >
                         Recusar
+                      </button>
+                      <button
+                        onClick={() => { setShowAdsOptions(true); track({ type: "external_link", url: "cookie-customize", label: "Personalizar cookies" }); }}
+                        className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors shrink-0"
+                      >
+                        Personalizar
                       </button>
                     </div>
                   ) : (
