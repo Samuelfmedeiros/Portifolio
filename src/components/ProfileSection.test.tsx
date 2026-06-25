@@ -46,12 +46,12 @@ describe("ProfileSection", () => {
 
   it("renders CTA button Ver projetos", () => {
     render(<ProfileSection />);
-    expect(screen.getByText("Ver projetos")).toBeInTheDocument();
+    expect(screen.getByText("Ver Projetos")).toBeInTheDocument();
   });
 
   it("renders CTA button Baixar Curriculo", () => {
     render(<ProfileSection />);
-    expect(screen.getByText("Baixar Curriculo")).toBeInTheDocument();
+    expect(screen.getByText("Baixar Currículo")).toBeInTheDocument();
   });
 
   it("renders all 7 timeline items (default expanded via P2)", () => {
@@ -88,13 +88,13 @@ describe("ProfileSection", () => {
 
   it("renders Ver projetos link pointing to #projects", () => {
     render(<ProfileSection />);
-    const link = screen.getByText("Ver projetos");
+    const link = screen.getByText("Ver Projetos");
     expect(link.closest("a")).toHaveAttribute("href", "#projects");
   });
 
   it("renders Baixar Curriculo as button that opens download modal", () => {
     render(<ProfileSection />);
-    const btn = screen.getByRole("button", { name: /Baixar Curriculo/i });
+    const btn = screen.getByRole("button", { name: /Baixar Currículo/i });
     expect(btn).toBeInTheDocument();
   });
 });
