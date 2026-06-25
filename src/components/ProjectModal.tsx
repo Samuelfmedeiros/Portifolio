@@ -5,6 +5,7 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { useLanguage } from "@/lib/i18n";
 import type { Repo } from "@/lib/types";
 
 interface ProjectModalProps {
@@ -56,6 +57,7 @@ const getTagStyle = (tech: string) => {
 };
 
 export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
+  const { t } = useLanguage();
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, open, onClose);
 
@@ -135,7 +137,7 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
                 <button
                   onClick={onClose}
                   className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors shrink-0"
-                  aria-label="Fechar"
+                  aria-label={t("modal.close")}
                 >
                   <X className="w-3.5 h-3.5" />
                 </button>
