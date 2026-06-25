@@ -10,6 +10,7 @@ import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { getProjectI18n } from "@/lib/profileData";
 import { ProjectModal } from "./ProjectModal";
 
 const FEATURED = FEATURED_PROJECTS;
@@ -86,10 +87,16 @@ const extractTechTags = (repo: Repo): string[] => {
 };
 
 function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; onSelect?: (repo: Repo) => void }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+
+  // Locale-aware project description
+  const projI18n = getProjectI18n(locale || "pt", repo.name);
+  const localizedDescription = projI18n?.description || repo.description;
+  const localizedTopics = projI18n?.topics || repo.topics;
+
   const isFeatured = FEATURED.includes(repo.name);
   const hasLink = !!(repo.homepage || repo.hasDemo);
-  const techTags = extractTechTags(repo);
+  const techTags = extractTechTags({ ...repo, description: localizedDescription, topics: localizedTopics });
   const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
   const updated = repo.pushed_at
     ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
@@ -163,7 +170,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             {repo.imageUrl ? (
               <Image
                 src={repo.imageUrl}
-                alt={repo.description ? `${repo.name} — ${repo.description.slice(0, 80)}` : `Projeto ${repo.name}`}
+                alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
                 fill
                 className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
                 unoptimized
@@ -201,7 +208,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             {repo.imageUrl ? (
               <Image
                 src={repo.imageUrl}
-                alt={repo.description ? `${repo.name} — ${repo.description.slice(0, 80)}` : `Projeto ${repo.name}`}
+                alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
                 fill
                 className="absolute inset-0 w-full h-full object-cover"
                 unoptimized
@@ -226,7 +233,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 
           {/* Description */}
           <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 mt-1">
-            {repo.description || "No description provided"}
+            {localizedDescription || "No description provided"}
           </p>
 
           {/* Tech tags */}
