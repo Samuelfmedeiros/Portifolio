@@ -9,3 +9,7 @@ export {
   StripeConsultingCTA,
   StripeConsultingIcon,
 } from "./StripeConsulting";
+export {
+  MpConsultingCTA,
+  MpConsultingIcon,
+} from "./MpConsultingButton";
