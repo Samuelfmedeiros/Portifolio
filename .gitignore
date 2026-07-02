@@ -42,3 +42,26 @@ _tmp_*
 next-env.d.ts
 node_modules_old/
 .env.stripe
+
+# SECURITY: Audio and transcription files
+audio_*
+transcribe_input*
+*.ogg
+*.wav
+*.mp3
+*.opus
+*.flac
+
+# SECURITY: Screenshots
+*screenshot*.png
+*screenshot*.jpg
+*print*.png
+*captura*.png
+*snapshot*.png
+
+# SECURITY: Uploads and sensitive data
+uploads/
+temp/
+*.log
+secrets/
+*.key
