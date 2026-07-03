@@ -13,7 +13,7 @@ Criar um **Stripe Payment Link** para "Consultoria / Contratação" que permita:
 ## 📋 Checklist
 
 - [x] Conta Stripe existente (usada pelo PataPass/Dogwalk)
-- [x] Publishable key configurada: `pk_live_51TgFhoJ9IBwdHn6XBzWqZnGaEXRIu3vcgcuPRvfsVL6hFSdxYoh2igfEKKNpaUZjnwkzxPVBOwhYfNar9xyp7ig500hbd8BZww`
+- [x] Publishable key configurada ✅ (stored em Cloudflare Secrets, não expor em docs)
 - [ ] **Secret key não encontrada** — está nos secrets do Cloudflare Pages + Supabase Edge Functions (criptografado)
 - [ ] Stripe Product "Consultoria" criado
 - [ ] Stripe Price criado
@@ -62,7 +62,7 @@ curl https://api.stripe.com/v1/payment_links \
 ```env
 # Stripe — Link de consultoria
 NEXT_PUBLIC_STRIPE_CONSULTING_LINK=https://buy.stripe.com/...
-NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_51TgFhoJ9IBwdHn6XBzWqZnGaEXRIu3vcgcuPRvfsVL6hFSdxYoh2igfEKKNpaUZjnwkzxPVBOwhYfNar9xyp7ig500hbd8BZww
+# NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=(definida via CI/CD, não expor em docs)
 ```
 
 ## 📊 Analytics
