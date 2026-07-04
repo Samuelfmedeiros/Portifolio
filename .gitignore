@@ -67,3 +67,4 @@ temp/
 *.log
 secrets/
 *.key
+.tokensave
