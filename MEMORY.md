@@ -39,3 +39,12 @@ Registro automático de commits. Atualizado pelo hook post-commit.
 | Tipo | 📖 docs |
 | Arquivos | 2 arquivos (+9/-2) |
 
+
+## 2026-07-03 21:16
+| Campo | Valor |
+|-------|-------|
+| Commit | `67c82ac` |
+| Mensagem | docs: atualiza README.md, cria ARCHITECTURE.md |
+| Tipo | 📖 docs |
+| Arquivos | 1 arquivos (+36/-0) |
+
