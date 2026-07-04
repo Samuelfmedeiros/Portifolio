@@ -104,3 +104,10 @@ Adição de recursos de apoio:
 ---
 
 > *Histórico vivo — atualizado em Julho de 2026.*
+
+## 2026-07-03 21:04
+| Evento | Detalhe |
+|--------|---------|
+| Versão | version": "0.1.0 |
+| Commit | `8368142` |
+| Nova versão: version": "0.1.0 (tag anterior: v0.1.0) | |
