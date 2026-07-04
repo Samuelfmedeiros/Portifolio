@@ -30,3 +30,12 @@ Registro automático de commits. Atualizado pelo hook post-commit.
 | Tipo | 📖 docs |
 | Arquivos | 1 arquivos (+7/-0) |
 
+
+## 2026-07-03 21:13
+| Campo | Valor |
+|-------|-------|
+| Commit | `1dfd654` |
+| Mensagem | docs: auto-update AGENTS.md + HISTORY.md |
+| Tipo | 📖 docs |
+| Arquivos | 2 arquivos (+9/-2) |
+
