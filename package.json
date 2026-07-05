@@ -19,13 +19,13 @@
   "dependencies": {
     "@supabase/supabase-js": "^2.105.3",
     "framer-motion": "^12.38.0",
+    "gsap": "^3.12.5",
     "lucide-react": "^1.14.0",
-    "next": "^16.2.9",
+    "mercadopago": "^3.2.0",
+    "next": "^9.3.3",
     "react": "19.2.4",
     "react-dom": "19.2.4",
-    "stripe": "^22.2.1",
-    "mercadopago": "^2.11.0",
-    "gsap": "^3.12.5"
+    "stripe": "^22.2.1"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.11.3",
@@ -42,10 +42,10 @@
     "eslint": "^9",
     "eslint-config-next": "16.2.5",
     "jsdom": "^29.1.1",
-    "netlify-cli": "^26.0.1",
+    "netlify-cli": "^24.0.1",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "vercel": "^53.2.0",
+    "vercel": "^50.41.0",
     "vitest": "^4.1.5"
   },
   "overrides": {
