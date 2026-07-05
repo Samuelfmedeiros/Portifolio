@@ -2,9 +2,13 @@
 const path = require('path');
 
 /** @type {import('next').NextConfig} */
+
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
+
+  // Fix workspace root inference (stray pnpm-lock in home dir)
+  outputFileTracingRoot: path.join(__dirname),
 
   // Headers de segurança
   async headers() {
