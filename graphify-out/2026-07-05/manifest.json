@@ -20,13 +20,13 @@
     "semantic_hash": ""
   },
   "next.config.js": {
-    "mtime": 1783237784.8371582,
-    "ast_hash": "3af779ed4a1df38c635ad4e4b66ff4c6",
+    "mtime": 1781960180.6739151,
+    "ast_hash": "3c49dbbc5688a6c2416a611686a2dc6a",
     "semantic_hash": ""
   },
   "package.json": {
-    "mtime": 1783237469.3542764,
-    "ast_hash": "b90f7228c68d7c986141909608700def",
+    "mtime": 1782875851.66997,
+    "ast_hash": "d9c8798bb75be55f197267a2cbd01893",
     "semantic_hash": ""
   },
   "playwright.config.ts": {
@@ -740,8 +740,8 @@
     "semantic_hash": ""
   },
   "AGENTS.md": {
-    "mtime": 1783239278.0449088,
-    "ast_hash": "91e71777b83fe53f436592f1b057669c",
+    "mtime": 1783155677.1444347,
+    "ast_hash": "459c0fab365c00a5b709b81711278a7d",
     "semantic_hash": ""
   },
   "CLAUDE.md": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "MEMORY.md": {
-    "mtime": 1783239215.1382763,
-    "ast_hash": "ffc3c45f1976415ce59726866d96b294",
+    "mtime": 1783155660.3509057,
+    "ast_hash": "0d4a136b3f1137f6c7227d79267545e6",
     "semantic_hash": ""
   },
   "PLAN.md": {
@@ -800,8 +800,8 @@
     "semantic_hash": ""
   },
   "docs/HISTORY.md": {
-    "mtime": 1783234970.1490536,
-    "ast_hash": "86d222685a7a019e558fff78ae4af0de",
+    "mtime": 1783125591.4753397,
+    "ast_hash": "649e9b7336da1ab1de6e51e8a45a337b",
     "semantic_hash": ""
   },
   "docs/MONETIZACAO_CAPIVARA.md": {
