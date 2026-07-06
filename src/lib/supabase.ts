@@ -1,12 +1,19 @@
-import { createClient, type SupabaseClient } from "@supabase/supabase-js";
-
-function createSupabaseClient(): SupabaseClient | null {
-  const url = process.env.NEXT_PUBLIC_SUPABASE_URL || "https://jwsdquwkrkonkqghyfns.supabase.co";
-  const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || "sb_publishable_9z5AeU_t109CUZ4047kyrg_UIijpL6C";
-
-  return createClient(url, key);
+/**
+ * Contact form submission via backend API.
+ * Supabase client removed — was previously used for submissions.
+ * Now uses the Portifolio backend API directly.
+ */
+export async function submitContactForm(data: { name: string; email: string; message: string }) {
+  try {
+    const res = await fetch('/api/contact', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+    })
+    if (!res.ok) throw new Error(`HTTP ${res.status}`)
+    return await res.json()
+  } catch (err) {
+    console.error('Contact form submission failed:', err)
+    return null
+  }
 }
-
-export const supabase = createSupabaseClient();
-
-export type { Message } from "@/lib/types";

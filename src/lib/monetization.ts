@@ -83,9 +83,9 @@ export const AFFILIATE_LINKS: AffiliateLink[] = [
     active: true,
   },
   {
-    key: "supabase",
-    name: "Supabase",
-    url: "https://supabase.com/?ref=samuelmedeiros",
+    key: "fastapi",
+    name: "FastAPI + SQLite",
+    url: "https://fastapi.tiangolo.com/?ref=samuelmedeiros",
     category: "database",
     active: true,
   },
@@ -109,7 +109,7 @@ export function getActiveAffiliates(category?: AffiliateLink["category"]): Affil
 export const PROJECT_AFFILIATES: Record<string, string[]> = {
   "seu.pet": [],
   "portifolio": ["vercel"],
-  DogWalk: ["supabase", "cloudflare"],
+  DogWalk: ["fastapi-sqlite", "cloudflare"],
 };
 
 /** Get affiliate keys for a project name */

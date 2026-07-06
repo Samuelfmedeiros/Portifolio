@@ -35,7 +35,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 - `src/app/` — App Router (layout, metadata, API routes, pages)
 - `src/components/` — Hero, Profile, Projects, Games, Contact, Navbar, Terminal
 - `src/hooks/` — useAnalytics, useLocalStorage
-- `src/lib/` — GitHub API, Supabase client, types, fallback data
+- `src/lib/` — GitHub API, types, fallback data
 - `src/test/` — Vitest setup + mocks
 - `src/components/MiniGames/` — Código dos 5 jogos (React)
 
