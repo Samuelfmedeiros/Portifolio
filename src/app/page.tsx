@@ -11,7 +11,7 @@ import { ContactForm } from "@/components/ContactForm";
 async function HangarWithData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter(
-    (r) => r.name !== "SamuelFmedeiros" && r.name !== "arachne-mcp"
+    (r) => r.name !== "SamuelFmedeiros" && r.name !== "arachne-mcp" && r.name !== "Arachne_Os_Crawl"
   );
 
   // Merge static + API, deduplicating by name (static data takes precedence for featured fields)

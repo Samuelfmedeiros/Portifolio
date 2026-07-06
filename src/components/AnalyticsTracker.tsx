@@ -1,15 +1,15 @@
 "use client";
 
 import { useEffect } from "react";
-import { supabase } from "@/lib/supabase";
 
 export function AnalyticsTracker() {
   useEffect(() => {
-    if (!supabase) return;
+    // Page view tracking via Umami (configured in layout)
+    // Legacy Supabase RPC removed — using Umami analytics instead
     const path = window.location.pathname;
-    supabase.rpc("increment_page_view", { page: path }).then(({ error }) => {
-      if (error) console.debug("Analytics:", error.message);
-    });
+    if (path && typeof window !== "undefined" && (window as any).umami) {
+      (window as any).umami.track?.({ url: path });
+    }
   }, []);
 
   return null;
