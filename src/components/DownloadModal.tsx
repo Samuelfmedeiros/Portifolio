@@ -6,6 +6,7 @@ import { Download, X, User, Mail, Shield } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { submitCVDownload } from "@/lib/supabase";
 
 interface DownloadModalProps {
   open: boolean;
@@ -54,6 +55,9 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
         hasName: !!name.trim(),
         hasEmail: !!email.trim(),
       });
+
+      // Persistir no PG18 via Capivara
+      submitCVDownload({ name: name || undefined, email: email || undefined, consent: true });
 
       // Download do PDF
       const blob = await res.blob();
