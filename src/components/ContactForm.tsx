@@ -4,7 +4,7 @@ import { useState, useRef, FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Radio, Send, CheckCircle, Copy, Check } from "lucide-react";
 import { GlassCard } from "./GlassCard";
-import { supabase } from "@/lib/supabase";
+import { submitContactForm } from "@/lib/supabase";
 import type { FormStatus } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
@@ -48,37 +48,33 @@ export function ContactForm() {
     lastSentRef.current = now;
     setStatus("sending");
 
-    if (!supabase) {
+    // Enviar via backend API local
+    const result = await submitContactForm({
+      name,
+      email,
+      message: content,
+    });
+
+    if (!result) {
       setStatus("error");
-      setErrorMessage("⚠ Banco de dados indisponível.");
+      setErrorMessage(t("contact.error"));
+      track({ type: "contact_error", error: "api" });
       return;
     }
 
-    const { error } = await supabase.from("contact_messages").insert({
-      name,
-      email,
-      content,
-    });
+    // Notify via API route (email + Telegram) — não bloqueia o form
+    fetch("/api/contact-notify", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, email, content }),
+    }).catch(() => {}); // fire-and-forget
 
-    if (error) {
-      console.error("Supabase error:", error);
-      setStatus("error");
-      track({ type: "contact_error", error: "supabase" });
-    } else {
-      // Notify via API route (email + Telegram) — não bloqueia o form
-      fetch("/api/contact-notify", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, email, content }),
-      }).catch(() => {}); // fire-and-forget
-
-      setStatus("sent");
-      setName("");
-      setEmail("");
-      setContent("");
-      setLgpdConsent(false);
-      track({ type: "contact_submit" });
-    }
+    setStatus("sent");
+    setName("");
+    setEmail("");
+    setContent("");
+    setLgpdConsent(false);
+    track({ type: "contact_submit" });
   };
 
   return (
