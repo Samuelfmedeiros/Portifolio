@@ -1,6 +1,6 @@
 "use client";
 
-import { motion, AnimatePresence, MotionValue, useScroll, useTransform, useInView } from "framer-motion";
+import { motion, AnimatePresence, MotionValue, useScroll, useTransform } from "framer-motion";
 import { useRef, useMemo, useState, useEffect, useCallback } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
@@ -12,7 +12,6 @@ import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
-import { getTimeline, getSkills, getAbout } from "@/lib/profileData";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
@@ -392,9 +391,8 @@ function CircuitLines() {
 
 /* ──────────────────── SKILLS GRID ──────────────────── */
 
-function SkillsCompact({ items }: { items?: typeof skills }) {
+function SkillsCompact() {
   const { t } = useLanguage();
-  const data = items || skills;
   return (
     <div className="mb-8">
       <motion.h2
@@ -405,12 +403,12 @@ function SkillsCompact({ items }: { items?: typeof skills }) {
         {t("profile.skills.heading", "▸ HABILIDADES")}
       </motion.h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
-        {data.map((skill, i) => (
+        {skills.map((skill, i) => (
           <motion.div
             key={skill.name}
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, delay: i * 0.03 }}
+            transition={{ duration: 0.4, delay: i * 0.08 }}
             viewport={{ once: true }}
             className="group relative"
           >
@@ -458,7 +456,7 @@ function SkillsCompact({ items }: { items?: typeof skills }) {
                   <motion.div
                     initial={{ width: 0 }}
                     whileInView={{ width: `${levelWidth[skill.level]}%` }}
-                    transition={{ duration: 1, delay: 0.2 + i * 0.03, ease: "easeOut" }}
+                    transition={{ duration: 1, delay: 0.3 + i * 0.08, ease: "easeOut" }}
                     className="h-full rounded-full bg-gradient-to-r"
                     style={{
                       background: `linear-gradient(90deg, var(--accent), var(--accent-alt, #7c3aed))`,
@@ -483,8 +481,6 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
   isSelected?: boolean;
 }) {
   const isLast = index === timeline.length - 1;
-  const dotRef = useRef<HTMLDivElement>(null);
-  const isInView = useInView(dotRef, { amount: 0.5, once: false });
 
   return (
     <motion.div
@@ -496,23 +492,9 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
       {!isLast && (
         <div className="absolute left-[11px] top-6 bottom-0 w-px bg-gradient-to-b from-[var(--accent)]/60 to-transparent" />
       )}
-      <motion.div
-        ref={dotRef}
-        className="absolute left-0 top-5 w-3.5 h-3.5 rounded-full border-2 flex items-center justify-center"
-        style={{ borderColor: isInView ? "var(--accent)" : "var(--border)" }}
-        animate={{
-          scale: isInView ? 1.3 : 1,
-          backgroundColor: isInView ? "var(--accent)" : "var(--bg-primary)",
-        }}
-        transition={{ duration: 0.3, ease: "easeOut" }}
-      >
-        <motion.div
-          className="w-1.5 h-1.5 rounded-full"
-          style={{ backgroundColor: isInView ? "var(--bg-primary)" : "var(--accent)" }}
-          animate={{ scale: isInView ? 1.2 : 1 }}
-          transition={{ duration: 0.3 }}
-        />
-      </motion.div>
+      <div className="absolute left-0 top-5 w-3.5 h-3.5 rounded-full border-2 border-[var(--accent)] bg-[var(--bg-primary)] flex items-center justify-center">
+        <div className="w-1.5 h-1.5 rounded-full bg-[var(--accent)] animate-pulse" />
+      </div>
       <GlassCard 
         onClick={() => onSelect?.(item)}
         className={`py-2.5 px-3.5 cursor-pointer transition-all duration-200
@@ -572,87 +554,11 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
   );
 }
 
-/* ──────────────────── ABOUT MODAL ──────────────────── */
-
-function AboutModal({ onClose }: { onClose: () => void }) {
-  const modalRef = useRef<HTMLDivElement>(null);
-  useFocusTrap(modalRef, true, onClose);
-  useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handleKey);
-    document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
-  const { t, locale } = useLanguage();
-  const about = getAbout(locale || "pt");
-
-  return (
-    <motion.div
-      ref={modalRef}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.2 }}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-black/60"
-      onClick={onClose}
-      role="dialog"
-      aria-modal="true"
-      aria-label={t("profile.about.heading", "Sobre")}
-    >
-      <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-        className="bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl"
-        onClick={(e) => e.stopPropagation()}
-      >
-        <div className="p-5">
-          {/* Header */}
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center gap-3">
-              <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-                <svg className="w-5 h-5 text-[var(--accent)]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
-                </svg>
-              </div>
-              <div>
-                <h3 className="font-semibold text-sm md:text-base">{about.title}</h3>
-                <p className="text-xs font-mono text-[var(--text-secondary)]">{about.role}</p>
-              </div>
-            </div>
-            <button
-              onClick={onClose}
-              className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
-              aria-label={t("aria.close")}
-            >
-              <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-              </svg>
-            </button>
-          </div>
-
-          {/* Content */}
-          <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed">
-            {about.paragraphs.map((p, i) => (
-              <p key={i} dangerouslySetInnerHTML={{ __html: p }} />
-            ))}
-          </div>
-        </div>
-      </motion.div>
-    </motion.div>
-  );
-}
-
 /* ──────────────────── TIMELINE MODAL ──────────────────── */
 
 function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true, onClose);
-  const { t } = useLanguage();
   useEffect(() => {
     const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
     window.addEventListener('keydown', handleKey);
@@ -701,7 +607,7 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
             <button
               onClick={onClose}
               className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
-              aria-label={t("aria.close")}
+              aria-label="Fechar"
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -759,7 +665,7 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
-  const { t, locale } = useLanguage();
+  const { t } = useLanguage();
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -767,34 +673,9 @@ export function ProfileSection() {
   }, []);
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
-  const [showAboutModal, setShowAboutModal] = useState(false);
-  const TIMELINE_DEFAULT_COUNT = 7;
+  const [showBio, setShowBio] = useState(false);
+  const TIMELINE_DEFAULT_COUNT = 4;
   const [showDownloadModal, setShowDownloadModal] = useState(false);
-
-  // Locale-aware data
-  const lang = locale || "pt";
-  const localizedSkills = useMemo(() => {
-    if (lang === "pt") return skills;
-    return getSkills("en").items.map((en, i) => ({
-      ...skills[i],
-      name: en.name ?? skills[i].name,
-      description: en.description ?? skills[i].description,
-      category: en.category ?? skills[i].category,
-    }));
-  }, [lang]);
-  const localizedTimeline = useMemo(() => {
-    if (lang === "pt") return timeline;
-    const enTimeline = getTimeline("en");
-    return timeline.map((item, i) => ({
-      ...item,
-      title: enTimeline[i]?.title ?? item.title,
-      company: enTimeline[i]?.company ?? item.company,
-      description: enTimeline[i]?.description ?? item.description,
-      period: enTimeline[i]?.period ?? item.period,
-      tags: enTimeline[i]?.tags ?? item.tags,
-      skillsUsed: enTimeline[i]?.skillsUsed ?? item.skillsUsed,
-    }));
-  }, [lang]);
 
   // Track section view
   useEffect(() => {
@@ -839,7 +720,7 @@ export function ProfileSection() {
   > = [];
   let lastType: string | null = null;
   let pastCutoff = false;
-  for (const [i, item] of localizedTimeline.entries()) {
+  for (const [i, item] of timeline.entries()) {
     if (!showFullTimeline && i >= TIMELINE_DEFAULT_COUNT) pastCutoff = true;
     if (lastType !== null && item.type !== lastType) {
       const cfg = typeConfig[item.type];
@@ -853,7 +734,7 @@ export function ProfileSection() {
     <motion.section
       id="profile"
       ref={containerRef}
-      className="relative min-h-screen py-8 px-4 md:px-6 overflow-hidden scroll-mt-20 pb-24 md:pb-32"
+      className="relative min-h-screen py-8 px-4 md:px-6 overflow-hidden scroll-mt-20"
       aria-labelledby="profile-heading"
     >
       {/* L0: Background parallax — grid + circles (sempre visível) */}
@@ -978,7 +859,7 @@ export function ProfileSection() {
                 transition-all duration-300"
             >
               <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/30 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-              <span className="relative z-10 font-semibold tracking-wide">{t("hero.btn.projects")}</span>
+              <span className="relative z-10 font-semibold tracking-wide">Ver projetos</span>
               <svg className="w-5 h-5 relative z-10 ml-2 group-hover:translate-x-1 transition-transform duration-300" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                 <path d="M5 12h14" />
                 <path d="m12 5 7 7-7 7" />
@@ -999,41 +880,78 @@ export function ProfileSection() {
                 <polyline points="7 10 12 15 17 10" />
                 <line x1="12" y1="15" x2="12" y2="3" />
               </svg>
-              <span className="relative z-10 font-semibold ml-1.5">{t("hero.btn.cv")}</span>
-              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">{t("hero.btn.cv.pdf")}</span>
+              <span className="relative z-10 font-semibold ml-1.5">Baixar Curriculo</span>
+              <span className="relative z-10 text-black/50 group-hover:text-black/70 text-xs hidden sm:inline ml-1">— PDF</span>
             </button>
           </motion.div>
         </div>
       </motion.div>
 
-      {/* Bio — conteúdo textual rico, em modal */}
-      <div className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12">
+      {/* Bio — conteúdo textual rico, expansível */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12"
+      >
         <div className="glass rounded-xl p-6 md:p-8 border border-[var(--border)]/50">
           <button
-            onClick={() => setShowAboutModal(true)}
+            onClick={() => setShowBio(!showBio)}
             className="w-full text-center focus:outline-none group cursor-pointer"
-            aria-expanded={false}
+            aria-expanded={showBio}
             aria-label={t("profile.about.aria", "Sobre mim")}
           >
             <div className="flex items-center justify-center gap-3">
               <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "▸ SOBRE")}</h2>
-              <span className="text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-colors inline-flex">
+              <motion.span
+                animate={{ rotate: showBio ? 180 : 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="text-[var(--accent)]/60 group-hover:text-[var(--accent)] transition-colors inline-flex"
+              >
                 <svg className="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <path d="m6 9 6 6 6-6" />
                 </svg>
-              </span>
+              </motion.span>
             </div>
-            <p className="text-[10px] font-mono text-[var(--text-secondary)]/50 mt-1">{t("profile.about.click_hint")}</p>
           </button>
+
+          <AnimatePresence initial={false}>
+            <motion.div
+              key="bio-content"
+              initial={{ height: 0, opacity: 0 }}
+              animate={showBio ? { height: "auto", opacity: 1 } : { height: 0, opacity: 0 }}
+              exit={{ height: 0, opacity: 0 }}
+              transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
+              className="overflow-hidden"
+              role="region"
+              aria-live="polite"
+              aria-label={t("profile.about.aria", "Sobre mim")}
+            >
+              <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-4 mt-3 border-t border-[var(--border)]/30">
+                <p>
+                  Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
+                </p>
+                <p>
+                  No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
+                </p>
+                <p>
+                  Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
+                </p>
+                <p>
+                  Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
+                </p>
+              </div>
+            </motion.div>
+          </AnimatePresence>
         </div>
-      </div>
+      </motion.div>
 
       {/* L4: Skills + Timeline — parallax sutil */}
       <motion.div
         style={{ y: contentY }}
         className="relative z-10 max-w-4xl mx-auto"
       >
-        <SkillsCompact items={localizedSkills} />
+        <SkillsCompact />
 
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
         <div id="jornada" className="scroll-mt-20 pb-16 md:pb-20">
@@ -1144,11 +1062,6 @@ export function ProfileSection() {
           </div>
         </div>
       </motion.div>
-
-      {/* About Modal */}
-      <AnimatePresence>
-        {showAboutModal && <AboutModal onClose={() => setShowAboutModal(false)} />}
-      </AnimatePresence>
 
       {/* Timeline Modal */}
       <AnimatePresence>

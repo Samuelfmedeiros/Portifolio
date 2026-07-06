@@ -1,6 +1,8 @@
-import '@testing-library/jest-dom/vitest'
-import { vi } from 'vitest'
+import { vi, expect } from 'vitest'
+import * as matchers from '@testing-library/jest-dom/matchers'
 import React from 'react'
+
+expect.extend(matchers)
 
 // Mock matchMedia
 Object.defineProperty(window, 'matchMedia', {

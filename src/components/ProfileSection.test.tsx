@@ -46,7 +46,7 @@ describe("ProfileSection", () => {
 
   it("renders CTA button Ver projetos", () => {
     render(<ProfileSection />);
-    expect(screen.getByText("Ver Projetos")).toBeInTheDocument();
+    expect(screen.getByText("Ver projetos")).toBeInTheDocument();
   });
 
   it("renders CTA button Baixar Curriculo", () => {
@@ -88,7 +88,7 @@ describe("ProfileSection", () => {
 
   it("renders Ver projetos link pointing to #projects", () => {
     render(<ProfileSection />);
-    const link = screen.getByText("Ver Projetos");
+    const link = screen.getByText("Ver projetos");
     expect(link.closest("a")).toHaveAttribute("href", "#projects");
   });
 
