@@ -1,16 +1,16 @@
-# Graph Report - portifolio  (2026-07-06)
+# Graph Report - portifolio  (2026-07-05)
 
 ## Corpus Check
-- 175 files · ~139,281 words
+- 175 files · ~139,243 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 941 nodes · 1239 edges · 89 communities (76 shown, 13 thin omitted)
+- 940 nodes · 1238 edges · 83 communities (70 shown, 13 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 4 edges (avg confidence: 0.65)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `735e88cd`
+- Built from commit: `3030a042`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -45,24 +45,19 @@
 - [[_COMMUNITY_🐹 Capivara — Análise de Potencial de Monetização|🐹 Capivara — Análise de Potencial de Monetização]]
 - [[_COMMUNITY_scripts|scripts]]
 - [[_COMMUNITY_README|README.md]]
-- [[_COMMUNITY_page.tsx|page.tsx]]
-- [[_COMMUNITY_UnifiedProfile.tsx|UnifiedProfile.tsx]]
 - [[_COMMUNITY_ResponsiveSection.tsx|ResponsiveSection.tsx]]
 - [[_COMMUNITY_♿ Acessibilidade — Audit Report|♿ Acessibilidade — Audit Report]]
 - [[_COMMUNITY_🎮 Games — Audit Report|🎮 Games — Audit Report]]
 - [[_COMMUNITY_🚀 Deploy - Portifolio Samuel|🚀 Deploy - Portifolio Samuel]]
 - [[_COMMUNITY_useLanguage|useLanguage]]
-- [[_COMMUNITY_HangarSkeleton.tsx|HangarSkeleton.tsx]]
 - [[_COMMUNITY_💰 Portifolio Samuel — Stripe Payment Link|💰 Portifolio Samuel — Stripe Payment Link]]
 - [[_COMMUNITY_dependencies|dependencies]]
 - [[_COMMUNITY_🛰️ Portifolio Samuel  Samuel Andrade Portfolio|🛰️ Portifolio Samuel | Samuel Andrade Portfolio]]
 - [[_COMMUNITY_🛸 Portifolio Samuel — Session State|🛸 Portifolio Samuel — Session State]]
 - [[_COMMUNITY_🛸 Portifolio Samuel — Arquitetura|🛸 Portifolio Samuel — Arquitetura]]
-- [[_COMMUNITY_GameShowcase.tsx|GameShowcase.tsx]]
 - [[_COMMUNITY_🤖 Agent Instructions Portifolio Samuel Project|🤖 Agent Instructions: Portifolio Samuel Project]]
 - [[_COMMUNITY_📓 Diário de Bordo — portifolio|📓 Diário de Bordo — portifolio]]
 - [[_COMMUNITY_package.json|package.json]]
-- [[_COMMUNITY_FadeInSection.tsx|FadeInSection.tsx]]
 - [[_COMMUNITY_Prioridade|Prioridade]]
 - [[_COMMUNITY_🤖 Agent Instructions Portifolio Samuel Project|🤖 Agent Instructions: Portifolio Samuel Project]]
 - [[_COMMUNITY_route.ts|route.ts]]
@@ -87,13 +82,12 @@
 - [[_COMMUNITY_rebuild-staging.sh|rebuild-staging.sh]]
 - [[_COMMUNITY_setup.tsx|setup.tsx]]
 - [[_COMMUNITY_vercel-deploy.sh|vercel-deploy.sh]]
-- [[_COMMUNITY_Terminal.tsx|Terminal.tsx]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `useLanguage()` - 36 edges
 2. `useAnalytics()` - 24 edges
 3. `compilerOptions` - 16 edges
-4. `📓 Diário de Bordo — portifolio` - 15 edges
+4. `📓 Diário de Bordo — portifolio` - 14 edges
 5. `📐 Paths do SVG (referência exata)` - 13 edges
 6. `scripts` - 12 edges
 7. `🛸 Portifolio Samuel — História do Projeto` - 12 edges
@@ -102,6 +96,8 @@
 10. `✅ Itens Completados` - 11 edges
 
 ## Surprising Connections (you probably didn't know these)
+- `ConsultingButton()` --calls--> `useAnalytics()`  [EXTRACTED]
+  src/components/ConsultingButton.tsx → src/hooks/useAnalytics.ts
 - `ContactForm()` --calls--> `useAnalytics()`  [EXTRACTED]
   src/components/ContactForm.tsx → src/hooks/useAnalytics.ts
 - `ContactForm()` --calls--> `useLanguage()`  [EXTRACTED]
@@ -110,21 +106,19 @@
   src/components/monetization/MonetizationProvider.tsx → src/components/CookieBanner.tsx
 - `CookieBannerProvider()` --calls--> `useLanguage()`  [EXTRACTED]
   src/components/CookieBanner.tsx → src/lib/i18n.ts
-- `DownloadModal()` --calls--> `useAnalytics()`  [EXTRACTED]
-  src/components/DownloadModal.tsx → src/hooks/useAnalytics.ts
 
 ## Import Cycles
 - None detected.
 
-## Communities (89 total, 13 thin omitted)
+## Communities (83 total, 13 thin omitted)
 
 ### Community 0 - "index.ts"
 Cohesion: 0.09
-Nodes (33): Footer(), AdSense(), AffiliateBadge(), AffiliateSection(), ProjectAffiliates(), BuyMeACoffee(), BuyMeACoffeeIcon(), GitHubSponsors() (+25 more)
+Nodes (34): ConsultingButton(), AdSense(), AffiliateBadge(), AffiliateSection(), ProjectAffiliates(), BuyMeACoffee(), BuyMeACoffeeIcon(), GitHubSponsors() (+26 more)
 
 ### Community 1 - "layout.tsx"
 Cohesion: 0.06
-Nodes (28): inter, jetbrainsMono, metadata, AnalyticsTracker(), AppWrapper(), BackToTop, ConditionalAnalytics(), AnalyticsConsent (+20 more)
+Nodes (29): inter, jetbrainsMono, metadata, AppWrapper(), BackToTop, ConditionalAnalytics(), AnalyticsConsent, CookieBannerContext (+21 more)
 
 ### Community 2 - "✅ Melhorias Implementadas (2026-05-19 a 2026-05-21)"
 Cohesion: 0.05
@@ -135,8 +129,8 @@ Cohesion: 0.06
 Nodes (31): Acessibilidade (A11y), 🌐 Acesso, ✅ CI/CD — Status Atual (2026-05-27), ContactForm, ✅ Correções Aplicadas (2026-05-27), Correções de Build, Correções de Build, CSP (Content Security Policy) (+23 more)
 
 ### Community 4 - "CockpitBackground.tsx"
-Cohesion: 0.09
-Nodes (11): CockpitBackground(), CockpitBorders(), GradientCornerProps, GitHubStatsSection(), ParallaxBackground(), PerspectiveGrid(), Scanline(), SpeedLine (+3 more)
+Cohesion: 0.10
+Nodes (9): CockpitBackground(), CockpitBorders(), GradientCornerProps, ParallaxBackground(), PerspectiveGrid(), Scanline(), SpeedLine, SpeedLines() (+1 more)
 
 ### Community 5 - "4. Crie as animações"
 Cohesion: 0.07
@@ -147,8 +141,8 @@ Cohesion: 0.08
 Nodes (25): Brilho do Casco (Shell Highlight), `Burst` (one-shot, 0.6s), Cabeça (Head), Casco (Shell) — corpo principal, ✅ Checklist de Verificação, ⚡ Dicas para o Rive Editor, `Dig_1` / `Dig_2` / `Dig_3` (one-shot, 0.3s cada), 🦴 Estrutura de Bones/Grupos (sugerida) (+17 more)
 
 ### Community 7 - "page.tsx"
-Cohesion: 0.17
-Nodes (6): ContactForm(), supabase, FormStatus, Message, PageView, Star
+Cohesion: 0.07
+Nodes (20): HangarWithData(), AnalyticsTracker(), ContactForm(), directionMap, FadeInSection(), FadeInSectionProps, StaggerContainer(), StaggerItem() (+12 more)
 
 ### Community 8 - "🔍 SEO + Meta — Audit Report"
 Cohesion: 0.08
@@ -163,8 +157,8 @@ Cohesion: 0.09
 Nodes (21): ⚠️ Alertas CSP, Alta Prioridade, Análise de Risco Real, ❌ Ausentes, Ações Recomendadas, Baixa Prioridade, 🚀 Comandos Úteis, Criados (3) (+13 more)
 
 ### Community 11 - "useLanguage"
-Cohesion: 0.23
-Nodes (7): COLOR_LABELS, COLORS, MiniGame(), MissionClock, UtilityDeck, WIDGETS, Widget
+Cohesion: 0.31
+Nodes (6): TimelineModal(), LANG_COLORS, ProjectModal(), ProjectModalProps, useFocusTrap(), Repo
 
 ### Community 12 - "ProfileSection.tsx"
 Cohesion: 0.12
@@ -191,12 +185,12 @@ Cohesion: 0.12
 Nodes (15): Arquivos que precisam mudar, Diagnóstico Atual, Fase 0 — Limpeza 🧹 (pré-requisito), Fase 1 — Hero como Ponto de Entrada 🎬, Fase 2 — Stagger Cinematográfico 🎯, Fase 3 — Background Sem Competição 🌌, Fase 4 — Scroll-Trigger com Personalidade 📜, Fase 5 — Navbar e Transições de Seção 🧭 (+7 more)
 
 ### Community 18 - "types.ts"
-Cohesion: 0.18
-Nodes (11): ConsultingButton(), crc16(), generatePixPayload(), SupportButton(), AnalyticsEvent, EVENT_NAMES, SectionName, useAnalytics() (+3 more)
+Cohesion: 0.33
+Nodes (4): AnalyticsEvent, EVENT_NAMES, SectionName, Window
 
 ### Community 19 - "MissionGames.tsx"
-Cohesion: 0.15
-Nodes (11): Asteroid, AsteroidDodge(), CODE_SNIPPETS, CodeTyping(), TypingState, CellState, Difficulty, MemoryMatrix() (+3 more)
+Cohesion: 0.05
+Nodes (34): GitHubStats, GitHubStatsSection(), GitHubStatsSectionProps, GlassCard, GlassCardProps, Asteroid, AsteroidDodge(), CODE_SNIPPETS (+26 more)
 
 ### Community 20 - "🚀 Deploy Instructions - Portifolio Samuel"
 Cohesion: 0.13
@@ -219,8 +213,8 @@ Cohesion: 0.14
 Nodes (13): Acessibilidade, 🌐 Acesso, Fundação, 🛰️ MISSION CONTROL — STATUS FINAL, 📊 Métricas, Novas Seções, 🚧 Pendente (manual), Performance (+5 more)
 
 ### Community 25 - "ProjectHangar.tsx"
-Cohesion: 0.25
-Nodes (8): extractTechTags(), LANG_COLORS, PROJECT_GRADIENTS, ProjectCard(), ProjectHangar(), ProjectModalProps, getProjectI18n(), Repo
+Cohesion: 0.29
+Nodes (7): extractTechTags(), LANG_COLORS, PROJECT_GRADIENTS, ProjectCard(), ProjectHangar(), getProjectAffiliates(), getProjectI18n()
 
 ### Community 26 - "⚡ Performance — Audit Report"
 Cohesion: 0.14
@@ -237,14 +231,6 @@ Nodes (12): scripts, build, build:analyze, deploy:dry, deploy:vercel, dev, lint,
 ### Community 29 - "README.md"
 Cohesion: 0.17
 Nodes (11): Build produção, Estrutura, Início Rápido, Jogos Embutidos, Licença, O que você encontra aqui, Seções, Sobre (+3 more)
-
-### Community 30 - "page.tsx"
-Cohesion: 0.31
-Nodes (5): HangarWithData(), getRepos(), FEATURED_PROJECTS, GAME_PROJECTS, STATIC_PROJECTS
-
-### Community 31 - "UnifiedProfile.tsx"
-Cohesion: 0.22
-Nodes (5): Tooltip, TooltipProps, levelWidth, skills, timeline
 
 ### Community 32 - "ResponsiveSection.tsx"
 Cohesion: 0.26
@@ -263,12 +249,8 @@ Cohesion: 0.18
 Nodes (10): Build falha no F: drive, 📦 Deploy Automático (Vercel + GitHub), 🛠️ Deploy Manual (CLI), 🚀 Deploy - Portifolio Samuel, ⚡ Otimizações Ativas, 📈 Performance, 📊 Scripts Úteis, Stack (+2 more)
 
 ### Community 36 - "useLanguage"
-Cohesion: 0.22
-Nodes (10): DownloadModal(), DownloadModalProps, GameShowcase(), HeroSection(), SkillsCompact(), TimelineModal(), LANG_COLORS, ProjectModal() (+2 more)
-
-### Community 37 - "HangarSkeleton.tsx"
-Cohesion: 0.39
-Nodes (3): HangarSkeleton(), GlassSkeleton, Skeleton
+Cohesion: 0.26
+Nodes (9): DownloadModal(), DownloadModalProps, GAME_IMAGES, GameShowcase(), HeroSection(), SkillsCompact(), useAnalytics(), useLanguage() (+1 more)
 
 ### Community 38 - "💰 Portifolio Samuel — Stripe Payment Link"
 Cohesion: 0.20
@@ -290,25 +272,17 @@ Nodes (7): 📍 Estado Atual, 📁 Estrutura, ✅ Features Implementadas, 🎯 I
 Cohesion: 0.25
 Nodes (7): Deploy, Documentação, Performance, 🛸 Portifolio Samuel — Arquitetura, Seções, Stack, Visão Geral
 
-### Community 43 - "GameShowcase.tsx"
-Cohesion: 0.32
-Nodes (5): GAME_IMAGES, GitHubStats, GitHubStatsSectionProps, GlassCard, GlassCardProps
-
 ### Community 44 - "🤖 Agent Instructions: Portifolio Samuel Project"
 Cohesion: 0.29
 Nodes (6): 🤖 Agent Instructions: Portifolio Samuel Project, Contexto Profissional, Diretrizes de Design, Estrutura de Dados (Supabase), Padrões de Código, Variáveis de Ambiente
 
 ### Community 45 - "📓 Diário de Bordo — portifolio"
-Cohesion: 0.12
-Nodes (15): 2026-07-03, 2026-07-03 20:53, 2026-07-03 21:04, 2026-07-03 21:13, 2026-07-03 21:16, 2026-07-04 04:01, 2026-07-04 06:01, 2026-07-04 17:00 (+7 more)
+Cohesion: 0.13
+Nodes (14): 2026-07-03, 2026-07-03 20:53, 2026-07-03 21:04, 2026-07-03 21:13, 2026-07-03 21:16, 2026-07-04 04:01, 2026-07-04 06:01, 2026-07-04 17:00 (+6 more)
 
 ### Community 46 - "package.json"
 Cohesion: 0.29
 Nodes (6): name, overrides, @opentelemetry/api, packageManager, private, version
-
-### Community 47 - "FadeInSection.tsx"
-Cohesion: 0.43
-Nodes (5): directionMap, FadeInSection(), FadeInSectionProps, StaggerContainer(), StaggerItem()
 
 ### Community 48 - "Prioridade"
 Cohesion: 0.33
@@ -354,29 +328,25 @@ Nodes (3): Reporting a Vulnerability, Security Policy, Security Practices
 Cohesion: 0.50
 Nodes (3): 🏁 FINAL_TEST — Portifolio Samuel, Testes, Verificações
 
-### Community 88 - "Terminal.tsx"
-Cohesion: 0.33
-Nodes (5): MissionGames(), BANNER, COMMANDS, Terminal(), Command
-
 ## Knowledge Gaps
-- **475 isolated node(s):** `deploy.sh script`, `eslintConfig`, `path`, `nextConfig`, `name` (+470 more)
+- **474 isolated node(s):** `deploy.sh script`, `eslintConfig`, `path`, `nextConfig`, `name` (+469 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **13 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `useLanguage()` connect `useLanguage` to `index.ts`, `layout.tsx`, `CockpitBackground.tsx`, `HangarSkeleton.tsx`, `page.tsx`, `ThemeProvider.tsx`, `GameShowcase.tsx`, `ProfileSection.tsx`, `useLanguage`, `PrivacyModal`, `Terminal.tsx`, `ProjectHangar.tsx`?**
+- **Why does `useLanguage()` connect `useLanguage` to `layout.tsx`, `page.tsx`, `ThemeProvider.tsx`, `useLanguage`, `ProfileSection.tsx`, `MissionGames.tsx`, `PrivacyModal`, `ProjectHangar.tsx`?**
   _High betweenness centrality (0.016) - this node is a cross-community bridge._
-- **Why does `useAnalytics()` connect `types.ts` to `index.ts`, `layout.tsx`, `useLanguage`, `page.tsx`, `ThemeProvider.tsx`, `GameShowcase.tsx`, `ProfileSection.tsx`, `useLanguage`, `Terminal.tsx`, `ProjectHangar.tsx`?**
+- **Why does `useAnalytics()` connect `useLanguage` to `index.ts`, `layout.tsx`, `page.tsx`, `ThemeProvider.tsx`, `ProfileSection.tsx`, `types.ts`, `PrivacyModal`, `MissionGames.tsx`, `ProjectHangar.tsx`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
-- **Why does `GlassCard` connect `GameShowcase.tsx` to `page.tsx`, `useLanguage`, `ProfileSection.tsx`, `MissionGames.tsx`, `Terminal.tsx`, `ProjectHangar.tsx`, `UnifiedProfile.tsx`?**
+- **Why does `GlassCard` connect `MissionGames.tsx` to `ProjectHangar.tsx`, `useLanguage`, `ProfileSection.tsx`, `page.tsx`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **What connects `deploy.sh script`, `eslintConfig`, `path` to the rest of the system?**
-  _475 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _474 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `index.ts` be split into smaller, more focused modules?**
-  _Cohesion score 0.09013605442176871 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08865248226950355 - nodes in this community are weakly interconnected._
 - **Should `layout.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.05660377358490566 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05589225589225589 - nodes in this community are weakly interconnected._
 - **Should `✅ Melhorias Implementadas (2026-05-19 a 2026-05-21)` be split into smaller, more focused modules?**
   _Cohesion score 0.047619047619047616 - nodes in this community are weakly interconnected._
