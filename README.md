@@ -62,6 +62,7 @@ Portfólio profissional de **Samuel Medeiros** — desenvolvedor full stack e an
 | **Testes** | Vitest · React Testing Library · Playwright |
 | **Analytics** | Umami (self-hosted) |
 | **Infra** | GitHub Actions · systemd (self-host) · Vercel |
+| **Banco** | PostgreSQL 18 (local) · Capivara API · Cloudflare Tunnel |
 
 ---
 
@@ -74,6 +75,44 @@ Portfólio profissional de **Samuel Medeiros** — desenvolvedor full stack e an
 | **Projetos** | Grid com filtros por categoria, dados ao vivo do GitHub + fallback estático, GitHub Stats |
 | **Jogos** | Carrossel com 5 jogos clássicos rodando em iframe — Memory Matrix, Simon, Code Typing, Terminal, Asteroid Dodge |
 | **Contato** | Formulário com validação, rate-limit de 30s, consentimento LGPD, integração Resend |
+
+## Banco de Dados
+
+O portfólio usa **PostgreSQL 18 local** como banco principal, acessado via **API intermediária no Capivara** (FastAPI :8001).
+
+### Arquitetura
+
+```
+Visitante → Vercel (Next.js) → capivara.seu.pet (Cloudflare Tunnel) → Capivara API → PG18
+```
+
+### Endpoints públicos (sem auth)
+
+| Endpoint | Função |
+|----------|--------|
+| `POST /api/portifolio/public/messages` | Salvar contato |
+| `POST /api/portifolio/public/cv-downloads` | Registrar download de CV |
+| `POST /api/portifolio/public/events` | Monitoramento |
+
+### Endpoints admin (auth JWT)
+
+| Endpoint | Função |
+|----------|--------|
+| `GET /api/portifolio/messages` | Listar mensagens |
+| `GET /api/portifolio/cv-downloads` | Listar downloads |
+| `GET /api/portifolio/events` | Listar eventos |
+
+### Tabelas
+
+- `messages` — contatos recebidos (nome, email, conteúdo, IP, data)
+- `cv_downloads` — downloads de currículo (nome, email, IP, referrer)
+- `monitoring_events` — eventos de monitoramento (tipo, payload JSON)
+
+### Infra
+
+- **PG18**: `localhost:5432`, database `portifolio`, user `portifolio`
+- **Capivara**: FastAPI em `/home/samuel/projetos/Capivara/backend/`, systemd user service
+- **Tunnel**: Cloudflare Tunnel (cloudflared), domínio `capivara.seu.pet`
 
 ---
 
