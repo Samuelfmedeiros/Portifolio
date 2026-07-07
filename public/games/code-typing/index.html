@@ -3,291 +3,282 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Code Typing Challenge</title>
+  <title>⌨️ Code Typing Challenge</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
-    *, *::before, *::after {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-      background: #0a0a0f;
-      color: #e2e8f0;
-      min-height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: flex-start;
-      padding: 2rem 1rem;
+      background: #0a0a0f; color: #e2e8f0;
+      min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 1.5rem 1rem;
     }
     #root { width: 100%; max-width: 800px; }
 
     .container {
-      background: #12121a;
-      border: 1px solid rgba(34, 211, 238, 0.15);
-      border-radius: 12px;
-      padding: 2rem;
+      background: #12121a; border: 1px solid rgba(34, 211, 238, 0.15);
+      border-radius: 12px; padding: 1.5rem;
       box-shadow: 0 8px 30px rgba(0,0,0,0.5);
     }
-    h1 {
-      text-align: center;
-      font-size: 1.75rem;
-      font-weight: 700;
-      margin-bottom: 0.25rem;
-      color: #22d3ee;
-    }
-    .subtitle {
-      text-align: center;
-      color: #94a3b8;
-      font-size: 0.9rem;
-      margin-bottom: 1.5rem;
-    }
+    h1 { text-align: center; font-size: 1.5rem; font-weight: 700; color: #22d3ee; margin-bottom: 0.15rem; }
+    .subtitle { text-align: center; color: #94a3b8; font-size: 0.8rem; margin-bottom: 1rem; }
 
-    /* Stats bar */
+    /* ─── Settings Bar ─────────────────────────────────── */
+    .settings-bar {
+      display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 0.75rem; padding: 0.5rem 0.75rem;
+      background: #0a0a0f; border-radius: 8px; border: 1px solid #1e293b;
+      align-items: center;
+    }
+    .mode-group { display: flex; gap: 2px; align-items: center; }
+    .mode-btn {
+      padding: 0.3rem 0.6rem; font-size: 0.7rem; font-weight: 600; font-family: inherit;
+      border: 1px solid #1e293b; background: #0a0a0f; color: #94a3b8; cursor: pointer;
+      transition: all 0.15s; text-transform: uppercase; letter-spacing: 0.03em;
+    }
+    .mode-btn:first-child { border-radius: 5px 0 0 5px; }
+    .mode-btn:last-child  { border-radius: 0 5px 5px 0; }
+    .mode-btn:not(:first-child):not(:last-child) { border-radius: 0; }
+    .mode-btn.active { background: #06b6d4; color: #fff; border-color: #22d3ee; }
+    .mode-btn:not(.active):hover { background: #1e293b; color: #e2e8f0; }
+
+    .setting-toggle {
+      display: flex; align-items: center; gap: 0.4rem;
+      padding: 0.25rem 0.5rem; border-radius: 5px;
+      font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.03em;
+      cursor: pointer; border: 1px solid #1e293b; background: #0a0a0f; color: #94a3b8;
+      user-select: none; transition: all 0.15s; font-family: inherit;
+    }
+    .setting-toggle.active { background: rgba(34, 211, 238, 0.15); color: #22d3ee; border-color: rgba(34, 211, 238, 0.3); }
+    .setting-toggle:hover { background: #1e293b; }
+    .setting-toggle .indicator {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: #4a4a5a; transition: background 0.15s;
+    }
+    .setting-toggle.active .indicator { background: #22d3ee; box-shadow: 0 0 6px rgba(34, 211, 238, 0.5); }
+
+    .divider { width: 1px; height: 20px; background: #1e293b; }
+
+    /* ─── Stats Bar ──────────────────────────────────── */
     .stats-bar {
-      display: flex;
-      gap: 1.5rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 1.5rem;
-      padding: 0.75rem 1rem;
-      background: #0a0a0f;
-      border-radius: 8px;
-      border: 1px solid #1e293b;
+      display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 0.75rem; padding: 0.6rem 0.75rem;
+      background: #0a0a0f; border-radius: 8px; border: 1px solid #1e293b;
     }
-    .stat {
-      text-align: center;
-    }
-    .stat-value {
-      font-size: 1.25rem;
-      font-weight: 700;
-      color: #e2e8f0;
-    }
-    .stat-label {
-      font-size: 0.75rem;
-      color: #94a3b8;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
+    .stat { text-align: center; min-width: 55px; }
+    .stat-value { font-size: 1.15rem; font-weight: 700; }
+    .stat-label { font-size: 0.7rem; color: #94a3b8; text-transform: uppercase; letter-spacing: 0.05em; }
+    .stat-value.timer-danger { color: #ef4444; animation: pulse 0.5s infinite alternate; }
+    @keyframes pulse { from { opacity: 1; transform: scale(1); } to { opacity: 0.6; transform: scale(1.1); } }
     .stat-value.green { color: #22c55e; }
     .stat-value.blue  { color: #22d3ee; }
     .stat-value.orange{ color: #f59e0b; }
     .stat-value.purple{ color: #a78bfa; }
+    .stat-value.red   { color: #ef4444; }
 
-    /* Code display */
+    /* ─── Code Display ────────────────────────────────── */
     .code-display {
-      background: #0f0f1a;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
-      padding: 1.25rem;
-      margin-bottom: 1rem;
+      background: #0f0f1a; border: 1px solid #1e293b; border-radius: 8px;
+      padding: 1rem; margin-bottom: 0.75rem;
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-      min-height: 100px;
+      font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+      min-height: 80px; position: relative; transition: filter 0.25s;
     }
-    .char {
-      position: relative;
+    .code-display.blind {
+      filter: blur(5px); user-select: none; cursor: default;
     }
-    .char.correct  { color: #22c55e; }
-    .char.incorrect{ color: #ef4444; background: #3d1214; border-radius: 2px; }
-    .char.current  { 
-      color: #e2e8f0; 
-      background: rgba(34, 211, 238, 0.25); 
-      border-radius: 2px;
-      box-shadow: 0 0 0 1px #22d3ee;
+    .code-display.blind::after {
+      content: '🔒 Blind Mode'; position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.2rem; font-weight: 700; color: #22d3ee;
+      background: rgba(10,10,15,0.6); border-radius: 8px;
+      filter: none; letter-spacing: 0.1em; text-shadow: 0 0 20px rgba(34,211,238,0.3);
     }
-    .char.pending  { color: #64748b; }
+    .char { position: relative; transition: color 0.05s; }
+    .char.correct   { color: #22c55e; }
+    .char.incorrect { color: #ef4444; background: #3d1214; border-radius: 2px; }
+    .char.current   { color: #e2e8f0; background: rgba(34, 211, 238, 0.25); border-radius: 2px; box-shadow: 0 0 0 1px #22d3ee; }
+    .char.pending   { color: #64748b; }
 
-    /* Input area */
-    .input-area {
-      margin-bottom: 1rem;
-    }
+    /* ─── Input ──────────────────────────────────────── */
+    .input-area { margin-bottom: 0.75rem; }
     .input-area textarea {
-      width: 100%;
-      min-height: 80px;
-      padding: 0.9rem 1rem;
-      background: #0f0f1a;
-      border: 1px solid #1e293b;
-      border-radius: 8px;
+      width: 100%; min-height: 70px; padding: 0.75rem 0.9rem;
+      background: #0f0f1a; border: 1px solid #1e293b; border-radius: 8px;
       color: #e2e8f0;
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-      font-size: 0.9rem;
-      line-height: 1.65;
-      resize: vertical;
-      outline: none;
+      font-size: 0.85rem; line-height: 1.6; resize: vertical; outline: none;
       transition: border-color 0.15s;
     }
-    .input-area textarea:focus {
-      border-color: #22d3ee;
-      box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15);
-    }
-    .input-area textarea:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
+    .input-area textarea:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15); }
+    .input-area textarea:disabled { opacity: 0.5; cursor: not-allowed; }
 
-    /* Action buttons */
-    .actions {
-      display: flex;
-      gap: 0.75rem;
-      justify-content: center;
-      flex-wrap: wrap;
-      margin-bottom: 1rem;
-    }
+    /* ─── Actions ──────────────────────────────────────── */
+    .actions { display: flex; gap: 0.6rem; justify-content: center; flex-wrap: wrap; margin-bottom: 0.75rem; }
     .btn {
-      padding: 0.65rem 1.5rem;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.15s;
-      font-family: inherit;
+      padding: 0.55rem 1.25rem; border: none; border-radius: 8px;
+      font-size: 0.85rem; font-weight: 600; cursor: pointer;
+      transition: all 0.15s; font-family: inherit;
     }
-    .btn:disabled {
-      opacity: 0.4;
-      cursor: not-allowed;
-    }
-    .btn-primary {
-      background: #06b6d4;
-      color: #fff;
-    }
-    .btn-primary:hover:not(:disabled) {
-      background: #22d3ee;
-    }
-    .btn-secondary {
-      background: #1e293b;
-      color: #94a3b8;
-      border: 1px solid #334155;
-    }
-    .btn-secondary:hover:not(:disabled) {
-      background: #334155;
-    }
-    .btn-danger {
-      background: #ef4444;
-      color: #fff;
-    }
-    .btn-danger:hover:not(:disabled) {
-      background: #f87171;
-    }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+    .btn-primary { background: #06b6d4; color: #fff; }
+    .btn-primary:hover:not(:disabled) { background: #22d3ee; }
+    .btn-secondary { background: #1e293b; color: #94a3b8; border: 1px solid #334155; }
+    .btn-secondary:hover:not(:disabled) { background: #334155; }
+    .btn-danger { background: #ef4444; color: #fff; }
+    .btn-danger:hover:not(:disabled) { background: #f87171; }
 
-    /* Progress bar */
-    .progress-bar {
-      width: 100%;
-      height: 4px;
-      background: #21262d;
-      border-radius: 2px;
-      margin-bottom: 1rem;
-      overflow: hidden;
+    /* ─── Progress Bar ────────────────────────────────── */
+    .progress-bar { width: 100%; height: 4px; background: #21262d; border-radius: 2px; margin-bottom: 0.75rem; overflow: hidden; }
+    .progress-fill { 
+      height: 100%; background: linear-gradient(90deg, #238636, #2ea043);
+      border-radius: 2px; transition: width 0.2s ease;
     }
-    .progress-fill {
-      height: 100%;
-      background: linear-gradient(90deg, #238636, #2ea043);
-      border-radius: 2px;
-      transition: width 0.2s ease;
-    }
+    .progress-fill.timed { background: linear-gradient(90deg, #06b6d4, #22d3ee); }
+    .progress-fill.timed.warning { background: linear-gradient(90deg, #f59e0b, #f97316); }
+    .progress-fill.timed.danger { background: linear-gradient(90deg, #ef4444, #dc2626); }
 
-    /* Snippet info */
+    /* ─── Snippet Info ─────────────────────────────────── */
     .snippet-info {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 0.75rem;
-      font-size: 0.8rem;
-      color: #8b949e;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 0.5rem; font-size: 0.75rem; color: #8b949e;
     }
     .snippet-info .badge {
-      background: #1f6feb20;
-      color: #58a6ff;
-      padding: 0.2rem 0.6rem;
-      border-radius: 4px;
-      font-size: 0.75rem;
-      font-weight: 600;
+      background: #1f6feb20; color: #58a6ff; padding: 0.15rem 0.5rem;
+      border-radius: 4px; font-size: 0.7rem; font-weight: 600;
     }
 
-    /* Results overlay */
-    .results-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.7);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 100;
-      padding: 1rem;
+    /* ─── Heat Map ─────────────────────────────────────── */
+    .heatmap-panel {
+      margin-bottom: 0.75rem; border: 1px solid #1e293b; border-radius: 8px;
+      background: #0f0f1a; overflow: hidden; transition: all 0.2s;
     }
-    .results-card {
-      background: #161b22;
-      border: 1px solid #30363d;
-      border-radius: 16px;
-      padding: 2.5rem 2rem;
-      max-width: 420px;
-      width: 100%;
-      text-align: center;
+    .heatmap-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.55rem 1rem; cursor: pointer; user-select: none;
+      font-size: 0.8rem; font-weight: 600; color: #94a3b8;
+    }
+    .heatmap-header:hover { background: #1a1a2a; }
+    .heatmap-header .arrow { transition: transform 0.2s; }
+    .heatmap-header .arrow.open { transform: rotate(90deg); }
+    .heatmap-body { padding: 0.5rem 1rem 1rem; border-top: 1px solid #1e293b; max-height: 200px; overflow-y: auto; }
+    .heatmap-grid {
+      display: flex; flex-wrap: wrap; gap: 3px; justify-content: center;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.85rem;
+    }
+    .heatmap-cell {
+      width: 28px; height: 28px; display: flex; align-items: center; justify-content: center;
+      border-radius: 4px; font-size: 0.75rem; font-weight: 600;
+      transition: all 0.15s; position: relative;
+    }
+    .heatmap-cell:hover { transform: scale(1.3); z-index: 2; }
+    .heatmap-cell .tooltip {
+      display: none; position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
+      background: #1e293b; color: #e2e8f0; padding: 2px 6px; border-radius: 4px;
+      font-size: 0.65rem; white-space: nowrap; z-index: 10; margin-bottom: 4px;
+    }
+    .heatmap-cell:hover .tooltip { display: block; }
+    .heatmap-legend {
+      display: flex; gap: 0.75rem; justify-content: center; margin-top: 0.5rem; font-size: 0.65rem; color: #8b949e;
+    }
+    .heatmap-legend .swatch { width: 12px; height: 12px; border-radius: 2px; display: inline-block; vertical-align: middle; }
+
+    /* ─── Leaderboard ──────────────────────────────────── */
+    .lb-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center; z-index: 200; padding: 1rem;
+    }
+    .lb-card {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      padding: 1.5rem; max-width: 520px; width: 100%; max-height: 90vh; overflow-y: auto;
       box-shadow: 0 16px 48px rgba(0,0,0,0.5);
     }
-    .results-card h2 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
+    .lb-card h2 { font-size: 1.3rem; margin-bottom: 0.3rem; color: #22d3ee; }
+    .lb-card .lb-sub { font-size: 0.8rem; color: #8b949e; margin-bottom: 1rem; }
+    .lb-filters { display: flex; gap: 4px; margin-bottom: 1rem; flex-wrap: wrap; }
+    .lb-filter-btn {
+      padding: 0.25rem 0.6rem; font-size: 0.7rem; font-weight: 600; font-family: inherit;
+      border: 1px solid #1e293b; background: #0a0a0f; color: #94a3b8; cursor: pointer; border-radius: 12px;
+      transition: all 0.15s;
     }
-    .results-card .emoji-big {
-      font-size: 3rem;
-      margin-bottom: 0.5rem;
-    }
-    .results-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-      margin: 1.5rem 0;
-    }
-    .results-grid .item {
-      background: #0d1117;
-      padding: 0.75rem;
-      border-radius: 8px;
-    }
-    .results-grid .item .value {
-      font-size: 1.3rem;
-      font-weight: 700;
-    }
-    .results-grid .item .lbl {
-      font-size: 0.7rem;
-      color: #8b949e;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    .results-grid .item .value.green { color: #3fb950; }
-    .results-grid .item .value.blue  { color: #58a6ff; }
-    .results-grid .item .value.orange{ color: #d29922; }
+    .lb-filter-btn.active { background: #06b6d4; color: #fff; border-color: #22d3ee; }
+    .lb-filter-btn:hover:not(.active) { background: #1e293b; }
+    .lb-table { width: 100%; border-collapse: collapse; font-size: 0.8rem; }
+    .lb-table th { text-align: left; padding: 0.4rem 0.5rem; color: #8b949e; font-weight: 600; border-bottom: 1px solid #21262d; font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; }
+    .lb-table td { padding: 0.45rem 0.5rem; border-bottom: 1px solid #161b22; }
+    .lb-table tr:hover td { background: #0d1117; }
+    .lb-rank { font-weight: 700; width: 24px; text-align: center; }
+    .lb-rank.gold { color: #f59e0b; }
+    .lb-rank.silver { color: #94a3b8; }
+    .lb-rank.bronze { color: #cd7f32; }
+    .lb-wpm { color: #22c55e; font-weight: 700; }
+    .lb-acc { color: #58a6ff; }
+    .lb-empty { text-align: center; padding: 2rem; color: #484f58; font-size: 0.9rem; }
 
-    .footer {
-      text-align: center;
-      margin-top: 1.5rem;
-      color: #484f58;
-      font-size: 0.75rem;
+    .lb-del-btn {
+      background: none; border: none; color: #484f58; cursor: pointer; font-size: 0.8rem;
+      padding: 2px 6px; border-radius: 4px; transition: all 0.15s;
     }
+    .lb-del-btn:hover { background: #3d1214; color: #ef4444; }
+
+    /* ─── Results Overlay ──────────────────────────────── */
+    .results-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.7);
+      display: flex; align-items: center; justify-content: center; z-index: 100; padding: 1rem;
+    }
+    .results-card {
+      background: #161b22; border: 1px solid #30363d; border-radius: 16px;
+      padding: 2rem 1.5rem; max-width: 420px; width: 100%; text-align: center;
+      box-shadow: 0 16px 48px rgba(0,0,0,0.5); max-height: 90vh; overflow-y: auto;
+    }
+    .results-card h2 { font-size: 1.4rem; margin-bottom: 0.3rem; }
+    .results-card .emoji-big { font-size: 2.8rem; margin-bottom: 0.3rem; }
+    .results-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; margin: 1rem 0; }
+    .results-grid .item { background: #0d1117; padding: 0.65rem; border-radius: 8px; }
+    .results-grid .item .value { font-size: 1.2rem; font-weight: 700; }
+    .results-grid .item .lbl { font-size: 0.65rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .footer { text-align: center; margin-top: 1rem; color: #484f58; font-size: 0.72rem; }
+    .footer button {
+      background: none; border: none; color: #58a6ff; cursor: pointer; font-size: 0.72rem; font-family: inherit;
+      text-decoration: underline; padding: 0 4px;
+    }
+    .footer button:hover { color: #22d3ee; }
     .footer a { color: #58a6ff; text-decoration: none; }
     .footer a:hover { text-decoration: underline; }
 
-@media (max-width: 640px) {
-  .container { padding: 1rem; }
-  h1 { font-size: 1.3rem; }
-  .stats-bar { gap: 0.75rem; padding: 0.5rem; }
-  .stat-value { font-size: 1rem; }
-  .code-display { font-size: 0.75rem; padding: 0.75rem; }
-  .input-area textarea { min-height: 60px; font-size: 0.75rem; }
-  .btn { padding: 0.5rem 1rem; font-size: 0.8rem; }
-}
-@media (max-width: 480px) {
-  .stats-bar { gap: 0.5rem; flex-wrap: wrap; }
-  .stat { min-width: 60px; }
-}
+    /* ─── Responsive ──────────────────────────────────── */
+    @media (max-width: 640px) {
+      body { padding: 0.75rem; }
+      .container { padding: 1rem; }
+      h1 { font-size: 1.2rem; }
+      .settings-bar { gap: 0.35rem; padding: 0.4rem 0.5rem; }
+      .mode-btn { padding: 0.2rem 0.45rem; font-size: 0.65rem; }
+      .setting-toggle { padding: 0.2rem 0.4rem; font-size: 0.65rem; }
+      .stats-bar { gap: 0.5rem; padding: 0.4rem 0.5rem; }
+      .stat-value { font-size: 1rem; }
+      .stat { min-width: 45px; }
+      .code-display { font-size: 0.72rem; padding: 0.6rem; min-height: 60px; }
+      .input-area textarea { min-height: 55px; font-size: 0.72rem; padding: 0.5rem; }
+      .btn { padding: 0.4rem 0.9rem; font-size: 0.78rem; }
+      .heatmap-cell { width: 22px; height: 22px; font-size: 0.65rem; }
+    }
+    @media (max-width: 480px) {
+      .stats-bar { gap: 0.35rem; }
+      .stat { min-width: 40px; }
+      .settings-bar .divider { display: none; }
+    }
+
+    /* ─── Sound indicator ─────────────────────────────── */
+    .sound-wave {
+      display: inline-block; position: relative;
+    }
+    .sound-wave.muted::after {
+      content: '✕'; position: absolute; inset: -2px; display: flex;
+      align-items: center; justify-content: center; font-size: 1.2rem;
+      color: #ef4444; font-weight: 700;
+    }
   </style>
 </head>
 <body>
@@ -295,31 +286,23 @@
   <script type="text/babel">
     const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-    // ─── Code Snippets ─────────────────────────────────────────────
+    // ─── Code Snippets ───────────────────────────────────────
     const SNIPPETS = [
-      {
-        lang: 'Python',
-        code: `def fibonacci(n):
+      { lang: 'Python', code: `def fibonacci(n):
     if n <= 1:
         return n
     a, b = 0, 1
     for _ in range(2, n + 1):
         a, b = b, a + b
-    return b`,
-      },
-      {
-        lang: 'JavaScript',
-        code: `function debounce(fn, delay) {
+    return b` },
+      { lang: 'JavaScript', code: `function debounce(fn, delay) {
     let timer;
     return function(...args) {
         clearTimeout(timer);
         timer = setTimeout(() => fn.apply(this, args), delay);
     };
-}`,
-      },
-      {
-        lang: 'React',
-        code: `function Counter() {
+}` },
+      { lang: 'React', code: `function Counter() {
     const [count, setCount] = useState(0);
     useEffect(() => {
         document.title = \`Count: \${count}\`;
@@ -332,11 +315,8 @@
             </button>
         </div>
     );
-}`,
-      },
-      {
-        lang: 'Python',
-        code: `class Stack:
+}` },
+      { lang: 'Python', code: `class Stack:
     def __init__(self):
         self._items = []
     
@@ -350,11 +330,8 @@
     
     @property
     def is_empty(self):
-        return len(self._items) == 0`,
-      },
-      {
-        lang: 'JavaScript',
-        code: `const memoize = (fn) => {
+        return len(self._items) == 0` },
+      { lang: 'JavaScript', code: `const memoize = (fn) => {
     const cache = new Map();
     return (...args) => {
         const key = JSON.stringify(args);
@@ -363,11 +340,8 @@
         cache.set(key, result);
         return result;
     };
-};`,
-      },
-      {
-        lang: 'SQL',
-        code: `SELECT
+};` },
+      { lang: 'SQL', code: `SELECT
     u.name,
     COUNT(o.id) AS total_orders,
     SUM(o.total) AS spent
@@ -376,11 +350,8 @@ LEFT JOIN orders o ON o.user_id = u.id
 WHERE u.active = true
 GROUP BY u.id, u.name
 HAVING COUNT(o.id) > 5
-ORDER BY spent DESC;`,
-      },
-      {
-        lang: 'Ruby',
-        code: `class BlogPost
+ORDER BY spent DESC;` },
+      { lang: 'Ruby', code: `class BlogPost
     attr_reader :title, :body, :created_at
     
     def initialize(title:, body:)
@@ -393,21 +364,15 @@ ORDER BY spent DESC;`,
     def add_comment(comment)
         @comments << comment
     end
-end`,
-      },
-      {
-        lang: 'Go',
-        code: `func Map[T any, U any](items []T, fn func(T) U) []U {
+end` },
+      { lang: 'Go', code: `func Map[T any, U any](items []T, fn func(T) U) []U {
     result := make([]U, len(items))
     for i, item := range items {
         result[i] = fn(item)
     }
     return result
-}`,
-      },
-      {
-        lang: 'TypeScript',
-        code: `interface ApiResponse<T> {
+}` },
+      { lang: 'TypeScript', code: `interface ApiResponse<T> {
     data: T;
     status: number;
     message: string;
@@ -417,11 +382,8 @@ async function fetchData<T>(url: string): Promise<ApiResponse<T>> {
     const res = await fetch(url);
     if (!res.ok) throw new Error(res.statusText);
     return res.json();
-}`,
-      },
-      {
-        lang: 'Rust',
-        code: `fn quicksort<T: Ord>(arr: &mut [T]) {
+}` },
+      { lang: 'Rust', code: `fn quicksort<T: Ord>(arr: &mut [T]) {
     if arr.len() <= 1 { return; }
     let pivot = partition(arr);
     quicksort(&mut arr[..pivot]);
@@ -437,28 +399,116 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
     }
     arr.swap(i, len - 1);
     i
-}`,
-      },
+}` },
     ];
 
-    // ─── Utility ────────────────────────────────────────────────────
-    function calcWPM(chars, seconds) {
-      if (seconds <= 0) return 0;
-      const words = chars / 5;
-      return Math.round(words / (seconds / 60));
+    // ─── Sound Engine (Web Audio API) ──────────────────────
+    let audioCtx = null;
+    function getAudioCtx() {
+      if (!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
     }
 
+    function playKeyCorrect() {
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sine';
+        osc.frequency.value = 880;
+        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.08);
+      } catch(e) {}
+    }
+
+    function playKeyError() {
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'sawtooth';
+        osc.frequency.value = 140;
+        gain.gain.setValueAtTime(0.07, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.15);
+      } catch(e) {}
+    }
+
+    function playComplete() {
+      try {
+        const ctx = getAudioCtx();
+        const notes = [523, 659, 784, 1047];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'sine';
+          osc.frequency.value = freq;
+          const t = ctx.currentTime + i * 0.1;
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.2);
+        });
+      } catch(e) {}
+    }
+
+    function playTimerWarning() {
+      try {
+        const ctx = getAudioCtx();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = 'square';
+        osc.frequency.value = 660;
+        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
+        osc.connect(gain).connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + 0.1);
+      } catch(e) {}
+    }
+
+    function playTimerEnd() {
+      try {
+        const ctx = getAudioCtx();
+        const notes = [784, 659, 523, 440, 349];
+        notes.forEach((freq, i) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+          osc.type = 'triangle';
+          osc.frequency.value = freq;
+          const t = ctx.currentTime + i * 0.12;
+          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
+          osc.connect(gain).connect(ctx.destination);
+          osc.start(t);
+          osc.stop(t + 0.25);
+        });
+      } catch(e) {}
+    }
+
+    // ─── Utilities ──────────────────────────────────────────
+    function calcWPM(chars, seconds) {
+      if (seconds <= 0) return 0;
+      return Math.round((chars / 5) / (seconds / 60));
+    }
     function calcAccuracy(correct, total) {
       if (total <= 0) return 0;
       return Math.round((correct / total) * 100);
     }
-
     function formatTime(sec) {
       const m = Math.floor(sec / 60);
       const s = sec % 60;
       return m > 0 ? `${m}m ${s}s` : `${s}s`;
     }
-
     function getRating(wpm, acc) {
       if (wpm >= 70 && acc >= 98) return { emoji: '🏆', label: 'Legend' };
       if (wpm >= 50 && acc >= 95) return { emoji: '🔥', label: 'Pro' };
@@ -467,7 +517,25 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       return { emoji: '🌱', label: 'Keep practicing' };
     }
 
-    // ─── Char Component ─────────────────────────────────────────────
+    // ─── localStorage helpers ──────────────────────────────
+    const LS_KEY = 'code-typing-data';
+    function loadData() {
+      try {
+        const raw = localStorage.getItem(LS_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          // Ensure preferences object exists (migration from old saves)
+          if (!parsed.preferences) parsed.preferences = {};
+          return parsed;
+        }
+      } catch(e) {}
+      return { leaderboard: [], heatMap: {}, preferences: { mode: 'complete', blindMode: false, soundEnabled: true } };
+    }
+    function saveData(data) {
+      try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
+    }
+
+    // ─── Char Component ─────────────────────────────────────
     function Char({ char, state }) {
       let cls = 'char';
       if (state === 'correct')   cls += ' correct';
@@ -477,7 +545,171 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       return <span className={cls}>{char}</span>;
     }
 
-    // ─── Main App ──────────────────────────────────────────────────
+    // ─── Heat Map Component ────────────────────────────────
+    function HeatMapPanel({ heatMap, totalKeystrokes }) {
+      const [open, setOpen] = useState(false);
+
+      const entries = useMemo(() => {
+        return Object.entries(heatMap)
+          .filter(([, v]) => v.total > 0)
+          .sort((a, b) => (b[1].errors / b[1].total) - (a[1].errors / a[1].total));
+      }, [heatMap]);
+
+      const topMistakes = entries.slice(0, 5);
+      const totalErrors = entries.reduce((s, [, v]) => s + v.errors, 0);
+      const errorRate = totalKeystrokes > 0 ? ((totalErrors / totalKeystrokes) * 100).toFixed(1) : '0.0';
+
+      const getHeatColor = (errRate) => {
+        if (errRate === 0) return '#0d2b0d';
+        if (errRate < 0.05) return '#1a3a1a';
+        if (errRate < 0.1) return '#2d4a1a';
+        if (errRate < 0.2) return '#4a4a0d';
+        if (errRate < 0.3) return '#6b3a0d';
+        if (errRate < 0.4) return '#8a2a0d';
+        return '#6b0d0d';
+      };
+      const getTextColor = (errRate) => {
+        if (errRate < 0.1) return '#22c55e';
+        if (errRate < 0.2) return '#a3e635';
+        if (errRate < 0.3) return '#f59e0b';
+        return '#ef4444';
+      };
+
+      return (
+        <div className="heatmap-panel">
+          <div className="heatmap-header" onClick={() => setOpen(!open)}>
+            <span>🔥 Heat Map · {errorRate}% error rate · {totalErrors} errors</span>
+            <span className={`arrow ${open ? 'open' : ''}`}>▶</span>
+          </div>
+          {open && (
+            <div className="heatmap-body">
+              {entries.length === 0 ? (
+                <div style={{ textAlign: 'center', color: '#484f58', padding: '1rem' }}>
+                  No data yet — start typing!
+                </div>
+              ) : (
+                <>
+                  {topMistakes.length > 0 && (
+                    <div style={{ marginBottom: '0.6rem', fontSize: '0.75rem', color: '#8b949e' }}>
+                      Top mistakes: {topMistakes.map(([ch, v]) => (
+                        <span key={ch} style={{ marginRight: '0.6rem' }}>
+                          <code style={{ color: getTextColor(v.errors / v.total) }}>'{ch === ' ' ? '␣' : ch}'</code>
+                          {' '}{v.errors}/{v.total}
+                        </span>
+                      ))}
+                    </div>
+                  )}
+                  <div className="heatmap-grid">
+                    {entries.map(([ch, v]) => {
+                      const errRate = v.total > 0 ? v.errors / v.total : 0;
+                      return (
+                        <div
+                          key={ch}
+                          className="heatmap-cell"
+                          style={{ background: getHeatColor(errRate), color: getTextColor(errRate) }}
+                        >
+                          {ch === ' ' ? '␣' : ch}
+                          <span className="tooltip">
+                            '{ch === ' ' ? '␣' : ch === '\n' ? '⏎' : ch}'
+                            {v.total} keystrokes · {(errRate * 100).toFixed(0)}% errors
+                          </span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="heatmap-legend">
+                    <span><span className="swatch" style={{ background: '#0d2b0d' }}></span> 0%</span>
+                    <span><span className="swatch" style={{ background: '#4a4a0d' }}></span> 10-20%</span>
+                    <span><span className="swatch" style={{ background: '#8a2a0d' }}></span> 30-40%</span>
+                    <span><span className="swatch" style={{ background: '#6b0d0d' }}></span> 40%+</span>
+                  </div>
+                </>
+              )}
+            </div>
+          )}
+        </div>
+      );
+    }
+
+    // ─── Leaderboard Component ─────────────────────────────
+    function Leaderboard({ data, onClose, onDelete }) {
+      const [filter, setFilter] = useState('all');
+      const [sortBy, setSortBy] = useState('wpm');
+
+      const languages = useMemo(() => {
+        const langs = new Set(data.leaderboard.map(r => r.lang));
+        return ['all', ...Array.from(langs)];
+      }, [data.leaderboard]);
+
+      const filtered = useMemo(() => {
+        let items = filter === 'all' ? data.leaderboard : data.leaderboard.filter(r => r.lang === filter);
+        items.sort((a, b) => sortBy === 'wpm' ? b.wpm - a.wpm : b.date.localeCompare(a.date));
+        return items.slice(0, 50);
+      }, [data.leaderboard, filter, sortBy]);
+
+      return (
+        <div className="lb-overlay" onClick={e => { if (e.target === e.currentTarget) onClose(); }}>
+          <div className="lb-card">
+            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.5rem' }}>
+              <h2>🏆 Leaderboard</h2>
+              <button className="btn btn-secondary" onClick={onClose} style={{ padding: '0.25rem 0.6rem', fontSize: '0.75rem' }}>✕ Close</button>
+            </div>
+            <p className="lb-sub">Best results · {data.leaderboard.length} entries · Top 50 shown</p>
+
+            <div className="lb-filters">
+              {languages.map(l => (
+                <button key={l} className={`lb-filter-btn ${filter === l ? 'active' : ''}`} onClick={() => setFilter(l)}>
+                  {l === 'all' ? 'All' : l}
+                </button>
+              ))}
+              <div style={{ flex: 1 }} />
+              <button className={`lb-filter-btn ${sortBy === 'wpm' ? 'active' : ''}`} onClick={() => setSortBy('wpm')}>By WPM</button>
+              <button className={`lb-filter-btn ${sortBy === 'date' ? 'active' : ''}`} onClick={() => setSortBy('date')}>By Date</button>
+            </div>
+
+            {filtered.length === 0 ? (
+              <div className="lb-empty">No results yet. Complete a snippet to appear here!</div>
+            ) : (
+              <table className="lb-table">
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Lang</th>
+                    <th style={{ cursor: 'pointer' }} onClick={() => setSortBy('wpm')}>WPM ↕</th>
+                    <th>Acc</th>
+                    <th>Mode</th>
+                    <th style={{ cursor: 'pointer' }} onClick={() => setSortBy('date')}>Date ↕</th>
+                    <th></th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filtered.map((r, i) => {
+                    let rankCls = 'lb-rank';
+                    if (i === 0) rankCls += ' gold';
+                    else if (i === 1) rankCls += ' silver';
+                    else if (i === 2) rankCls += ' bronze';
+                    const medal = i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '';
+                    return (
+                      <tr key={`${r.lang}-${r.date}-${i}`}>
+                        <td className={rankCls}>{medal || (i + 1)}</td>
+                        <td><span className="badge">{r.lang}</span></td>
+                        <td className="lb-wpm">{r.wpm}</td>
+                        <td className="lb-acc">{r.accuracy}%</td>
+                        <td style={{ color: '#8b949e', fontSize: '0.7rem' }}>{r.mode || 'complete'}</td>
+                        <td style={{ color: '#8b949e', fontSize: '0.7rem' }}>{r.date}</td>
+                        <td><button className="lb-del-btn" onClick={() => onDelete(r.lang, r.date, r.wpm)} title="Delete">✕</button></td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </table>
+            )}
+          </div>
+        </div>
+      );
+    }
+
+    // ─── Main App ─────────────────────────────────────────
     function App() {
       const [snippetIndex, setSnippetIndex] = useState(0);
       const [input, setInput] = useState('');
@@ -486,34 +718,71 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const [showResults, setShowResults] = useState(false);
       const [roundStats, setRoundStats] = useState([]);
       const textareaRef = useRef(null);
+      const timerRef = useRef(null);
+      const [timerWarningPlayed, setTimerWarningPlayed] = useState(false);
+      const [timerEndPlayed, setTimerEndPlayed] = useState(false);
+
+      // ─── Persistent Settings ──────────────────────────
+      const [mode, setMode] = useState(data.preferences?.mode || 'complete');
+      const [blindMode, setBlindMode] = useState(data.preferences?.blindMode || false);
+      const [soundEnabled, setSoundEnabled] = useState(data.preferences?.soundEnabled !== false);
+      const [data, setData] = useState(loadData);
+      const [showLeaderboard, setShowLeaderboard] = useState(false);
+
+      // Timed mode state (local, not persisted)
+      const [timeRemaining, setTimeRemaining] = useState(null);
+      const [timedActive, setTimedActive] = useState(false);
+      const [timedChars, setTimedChars] = useState(0);
+      const [timedCorrect, setTimedCorrect] = useState(0);
+      const [timedSnippetsDone, setTimedSnippetsDone] = useState(0);
 
       const snippet = SNIPPETS[snippetIndex];
       const codeChars = snippet.code;
 
-      // --- Derived ---
+      const isTimed = mode !== 'complete';
+      const timerDuration = isTimed ? parseInt(mode) : 0;
       const isRunning = startTime !== null && endTime === null;
       const isDone = endTime !== null;
 
-      // Build char states
+      // ─── Heat Map (persistent) ──────────────────────
+      const [heatMap, setHeatMap] = useState(data.heatMap || {});
+
+      const updateHeatMap = useCallback((char, correct) => {
+        setHeatMap(prev => {
+          const next = { ...prev };
+          const c = char === '\n' ? '⏎' : char === ' ' ? '␣' : char;
+          if (!next[c]) next[c] = { total: 0, errors: 0 };
+          next[c] = { ...next[c], total: next[c].total + 1, errors: next[c].errors + (correct ? 0 : 1) };
+          return next;
+        });
+      }, []);
+
+      // ─── Sound helpers ──────────────────────────────
+      const sfxCorrect = useCallback(() => { if (soundEnabled) playKeyCorrect(); }, [soundEnabled]);
+      const sfxError = useCallback(() => { if (soundEnabled) playKeyError(); }, [soundEnabled]);
+      const sfxComplete = useCallback(() => { if (soundEnabled) playComplete(); }, [soundEnabled]);
+      const sfxTimerWarning = useCallback(() => { if (soundEnabled) playTimerWarning(); }, [soundEnabled]);
+      const sfxTimerEnd = useCallback(() => { if (soundEnabled) playTimerEnd(); }, [soundEnabled]);
+
+      // ─── Persist data ───────────────────────────────
+      useEffect(() => {
+        saveData({ ...data, heatMap, preferences: { mode, blindMode, soundEnabled } });
+      }, [heatMap, mode, blindMode, soundEnabled]);
+
+      // ─── Derived stats ──────────────────────────────
       const charStates = useMemo(() => {
         const states = [];
         for (let i = 0; i < codeChars.length; i++) {
-          if (i >= input.length) {
-            states.push('pending');
-          } else if (input[i] === codeChars[i]) {
-            states.push('correct');
-          } else {
-            states.push('incorrect');
-          }
+          if (i >= input.length) states.push('pending');
+          else if (input[i] === codeChars[i]) states.push('correct');
+          else states.push('incorrect');
         }
         return states;
       }, [codeChars, input]);
 
-      // Current position
       const currentPos = input.length;
       const progress = Math.min((currentPos / codeChars.length) * 100, 100);
 
-      // Stats
       const elapsed = isRunning && startTime
         ? Math.floor((Date.now() - startTime) / 1000)
         : isDone && endTime && startTime
@@ -524,38 +793,152 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const totalTyped = input.length;
       const wpm = calcWPM(correctCount, elapsed);
       const accuracy = calcAccuracy(correctCount, totalTyped);
+      const totalKeystrokes = Object.values(heatMap).reduce((s, v) => s + v.total, 0);
 
-      // --- Handlers ---
+      // ─── Timer Logic ──────────────────────────────────
+      useEffect(() => {
+        if (timedActive && timeRemaining > 0) {
+          const interval = setInterval(() => {
+            setTimeRemaining(prev => {
+              const next = prev - 1;
+              if (next <= 0) {
+                clearInterval(interval);
+                return 0;
+              }
+              return next;
+            });
+          }, 1000);
+          return () => clearInterval(interval);
+        }
+      }, [timedActive, timeRemaining]);
+
+      // Timer warning sounds
+      useEffect(() => {
+        if (timedActive && timeRemaining <= 10 && timeRemaining > 0 && !timerWarningPlayed) {
+          setTimerWarningPlayed(true);
+          sfxTimerWarning();
+        }
+        if (!timedActive) setTimerWarningPlayed(false);
+      }, [timedActive, timeRemaining, timerWarningPlayed, sfxTimerWarning]);
+
+      // Timer end
+      useEffect(() => {
+        if (timedActive && timeRemaining === 0 && !timerEndPlayed) {
+          setTimerEndPlayed(true);
+          sfxTimerEnd();
+          // End the timed round
+          if (startTime) {
+            setEndTime(Date.now());
+            const finalWpm = calcWPM(timedCorrect, timerDuration);
+            const finalAcc = calcAccuracy(timedCorrect, timedCorrect + (timedChars - timedCorrect));
+            setRoundStats(prev => [...prev, {
+              snippetIndex: -1,
+              wpm: finalWpm,
+              accuracy: finalAcc,
+              time: timerDuration,
+              lang: `Timed ${mode}s`,
+              mode: `timed-${mode}`,
+              chars: timedChars,
+              correct: timedCorrect,
+            }]);
+            // Auto-save to leaderboard
+            if (finalAcc >= 70) {
+              setData(prev => {
+                const entry = {
+                  lang: `Timed ${mode}s`,
+                  wpm: finalWpm,
+                  accuracy: finalAcc,
+                  date: new Date().toISOString().split('T')[0],
+                  mode: `timed-${mode}`,
+                };
+                const lb = [...prev.leaderboard, entry];
+                return { ...prev, leaderboard: lb };
+              });
+            }
+          }
+        }
+      }, [timedActive, timeRemaining, timerEndPlayed, startTime]);
+
+      // ─── Input Handler ──────────────────────────────
       const handleInput = useCallback((e) => {
         if (isDone) return;
         const val = e.target.value;
+
         if (!startTime && val.length > 0) {
           setStartTime(Date.now());
         }
-        // Prevent typing past the snippet length
-        if (val.length <= codeChars.length) {
-          setInput(val);
-        }
-        // Check if complete
-        if (val.length === codeChars.length) {
-          const now = Date.now();
-          setEndTime(now);
-          const endElapsed = Math.floor((now - (startTime || now)) / 1000);
-          const endCorrect = codeChars.split('').filter((ch, i) => i < val.length && val[i] === ch).length;
-          setRoundStats(prev => [...prev, {
-            snippetIndex,
-            wpm: calcWPM(endCorrect, endElapsed),
-            accuracy: calcAccuracy(endCorrect, val.length),
-            time: endElapsed,
-            lang: snippet.lang,
-          }]);
-        }
-      }, [isDone, startTime, codeChars, snippetIndex, snippet.lang]);
 
-      const handleKeyDown = useCallback((e) => {
-        // Prevent backspace from deleting already-correct chars if desired
-        // Actually allow it — user experience is better
-      }, []);
+        if (isTimed) {
+          // Timed mode: keep track of typed characters
+          if (val.length > input.length) {
+            // Detect which char was just typed
+            const newChar = val[val.length - 1];
+            const codeIdx = input.length;
+            const isCorrect = codeIdx < codeChars.length && newChar === codeChars[codeIdx];
+            updateHeatMap(newChar, isCorrect);
+            if (isCorrect) setTimedCorrect(prev => prev + 1);
+            setTimedChars(val.length);
+
+            if (isCorrect) sfxCorrect();
+            else sfxError();
+
+            if (val.length >= codeChars.length) {
+              // Auto-advance snippet in timed mode
+              setSnippetIndex(prev => (prev + 1) % SNIPPETS.length);
+              setTimedSnippetsDone(prev => prev + 1);
+              setInput('');
+              return;
+            }
+          }
+          setInput(val);
+        } else {
+          // Complete mode (original behavior)
+          if (val.length <= codeChars.length) {
+            // Detect new char
+            if (val.length > input.length) {
+              const newChar = val[val.length - 1];
+              const codeIdx = input.length;
+              const isCorrect = codeIdx < codeChars.length && newChar === codeChars[codeIdx];
+              updateHeatMap(newChar, isCorrect);
+              if (isCorrect) sfxCorrect();
+              else sfxError();
+            }
+            setInput(val);
+          }
+
+          if (val.length === codeChars.length) {
+            const now = Date.now();
+            setEndTime(now);
+            sfxComplete();
+            const endElapsed = Math.floor((now - (startTime || now)) / 1000);
+            const endCorrect = codeChars.split('').filter((ch, i) => i < val.length && val[i] === ch).length;
+            const endAcc = calcAccuracy(endCorrect, val.length);
+            const endWpm = calcWPM(endCorrect, endElapsed);
+            setRoundStats(prev => [...prev, {
+              snippetIndex,
+              wpm: endWpm,
+              accuracy: endAcc,
+              time: endElapsed,
+              lang: snippet.lang,
+              mode: 'complete',
+            }]);
+            // Auto-save to leaderboard if accuracy >= 70%
+            if (endAcc >= 70) {
+              setData(prev => {
+                const entry = {
+                  lang: snippet.lang,
+                  wpm: endWpm,
+                  accuracy: endAcc,
+                  date: new Date().toISOString().split('T')[0],
+                  mode: 'complete',
+                };
+                const lb = [...prev.leaderboard, entry];
+                return { ...prev, leaderboard: lb };
+              });
+            }
+          }
+        }
+      }, [isDone, startTime, isTimed, input, codeChars, snippetIndex, snippet.lang, updateHeatMap, sfxCorrect, sfxError, sfxComplete]);
 
       const nextSnippet = useCallback(() => {
         const next = (snippetIndex + 1) % SNIPPETS.length;
@@ -563,6 +946,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         setInput('');
         setStartTime(null);
         setEndTime(null);
+        setShowResults(false);
         textareaRef.current?.focus();
       }, [snippetIndex]);
 
@@ -584,21 +968,69 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         setEndTime(null);
         setShowResults(false);
         setRoundStats([]);
+        setTimeRemaining(null);
+        setTimedActive(false);
+        setTimedChars(0);
+        setTimedCorrect(0);
+        setTimedSnippetsDone(0);
+        setTimerEndPlayed(false);
+        setTimerWarningPlayed(false);
       }, []);
 
-      // Auto focus textarea
-      useEffect(() => {
+      // ─── Mode change ────────────────────────────────
+      const handleModeChange = useCallback((newMode) => {
+        if (isRunning) return; // prevent changing mode mid-round
+        setMode(newMode);
+        setInput('');
+        setStartTime(null);
+        setEndTime(null);
+        setShowResults(false);
+        setTimeRemaining(null);
+        setTimedActive(false);
+        setTimedChars(0);
+        setTimedCorrect(0);
+        setTimedSnippetsDone(0);
+        setTimerEndPlayed(false);
+        setTimerWarningPlayed(false);
+      }, [isRunning]);
+
+      // ─── Start timed session ────────────────────────
+      const startTimed = useCallback(() => {
+        setInput('');
+        setStartTime(Date.now());
+        setEndTime(null);
+        setTimeRemaining(timerDuration);
+        setTimedActive(true);
+        setTimedChars(0);
+        setTimedCorrect(0);
+        setTimedSnippetsDone(0);
+        setTimerEndPlayed(false);
+        setTimerWarningPlayed(false);
         textareaRef.current?.focus();
-      }, [snippetIndex]);
+      }, [timerDuration]);
 
-      // Handle completion detection for auto-showing results
+      // Auto focus
       useEffect(() => {
-        if (isDone) {
-          const timer = setTimeout(() => setShowResults(true), 600);
-          return () => clearTimeout(timer);
-        }
-      }, [isDone]);
+        if (!isDone) textareaRef.current?.focus();
+      }, [snippetIndex, isDone, mode]);
 
+      // Auto show results (complete mode)
+      useEffect(() => {
+        if (isDone && !isTimed) {
+          const t = setTimeout(() => setShowResults(true), 600);
+          return () => clearTimeout(t);
+        }
+      }, [isDone, isTimed]);
+
+      // ─── Leaderboard management ─────────────────────
+      const handleDeleteEntry = useCallback((lang, date, wpm) => {
+        setData(prev => {
+          const lb = prev.leaderboard.filter(r => !(r.lang === lang && r.date === date && r.wpm === wpm));
+          return { ...prev, leaderboard: lb };
+        });
+      }, []);
+
+      // ─── Derived results ────────────────────────────
       const overallWpm = roundStats.length > 0
         ? Math.round(roundStats.reduce((s, r) => s + r.wpm, 0) / roundStats.length)
         : 0;
@@ -606,48 +1038,106 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         ? Math.round(roundStats.reduce((s, r) => s + r.accuracy, 0) / roundStats.length)
         : 0;
       const totalTime = roundStats.reduce((s, r) => s + r.time, 0);
-
       const rating = getRating(overallWpm, overallAcc);
 
-      // ─── Render ──────────────────────────────────────────────────
+      // ─── Display vars ───────────────────────────────
+      const displayTime = isTimed ? (timeRemaining !== null ? timeRemaining : timerDuration) : elapsed;
+      const displayWpm = isTimed ? calcWPM(timedCorrect, timerDuration - (timeRemaining || 0)) : wpm;
+      const displayAcc = isTimed ? calcAccuracy(timedCorrect, timedChars || 1) : accuracy;
+      const timerProgress = timerDuration > 0 ? ((timeRemaining !== null ? timeRemaining : timerDuration) / timerDuration) * 100 : 0;
+      const timerUrgency = timeRemaining !== null && timeRemaining <= 5;
+
+      // ─── Render ──────────────────────────────────────
       return (
         <div className="container">
           <h1>⌨️ Code Typing Challenge</h1>
           <p className="subtitle">Type the code as fast and accurately as you can</p>
 
-          {/* Stats */}
+          {/* ───── Settings Bar ───── */}
+          <div className="settings-bar">
+            <div className="mode-group">
+              <button className={`mode-btn ${mode === 'complete' ? 'active' : ''}`}
+                onClick={() => handleModeChange('complete')} disabled={isRunning}>Snippet</button>
+              <button className={`mode-btn ${mode === '30' ? 'active' : ''}`}
+                onClick={() => handleModeChange('30')} disabled={isRunning}>30s</button>
+              <button className={`mode-btn ${mode === '60' ? 'active' : ''}`}
+                onClick={() => handleModeChange('60')} disabled={isRunning}>60s</button>
+              <button className={`mode-btn ${mode === '120' ? 'active' : ''}`}
+                onClick={() => handleModeChange('120')} disabled={isRunning}>120s</button>
+            </div>
+            <div className="divider" />
+            <button className={`setting-toggle ${blindMode ? 'active' : ''}`}
+              onClick={() => setBlindMode(!blindMode)}>
+              <span className="indicator" /> Blind
+            </button>
+            <button className={`setting-toggle ${soundEnabled ? 'active' : ''}`}
+              onClick={() => setSoundEnabled(!soundEnabled)}>
+              <span className={`sound-wave ${!soundEnabled ? 'muted' : ''}`}>🔊</span>
+            </button>
+          </div>
+
+          {/* ───── Stats Bar ───── */}
           <div className="stats-bar">
             <div className="stat">
-              <div className="stat-value blue">{formatTime(elapsed)}</div>
-              <div className="stat-label">Time</div>
+              <div className={`stat-value ${isTimed && timerUrgency ? 'timer-danger' : 'blue'}`}>
+                {isTimed ? formatTime(displayTime) : formatTime(displayTime)}
+              </div>
+              <div className="stat-label">{isTimed ? 'Remaining' : 'Time'}</div>
             </div>
             <div className="stat">
-              <div className="stat-value green">{wpm}</div>
+              <div className={`stat-value green ${blindMode && isRunning ? 'blurred' : ''}`}>
+                {blindMode && isRunning ? '???' : displayWpm}
+              </div>
               <div className="stat-label">WPM</div>
             </div>
             <div className="stat">
-              <div className="stat-value orange">{accuracy}%</div>
+              <div className={`stat-value orange ${blindMode && isRunning ? 'blurred' : ''}`}>
+                {blindMode && isRunning ? '???' : displayAcc}%
+              </div>
               <div className="stat-label">Accuracy</div>
             </div>
             <div className="stat">
-              <div className="stat-value purple">{progress.toFixed(0)}%</div>
-              <div className="stat-label">Progress</div>
+              <div className="stat-value purple">
+                {isTimed ? `${timedSnippetsDone}` : `${progress.toFixed(0)}%`}
+              </div>
+              <div className="stat-label">{isTimed ? 'Snippets' : 'Progress'}</div>
             </div>
+            {isTimed && (
+              <div className="stat">
+                <div className="stat-value red">{timedCorrect}</div>
+                <div className="stat-label">Correct</div>
+              </div>
+            )}
           </div>
 
-          {/* Progress bar */}
-          <div className="progress-bar">
-            <div className="progress-fill" style={{ width: `${progress}%` }} />
-          </div>
+          {/* ───── Timer Progress Bar (timed mode) ───── */}
+          {isTimed && (
+            <div className="progress-bar">
+              <div className={`progress-fill timed ${timeRemaining !== null && timeRemaining <= 10 ? 'warning' : ''} ${timerUrgency ? 'danger' : ''}`}
+                style={{ width: `${timerProgress}%` }} />
+            </div>
+          )}
 
-          {/* Snippet info */}
+          {/* ───── Progress Bar (complete mode) ───── */}
+          {!isTimed && (
+            <div className="progress-bar">
+              <div className="progress-fill" style={{ width: `${progress}%` }} />
+            </div>
+          )}
+
+          {/* ───── Snippet Info ───── */}
           <div className="snippet-info">
             <span className="badge">{snippet.lang}</span>
-            <span>Snippet {snippetIndex + 1} of {SNIPPETS.length}</span>
+            <span>
+              {isTimed
+                ? `Timed ${mode}s · Snippet ${(snippetIndex % SNIPPETS.length) + 1} of ${SNIPPETS.length}`
+                : `Snippet ${snippetIndex + 1} of ${SNIPPETS.length}`
+              }
+            </span>
           </div>
 
-          {/* Code display */}
-          <div className="code-display">
+          {/* ───── Code Display ───── */}
+          <div className={`code-display ${blindMode && !isDone ? 'blind' : ''}`}>
             {codeChars.split('').map((ch, i) => (
               <Char key={i} char={ch} state={
                 i === currentPos && !isDone ? 'current' : charStates[i]
@@ -655,15 +1145,17 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
             ))}
           </div>
 
-          {/* Input */}
+          {/* ───── Input ───── */}
           <div className="input-area">
             <textarea
               ref={textareaRef}
               value={input}
               onChange={handleInput}
-              onKeyDown={handleKeyDown}
-              placeholder="Start typing here..."
-              disabled={isDone}
+              placeholder={isTimed
+                ? (timedActive ? 'Type the code above...' : 'Press "Start Timer" to begin...')
+                : 'Start typing here...'
+              }
+              disabled={isDone || (isTimed && !timedActive)}
               spellCheck={false}
               autoComplete="off"
               autoCorrect="off"
@@ -671,8 +1163,13 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
             />
           </div>
 
-          {/* Actions */}
+          {/* ───── Actions ───── */}
           <div className="actions">
+            {isTimed && !timedActive && !isDone && (
+              <button className="btn btn-primary" onClick={startTimed}>
+                ▶ Start Timer ({mode}s)
+              </button>
+            )}
             {isDone ? (
               <>
                 <button className="btn btn-primary" onClick={nextSnippet}>
@@ -685,31 +1182,43 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
                 )}
               </>
             ) : (
-              <>
-                <button className="btn btn-danger" onClick={handleReset} disabled={!isRunning}>
-                  ↺ Reset
-                </button>
-              </>
+              <button className="btn btn-danger" onClick={handleReset} disabled={!isRunning && !timedActive}>
+                ↺ Reset
+              </button>
+            )}
+            {isTimed && timedActive && !isDone && (
+              <button className="btn btn-danger" onClick={() => {
+                setEndTime(Date.now());
+                setTimedActive(false);
+                setTimeRemaining(0);
+              }}>
+                ■ Stop
+              </button>
             )}
           </div>
 
+          {/* ───── Heat Map ───── */}
+          <HeatMapPanel heatMap={heatMap} totalKeystrokes={totalKeystrokes} />
+
+          {/* ───── Footer ───── */}
           <div className="footer">
             React 18 &middot; {SNIPPETS.length} snippets &middot;
-            {' '}<a href="https://github.com/Samuelfmedeiros/code-typing" target="_blank">GitHub</a>
+            <button onClick={() => setShowLeaderboard(true)}>
+              🏆 Leaderboard ({data.leaderboard.length})
+            </button>
+            &middot;
+            <a href="https://github.com/Samuelfmedeiros/code-typing" target="_blank">GitHub</a>
           </div>
 
-          {/* Results Modal */}
+          {/* ───── Results Modal ───── */}
           {showResults && roundStats.length > 0 && (
-            <div className="results-overlay" onClick={(e) => {
-              if (e.target === e.currentTarget) setShowResults(false);
-            }}>
+            <div className="results-overlay" onClick={e => { if (e.target === e.currentTarget) setShowResults(false); }}>
               <div className="results-card">
                 <div className="emoji-big">{rating.emoji}</div>
                 <h2>Session Complete!</h2>
-                <p style={{ color: '#8b949e', marginBottom: '0.5rem' }}>
-                  {rating.label} &middot; {roundStats.length} snippets
+                <p style={{ color: '#8b949e', marginBottom: '0.3rem', fontSize: '0.85rem' }}>
+                  {rating.label} &middot; {roundStats.length} snippet{roundStats.length > 1 ? 's' : ''}
                 </p>
-
                 <div className="results-grid">
                   <div className="item">
                     <div className="value green">{overallWpm}</div>
@@ -728,32 +1237,31 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
                     <div className="lbl">Completed</div>
                   </div>
                 </div>
-
-                <div style={{ marginBottom: '1rem', textAlign: 'left' }}>
-                  <p style={{ fontSize: '0.8rem', color: '#8b949e', marginBottom: '0.4rem' }}>Per Snippet:</p>
+                <div style={{ marginBottom: '0.75rem', textAlign: 'left' }}>
+                  <p style={{ fontSize: '0.75rem', color: '#8b949e', marginBottom: '0.3rem' }}>Per Snippet:</p>
                   {roundStats.map((r, i) => (
-                    <div key={i} style={{
-                      display: 'flex', justifyContent: 'space-between',
-                      fontSize: '0.8rem', padding: '0.2rem 0',
-                      borderBottom: '1px solid #21262d'
-                    }}>
-                      <span style={{ color: '#58a6ff' }}>{r.lang} #{i + 1}</span>
+                    <div key={i} style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.75rem', padding: '0.2rem 0', borderBottom: '1px solid #21262d' }}>
+                      <span style={{ color: '#58a6ff' }}>{r.lang || `Snippet #${i + 1}`}{r.mode && r.mode.startsWith('timed') ? ` (${r.mode})` : ''}</span>
                       <span>{r.wpm} WPM &middot; {r.accuracy}% &middot; {formatTime(r.time)}</span>
                     </div>
                   ))}
                 </div>
-
                 <button className="btn btn-primary" onClick={handleRestart} style={{ width: '100%' }}>
                   🔄 Start New Session
                 </button>
               </div>
             </div>
           )}
+
+          {/* ───── Leaderboard Modal ───── */}
+          {showLeaderboard && (
+            <Leaderboard data={data} onClose={() => setShowLeaderboard(false)} onDelete={handleDeleteEntry} />
+          )}
         </div>
       );
     }
 
-    // ─── Mount ──────────────────────────────────────────────────────
+    // ─── Mount ─────────────────────────────────────────────
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
