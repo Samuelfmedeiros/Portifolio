@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, MotionValue, useScroll, useTransform } from "framer-motion";
-import { useRef, useMemo, useState, useEffect, useCallback } from "react";
+import { useRef, useMemo, useState, useEffect, useCallback, startTransition } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
   Cpu, Flame, Zap, GitMerge, RefreshCw, HardDrive, Sigma, FileJson,
@@ -669,7 +669,9 @@ export function ProfileSection() {
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
-    setMounted(true);
+    startTransition(() => {
+      setMounted(true);
+    });
   }, []);
   const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);

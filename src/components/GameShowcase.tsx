@@ -22,8 +22,6 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   const { track } = useAnalytics();
   const { t } = useLanguage();
 
-  if (!repos || repos.length === 0) return null;
-
   const playGame = useCallback((name: string, url: string | null) => {
     track({ type: "game_play", game: name });
     const el = embedRef.current;
@@ -68,6 +66,8 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
     buttons.forEach((btn) => btn.addEventListener("click", handleClick));
     return () => buttons.forEach((btn) => btn.removeEventListener("click", handleClick));
   }, [playGame]);
+
+  if (!repos || repos.length === 0) return null;
 
   return (
     <div className="py-6 px-6">
