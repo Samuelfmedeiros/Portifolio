@@ -3,18 +3,17 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <meta name="HandheldFriendly" content="true" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
   <title>⌨️ Code Typing Challenge</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       background: #0a0a0f; color: #e2e8f0;
-      min-height: 100vh; display: flex; justify-content: center; align-items: flex-start; padding: 1.5rem 1rem;
+      min-height: 100vh; min-height: 100dvh; display: flex; justify-content: center; align-items: flex-start; padding: 1.5rem 1rem;
+      touch-action: manipulation; -webkit-text-size-adjust: 100%;
     }
     #root { width: 100%; max-width: 800px; }
 
@@ -84,7 +83,7 @@
       background: #0f0f1a; border: 1px solid #1e293b; border-radius: 8px;
       padding: 1rem; margin-bottom: 0.75rem;
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-      font-size: 0.85rem; line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
+      font-size: clamp(0.7rem, 2.5vw, 0.85rem); line-height: 1.6; overflow-x: auto; white-space: pre-wrap; word-break: break-word;
       min-height: 80px; position: relative; transition: filter 0.25s;
     }
     .code-display.blind {
@@ -97,7 +96,6 @@
       background: rgba(10,10,15,0.6); border-radius: 8px;
       filter: none; letter-spacing: 0.1em; text-shadow: 0 0 20px rgba(34,211,238,0.3);
     }
-    .stat-value.blurred { filter: blur(6px); user-select: none; }
     .char { position: relative; transition: color 0.05s; }
     .char.correct   { color: #22c55e; }
     .char.incorrect { color: #ef4444; background: #3d1214; border-radius: 2px; }
@@ -111,7 +109,7 @@
       background: #0f0f1a; border: 1px solid #1e293b; border-radius: 8px;
       color: #e2e8f0;
       font-family: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', 'Consolas', monospace;
-      font-size: 0.85rem; line-height: 1.6; resize: vertical; outline: none;
+      font-size: clamp(0.75rem, 2.8vw, 0.9rem); line-height: 1.6; resize: vertical; outline: none;
       transition: border-color 0.15s;
     }
     .input-area textarea:focus { border-color: #22d3ee; box-shadow: 0 0 0 3px rgba(34, 211, 238, 0.15); }
@@ -256,21 +254,60 @@
       body { padding: 0.75rem; }
       .container { padding: 1rem; }
       h1 { font-size: 1.2rem; }
-      .settings-bar { gap: 0.35rem; padding: 0.4rem 0.5rem; }
+      .settings-bar { gap: 0.35rem; padding: 0.4rem 0.5rem; flex-wrap: wrap; }
       .mode-btn { padding: 0.2rem 0.45rem; font-size: 0.65rem; }
       .setting-toggle { padding: 0.2rem 0.4rem; font-size: 0.65rem; }
       .stats-bar { gap: 0.5rem; padding: 0.4rem 0.5rem; }
       .stat-value { font-size: 1rem; }
       .stat { min-width: 45px; }
-      .code-display { font-size: 0.72rem; padding: 0.6rem; min-height: 60px; }
-      .input-area textarea { min-height: 55px; font-size: 0.72rem; padding: 0.5rem; }
-      .btn { padding: 0.4rem 0.9rem; font-size: 0.78rem; }
+      .code-display { font-size: clamp(0.65rem, 2.5vw, 0.78rem); padding: 0.6rem; min-height: 60px; }
+      .input-area textarea { min-height: 60px; font-size: clamp(0.7rem, 2.8vw, 0.8rem); padding: 0.5rem; }
+      .btn { padding: 0.4rem 0.9rem; font-size: 0.78rem; min-height: 44px; }
       .heatmap-cell { width: 22px; height: 22px; font-size: 0.65rem; }
+      .results-card { padding: 1.5rem 1rem; }
+      .results-card h2 { font-size: 1.2rem; }
+      .results-grid { gap: 0.5rem; }
+      .results-grid .item .value { font-size: 1rem; }
+      .lb-card { padding: 1rem; }
+      .snippet-info { font-size: 0.65rem; }
     }
     @media (max-width: 480px) {
-      .stats-bar { gap: 0.35rem; }
-      .stat { min-width: 40px; }
+      .stats-bar {
+        display: grid; grid-template-columns: 1fr 1fr; gap: 0.35rem;
+        justify-items: center; align-items: center;
+      }
+      .stat { min-width: auto; width: 100%; }
+      .stat-value { font-size: 0.95rem; }
+      .stat-label { font-size: 0.6rem; }
       .settings-bar .divider { display: none; }
+      .mode-group { flex-wrap: wrap; justify-content: center; }
+      .settings-bar { justify-content: center; }
+      .code-display { min-height: 50px; }
+      .input-area textarea { min-height: 55px; }
+      .lb-table { font-size: 0.65rem; }
+      .lb-table th, .lb-table td { padding: 0.3rem; }
+      .lb-card { padding: 0.75rem; }
+      .lb-card h2 { font-size: 1rem; }
+      .heatmap-cell { width: 20px; height: 20px; font-size: 0.6rem; }
+      .results-grid { grid-template-columns: 1fr 1fr; }
+    }
+    @media (max-width: 360px) {
+      body { padding: 0.5rem; }
+      .container { padding: 0.75rem; }
+      h1 { font-size: 1rem; }
+      .stats-bar { gap: 0.25rem; }
+      .stat-value { font-size: 0.85rem; }
+      .code-display { padding: 0.4rem; min-height: 40px; }
+      .input-area textarea { min-height: 50px; padding: 0.4rem; }
+    }
+
+    /* ─── Mobile detection via pointer coarse ─────────── */
+    @media (pointer: coarse) {
+      .quick-keys.visible { display: flex; }
+      .kb-dismiss-wrap.visible { display: flex; }
+      .btn { min-height: 44px; }
+      .mode-btn { min-height: 36px; }
+      .setting-toggle { min-height: 36px; }
     }
 
     /* ─── Sound indicator ─────────────────────────────── */
@@ -283,97 +320,160 @@
       color: #ef4444; font-weight: 700;
     }
 
-    /* ─── Swipe hint ─────────────────────────────────── */
+    /* ─── Blind Mode Hardcore ──────────────────────────── */
+    .code-display.blind-hardcore {
+      filter: none; user-select: none; cursor: default;
+    }
+    .code-display.blind-hardcore .char { color: transparent !important; background: none !important; box-shadow: none !important; }
+    .code-display.blind-hardcore .char.current::after {
+      content: '|'; position: absolute; color: #22d3ee; font-size: 1.2rem;
+      animation: blink-cursor 0.6s infinite alternate;
+    }
+    @keyframes blink-cursor { from { opacity: 1; } to { opacity: 0.3; } }
+
+    /* ─── Timer Ring SVG ───────────────────────────────── */
+    .timer-ring-wrap { display: flex; justify-content: center; align-items: center; }
+    .timer-ring-svg { width: 60px; height: 60px; transform: rotate(-90deg); }
+    .timer-ring-bg { fill: none; stroke: #1e293b; stroke-width: 4; }
+    .timer-ring-fg {
+      fill: none; stroke: #22d3ee; stroke-width: 4; stroke-linecap: round;
+      transition: stroke-dashoffset 1s linear, stroke 0.3s;
+    }
+    .timer-ring-fg.warning { stroke: #f59e0b; }
+    .timer-ring-fg.danger { stroke: #ef4444; }
+    .timer-ring-text { font-size: 0.85rem; font-weight: 700; fill: #e2e8f0; }
+    .timer-ring-sub { font-size: 0.45rem; fill: #94a3b8; }
+
+    /* ─── Flash Overlay ────────────────────────────────── */
+    .flash-overlay {
+      position: fixed; inset: 0; pointer-events: none; z-index: 300;
+      animation: flash-anim 0.4s ease-out forwards;
+    }
+    @keyframes flash-anim {
+      0% { background: rgba(239, 68, 68, 0.25); }
+      100% { background: transparent; }
+    }
+
+    /* ─── Leaderboard Stats ────────────────────────────── */
+    .lb-stats {
+      display: flex; gap: 0.6rem; flex-wrap: wrap; margin-bottom: 0.8rem;
+      padding: 0.5rem 0.75rem; background: #0a0a0f; border-radius: 8px; border: 1px solid #1e293b;
+    }
+    .lb-stat { text-align: center; min-width: 50px; flex: 1; }
+    .lb-stat-val { font-size: 1rem; font-weight: 700; color: #22d3ee; }
+    .lb-stat-lbl { font-size: 0.6rem; color: #8b949e; text-transform: uppercase; letter-spacing: 0.05em; }
+    .lb-pagination {
+      display: flex; justify-content: center; align-items: center; gap: 0.5rem;
+      margin-top: 0.75rem; font-size: 0.75rem; color: #8b949e;
+    }
+    .lb-page-btn {
+      padding: 0.25rem 0.65rem; border: 1px solid #1e293b; background: #0a0a0f;
+      color: #94a3b8; cursor: pointer; border-radius: 6px; font-size: 0.7rem; font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lb-page-btn:hover:not(:disabled) { background: #1e293b; color: #e2e8f0; }
+    .lb-page-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+    .lb-export-btn {
+      background: none; border: 1px solid #1e293b; color: #8b949e; cursor: pointer;
+      font-size: 0.7rem; padding: 0.2rem 0.5rem; border-radius: 4px; font-family: inherit;
+      transition: all 0.15s;
+    }
+    .lb-export-btn:hover { background: #1e293b; color: #22d3ee; }
+
+    /* ─── Per-Snippet Stats ────────────────────────────── */
+    .snippet-stats-panel {
+      margin-bottom: 0.75rem; border: 1px solid #1e293b; border-radius: 8px;
+      background: #0f0f1a; overflow: hidden; transition: all 0.2s;
+    }
+    .snippet-stats-header {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.55rem 1rem; cursor: pointer; user-select: none;
+      font-size: 0.8rem; font-weight: 600; color: #94a3b8;
+    }
+    .snippet-stats-header:hover { background: #1a1a2a; }
+    .snippet-stats-body { padding: 0.5rem 1rem 1rem; border-top: 1px solid #1e293b; max-height: 250px; overflow-y: auto; }
+    .snippet-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0.35rem 0; border-bottom: 1px solid #161b22; font-size: 0.75rem;
+    }
+    .snippet-row:last-child { border-bottom: none; }
+    .snippet-row .lang { color: #58a6ff; font-weight: 600; }
+    .snippet-row .stat { color: #8b949e; }
+    .snippet-row .wpm { color: #22c55e; font-weight: 600; }
+    .snippet-row .trend-up { color: #22c55e; }
+    .snippet-row .trend-down { color: #ef4444; }
+    .snippet-row .trend-flat { color: #8b949e; }
+
+    /* ─── Volume Slider ────────────────────────────────── */
+    .volume-wrap {
+      display: flex; align-items: center; gap: 0.3rem; position: relative;
+    }
+    .volume-slider {
+      width: 0; overflow: hidden; opacity: 0; transition: all 0.2s;
+      -webkit-appearance: none; appearance: none; height: 3px;
+      background: #1e293b; border-radius: 2px; outline: none; cursor: pointer;
+    }
+    .volume-slider::-webkit-slider-thumb {
+      -webkit-appearance: none; width: 12px; height: 12px;
+      background: #22d3ee; border-radius: 50%; cursor: pointer;
+    }
+    .volume-wrap:hover .volume-slider,
+    .volume-slider:focus-within { width: 50px; opacity: 1; margin-left: 0.2rem; }
+
+    /* ─── Swipe Hint ──────────────────────────────────── */
     .swipe-hint {
-      text-align: center; font-size: 0.65rem; color: #484f58;
-      padding: 0.2rem 0; margin-bottom: 0.3rem;
-      user-select: none; -webkit-user-select: none;
+      text-align: center; color: #484f58; font-size: 0.65rem;
+      padding: 0.2rem 0; cursor: pointer; user-select: none;
+      transition: color 0.2s; -webkit-tap-highlight-color: transparent;
     }
-    .swipe-hint span { opacity: 0; transition: opacity 0.3s; }
-    .swipe-hint span.show { opacity: 1; }
-    .code-display.swipe-ready { cursor: grab; }
-    .code-display.swipe-ready:active { cursor: grabbing; }
+    .swipe-hint:hover, .swipe-hint:active { color: #8b949e; }
+    .swipe-hint .arrow { display: inline-block; transition: transform 0.2s; }
+    .swipe-hint .arrow-left { margin-right: 0.3rem; }
+    .swipe-hint .arrow-right { margin-left: 0.3rem; }
 
-    /* ─── Mobile keyboard-aware layout ────────────────── */
-    @media (max-width: 768px) {
-      /* When textarea is focused, stick it to bottom */
-      .input-area textarea:focus {
-        position: sticky; bottom: 0; z-index: 50;
-        margin-bottom: 0;
-        box-shadow: 0 -4px 20px rgba(0,0,0,0.4);
-      }
-      .input-area textarea:focus + .actions { display: none; }
-      /* Ensure root takes full height on mobile */
-      body.keyboard-open { padding-bottom: 0; }
-      body.keyboard-open #root { max-width: 100%; }
+    /* ─── Quick Keys (mobile) ─────────────────────────── */
+    .quick-keys {
+      display: none; gap: 0.35rem; justify-content: center; flex-wrap: wrap;
+      margin-bottom: 0.5rem; padding: 0.4rem 0.5rem;
+      background: #0a0a0f; border-radius: 8px; border: 1px solid #1e293b;
     }
-
-    /* ─── Mobile Responsive ──────────────────────────── */
-    @media (max-width: 640px) {
-      body { padding: 0.5rem; align-items: stretch; }
-      .container { padding: 0.75rem; border-radius: 10px; }
-      h1 { font-size: 1.1rem; margin-bottom: 0.1rem; }
-      .subtitle { font-size: 0.7rem; margin-bottom: 0.6rem; }
-      .settings-bar { gap: 0.25rem; padding: 0.35rem 0.4rem; flex-wrap: nowrap; overflow-x: auto; -webkit-overflow-scrolling: touch; }
-      .mode-btn { padding: 0.2rem 0.4rem; font-size: 0.6rem; white-space: nowrap; }
-      .setting-toggle { padding: 0.15rem 0.35rem; font-size: 0.6rem; white-space: nowrap; }
-      .settings-bar .divider { display: none; }
-      .stats-bar { gap: 0.25rem; padding: 0.35rem 0.4rem; }
-      .stat { min-width: 35px; }
-      .stat-value { font-size: 0.9rem; }
-      .stat-label { font-size: 0.6rem; }
-
-      /* ── Bigger code display on mobile ── */
-      .code-display {
-        font-size: 0.8rem; padding: 0.75rem;
-        min-height: 70px; line-height: 1.7;
-      }
-
-      /* ── Bigger textarea on mobile ── */
-      .input-area textarea {
-        min-height: 80px; font-size: 0.85rem;
-        padding: 0.65rem 0.7rem; line-height: 1.7;
-      }
-      .input-area textarea:focus {
-        min-height: 100px; font-size: 0.9rem;
-      }
-
-      .btn { padding: 0.5rem 1rem; font-size: 0.8rem; border-radius: 10px; }
-      .actions { gap: 0.4rem; }
-      .snippet-info { font-size: 0.65rem; flex-wrap: wrap; gap: 0.25rem; }
-
-      .heatmap-cell { width: 20px; height: 20px; font-size: 0.6rem; }
-      .heatmap-body { max-height: 140px; }
-      .lb-card { padding: 1rem; }
-      .results-card { padding: 1.2rem 1rem; }
-      .results-grid { gap: 0.5rem; }
-      .results-grid .item .value { font-size: 1rem; }
+    .quick-keys.visible { display: flex; }
+    .quick-key {
+      min-width: 44px; min-height: 44px;
+      display: flex; align-items: center; justify-content: center;
+      padding: 0.3rem 0.55rem; border: 1px solid #1e293b; border-radius: 6px;
+      background: #0f0f1a; color: #c0c0d0; cursor: pointer;
+      font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.7rem;
+      transition: all 0.1s; user-select: none; -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
+    .quick-key:active { background: #1e293b; transform: scale(0.95); }
+    .quick-key.wide { min-width: 64px; }
 
-    @media (max-width: 480px) {
-      body { padding: 0.25rem; }
-      .container { padding: 0.5rem; border-radius: 8px; }
-      h1 { font-size: 1rem; }
-      .code-display { font-size: 0.75rem; padding: 0.5rem; min-height: 60px; }
-      .input-area textarea { min-height: 70px; font-size: 0.8rem; padding: 0.5rem; }
-      .input-area textarea:focus { min-height: 90px; font-size: 0.85rem; }
-      .stat { min-width: 30px; }
-      .stat-value { font-size: 0.8rem; }
-      .btn { padding: 0.45rem 0.75rem; font-size: 0.75rem; }
+    /* ─── Keyboard Dismiss ────────────────────────────── */
+    .kb-dismiss-wrap {
+      display: none; justify-content: flex-end; margin-bottom: 0.25rem;
     }
+    .kb-dismiss-wrap.visible { display: flex; }
+    .kb-dismiss {
+      min-width: 44px; min-height: 36px;
+      display: flex; align-items: center; gap: 0.3rem;
+      padding: 0.3rem 0.7rem; border: 1px solid #1e293b; border-radius: 6px;
+      background: #0f0f1a; color: #8b949e; cursor: pointer;
+      font-family: inherit; font-size: 0.7rem; transition: all 0.15s;
+      user-select: none; -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .kb-dismiss:active { background: #1e293b; color: #e2e8f0; }
 
-    /* ─── Prevent textarea resize on mobile ──────────── */
-    @media (max-width: 768px) {
-      .input-area textarea { resize: none; }
+    /* ─── Toast ────────────────────────────────────────── */
+    .toast {
+      position: fixed; bottom: 1rem; left: 50%; transform: translateX(-50%);
+      background: #1e293b; color: #e2e8f0; padding: 0.5rem 1.2rem;
+      border-radius: 8px; font-size: 0.8rem; z-index: 500;
+      animation: toast-in 0.25s ease-out; border: 1px solid #334155;
     }
-
-    /* ─── Smooth transitions for snippet changes ─────── */
-    .code-display {
-      transition: opacity 0.2s ease;
-    }
-    .code-display.snippet-enter {
-      opacity: 0.4;
-    }
+    @keyframes toast-in { from { opacity: 0; transform: translateX(-50%) translateY(1rem); } to { opacity: 1; transform: translateX(-50%) translateY(0); } }
   </style>
 </head>
 <body>
@@ -499,6 +599,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
 
     // ─── Sound Engine (Web Audio API) ──────────────────────
     let audioCtx = null;
+    let volumeLevel = 0.5;
     function getAudioCtx() {
       if (!audioCtx) {
         audioCtx = new (window.AudioContext || window.webkitAudioContext)();
@@ -514,7 +615,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         const gain = ctx.createGain();
         osc.type = 'sine';
         osc.frequency.value = 880;
-        gain.gain.setValueAtTime(0.06, ctx.currentTime);
+        gain.gain.setValueAtTime(0.06 * volumeLevel, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.08);
         osc.connect(gain).connect(ctx.destination);
         osc.start(ctx.currentTime);
@@ -529,7 +630,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         const gain = ctx.createGain();
         osc.type = 'sawtooth';
         osc.frequency.value = 140;
-        gain.gain.setValueAtTime(0.07, ctx.currentTime);
+        gain.gain.setValueAtTime(0.07 * volumeLevel, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.15);
         osc.connect(gain).connect(ctx.destination);
         osc.start(ctx.currentTime);
@@ -547,7 +648,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
           osc.type = 'sine';
           osc.frequency.value = freq;
           const t = ctx.currentTime + i * 0.1;
-          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.setValueAtTime(0.08 * volumeLevel, t);
           gain.gain.exponentialRampToValueAtTime(0.001, t + 0.2);
           osc.connect(gain).connect(ctx.destination);
           osc.start(t);
@@ -563,7 +664,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         const gain = ctx.createGain();
         osc.type = 'square';
         osc.frequency.value = 660;
-        gain.gain.setValueAtTime(0.05, ctx.currentTime);
+        gain.gain.setValueAtTime(0.05 * volumeLevel, ctx.currentTime);
         gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.1);
         osc.connect(gain).connect(ctx.destination);
         osc.start(ctx.currentTime);
@@ -581,7 +682,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
           osc.type = 'triangle';
           osc.frequency.value = freq;
           const t = ctx.currentTime + i * 0.12;
-          gain.gain.setValueAtTime(0.08, t);
+          gain.gain.setValueAtTime(0.08 * volumeLevel, t);
           gain.gain.exponentialRampToValueAtTime(0.001, t + 0.25);
           osc.connect(gain).connect(ctx.destination);
           osc.start(t);
@@ -617,14 +718,9 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
     function loadData() {
       try {
         const raw = localStorage.getItem(LS_KEY);
-        if (raw) {
-          const parsed = JSON.parse(raw);
-          // Ensure preferences object exists (migration from old saves)
-          if (!parsed.preferences) parsed.preferences = {};
-          return parsed;
-        }
+        if (raw) return JSON.parse(raw);
       } catch(e) {}
-      return { leaderboard: [], heatMap: {}, preferences: { mode: 'complete', blindMode: false, soundEnabled: true } };
+      return { leaderboard: [], heatMap: {} };
     }
     function saveData(data) {
       try { localStorage.setItem(LS_KEY, JSON.stringify(data)); } catch(e) {}
@@ -641,7 +737,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
     }
 
     // ─── Heat Map Component ────────────────────────────────
-    function HeatMapPanel({ heatMap, totalKeystrokes, onClear }) {
+    function HeatMapPanel({ heatMap, totalKeystrokes }) {
       const [open, setOpen] = useState(false);
 
       const entries = useMemo(() => {
@@ -672,16 +768,9 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
 
       return (
         <div className="heatmap-panel">
-          <div className="heatmap-header">
-            <span onClick={() => setOpen(!open)} style={{cursor: 'pointer', flex: 1}}>🔥 Heat Map · {errorRate}% error rate · {totalErrors} errors</span>
-            <span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
-              {totalKeystrokes > 0 && onClear && (
-                <button className="btn btn-secondary" onClick={(e) => { e.stopPropagation(); onClear(); }}
-                  style={{padding: '0.15rem 0.5rem', fontSize: '0.65rem', background: '#3d1214', border: '1px solid #6b0d0d', color: '#ef4444'}}
-                  title="Clear all heat map data">🗑 Clear</button>
-              )}
-              <span className={`arrow ${open ? 'open' : ''}`}>▶</span>
-            </span>
+          <div className="heatmap-header" onClick={() => setOpen(!open)}>
+            <span>🔥 Heat Map · {errorRate}% error rate · {totalErrors} errors</span>
+            <span className={`arrow ${open ? 'open' : ''}`}>▶</span>
           </div>
           {open && (
             <div className="heatmap-body">
@@ -821,15 +910,22 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const [roundStats, setRoundStats] = useState([]);
       const textareaRef = useRef(null);
       const timerRef = useRef(null);
+      const codeDisplayRef = useRef(null);
+      const touchStartX = useRef(0);
+      const touchStartY = useRef(0);
       const [timerWarningPlayed, setTimerWarningPlayed] = useState(false);
       const [timerEndPlayed, setTimerEndPlayed] = useState(false);
+      const [isMobile, setIsMobile] = useState(window.innerWidth < 768 && ('ontouchstart' in window || navigator.maxTouchPoints > 0));
 
       // ─── Persistent Settings ──────────────────────────
-      const [mode, setMode] = useState(data.preferences?.mode || 'complete');
-      const [blindMode, setBlindMode] = useState(data.preferences?.blindMode || false);
-      const [soundEnabled, setSoundEnabled] = useState(data.preferences?.soundEnabled !== false);
+      const [mode, setMode] = useState('complete'); // 'complete' | '30' | '45' | '60' | '120' | '180'
+      const [blindMode, setBlindMode] = useState(false); // false | true (blur) | 'hardcore' (hidden)
+      const [soundEnabled, setSoundEnabled] = useState(true);
+      const [soundVolume, setSoundVolume] = useState(50); // 0–100
       const [data, setData] = useState(loadData);
       const [showLeaderboard, setShowLeaderboard] = useState(false);
+      const [flashShow, setFlashShow] = useState(false);
+      const [toastMsg, setToastMsg] = useState('');
 
       // Timed mode state (local, not persisted)
       const [timeRemaining, setTimeRemaining] = useState(null);
@@ -837,7 +933,6 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const [timedChars, setTimedChars] = useState(0);
       const [timedCorrect, setTimedCorrect] = useState(0);
       const [timedSnippetsDone, setTimedSnippetsDone] = useState(0);
-      const [countdown, setCountdown] = useState(null); // 3-2-1 countdown
 
       const snippet = SNIPPETS[snippetIndex];
       const codeChars = snippet.code;
@@ -866,11 +961,13 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const sfxComplete = useCallback(() => { if (soundEnabled) playComplete(); }, [soundEnabled]);
       const sfxTimerWarning = useCallback(() => { if (soundEnabled) playTimerWarning(); }, [soundEnabled]);
       const sfxTimerEnd = useCallback(() => { if (soundEnabled) playTimerEnd(); }, [soundEnabled]);
+      // Sync volume (module-level var the sound functions read)
+      useEffect(() => { volumeLevel = soundVolume / 100; }, [soundVolume]);
 
       // ─── Persist data ───────────────────────────────
       useEffect(() => {
-        saveData({ ...data, heatMap, preferences: { mode, blindMode, soundEnabled } });
-      }, [heatMap, mode, blindMode, soundEnabled]);
+        saveData({ ...data, heatMap });
+      }, [heatMap]);
 
       // ─── Derived stats ──────────────────────────────
       const charStates = useMemo(() => {
@@ -898,18 +995,22 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const accuracy = calcAccuracy(correctCount, totalTyped);
       const totalKeystrokes = Object.values(heatMap).reduce((s, v) => s + v.total, 0);
 
-      // ─── Timer Logic (drift-free via Date.now()) ─────
+      // ─── Timer Logic ──────────────────────────────────
       useEffect(() => {
-        if (!timedActive || !startTime) return;
-        const tick = () => {
-          const elapsed = Math.floor((Date.now() - startTime) / 1000);
-          const remaining = Math.max(timerDuration - elapsed, 0);
-          setTimeRemaining(remaining);
-        };
-        tick();
-        const interval = setInterval(tick, 200);
-        return () => clearInterval(interval);
-      }, [timedActive, startTime, timerDuration]);
+        if (timedActive && timeRemaining > 0) {
+          const interval = setInterval(() => {
+            setTimeRemaining(prev => {
+              const next = prev - 1;
+              if (next <= 0) {
+                clearInterval(interval);
+                return 0;
+              }
+              return next;
+            });
+          }, 1000);
+          return () => clearInterval(interval);
+        }
+      }, [timedActive, timeRemaining]);
 
       // Timer warning sounds
       useEffect(() => {
@@ -925,6 +1026,10 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         if (timedActive && timeRemaining === 0 && !timerEndPlayed) {
           setTimerEndPlayed(true);
           sfxTimerEnd();
+          setFlashShow(true);
+          setTimeout(() => setFlashShow(false), 500);
+          // Haptic feedback on mobile
+          if (navigator.vibrate) navigator.vibrate(200);
           // End the timed round
           if (startTime) {
             setEndTime(Date.now());
@@ -1076,7 +1181,135 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
         setTimerWarningPlayed(false);
       }, []);
 
-      // ─── Mode change ────────────────────────────────
+      // ─── Swipe Gesture ─────────────────────────────
+      const handleTouchStart = useCallback((e) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+      }, []);
+
+      const handleTouchEnd = useCallback((e) => {
+        const dx = e.changedTouches[0].clientX - touchStartX.current;
+        const dy = e.changedTouches[0].clientY - touchStartY.current;
+        // Only swipe if horizontal > vertical (prevents scroll conflicts)
+        if (Math.abs(dx) > Math.abs(dy) && Math.abs(dx) > 50) {
+          if (dx > 0) {
+            // Swipe right → previous snippet
+            setSnippetIndex(prev => (prev - 1 + SNIPPETS.length) % SNIPPETS.length);
+            setInput('');
+            setStartTime(null);
+            setEndTime(null);
+            setShowResults(false);
+          } else {
+            // Swipe left → next snippet
+            setSnippetIndex(prev => (prev + 1) % SNIPPETS.length);
+            setInput('');
+            setStartTime(null);
+            setEndTime(null);
+            setShowResults(false);
+          }
+          // Haptic feedback
+          if (navigator.vibrate) navigator.vibrate(15);
+        }
+      }, []);
+
+      // ─── Quick Key Handler ───────────────────────────
+      const handleQuickKey = useCallback((key) => {
+        if (isDone || (isTimed && !timedActive)) return;
+
+        if (key === '⌫') {
+          // Backspace: simple removal, no stats impact
+          setInput(prev => prev.length > 0 ? prev.slice(0, -1) : prev);
+          return;
+        }
+
+        // For regular characters (space, tab, enter), process like keyboard input
+        const currentVal = textareaRef.current?.value || '';
+
+        if (isTimed) {
+          const newVal = currentVal + key;
+          const codeIdx = currentVal.length;
+          const isCorrect = codeIdx < codeChars.length && key === codeChars[codeIdx];
+          updateHeatMap(key, isCorrect);
+          if (isCorrect) {
+            setTimedCorrect(prev => prev + 1);
+            sfxCorrect();
+          } else {
+            sfxError();
+          }
+          setTimedChars(newVal.length);
+
+          if (!startTime && currentVal.length === 0) {
+            setStartTime(Date.now());
+          }
+
+          if (newVal.length >= codeChars.length) {
+            // Auto-advance in timed mode
+            setSnippetIndex(prev => (prev + 1) % SNIPPETS.length);
+            setTimedSnippetsDone(prev => prev + 1);
+            setInput('');
+          } else {
+            setInput(newVal);
+          }
+        } else {
+          // Complete mode
+          if (currentVal.length < codeChars.length) {
+            const codeIdx = currentVal.length;
+            const isCorrect = codeIdx < codeChars.length && key === codeChars[codeIdx];
+            updateHeatMap(key, isCorrect);
+            if (isCorrect) sfxCorrect();
+            else sfxError();
+
+            if (!startTime && currentVal.length === 0) {
+              setStartTime(Date.now());
+            }
+
+            const newVal = currentVal + key;
+            if (newVal.length === codeChars.length) {
+              // Completed!
+              const now = Date.now();
+              setEndTime(now);
+              sfxComplete();
+              const endElapsed = Math.floor((now - (startTime || now)) / 1000);
+              const endCorrect = codeChars.split('').filter((ch, i) => i < newVal.length && newVal[i] === ch).length;
+              const endAcc = calcAccuracy(endCorrect, newVal.length);
+              const endWpm = calcWPM(endCorrect, endElapsed);
+              setRoundStats(prev => [...prev, {
+                snippetIndex,
+                wpm: endWpm,
+                accuracy: endAcc,
+                time: endElapsed,
+                lang: snippet.lang,
+                mode: 'complete',
+              }]);
+              if (endAcc >= 70) {
+                setData(prev => {
+                  const entry = {
+                    lang: snippet.lang,
+                    wpm: endWpm,
+                    accuracy: endAcc,
+                    date: new Date().toISOString().split('T')[0],
+                    mode: 'complete',
+                  };
+                  const lb = [...prev.leaderboard, entry];
+                  return { ...prev, leaderboard: lb };
+                });
+              }
+              setInput(newVal);
+            } else {
+              setInput(newVal);
+            }
+          }
+        }
+      }, [isDone, isTimed, timedActive, codeChars.length, startTime, snippetIndex, snippet.lang, updateHeatMap, sfxCorrect, sfxError, sfxComplete]);
+
+      // ─── Keyboard Dismiss ──────────────────────────
+      const handleDismissKeyboard = useCallback(() => {
+        if (textareaRef.current) {
+          textareaRef.current.blur();
+        }
+      }, []);
+
+      // Auto focus
       const handleModeChange = useCallback((newMode) => {
         if (isRunning) return; // prevent changing mode mid-round
         setMode(newMode);
@@ -1112,6 +1345,18 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       useEffect(() => {
         if (!isDone) textareaRef.current?.focus();
       }, [snippetIndex, isDone, mode]);
+
+      // Auto-scroll textarea into view on mobile when focused
+      useEffect(() => {
+        if (isMobile && textareaRef.current) {
+          const ta = textareaRef.current;
+          const handleFocus = () => {
+            setTimeout(() => ta.scrollIntoView({ behavior: 'smooth', block: 'center' }), 300);
+          };
+          ta.addEventListener('focus', handleFocus);
+          return () => ta.removeEventListener('focus', handleFocus);
+        }
+      }, [isMobile]);
 
       // Auto show results (complete mode)
       useEffect(() => {
@@ -1159,20 +1404,34 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
                 onClick={() => handleModeChange('complete')} disabled={isRunning}>Snippet</button>
               <button className={`mode-btn ${mode === '30' ? 'active' : ''}`}
                 onClick={() => handleModeChange('30')} disabled={isRunning}>30s</button>
+              <button className={`mode-btn ${mode === '45' ? 'active' : ''}`}
+                onClick={() => handleModeChange('45')} disabled={isRunning}>45s</button>
               <button className={`mode-btn ${mode === '60' ? 'active' : ''}`}
                 onClick={() => handleModeChange('60')} disabled={isRunning}>60s</button>
               <button className={`mode-btn ${mode === '120' ? 'active' : ''}`}
                 onClick={() => handleModeChange('120')} disabled={isRunning}>120s</button>
+              <button className={`mode-btn ${mode === '180' ? 'active' : ''}`}
+                onClick={() => handleModeChange('180')} disabled={isRunning}>180s</button>
             </div>
             <div className="divider" />
             <button className={`setting-toggle ${blindMode ? 'active' : ''}`}
               onClick={() => setBlindMode(!blindMode)}>
               <span className="indicator" /> Blind
             </button>
-            <button className={`setting-toggle ${soundEnabled ? 'active' : ''}`}
-              onClick={() => setSoundEnabled(!soundEnabled)}>
-              <span className={`sound-wave ${!soundEnabled ? 'muted' : ''}`}>🔊</span>
+            <button className={`setting-toggle ${blindMode === 'hardcore' ? 'active' : ''}`}
+              onClick={() => setBlindMode(prev => prev === 'hardcore' ? true : 'hardcore')}
+              title="Hardcore blind — hide all text, only cursor visible">
+              <span className="indicator" /> 🔒
             </button>
+            <div className="volume-wrap">
+              <button className={`setting-toggle ${soundEnabled ? 'active' : ''}`}
+                onClick={() => setSoundEnabled(!soundEnabled)}>
+                <span className={`sound-wave ${!soundEnabled ? 'muted' : ''}`}>🔊</span>
+              </button>
+              <input type="range" className="volume-slider" min="0" max="100" value={soundVolume}
+                onChange={e => setSoundVolume(Number(e.target.value))}
+                title="Volume" />
+            </div>
           </div>
 
           {/* ───── Stats Bar ───── */}
@@ -1184,38 +1443,39 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
               <div className="stat-label">{isTimed ? 'Remaining' : 'Time'}</div>
             </div>
             <div className="stat">
-              <div className={`stat-value green ${blindMode && isRunning ? 'blurred' : ''}`}>
-                {blindMode && isRunning ? '???' : displayWpm}
-              </div>
+              <div className="stat-value green">{displayWpm}</div>
               <div className="stat-label">WPM</div>
             </div>
             <div className="stat">
-              <div className={`stat-value orange ${blindMode && isRunning ? 'blurred' : ''}`}>
-                {blindMode && isRunning ? '???' : displayAcc}%
-              </div>
+              <div className="stat-value orange">{displayAcc}%</div>
               <div className="stat-label">Accuracy</div>
             </div>
             <div className="stat">
-              <div className={`stat-value purple ${blindMode && isRunning ? 'blurred' : ''}`}>
-                {blindMode && isRunning ? '???' : (isTimed ? `${timedSnippetsDone}` : `${progress.toFixed(0)}%`)}
+              <div className="stat-value purple">
+                {isTimed ? `${timedSnippetsDone}` : `${progress.toFixed(0)}%`}
               </div>
               <div className="stat-label">{isTimed ? 'Snippets' : 'Progress'}</div>
             </div>
             {isTimed && (
               <div className="stat">
-                <div className={`stat-value red ${blindMode && isRunning ? 'blurred' : ''}`}>
-                  {blindMode && isRunning ? '???' : timedCorrect}
-                </div>
+                <div className="stat-value red">{timedCorrect}</div>
                 <div className="stat-label">Correct</div>
               </div>
             )}
           </div>
 
-          {/* ───── Timer Progress Bar (timed mode) ───── */}
+          {/* ───── Timer Ring (timed mode) ───── */}
           {isTimed && (
-            <div className="progress-bar">
-              <div className={`progress-fill timed ${timeRemaining !== null && timeRemaining <= 10 ? 'warning' : ''} ${timerUrgency ? 'danger' : ''}`}
-                style={{ width: `${timerProgress}%` }} />
+            <div className="timer-ring-wrap">
+              <svg className="timer-ring-svg" viewBox="0 0 60 60">
+                <circle className="timer-ring-bg" cx="30" cy="30" r="24" />
+                <circle className={`timer-ring-fg ${timeRemaining !== null && timeRemaining <= 10 ? 'warning' : ''} ${timerUrgency ? 'danger' : ''}`}
+                  cx="30" cy="30" r="24"
+                  strokeDasharray={2 * Math.PI * 24}
+                  strokeDashoffset={2 * Math.PI * 24 * (1 - timerProgress / 100)} />
+                <text x="30" y="28" textAnchor="middle" className="timer-ring-text">{displayTime}</text>
+                <text x="30" y="38" textAnchor="middle" className="timer-ring-sub">left</text>
+              </svg>
             </div>
           )}
 
@@ -1238,7 +1498,12 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
           </div>
 
           {/* ───── Code Display ───── */}
-          <div className={`code-display ${blindMode && !isDone ? 'blind' : ''}`}>
+          <div
+            className={`code-display ${blindMode === 'hardcore' && !isDone ? 'blind-hardcore' : blindMode && !isDone ? 'blind' : ''}`}
+            ref={codeDisplayRef}
+            onTouchStart={handleTouchStart}
+            onTouchEnd={handleTouchEnd}
+          >
             {codeChars.split('').map((ch, i) => (
               <Char key={i} char={ch} state={
                 i === currentPos && !isDone ? 'current' : charStates[i]
@@ -1246,8 +1511,27 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
             ))}
           </div>
 
+          {/* ───── Swipe Hint (mobile) ───── */}
+          {isMobile && (
+            <div className="swipe-hint" onClick={() => {
+              if (codeDisplayRef.current) {
+                // Simulate a tap to scroll to area on click
+              }
+            }}>
+              <span className="arrow arrow-left">◀</span>
+              Swipe code to change snippet
+              <span className="arrow arrow-right">▶</span>
+            </div>
+          )}
+
           {/* ───── Input ───── */}
           <div className="input-area">
+            {/* Keyboard dismiss (mobile) */}
+            <div className={`kb-dismiss-wrap ${isMobile ? 'visible' : ''}`}>
+              <button className="kb-dismiss" onClick={handleDismissKeyboard} type="button">
+                ▼ Hide Keyboard
+              </button>
+            </div>
             <textarea
               ref={textareaRef}
               value={input}
@@ -1262,6 +1546,16 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
               autoCorrect="off"
               autoCapitalize="off"
             />
+            {/* ───── Quick Keys (mobile) ───── */}
+            <div className={`quick-keys ${isMobile ? 'visible' : ''}`}>
+              <button className="quick-key" onClick={() => handleQuickKey(' ')} type="button" title="Space">␣</button>
+              <button className="quick-key wide" onClick={() => handleQuickKey('⌫')} type="button" title="Backspace">⌫ Bksp</button>
+              <button className="quick-key" onClick={() => handleQuickKey('\t')} type="button" title="Tab">⇥ Tab</button>
+              <button className="quick-key" onClick={() => handleQuickKey('\n')} type="button" title="Enter">↵ Enter</button>
+              <button className="quick-key" onClick={() => {
+                if (textareaRef.current) textareaRef.current.focus();
+              }} type="button" title="Focus">⌨️</button>
+            </div>
           </div>
 
           {/* ───── Actions ───── */}
@@ -1299,8 +1593,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
           </div>
 
           {/* ───── Heat Map ───── */}
-          <HeatMapPanel heatMap={heatMap} totalKeystrokes={totalKeystrokes}
-            onClear={() => { setHeatMap({}); }} />
+          <HeatMapPanel heatMap={heatMap} totalKeystrokes={totalKeystrokes} />
 
           {/* ───── Footer ───── */}
           <div className="footer">

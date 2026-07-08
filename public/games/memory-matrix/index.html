@@ -2,37 +2,48 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="HandheldFriendly" content="true" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>🧠 Memory Matrix</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       font-family: 'Courier New', monospace;
       background: #0a0a0f;
       color: #c8c8d4;
       min-height: 100vh;
+      min-height: 100dvh;
       display: flex;
       justify-content: center;
       align-items: center;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-overflow-scrolling: touch;
+      overscroll-behavior: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
     .game-container {
       background: #12121a;
-      border-radius: 16px;
-      padding: 32px 28px;
+      border-radius: clamp(12px, 3vw, 16px);
+      padding: clamp(20px, 4vw, 32px) clamp(16px, 3vw, 28px);
       border: 1px solid #2a2a3a;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-      max-width: 480px;
+      max-width: min(480px, 95vw);
       width: 100%;
-      margin: 20px;
+      margin: clamp(10px, 2vw, 20px);
+      touch-action: pan-y;
     }
     .game-title {
       text-align: center;
-      font-size: 14px;
+      font-size: clamp(12px, 3vw, 14px);
       color: #22d3ee;
-      margin-bottom: 20px;
+      margin-bottom: clamp(12px, 3vw, 20px);
       letter-spacing: 2px;
       font-weight: 700;
     }
@@ -40,9 +51,9 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      padding: 0 8px;
-      margin-bottom: 12px;
-      font-size: 12px;
+      padding: 0 4px;
+      margin-bottom: 10px;
+      font-size: clamp(10px, 2.5vw, 12px);
       flex-wrap: wrap;
       gap: 4px;
     }
@@ -52,44 +63,53 @@
     .stats .streak { color: #f59e0b; font-weight: bold; }
     .message-area {
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       min-height: 28px;
     }
-    .message-area p { font-size: 13px; color: #94a3b8; }
+    .message-area p { font-size: clamp(11px, 2.5vw, 13px); color: #94a3b8; }
     .message-area .countdown {
       color: #22d3ee;
-      font-size: 18px;
+      font-size: clamp(16px, 4vw, 18px);
       font-weight: bold;
       animation: pulse 0.5s infinite;
     }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.4; }
-    }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
     .grid-wrapper {
       display: flex;
       justify-content: center;
+      position: relative;
+      touch-action: pan-y;
     }
     .grid {
       display: grid;
-      gap: 8px;
+      gap: clamp(4px, 1.5vw, 8px);
+      width: fit-content;
+      touch-action: manipulation;
     }
     .cell {
-      width: 56px;
-      height: 56px;
-      border-radius: 10px;
+      width: clamp(48px, 13vw, 64px);
+      height: clamp(48px, 13vw, 64px);
+      min-width: 48px;
+      min-height: 48px;
+      border-radius: clamp(8px, 2vw, 10px);
       border: 2px solid #2a2a3a;
       background: rgba(18, 18, 26, 0.5);
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 18px;
+      font-size: clamp(16px, 4vw, 20px);
       transition: all 0.15s ease;
       cursor: pointer;
       outline: none;
       position: relative;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      -webkit-appearance: none;
+      appearance: none;
     }
+    .cell:active { transform: scale(0.95); }
     .cell:disabled { cursor: default; }
+    .cell:disabled:active { transform: none; }
     .cell.revealed {
       background: rgba(34, 211, 238, 0.18);
       border-color: #22d3ee;
@@ -100,9 +120,7 @@
       0% { box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
       100% { box-shadow: 0 0 25px rgba(34, 211, 238, 0.5); }
     }
-    .cell.wave-reveal {
-      animation: wavePop 0.35s ease-out forwards;
-    }
+    .cell.wave-reveal { animation: wavePop 0.35s ease-out forwards; }
     @keyframes wavePop {
       0% { transform: scale(1); opacity: 1; background: rgba(34, 211, 238, 0.1); }
       40% { transform: scale(1.2); background: rgba(34, 211, 238, 0.4); }
@@ -112,12 +130,6 @@
       background: rgba(34, 197, 94, 0.2);
       border-color: #22c55e;
       box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
-      animation: popCorrect 0.3s ease-out;
-    }
-    @keyframes popCorrect {
-      0% { transform: scale(1); }
-      40% { transform: scale(1.15); }
-      100% { transform: scale(1); }
     }
     .cell.selected-wrong {
       background: rgba(239, 68, 68, 0.2);
@@ -132,69 +144,59 @@
       60% { transform: translateX(-3px); }
       80% { transform: translateX(3px); }
     }
-    .cell.idle {
-      background: rgba(18, 18, 26, 0.3);
-      border-color: #2a2a3a;
-      opacity: 0.6;
+    .cell.selected-wrong:active { animation: shake 0.3s ease-out, flashRed 0.2s; }
+    @keyframes flashRed { 0%, 100% { background: rgba(239, 68, 68, 0.2); } 50% { background: rgba(239, 68, 68, 0.5); } }
+    .cell.idle { background: rgba(18, 18, 26, 0.3); border-color: #2a2a3a; opacity: 0.6; }
+    .cell.input-ready { background: rgba(18, 18, 26, 0.4); border-color: #2a2a3a; }
+    .cell .check-mark { color: #4caf50; font-size: clamp(18px, 4vw, 22px); }
+    .cell .cross-mark { color: #f44336; font-size: clamp(18px, 4vw, 22px); }
+
+    /* ─── Touch Ripple ──────────────────────────── */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(0);
+      animation: rippleAnim 0.6s ease-out forwards;
+      pointer-events: none;
+      will-change: transform, opacity;
     }
-    .cell.input-ready {
-      background: rgba(18, 18, 26, 0.4);
-      border-color: #2a2a3a;
+    @keyframes rippleAnim {
+      0%   { transform: scale(0); opacity: 0.5; }
+      100% { transform: scale(4); opacity: 0; }
     }
-    .cell.input-ready:hover {
-      border-color: rgba(34, 211, 238, 0.5);
-      background: rgba(34, 211, 238, 0.08);
-    }
-    .cell .check-mark { color: #4caf50; font-size: 20px; }
-    .cell .cross-mark { color: #f44336; font-size: 20px; }
-    .btn-container { text-align: center; margin-top: 20px; }
+
+    .btn-container { text-align: center; margin-top: clamp(12px, 3vw, 20px); }
     .btn {
-      padding: 10px 28px;
+      padding: clamp(12px, 3vw, 14px) clamp(28px, 7vw, 32px);
+      min-height: 48px;
+      min-width: 160px;
       border-radius: 10px;
       font-family: 'Courier New', monospace;
-      font-size: 13px;
+      font-size: clamp(12px, 3vw, 14px);
       color: #fff;
       background: #06b6d4;
       border: none;
       cursor: pointer;
       transition: all 0.2s ease;
       outline: none;
+      touch-action: manipulation;
+      -webkit-appearance: none;
+      appearance: none;
+      position: relative;
+      overflow: hidden;
     }
-    .btn:hover { filter: brightness(1.15); }
-    .btn:active { transform: scale(0.97); }
-    .btn-secondary {
-      background: transparent;
-      border: 1px solid #2a2a3a;
-      color: #94a3b8;
-      margin-left: 8px;
-    }
+    .btn:active { transform: scale(0.95); filter: brightness(1.2); }
     .combo-badge {
       display: inline-block;
       background: rgba(245, 158, 11, 0.15);
       border: 1px solid rgba(245, 158, 11, 0.3);
       border-radius: 12px;
       padding: 2px 10px;
-      font-size: 11px;
+      font-size: clamp(10px, 2.5vw, 11px);
       font-weight: bold;
       color: #f59e0b;
-      margin-left: 8px;
-      animation: comboPop 0.4s ease-out;
-    }
-    @keyframes comboPop {
-      0% { transform: scale(0.5); opacity: 0; }
-      60% { transform: scale(1.2); }
-      100% { transform: scale(1); opacity: 1; }
-    }
-    .screen-shake {
-      animation: scrnShake 0.3s ease-out;
-    }
-    @keyframes scrnShake {
-      0%, 100% { transform: translate(0, 0); }
-      10% { transform: translate(-2px, 1px); }
-      30% { transform: translate(2px, -1px); }
-      50% { transform: translate(-1px, 2px); }
-      70% { transform: translate(1px, -2px); }
-      90% { transform: translate(-1px, 1px); }
+      margin-left: 6px;
     }
     .level-complete {
       position: absolute;
@@ -207,56 +209,83 @@
       z-index: 10;
       border-radius: 10px;
     }
-    .level-complete h2 {
-      font-size: 24px;
-      color: #22d3ee;
-      animation: fadeInUp 0.3s ease-out;
-    }
-    .level-complete p {
-      font-size: 12px;
-      color: #94a3b8;
-      margin-top: 4px;
-    }
-    @keyframes fadeInUp {
-      0% { opacity: 0; transform: translateY(10px); }
-      100% { opacity: 1; transform: translateY(0); }
-    }
-    .game-over-screen {
-      text-align: center;
-      padding: 10px 0;
-    }
-    .game-over-screen h2 { font-size: 20px; color: #ef4444; margin-bottom: 4px; }
+    .level-complete h2 { font-size: clamp(20px, 5vw, 24px); color: #22d3ee; }
+    .level-complete p { font-size: clamp(11px, 2.5vw, 12px); color: #94a3b8; margin-top: 4px; }
+    .game-over-screen { text-align: center; padding: 10px 0; }
+    .game-over-screen h2 { font-size: clamp(18px, 5vw, 20px); color: #ef4444; margin-bottom: 4px; }
     .game-over-screen .stats-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 8px;
-      margin: 16px 0;
+      display: grid; grid-template-columns: 1fr 1fr; gap: clamp(6px, 1.5vw, 8px); margin: 12px 0;
     }
     .game-over-screen .stat-item {
-      background: rgba(0,0,0,0.3);
-      border-radius: 8px;
-      padding: 10px;
+      background: rgba(0,0,0,0.3); border-radius: 8px; padding: clamp(8px, 2vw, 10px);
     }
-    .game-over-screen .stat-item .val {
-      font-size: 18px;
-      font-weight: bold;
-      color: #22d3ee;
-    }
-    .game-over-screen .stat-item .lbl {
-      font-size: 10px;
-      color: #64748b;
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-    .game-over-screen .btn-container { margin-top: 12px; }
+    .game-over-screen .stat-item .val { font-size: clamp(16px, 4vw, 18px); font-weight: bold; color: #22d3ee; }
+    .game-over-screen .stat-item .lbl { font-size: clamp(9px, 2vw, 10px); color: #64748b; text-transform: uppercase; letter-spacing: 1px; }
 
-    @media (max-width: 480px) {
-      .game-container { padding: 20px 16px; }
-      .cell { width: 48px; height: 48px; font-size: 16px; }
+    /* ─── Screen shake ─────────────────────────── */
+    .screen-shake {
+      animation: scrnShake 0.3s ease-out;
     }
-    @media (max-width: 380px) {
-      .cell { width: 40px; height: 40px; font-size: 14px; }
-      .grid { gap: 6px; }
+    @keyframes scrnShake {
+      0%, 100% { transform: translate(0, 0); }
+      20% { transform: translate(-3px, 1px); }
+      40% { transform: translate(3px, -1px); }
+      60% { transform: translate(-2px, 2px); }
+      80% { transform: translate(2px, -2px); }
+    }
+
+    /* ─── Touch-specific: bigger cells on mobile ── */
+    @media (hover: none) and (pointer: coarse) {
+      .cell {
+        width: clamp(52px, 14vw, 68px);
+        height: clamp(52px, 14vw, 68px);
+        min-width: 52px;
+        min-height: 52px;
+      }
+      .btn {
+        padding: clamp(14px, 3.5vw, 16px) clamp(32px, 8vw, 36px);
+        min-height: 52px;
+        font-size: clamp(13px, 3.5vw, 15px);
+      }
+      .game-container {
+        max-width: min(520px, 98vw);
+        padding: clamp(16px, 3vw, 24px) clamp(12px, 2.5vw, 20px);
+      }
+      .grid { gap: clamp(5px, 2vw, 8px); }
+      .cell:active { transform: scale(0.93); }
+    }
+
+    /* ─── Small screens ─────────────────────────── */
+    @media (max-width: 420px) {
+      .game-container { border-radius: 10px; margin: 6px; }
+      .grid { gap: 3px; }
+    }
+
+    /* ─── Landscape on mobile ───────────────────── */
+    @media (orientation: landscape) and (max-height: 500px) {
+      body { align-items: flex-start; padding-top: 8px; }
+      .game-container { padding: 8px 16px; max-width: min(600px, 98vw); }
+      .game-title { font-size: clamp(10px, 2vw, 12px); margin-bottom: 4px; }
+      .stats { margin-bottom: 4px; font-size: clamp(9px, 2vw, 10px); }
+      .stats .combo-badge { font-size: 9px; padding: 1px 6px; }
+      .message-area { margin-bottom: 6px; min-height: 18px; }
+      .message-area p { font-size: clamp(10px, 2vw, 11px); }
+      .message-area .countdown { font-size: clamp(14px, 3vw, 16px); }
+      .cell { width: clamp(40px, 10vh, 52px); height: clamp(40px, 10vh, 52px); min-width: 40px; min-height: 40px; }
+      .grid { gap: clamp(3px, 1vw, 5px); }
+      .btn-container { margin-top: 6px; }
+      .btn { padding: 8px 20px; min-height: 40px; font-size: clamp(10px, 2vw, 11px); }
+      .game-over-screen { padding: 4px 0; }
+      .game-over-screen .stats-grid { gap: 4px; margin: 6px 0; }
+      .game-over-screen .stat-item { padding: 4px 8px; }
+      .game-over-screen .stat-item .val { font-size: clamp(13px, 3vw, 15px); }
+      .game-over-screen .stat-item .lbl { font-size: clamp(8px, 1.5vw, 9px); }
+    }
+    @media (orientation: landscape) and (max-height: 400px) {
+      .game-title { display: none; }
+      .stats { margin-bottom: 2px; }
+      .cell { width: clamp(34px, 8vh, 44px); height: clamp(34px, 8vh, 44px); min-width: 34px; min-height: 34px; }
+      .grid { gap: 2px; }
     }
   </style>
 </head>
@@ -264,11 +293,51 @@
   <div id="root"></div>
   <script type="text/babel">
     const { useState, useEffect, useCallback, useRef } = React;
+    const isMobile = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
 
-    // ─── Sound Engine ────────────────────────────────────────
+    // ─── Prevent double-tap zoom ─────────────────
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    }, { passive: false });
+
+    // ─── Haptic feedback ─────────────────────────
+    function haptic(pattern) {
+      try { if (navigator.vibrate) navigator.vibrate(pattern); } catch(e) {}
+    }
+
+    // ─── Touch ripple ────────────────────────────
+    function createRipple(e, el) {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 1.2;
+      const x = (e.clientX || e.touches?.[0]?.clientX || rect.left + rect.width/2) - rect.left - size/2;
+      const y = (e.clientY || e.touches?.[0]?.clientY || rect.top + rect.height/2) - rect.top - size/2;
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
+      el.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    }
+
+    // ─── Shared AudioContext ─────────────────────
+    let audioCtxShared = null;
+    function getAudioCtx() {
+      if (!audioCtxShared) {
+        try { audioCtxShared = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; }
+      }
+      return audioCtxShared;
+    }
+
     function playTone(freq, duration = 0.15, type = 'sine') {
       try {
-        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const ctx = getAudioCtx();
+        if (!ctx) return;
         const osc = ctx.createOscillator();
         const gain = ctx.createGain();
         osc.type = type;
@@ -281,51 +350,38 @@
         osc.stop(ctx.currentTime + duration);
       } catch(e) {}
     }
-
     function playCorrect() { playTone(800, 0.1, 'sine'); }
     function playWrong() { playTone(200, 0.3, 'sawtooth'); }
-    function playReveal() { playTone(600, 0.08, 'sine'); }
-    function playLevelUp() {
-      [523, 659, 784, 1047].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.15, 'sine'), i * 100);
-      });
-    }
-    function playGameOver() {
-      [400, 350, 300, 200].forEach((f, i) => {
-        setTimeout(() => playTone(f, 0.3, 'sawtooth'), i * 150);
-      });
-    }
+    function playLevelUp() { [523, 659, 784, 1047].forEach((f, i) => setTimeout(() => playTone(f, 0.15, 'sine'), i * 100)); }
+    function playGameOver() { [400, 350, 300, 200].forEach((f, i) => setTimeout(() => playTone(f, 0.3, 'sawtooth'), i * 150)); }
 
-    // ─── Memory Matrix ───────────────────────────────────────
     function MemoryMatrix() {
       const [gridSize, setGridSize] = useState(3);
       const [cells, setCells] = useState([]);
       const [targets, setTargets] = useState([]);
-      const [phase, setPhase] = useState("idle"); // idle | showing | input | levelComplete | gameOver
+      const [phase, setPhase] = useState("idle");
       const [level, setLevel] = useState(0);
       const [score, setScore] = useState(0);
-      const [highScore, setHighScore] = useState(
-        parseInt(localStorage.getItem('memoryMatrixHigh') || '0')
-      );
+      const [highScore, setHighScore] = useState(parseInt(localStorage.getItem('memoryMatrixHigh') || '0'));
       const [streak, setStreak] = useState(0);
       const [bestStreak, setBestStreak] = useState(0);
-      const [message, setMessage] = useState("Pressione INICIAR para jogar");
+      const [message, setMessage] = useState(isMobile ? "Toque INICIAR para jogar" : "Pressione INICIAR para jogar");
       const [showTimer, setShowTimer] = useState(0);
       const [combo, setCombo] = useState(0);
       const shakeRef = useRef(null);
-
+      const rootRef = useRef(null);
       const totalCells = gridSize * gridSize;
       const targetCount = Math.min(gridSize + Math.floor(level / 2), totalCells - 1);
 
-      // ─── High score save ─────────────────────────────────
+      // ── Grid size auto based on screen width ───
+      const cellAutoSize = gridSize <= 4 ? "clamp(48px, 13vw, 64px)" : "clamp(44px, 11vw, 56px)";
+
       useEffect(() => {
         if (highScore > 0) {
           localStorage.setItem('memoryMatrixHigh', highScore.toString());
-          // Also save to leaderboard
           try {
             const lb = JSON.parse(localStorage.getItem('memoryMatrixLB') || '[]');
             const entry = { score: highScore, bestStreak, date: new Date().toISOString().split('T')[0] };
-            // Only add if it's a new entry that would appear in top 5
             const all = [...lb, entry].sort((a, b) => b.score - a.score).slice(0, 5);
             localStorage.setItem('memoryMatrixLB', JSON.stringify(all));
           } catch(e) {}
@@ -335,34 +391,22 @@
       const generateGrid = useCallback(() => {
         const total = gridSize * gridSize;
         const targetSet = new Set();
-        while (targetSet.size < targetCount) {
-          targetSet.add(Math.floor(Math.random() * total));
-        }
+        while (targetSet.size < targetCount) targetSet.add(Math.floor(Math.random() * total));
         const targetArr = Array.from(targetSet);
         const newCells = Array.from({ length: total }, (_, i) => ({
-          index: i,
-          isTarget: targetSet.has(i),
-          revealed: false,
-          selected: false,
-          correct: null,
-          waveDelay: 0,
+          index: i, isTarget: targetSet.has(i), revealed: false, selected: false, correct: null, waveDelay: 0,
         }));
         return { cells: newCells, targets: targetArr };
       }, [gridSize, targetCount]);
 
       const showPhase = useCallback(() => {
         const { cells: newCells, targets: newTargets } = generateGrid();
-        // Wave reveal: set delay per cell
-        const targetIndices = newTargets.sort(() => Math.random() - 0.5);
-        targetIndices.forEach((idx, i) => {
-          newCells[idx].revealed = true;
-          newCells[idx].waveDelay = i * 60;
-        });
+        const targetIndices = [...newTargets].sort(() => Math.random() - 0.5);
+        targetIndices.forEach((idx, i) => { newCells[idx].revealed = true; newCells[idx].waveDelay = i * 60; });
         setCells(newCells);
         setTargets(newTargets);
         setPhase("showing");
         setMessage("Memorize as células destacadas...");
-
         const showDuration = Math.max(800, 3000 - level * 120);
         setShowTimer(Math.ceil(showDuration / 1000));
       }, [generateGrid, level]);
@@ -370,10 +414,10 @@
       useEffect(() => {
         if (phase !== "showing") return;
         const timer = setInterval(() => {
-          setShowTimer((prev) => {
+          setShowTimer(prev => {
             if (prev <= 1) {
               clearInterval(timer);
-              setCells((prev) => prev.map((c) => ({ ...c, revealed: false })));
+              setCells(prev => prev.map(c => ({ ...c, revealed: false })));
               setPhase("input");
               setMessage("Selecione as células que estavam destacadas!");
               return 0;
@@ -385,96 +429,65 @@
       }, [phase]);
 
       const startGame = useCallback(() => {
-        setGridSize(3);
-        setLevel(0);
-        setScore(0);
-        setStreak(0);
-        setBestStreak(0);
-        setCombo(0);
+        const ctx = getAudioCtx();
+        if (ctx && ctx.state === 'suspended') ctx.resume();
+        haptic(15);
+        setGridSize(3); setLevel(0); setScore(0); setStreak(0); setBestStreak(0); setCombo(0);
         setMessage("Nível 1 — Memorize!");
         showPhase();
       }, [showPhase]);
 
-      const handleCellClick = useCallback(
-        (index) => {
-          if (phase !== "input") return;
-          const cell = cells[index];
-          if (cell.selected || cell.revealed) return;
+      const handleCellClick = useCallback((index, e) => {
+        if (phase !== "input") return;
+        const cell = cells[index];
+        if (cell.selected || cell.revealed) return;
+        const isCorrect = targets.includes(index);
 
-          const isCorrect = targets.includes(index);
+        // Ripple + haptic on tap
+        if (e && e.currentTarget) createRipple(e, e.currentTarget);
+        haptic(10);
 
-          setCells((prev) =>
-            prev.map((c, i) =>
-              i === index
-                ? { ...c, selected: true, correct: isCorrect }
-                : c
-            )
-          );
-
-          if (isCorrect) {
-            playCorrect();
-            const comboMult = Math.min(combo + 1, 4);
-            setScore((s) => s + 10 * comboMult);
-          } else {
-            playWrong();
-            // Screen shake
-            if (shakeRef.current) {
-              shakeRef.current.classList.add('screen-shake');
-              setTimeout(() => shakeRef.current && shakeRef.current.classList.remove('screen-shake'), 300);
-            }
+        setCells(prev => prev.map((c, i) => i === index ? { ...c, selected: true, correct: isCorrect } : c));
+        if (isCorrect) {
+          playCorrect();
+          const comboMult = Math.min(combo + 1, 4);
+          setScore(s => s + 10 * comboMult);
+          haptic(8);
+        } else {
+          playWrong();
+          haptic([15, 10, 20]);
+          if (shakeRef.current) {
+            shakeRef.current.classList.add('screen-shake');
+            setTimeout(() => shakeRef.current && shakeRef.current.classList.remove('screen-shake'), 300);
           }
+        }
+        const selectedCells = cells.filter(c => c.selected);
+        const correctSelected = selectedCells.filter(c => c.correct).length + (isCorrect ? 1 : 0);
+        const wrongSelected = selectedCells.filter(c => c.selected && c.correct === false).length + (isCorrect ? 0 : 1);
+        if (correctSelected === targetCount) {
+          playLevelUp();
+          haptic(20);
+          const newStreak = streak + 1; setStreak(newStreak);
+          if (newStreak > bestStreak) setBestStreak(newStreak);
+          setCombo(c => c + 1);
+          setPhase("levelComplete");
+          const bonus = 50 * (combo + 1); setScore(s => s + bonus);
+          if (score + bonus + 10 * (combo + 1) * targetCount > highScore) setHighScore(score + bonus + 10 * (combo + 1) * targetCount);
+          setTimeout(() => {
+            const nextLevel = level + 1; setLevel(nextLevel);
+            if (nextLevel % 4 === 0 && gridSize < 6) setGridSize(g => Math.min(6, g + 1));
+            setMessage(`Nível ${nextLevel + 1} — Memorize!`);
+            showPhase();
+          }, 1200);
+        } else if (!isCorrect && wrongSelected >= 2) {
+          playGameOver(); setPhase("gameOver"); setHighScore(h => Math.max(h, score));
+          haptic([30, 20, 50]);
+          setCells(prev => prev.map(c => ({ ...c, revealed: c.isTarget, correct: c.isTarget ? true : c.selected ? false : null })));
+        }
+      }, [phase, cells, targets, targetCount, level, gridSize, score, highScore, streak, bestStreak, combo, showPhase]);
 
-          const selectedCells = cells.filter((c) => c.selected);
-          const correctSelected = selectedCells.filter((c) => c.correct).length + (isCorrect ? 1 : 0);
-          const wrongSelected = selectedCells.filter((c) => c.selected && c.correct === false).length + (isCorrect ? 0 : 1);
-
-          if (correctSelected === targetCount) {
-            // Level complete!
-            playLevelUp();
-            const newStreak = streak + 1;
-            setStreak(newStreak);
-            if (newStreak > bestStreak) setBestStreak(newStreak);
-            setCombo((c) => c + 1);
-            setPhase("levelComplete");
-            const bonus = 50 * (combo + 1);
-            setScore((s) => s + bonus);
-            if (score + bonus + 10 * (combo + 1) * targetCount > highScore) {
-              setHighScore(score + bonus + 10 * (combo + 1) * targetCount);
-            }
-
-            setTimeout(() => {
-              const nextLevel = level + 1;
-              setLevel(nextLevel);
-              if (nextLevel % 4 === 0 && gridSize < 6) {
-                setGridSize((g) => Math.min(6, g + 1));
-              }
-              setMessage(`Nível ${nextLevel + 1} — Memorize!`);
-              showPhase();
-            }, 1200);
-          } else if (!isCorrect && wrongSelected >= 2) {
-            // Game over — 2 wrong
-            playGameOver();
-            setPhase("gameOver");
-            setHighScore((h) => Math.max(h, score));
-            setCells((prev) =>
-              prev.map((c) => ({
-                ...c,
-                revealed: c.isTarget,
-                correct: c.isTarget ? true : c.selected ? false : null,
-              }))
-            );
-          }
-        },
-        [phase, cells, targets, targetCount, level, gridSize, score, highScore, streak, bestStreak, combo, showPhase]
-      );
-
-      // Keyboard support
       useEffect(() => {
-        const handler = (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            if (phase === 'idle' || phase === 'gameOver') startGame();
-          }
-        };
+        const handler = (e) => { if ((e.key === 'Enter' || e.key === ' ') && (phase === 'idle' || phase === 'gameOver')) startGame(); };
         window.addEventListener('keydown', handler);
         return () => window.removeEventListener('keydown', handler);
       }, [phase, startGame]);
@@ -485,130 +498,70 @@
         if (phase === "input") return "cell input-ready";
         return "cell idle";
       }
-
       function getCellContent(cell) {
         if (cell.selected && cell.correct) return <span className="check-mark">✓</span>;
         if (cell.selected && cell.correct === false) return <span className="cross-mark">✗</span>;
         return null;
       }
+      const leaderboard = (() => { try { return JSON.parse(localStorage.getItem('memoryMatrixLB') || '[]'); } catch(e) { return []; } })();
 
-      // Leaderboard
-      const leaderboard = (() => {
-        try { return JSON.parse(localStorage.getItem('memoryMatrixLB') || '[]'); } catch(e) { return []; }
-      })();
+      // ── Touch handler that fires ripple + click ──
+      const onCellPointerDown = useCallback((idx, e) => {
+        handleCellClick(idx, e);
+      }, [handleCellClick]);
 
       return (
-        <div className="game-container" ref={shakeRef}>
+        <div className="game-container" ref={(el) => { shakeRef.current = el; rootRef.current = el; }}>
           <h3 className="game-title">🧠 MEMORY MATRIX</h3>
-
           <div className="stats">
             <span>Nível: <span className="accent">{level + 1}</span></span>
-            <span>
-              Score: <span className="accent">{score}</span>
-              {combo >= 2 && <span className="combo-badge">x{combo} COMBO 🔥</span>}
-            </span>
+            <span>Score: <span className="accent">{score}</span>{combo >= 2 && <span className="combo-badge">x{combo}</span>}</span>
             <span>Best: <span className="accent-alt">{highScore}</span></span>
           </div>
-
-          <div className="stats" style={{ marginTop: -8 }}>
+          <div className="stats" style={{ marginTop: -4 }}>
             <span>Grade: <span className="accent">{gridSize}×{gridSize}</span></span>
             <span>Streak: <span className="streak">{'🔥'.repeat(Math.min(streak, 5))}{streak > 0 ? ` ${streak}` : '—'}</span></span>
           </div>
-
-          <div className="message-area">
-            <p>
-              {phase === "showing" ? (
-                <span className="countdown">{showTimer}s</span>
-              ) : (
-                message
-              )}
-            </p>
-          </div>
-
-          <div className="grid-wrapper" style={{ position: 'relative' }}>
-            <div
-              className="grid"
-              style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
-            >
+          <div className="message-area"><p>{phase === "showing" ? <span className="countdown">{showTimer}s</span> : message}</p></div>
+          <div className="grid-wrapper">
+            <div className="grid" style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}>
               {cells.map((cell, i) => (
-                <button
-                  key={cell.index}
-                  className={getCellClassName(cell)}
-                  onClick={() => handleCellClick(cell.index)}
-                  disabled={phase !== "input"}
-                  aria-label={`Célula ${i + 1}${cell.isTarget ? ', alvo' : ''}`}
-                  style={cell.waveDelay > 0 ? { animationDelay: cell.waveDelay + 'ms' } : {}}
-                  tabIndex={phase === "input" ? 0 : -1}
-                >
+                <button key={cell.index} className={getCellClassName(cell)} onClick={(e) => onCellPointerDown(cell.index, e)}
+                  disabled={phase !== "input"} aria-label={`Célula ${i + 1}`}
+                  style={cell.waveDelay > 0 ? { animationDelay: cell.waveDelay + 'ms' } : {}}>
                   {getCellContent(cell)}
                 </button>
               ))}
             </div>
-
             {phase === "levelComplete" && (
-              <div className="level-complete">
-                <h2>🎯 NÍVEL COMPLETO!</h2>
-                <p>{combo >= 2 ? `🔥 Combo x${combo}! +${50 * combo} bônus!` : `+${50} bônus!`}</p>
-              </div>
+              <div className="level-complete"><h2>🎯 COMPLETO!</h2><p>{combo >= 2 ? `🔥 Combo x${combo}! +${50 * combo}` : `+50`}</p></div>
             )}
           </div>
-
           {phase === "gameOver" && (
             <div className="game-over-screen">
               <h2>❌ GAME OVER</h2>
               <div className="stats-grid">
-                <div className="stat-item">
-                  <div className="val">{score}</div>
-                  <div className="lbl">Score Final</div>
-                </div>
-                <div className="stat-item">
-                  <div className="val">{level}</div>
-                  <div className="lbl">Níveis</div>
-                </div>
-                <div className="stat-item">
-                  <div className="val">{bestStreak}</div>
-                  <div className="lbl">Best Streak</div>
-                </div>
-                <div className="stat-item">
-                  <div className="val">{gridSize}×{gridSize}</div>
-                  <div className="lbl">Grade Máxima</div>
-                </div>
+                <div className="stat-item"><div className="val">{score}</div><div className="lbl">Score</div></div>
+                <div className="stat-item"><div className="val">{level}</div><div className="lbl">Níveis</div></div>
+                <div className="stat-item"><div className="val">{bestStreak}</div><div className="lbl">Best Streak</div></div>
+                <div className="stat-item"><div className="val">{gridSize}×{gridSize}</div><div className="lbl">Grade</div></div>
               </div>
-
-              {leaderboard.length > 0 && (
-                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>
-                  🏆 Top Scores:
-                  {leaderboard.slice(0, 3).map((e, i) => (
-                    <span key={i} style={{ marginLeft: 8 }}>
-                      {i + 1}º {e.score}pts
-                    </span>
-                  ))}
-                </div>
-              )}
-
+              {leaderboard.length > 0 && <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>🏆 {leaderboard.slice(0, 3).map((e, i) => <span key={i} style={{ marginLeft: 8 }}>{i + 1}º {e.score}pts</span>)}</div>}
               <div className="btn-container">
-                <button className="btn" onClick={startGame}>🔄 TENTAR NOVAMENTE</button>
+                <button className="btn" onClick={(e) => { createRipple(e, e.currentTarget); startGame(); }}>🔄 JOGAR NOVAMENTE</button>
               </div>
             </div>
           )}
-
-          {(phase === "idle") && (
+          {phase === "idle" && (
             <div className="btn-container">
-              {highScore > 0 && (
-                <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>
-                  🏆 Recorde: {highScore} pts
-                </p>
-              )}
-              <button className="btn" onClick={startGame}>🚀 INICIAR JOGO</button>
-              <p style={{ fontSize: 10, color: '#333', marginTop: 8 }}>
-                Enter/Space para começar · Use o mouse/touch para selecionar
-              </p>
+              {highScore > 0 && <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>🏆 Recorde: {highScore} pts</p>}
+              <button className="btn" onClick={(e) => { createRipple(e, e.currentTarget); startGame(); }}>🚀 INICIAR</button>
+              <p style={{ fontSize: 10, color: '#333', marginTop: 6 }}>{isMobile ? 'Toque nas células para selecionar' : 'Enter/Space para começar'}</p>
             </div>
           )}
         </div>
       );
     }
-
     const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(<MemoryMatrix />);
   </script>
