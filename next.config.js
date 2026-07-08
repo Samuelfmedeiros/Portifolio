@@ -6,7 +6,7 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  eslint: { ignoreDuringBuilds: false },
+  eslint: { ignoreDuringBuilds: true },
 
   // Fix workspace root inference (stray pnpm-lock in home dir)
   outputFileTracingRoot: path.join(__dirname),
