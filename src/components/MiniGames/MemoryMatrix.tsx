@@ -20,7 +20,17 @@ interface ComboState {
   justMilestone: boolean;
 }
 
-// ─── Sound System (Web Audio API) ───────────────────────────────────────────
+// ── Haptic feedback ────────────────────────────────────────────────────────
+
+function haptic(pattern: number | number[]) {
+  try {
+    if (navigator.vibrate) navigator.vibrate(pattern);
+  } catch {
+    // noop
+  }
+}
+
+// ── Sound System (Web Audio API) ───────────────────────────────────────────
 
 function createAudioContext(): AudioContext | null {
   try {
@@ -192,6 +202,25 @@ export function MemoryMatrix() {
     saveSoundPref(soundEnabled);
   }, [soundEnabled]);
 
+  // ── Prevent double-tap zoom on mobile ─────────────────────────────────
+  useEffect(() => {
+    const preventZoom = (e: TouchEvent) => {
+      if (e.touches.length > 1) e.preventDefault();
+    };
+    let lastTouchEnd = 0;
+    const preventDoubleTap = (e: TouchEvent) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    };
+    document.addEventListener('touchstart', preventZoom, { passive: false });
+    document.addEventListener('touchend', preventDoubleTap, { passive: false });
+    return () => {
+      document.removeEventListener('touchstart', preventZoom);
+      document.removeEventListener('touchend', preventDoubleTap);
+    };
+  }, []);
+
   // ── Sound wrapper ──────────────────────────────────────────────────────
   const sound = useCallback(
     (fn: (ctx: AudioContext | null) => void) => {
@@ -270,6 +299,7 @@ export function MemoryMatrix() {
   // ── Start game ─────────────────────────────────────────────────────────
   const startGame = useCallback(() => {
     ensureAudio();
+    haptic(15);
     setGridSize(3);
     setLevel(0);
     setScore(0);
@@ -301,6 +331,7 @@ export function MemoryMatrix() {
         const points = Math.round(10 * multiplier);
         const isMilestone = COMBO_MILESTONES.includes(newComboCount);
 
+        haptic(8);
         setCombo({
           count: newComboCount,
           maxCombo: Math.max(combo.maxCombo, newComboCount),
@@ -329,6 +360,7 @@ export function MemoryMatrix() {
           );
           setScore((s) => s + 50 + bonus);
           setHighScore((h) => Math.max(h, score + 50 + bonus));
+          haptic(20);
           sound(playLevelComplete);
 
           setTimeout(() => {
@@ -345,6 +377,7 @@ export function MemoryMatrix() {
         }
       } else {
         // Wrong pick
+        haptic([15, 10, 25]);
         sound(playWrong);
         setCombo((prev) => ({
           ...prev,
@@ -376,7 +409,9 @@ export function MemoryMatrix() {
   );
 
   // ── Cell size ─────────────────────────────────────────────────────────
-  const cellSize = gridSize <= 4 ? "w-12 h-12 md:w-14 md:h-14" : "w-10 h-10 md:w-12 md:h-12";
+  const cellSize = gridSize <= 4
+    ? "w-[52px] h-[52px] md:w-14 md:h-14"
+    : "w-12 h-12 md:w-[52px] md:h-[52px]";
 
   // ── Combo badge color ─────────────────────────────────────────────────
   const comboColor =
@@ -390,7 +425,7 @@ export function MemoryMatrix() {
 
   // ── Render ────────────────────────────────────────────────────────────
   return (
-    <div className="py-2 select-none">
+    <div className="py-2 select-none touch-action-manipulation" style={{ WebkitTapHighlightColor: 'transparent' }}>
       {/* Header */}
       <h3 className="font-mono text-sm text-[var(--accent)] mb-4 text-center">
         🧠 MEMORY MATRIX
@@ -449,7 +484,7 @@ export function MemoryMatrix() {
       </AnimatePresence>
 
       {/* Cell size adjusts for larger grids */}
-      <div className="flex justify-center">
+      <div className="flex justify-center touch-action-manipulation">
         <div
           className="grid gap-1.5 sm:gap-2"
           style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
@@ -493,7 +528,7 @@ export function MemoryMatrix() {
                   }}
                   whileHover={phase === "input" ? { scale: 1.08 } : {}}
                   whileTap={phase === "input" ? { scale: 0.92 } : {}}
-                  className={`${cellSize} rounded-lg border-2 transition-colors duration-150
+                  className={`${cellSize} rounded-lg border-2 transition-colors duration-150 touch-action-manipulation select-none
                     ${
                       cell.revealed
                         ? "border-[var(--accent)] shadow-[0_0_12px_var(--accent)]"

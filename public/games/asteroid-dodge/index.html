@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Asteroid Dodge</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -55,6 +55,10 @@
       border-radius: 8px;
       overflow: hidden;
       cursor: none;
+      touch-action: none;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
     }
 
     /* Player ship */
@@ -65,6 +69,7 @@
       transition: left 0.15s ease-out, top 0.15s ease-out;
       pointer-events: none;
       z-index: 10;
+      will-change: transform;
     }
     .ship svg {
       width: 100%;
@@ -206,6 +211,45 @@
       }
       .btn { padding: 10px 24px; font-size: 16px; }
     }
+
+    /* Touch joystick */
+    .joystick {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      z-index: 15;
+      touch-action: none;
+      display: none;
+    }
+    .joystick-zone {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      width: 50%;
+      display: flex;
+      align-items: center;
+    }
+    .joystick-zone--left { left: 0; justify-content: flex-start; padding-left: 20px; }
+    .joystick-zone--right { right: 0; justify-content: flex-end; padding-right: 20px; }
+    .joystick-arrow {
+      font-size: 28px;
+      color: rgba(255,255,255,0.3);
+      pointer-events: none;
+      user-select: none;
+    }
+    .joystick-divider {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      width: 1px;
+      height: 100%;
+      background: rgba(255,255,255,0.03);
+    }
+    @media (pointer: coarse), (max-width: 640px) {
+      .joystick { display: flex; }
+    }
   </style>
 </head>
 <body>
@@ -326,6 +370,8 @@
       const lastSpawnRef = useRef(0);
       const gameRef = useRef({ score: 0, lives: MAX_LIVES, level: 1 });
       const canvasRef = useRef(null);
+      const touchLeftRef = useRef(false);
+      const touchRightRef = useRef(false);
 
       // ─── Keep mutable refs in sync ──────────────────────────
       useEffect(() => { gameRef.current = { score, lives, level }; }, [score, lives, level]);
@@ -346,6 +392,30 @@
         }
       }, [handlePointer]);
 
+      // ─── Joystick touch handlers ────────────────────────────
+      const onJoystickStart = useCallback((e) => {
+        e.preventDefault();
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const mid = rect.width / 2;
+        touchLeftRef.current = x < mid;
+        touchRightRef.current = x >= mid;
+      }, []);
+
+      const onJoystickMove = useCallback((e) => {
+        e.preventDefault();
+        const rect = e.currentTarget.getBoundingClientRect();
+        const x = e.touches[0].clientX - rect.left;
+        const mid = rect.width / 2;
+        touchLeftRef.current = x < mid;
+        touchRightRef.current = x >= mid;
+      }, []);
+
+      const onJoystickEnd = useCallback(() => {
+        touchLeftRef.current = false;
+        touchRightRef.current = false;
+      }, []);
+
       // ─── Spawn asteroid ─────────────────────────────────────
       const spawnAsteroid = useCallback(() => {
         const size = ASTEROID_SIZES[randInt(0, ASTEROID_SIZES.length - 1)];
@@ -359,7 +429,7 @@
 
       // ─── Collision detection ────────────────────────────────
       const checkCollision = useCallback((ax, ay, aSize, sx, sy) => {
-        const r = aSize / 2 + SHIP_SIZE / 2 - 4;
+        const r = aSize / 2 + SHIP_SIZE / 2 - 2;
         const dx = ax - sx;
         const dy = ay - sy;
         return dx * dx + dy * dy < r * r;
@@ -395,6 +465,14 @@
               y: prev.y + (dy / dist) * speed,
             };
           });
+
+          // Joystick movement (mobile)
+          if (touchLeftRef.current) {
+            setShipPos(prev => ({ ...prev, x: Math.max(SHIP_SIZE / 2, prev.x - 8) }));
+          }
+          if (touchRightRef.current) {
+            setShipPos(prev => ({ ...prev, x: Math.min(CANVAS_W - SHIP_SIZE / 2, prev.x + 8) }));
+          }
 
           frameRef.current = requestAnimationFrame(tick);
         };
@@ -506,11 +584,28 @@
               <Explosion key={e.id} x={e.x} y={e.y} />
             ))}
 
+            {/* Touch joystick */}
+            <div
+              className="joystick"
+              onTouchStart={onJoystickStart}
+              onTouchMove={onJoystickMove}
+              onTouchEnd={onJoystickEnd}
+              onTouchCancel={onJoystickEnd}
+            >
+              <div className="joystick-zone joystick-zone--left">
+                <span className="joystick-arrow">◀</span>
+              </div>
+              <div className="joystick-zone joystick-zone--right">
+                <span className="joystick-arrow">▶</span>
+              </div>
+              <div className="joystick-divider" />
+            </div>
+
             {/* Overlays */}
             {status === 'start' && (
               <div className="overlay">
                 <h1>☄️ Asteroid Dodge</h1>
-                <p>Move your mouse to control the ship.<br />Dodge asteroids and survive!</p>
+                <p>Move mouse or tap ◀▶ to control the ship.<br />Dodge asteroids and survive!</p>
                 <button className="btn" onClick={startGame}>Start Game</button>
               </div>
             )}
@@ -525,7 +620,7 @@
             )}
           </div>
 
-          <div className="hint">Move mouse to navigate — dodge the asteroids!</div>
+          <div className="hint">Move mouse — or use ◀▶ on touch — dodge the asteroids!</div>
         </div>
       );
     }

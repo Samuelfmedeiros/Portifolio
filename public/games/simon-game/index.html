@@ -2,7 +2,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>Simon Game</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -13,14 +13,52 @@
       padding: 0;
       box-sizing: border-box;
     }
+    html, body {
+      overscroll-behavior: none;
+      overflow: hidden;
+      height: 100%;
+    }
     body {
       background: #0a0a0f;
       display: flex;
       justify-content: center;
       align-items: center;
       min-height: 100vh;
+      min-height: 100dvh;
       font-family: monospace;
       color: #e2e8f0;
+      touch-action: manipulation;
+      -webkit-touch-callout: none;
+      -webkit-user-select: none;
+      user-select: none;
+      position: fixed;
+      width: 100%;
+    }
+    .landscape-blocker {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: #0a0a0f;
+      z-index: 9999;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #94a3b8;
+      font-size: 1.2rem;
+      text-align: center;
+      padding: 2rem;
+      gap: 1rem;
+    }
+    .landscape-blocker .icon {
+      font-size: 3rem;
+      animation: rotate-phone 2s ease-in-out infinite;
+    }
+    @keyframes rotate-phone {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(90deg); }
+    }
+    @media (orientation: landscape) and (max-height: 500px) {
+      .landscape-blocker { display: flex; }
     }
     .game-container {
       background: #12121a;
@@ -28,10 +66,14 @@
       border-radius: 16px;
       border: 1px solid rgba(34, 211, 238, 0.15);
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
+      max-width: 95vw;
+      max-height: 98dvh;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
     }
     .simon-title {
       text-align: center;
-      font-size: 1.5rem;
+      font-size: clamp(1rem, 4vw, 1.5rem);
       font-weight: bold;
       color: #22d3ee;
       margin-bottom: 0.5rem;
@@ -40,7 +82,7 @@
     }
     .status-text {
       text-align: center;
-      font-size: 0.75rem;
+      font-size: clamp(0.65rem, 2.5vw, 0.75rem);
       color: #94a3b8;
       margin-bottom: 0.75rem;
       min-height: 1.2em;
@@ -49,9 +91,10 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 0.5rem;
-      width: 11rem;
-      height: 11rem;
+      width: min(12rem, 82vw);
+      height: min(12rem, 82vw);
       margin: 0 auto;
+      touch-action: manipulation;
     }
     .color-btn {
       border: none;
@@ -60,6 +103,10 @@
       transition: all 0.15s ease;
       outline: 2px solid transparent;
       outline-offset: -2px;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      position: relative;
+      overflow: hidden;
     }
     .color-btn:focus-visible {
       outline-color: #ffffff80;
@@ -79,9 +126,21 @@
     .color-btn.clickable:hover {
       filter: brightness(1.1);
     }
+    /* Touch ripple */
+    .color-btn .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.45);
+      pointer-events: none;
+      animation: ripple-anim 0.5s ease-out forwards;
+    }
+    @keyframes ripple-anim {
+      0% { width: 0; height: 0; opacity: 0.6; }
+      100% { width: 140%; height: 140%; opacity: 0; }
+    }
     .score-text {
       text-align: center;
-      font-size: 1.125rem;
+      font-size: clamp(0.9rem, 3vw, 1.125rem);
       font-weight: bold;
       color: #22d3ee;
       margin-top: 0.75rem;
@@ -90,15 +149,17 @@
     .btn-play {
       display: block;
       margin: 0 auto;
-      padding: 0.6rem 1.25rem;
+      padding: 0.7rem 1.5rem;
       border: none;
       border-radius: 8px;
       background: #06b6d4;
       color: #fff;
       font-family: monospace;
-      font-size: 0.75rem;
+      font-size: clamp(0.7rem, 2.5vw, 0.8rem);
       cursor: pointer;
       transition: all 0.2s ease;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
     .btn-play:hover {
       filter: brightness(1.15);
@@ -113,19 +174,46 @@
       color: #475569;
     }
 
+    /* Mobile — bigger buttons */
     @media (max-width: 480px) {
       .game-container { padding: 1.25rem; max-width: 92vw; }
-      .grid { width: 9rem; height: 9rem; gap: 0.35rem; }
-      .color-btn { border-radius: 0.5rem; }
-      .simon-title { font-size: 1.2rem; }
-      .btn-play { padding: 0.5rem 1rem; font-size: 0.7rem; }
+      .grid { width: min(12rem, 82vw); height: min(12rem, 82vw); gap: 0.4rem; }
+      .color-btn { border-radius: 0.65rem; }
+      .simon-title { font-size: clamp(1rem, 5vw, 1.3rem); }
+      .btn-play { padding: 0.65rem 1.25rem; font-size: clamp(0.65rem, 3vw, 0.8rem); }
     }
+    /* Small phones */
     @media (max-width: 380px) {
-      .grid { width: 7.5rem; height: 7.5rem; gap: 0.25rem; }
+      .game-container { padding: 0.9rem; }
+      .grid { width: min(11rem, 85vw); height: min(11rem, 85vw); gap: 0.3rem; }
+      .color-btn { border-radius: 0.5rem; }
+    }
+    /* Very small / short screens */
+    @media (max-height: 600px) {
+      .game-container { padding: 0.75rem; }
+      .grid { width: min(9.5rem, 70vw); height: min(9.5rem, 70vw); gap: 0.3rem; }
+      .simon-title { font-size: 0.9rem; margin-bottom: 0.25rem; }
+      .status-text { font-size: 0.6rem; margin-bottom: 0.35rem; min-height: 0.9em; }
+      .score-text { margin-top: 0.35rem; margin-bottom: 0.25rem; font-size: 0.85rem; }
+      .btn-play { padding: 0.4rem 0.9rem; font-size: 0.6rem; }
+      .footer { margin-top: 0.5rem; }
+    }
+    /* Touch feedback — pulse on tap */
+    @media (hover: none) and (pointer: coarse) {
+      .color-btn.active {
+        transform: scale(1.15);
+        filter: brightness(1.5);
+      }
     }
   </style>
 </head>
 <body>
+  <div class="landscape-blocker" id="landscape-blocker">
+    <div class="icon">📱</div>
+    <div>Gire o dispositivo</div>
+    <small>Modo retrato necessário</small>
+  </div>
+
   <div class="game-container">
     <div class="simon-title">Simon Game</div>
     <div id="root"></div>
@@ -138,6 +226,46 @@
     const COLORS = ["#ef4444", "#22c55e", "#3b82f6", "#f59e0b"];
     const COLOR_LABELS = ["VERMELHO", "VERDE", "AZUL", "AMARELO"];
 
+    // ─── Haptic feedback ─────────────────────────────────────────────
+    const vibrate = (ms = 12) => {
+      try { navigator.vibrate?.(ms); } catch {}
+    };
+
+    // ─── Touch ripple on element ─────────────────────────────────────
+    function createRipple(e, el) {
+      const rect = el.getBoundingClientRect();
+      const touch = e.changedTouches?.[0] || e;
+      const x = (touch.clientX - rect.left) / rect.width * 100;
+      const y = (touch.clientY - rect.top) / rect.height * 100;
+      const ripple = document.createElement("span");
+      ripple.className = "ripple";
+      ripple.style.left = x + "%";
+      ripple.style.top = y + "%";
+      ripple.style.transform = "translate(-50%, -50%)";
+      ripple.style.position = "absolute";
+      ripple.style.borderRadius = "50%";
+      ripple.style.background = "rgba(255,255,255,0.45)";
+      ripple.style.pointerEvents = "none";
+      ripple.style.animation = "ripple-anim 0.5s ease-out forwards";
+      el.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 500);
+    }
+
+    // ─── Portrait lock ───────────────────────────────────────────────
+    async function lockPortrait() {
+      try {
+        if (screen.orientation?.lock) {
+          await screen.orientation.lock("portrait");
+        }
+      } catch {}
+    }
+    if (typeof screen !== "undefined" && screen.orientation) {
+      lockPortrait();
+      document.addEventListener("visibilitychange", () => {
+        if (!document.hidden) lockPortrait();
+      });
+    }
+
     function MiniGame() {
       const [sequence, setSequence] = useState([]);
       const [playerTurn, setPlayerTurn] = useState(false);
@@ -146,6 +274,7 @@
       const [phase, setPhase] = useState("idle");
       const playerIdx = useRef(0);
       const flashAbort = useRef(false);
+      const btnRefs = useRef([]);
 
       const startGame = useCallback(() => {
         const first = Math.floor(Math.random() * 4);
@@ -182,11 +311,21 @@
       }, [phase, sequence, flashSequence]);
 
       const handleClick = useCallback(
-        (idx) => {
+        (idx, e) => {
           if (!playerTurn || phase !== "playing") return;
+
+          // Haptic
+          vibrate(12);
+
+          // Ripple
+          const el = btnRefs.current[idx];
+          if (el) createRipple(e, el);
+
           setActiveIdx(idx);
           setTimeout(() => setActiveIdx(null), 250);
+
           if (idx !== sequence[playerIdx.current]) {
+            vibrate(40); // longer buzz on error
             setPhase("gameover");
             setPlayerTurn(false);
             return;
@@ -206,9 +345,9 @@
       const statusMessage = () => {
         switch (phase) {
           case "idle":     return "Clique em Iniciar para jogar!";
-          case "showing":  return "👀 Observe a sequência...";
-          case "playing":  return "🎯 Repita a sequência!";
-          case "gameover": return "💀 Game Over! Pontuação: " + score;
+          case "showing":  return "\u{1F440} Observe a sequ\u00EAncia...";
+          case "playing":  return "\u{1F3AF} Repita a sequ\u00EAncia!";
+          case "gameover": return "\u{1F480} Game Over! Pontua\u00E7\u00E3o: " + score;
           default:         return "";
         }
       };
@@ -221,7 +360,11 @@
             {COLORS.map((color, i) => (
               <button
                 key={i}
-                onClick={() => handleClick(i)}
+                ref={(el) => (btnRefs.current[i] = el)}
+                onClick={(e) => handleClick(i, e)}
+                onTouchStart={() => {
+                  if (playerTurn && phase === "playing") vibrate(8);
+                }}
                 disabled={phase !== "playing"}
                 className={
                   "color-btn" +
@@ -237,8 +380,8 @@
           <p className="score-text">Score: {score}</p>
 
           {(phase === "idle" || phase === "gameover") && (
-            <button onClick={startGame} className="btn-play">
-              {phase === "gameover" ? "🔄 Tentar Novamente" : "▶ Iniciar Jogo"}
+            <button onClick={() => { vibrate(10); startGame(); }} className="btn-play">
+              {phase === "gameover" ? "\u{1F504} Tentar Novamente" : "\u25B6 Iniciar Jogo"}
             </button>
           )}
         </div>

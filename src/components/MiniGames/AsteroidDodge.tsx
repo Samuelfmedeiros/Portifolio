@@ -164,6 +164,13 @@ export function AsteroidDodge() {
   const keysRef = useRef<Set<string>>(new Set());
   const audioRef = useRef(createAudio());
 
+  // ── Touch joystick ──────────────────────────────────────────────
+  const touchLeftRef = useRef(false);
+  const touchRightRef = useRef(false);
+  const joystickRef = useRef<HTMLDivElement>(null);
+  // larger collision margin for touch friendliness
+  const COLLISION_MARGIN = 8;
+
   // keep value-refs in sync (effect, not render — React 19 strict-mode compliant)
   useEffect(() => {
     scoreRef.current = score;
@@ -193,7 +200,7 @@ export function AsteroidDodge() {
 
   /* ── Collision check ──────────────────────────────────────────── */
   const checkCollision = useCallback((asteroid: Asteroid, px: number) => {
-    const margin = 5;
+    const margin = COLLISION_MARGIN;
     return (
       px + margin > asteroid.x - asteroid.size / 10 &&
       px - margin < asteroid.x + asteroid.size / 10 &&
@@ -337,6 +344,15 @@ export function AsteroidDodge() {
         setPlayerX((p) => Math.min(95, p + moveSpeed));
       }
 
+      // Touch joystick input (mobile)
+      const touchSpeed = 4;
+      if (touchLeftRef.current) {
+        setPlayerX((p) => Math.max(5, p - touchSpeed));
+      }
+      if (touchRightRef.current) {
+        setPlayerX((p) => Math.min(95, p + touchSpeed));
+      }
+
       // Move asteroids
       setAsteroids((prev) => {
         const updated = prev
@@ -443,6 +459,30 @@ export function AsteroidDodge() {
     updatePlayerFromPointer(e.touches[0].clientX);
   };
 
+  /* ── Joystick touch handlers ─────────────────────────────────── */
+  const handleJoystickStart = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const mid = rect.width / 2;
+    touchLeftRef.current = x < mid;
+    touchRightRef.current = x >= mid;
+  };
+
+  const handleJoystickMove = (e: React.TouchEvent<HTMLDivElement>) => {
+    e.preventDefault();
+    const rect = e.currentTarget.getBoundingClientRect();
+    const x = e.touches[0].clientX - rect.left;
+    const mid = rect.width / 2;
+    touchLeftRef.current = x < mid;
+    touchRightRef.current = x >= mid;
+  };
+
+  const handleJoystickEnd = () => {
+    touchLeftRef.current = false;
+    touchRightRef.current = false;
+  };
+
   /* ── Power-up icons for status bar ────────────────────────────── */
   const activePowerUpIcons = [
     shieldActive && "🛡️",
@@ -488,7 +528,7 @@ export function AsteroidDodge() {
         ref={gameRef}
         onClick={handleContainerClick}
         onTouchMove={handleTouch}
-        className={`relative w-full h-48 rounded-lg overflow-hidden bg-[var(--bg-primary)]/50 border border-[var(--border)] cursor-crosshair select-none ${
+        className={`relative w-full h-52 sm:h-64 lg:h-72 touch-none rounded-lg overflow-hidden bg-[var(--bg-primary)]/50 border border-[var(--border)] cursor-crosshair select-none ${
           slowMoActive ? "border-[#60a5fa]/50" : ""
         }`}
         tabIndex={0}
@@ -544,10 +584,10 @@ export function AsteroidDodge() {
 
         {/* Player ship */}
         <motion.div
-          className={`absolute bottom-2 text-lg z-10 ${
+          className={`absolute bottom-2 text-lg z-10 will-change-transform ${
             shieldFlash ? "brightness-200 scale-125" : ""
           }`}
-          style={{ left: `${playerX}%`, transform: "translateX(-50%)" }}
+          style={{ left: `${playerX}%`, transform: "translateX(-50%) translateZ(0)" }}
           animate={{ scale: gameOver ? [1, 1.5, 0] : 1 }}
           transition={{ duration: 0.3 }}
         >
@@ -607,6 +647,29 @@ export function AsteroidDodge() {
             🔥 {comboCount}x COMBO
           </div>
         )}
+
+        {/* ── Touch joystick (mobile) ─────────────────────────────── */}
+        <div
+          ref={joystickRef}
+          onTouchStart={handleJoystickStart}
+          onTouchMove={handleJoystickMove}
+          onTouchEnd={handleJoystickEnd}
+          onTouchCancel={handleJoystickEnd}
+          className="absolute bottom-0 left-0 right-0 h-[72px] sm:hidden z-15 touch-none select-none"
+          style={{ touchAction: 'none' }}
+        >
+          {/* Background zones */}
+          <div className="absolute inset-0 flex">
+            <div className="flex-1 flex items-center justify-start pl-6 bg-gradient-to-r from-white/[0.06] to-transparent">
+              <span className="text-2xl text-white/50 pointer-events-none">◀</span>
+            </div>
+            <div className="flex-1 flex items-center justify-end pr-6 bg-gradient-to-l from-white/[0.06] to-transparent">
+              <span className="text-2xl text-white/50 pointer-events-none">▶</span>
+            </div>
+          </div>
+          {/* Divider line */}
+          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-px h-full bg-white/[0.04]" />
+        </div>
 
         {/* Overlay */}
         {(!started || gameOver) && (
