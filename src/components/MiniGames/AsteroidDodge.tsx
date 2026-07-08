@@ -13,6 +13,8 @@ function seededRandom(seed: number): () => number {
 }
 
 /* ── Sound engine (Web Audio API) ───────────────────────────────── */
+const POWER_UP_DURATION = 5000; // ms
+
 function createAudio() {
   let ctx: AudioContext | null = null;
 
@@ -112,7 +114,10 @@ const POWER_UP_COLOR: Record<PowerType, string> = {
   slowmo: "#60a5fa",
   "2x": "#fbbf24",
 };
-const POWER_UP_DURATION = 5000; // ms
+
+/* ── Reducer-style power-up expiry timer ─────────────────────────── */
+// Instead of comparing Date.now() during render, we store booleans
+// in state and schedule timeouts to clear them.
 
 /* ── Component ───────────────────────────────────────────────────── */
 export function AsteroidDodge() {
@@ -122,14 +127,23 @@ export function AsteroidDodge() {
   const [lives, setLives] = useState(3);
   const [gameOver, setGameOver] = useState(false);
   const [started, setStarted] = useState(false);
-  const [highScore, setHighScore] = useState(0);
+  // High score: lazy init from localStorage (avoids setState in effect)
+  const [highScore, setHighScore] = useState(() => {
+    try {
+      const saved = localStorage.getItem("asteroid-dodge-highscore");
+      return saved ? Number(saved) : 0;
+    } catch {
+      return 0;
+    }
+  });
   const [trail, setTrail] = useState<TrailPoint[]>([]);
   const [powerUps, setPowerUps] = useState<PowerUp[]>([]);
-  const [activeEffects, setActiveEffects] = useState<Record<string, number>>({
-    shield: 0,
-    slowmo: 0,
-    "2x": 0,
-  });
+
+  // Boolean state for render — avoids Date.now() in render path.
+  // Actual expiry timestamps live in a ref for the game loop.
+  const [shieldActive, setShieldActive] = useState(false);
+  const [slowMoActive, setSlowMoActive] = useState(false);
+  const [x2Active, setX2Active] = useState(false);
   const [shieldFlash, setShieldFlash] = useState(false);
   const [comboCount, setComboCount] = useState(0);
 
@@ -143,26 +157,23 @@ export function AsteroidDodge() {
   const playerXRef = useRef(50);
   const startedRef = useRef(false);
   const gameOverRef = useRef(false);
-  const effectsRef = useRef<Record<string, number>>({ shield: 0, slowmo: 0, "2x": 0 });
+  // Expiry timestamps for game loop (refs avoid set-state-in-effect issues)
+  const shieldExpiry = useRef(0);
+  const slowMoExpiry = useRef(0);
+  const x2Expiry = useRef(0);
   const keysRef = useRef<Set<string>>(new Set());
   const audioRef = useRef(createAudio());
 
-  // keep refs in sync
-  scoreRef.current = score;
-  livesRef.current = lives;
-  playerXRef.current = playerX;
-  startedRef.current = started;
-  gameOverRef.current = gameOver;
-  effectsRef.current = activeEffects;
-
-  /* ── High score localStorage ──────────────────────────────────── */
+  // keep value-refs in sync (effect, not render — React 19 strict-mode compliant)
   useEffect(() => {
-    try {
-      const saved = localStorage.getItem("asteroid-dodge-highscore");
-      if (saved) setHighScore(Number(saved));
-    } catch { /* noop */ }
-  }, []);
+    scoreRef.current = score;
+    livesRef.current = lives;
+    playerXRef.current = playerX;
+    startedRef.current = started;
+    gameOverRef.current = gameOver;
+  });
 
+  /* ── Persist high score ────────────────────────────────────────── */
   useEffect(() => {
     if (highScore > 0) {
       try {
@@ -226,6 +237,36 @@ export function AsteroidDodge() {
     setPowerUps((prev) => [...prev, pu]);
   }, []);
 
+  /* ── Activate a power-up (sets boolean + schedules auto-clear) ── */
+  const activatePowerUp = useCallback((type: PowerType) => {
+    const now = Date.now();
+    audioRef.current.powerUp();
+    setComboCount((c) => c + 1);
+
+    if (type === "shield") {
+      shieldExpiry.current = now + POWER_UP_DURATION;
+      setShieldActive(true);
+      setTimeout(() => {
+        shieldExpiry.current = 0;
+        setShieldActive(false);
+      }, POWER_UP_DURATION);
+    } else if (type === "slowmo") {
+      slowMoExpiry.current = now + POWER_UP_DURATION;
+      setSlowMoActive(true);
+      setTimeout(() => {
+        slowMoExpiry.current = 0;
+        setSlowMoActive(false);
+      }, POWER_UP_DURATION);
+    } else if (type === "2x") {
+      x2Expiry.current = now + POWER_UP_DURATION;
+      setX2Active(true);
+      setTimeout(() => {
+        x2Expiry.current = 0;
+        setX2Active(false);
+      }, POWER_UP_DURATION);
+    }
+  }, []);
+
   /* ── Keyboard ─────────────────────────────────────────────────── */
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
@@ -233,7 +274,6 @@ export function AsteroidDodge() {
       if (e.key === " " || e.key === "Enter") {
         e.preventDefault();
         if (gameOverRef.current || !startedRef.current) {
-          // restart / start via keyboard too
           const btn = gameRef.current?.querySelector("button");
           btn?.click();
         }
@@ -259,8 +299,10 @@ export function AsteroidDodge() {
       const delta = (time - lastTime) / 16;
       lastTime = time;
 
-      const effects = effectsRef.current;
-      const speedMultiplier = effects.slowmo > Date.now() ? 0.45 : 1;
+      const now = Date.now();
+      const hasSlowMo = slowMoExpiry.current > now;
+      const has2x = x2Expiry.current > now;
+      const speedMultiplier = hasSlowMo ? 0.45 : 1;
 
       // Spawn asteroids
       if (time - lastSpawnRef.current > Math.max(350, 900 - scoreRef.current * 18)) {
@@ -268,14 +310,14 @@ export function AsteroidDodge() {
         lastSpawnRef.current = time;
       }
 
-      // Spawn power-ups (every 3-5s)
+      // Spawn power-ups (every 3.5-5.5s)
       if (time - lastPowerUpRef.current > 3500 + Math.random() * 2000) {
         spawnPowerUp();
         lastPowerUpRef.current = time;
       }
 
       // Score
-      const pointsGain = Math.round(delta * (effects["2x"] > Date.now() ? 2 : 1));
+      const pointsGain = Math.round(delta * (has2x ? 2 : 1));
       const newScore = scoreRef.current + pointsGain;
       const prevMilestone = Math.floor(scoreRef.current / 500);
       const newMilestone = Math.floor(newScore / 500);
@@ -303,14 +345,12 @@ export function AsteroidDodge() {
 
         for (const a of updated) {
           if (checkCollision(a, playerXRef.current)) {
-            // Check shield
-            if (effectsRef.current.shield > Date.now()) {
-              // Absorb hit, remove shield
-              effectsRef.current.shield = 0;
-              setActiveEffects((e) => ({ ...e, shield: 0 }));
+            // Shield absorbs hit
+            if (shieldExpiry.current > now) {
+              shieldExpiry.current = 0;
+              setShieldActive(false);
               setShieldFlash(true);
               setTimeout(() => setShieldFlash(false), 300);
-              // Remove that asteroid
               return updated.filter((x) => x.id !== a.id);
             }
 
@@ -323,14 +363,11 @@ export function AsteroidDodge() {
 
             if (newLives <= 0) {
               setGameOver(true);
-              setHighScore((h) => {
-                const best = Math.max(h, scoreRef.current);
-                return best;
-              });
+              setHighScore((h) => Math.max(h, scoreRef.current));
               audioRef.current.gameOver();
               return updated;
             }
-            // Respawn player at center after hit
+            // Respawn at center after hit
             setPlayerX(50);
             return updated.filter((x) => x.id !== a.id);
           }
@@ -344,26 +381,8 @@ export function AsteroidDodge() {
           .map((p) => ({ ...p, y: p.y + p.speed * delta }))
           .filter((p) => {
             if (p.y > 105) return false;
-
-            // Check if player collected it
             if (checkPowerUpCollision(p, playerXRef.current)) {
-              const now = Date.now();
-              audioRef.current.powerUp();
-              setComboCount((c) => c + 1);
-
-              if (p.type === "shield") {
-                const expiry = now + POWER_UP_DURATION;
-                effectsRef.current.shield = expiry;
-                setActiveEffects((e) => ({ ...e, shield: expiry }));
-              } else if (p.type === "slowmo") {
-                const expiry = now + POWER_UP_DURATION;
-                effectsRef.current.slowmo = expiry;
-                setActiveEffects((e) => ({ ...e, slowmo: expiry }));
-              } else if (p.type === "2x") {
-                const expiry = now + POWER_UP_DURATION;
-                effectsRef.current["2x"] = expiry;
-                setActiveEffects((e) => ({ ...e, "2x": expiry }));
-              }
+              activatePowerUp(p.type);
               return false;
             }
             return true;
@@ -382,7 +401,7 @@ export function AsteroidDodge() {
 
     animRef.current = requestAnimationFrame(gameLoop);
     return () => cancelAnimationFrame(animRef.current);
-  }, [started, gameOver, spawnAsteroid, spawnPowerUp, checkCollision, checkPowerUpCollision]);
+  }, [started, gameOver, spawnAsteroid, spawnPowerUp, checkCollision, checkPowerUpCollision, activatePowerUp]);
 
   /* ── Start / Restart ──────────────────────────────────────────── */
   const startGame = useCallback(() => {
@@ -397,10 +416,12 @@ export function AsteroidDodge() {
     setTrail([]);
     setComboCount(0);
     setShieldFlash(false);
-    const now = Date.now();
-    const reset = { shield: 0, slowmo: 0, "2x": 0 };
-    effectsRef.current = reset;
-    setActiveEffects(reset);
+    setShieldActive(false);
+    setSlowMoActive(false);
+    setX2Active(false);
+    shieldExpiry.current = 0;
+    slowMoExpiry.current = 0;
+    x2Expiry.current = 0;
     lastSpawnRef.current = performance.now();
     lastPowerUpRef.current = performance.now();
     setPlayerX(50);
@@ -422,15 +443,11 @@ export function AsteroidDodge() {
     updatePlayerFromPointer(e.touches[0].clientX);
   };
 
-  /* ── Render helpers ───────────────────────────────────────────── */
-  const hasShield = activeEffects.shield > Date.now();
-  const hasSlowMo = activeEffects.slowmo > Date.now();
-  const has2x = activeEffects["2x"] > Date.now();
-
+  /* ── Power-up icons for status bar ────────────────────────────── */
   const activePowerUpIcons = [
-    hasShield && "🛡️",
-    hasSlowMo && "⏱️",
-    has2x && "⭐",
+    shieldActive && "🛡️",
+    slowMoActive && "⏱️",
+    x2Active && "⭐",
   ].filter(Boolean);
 
   return (
@@ -472,12 +489,12 @@ export function AsteroidDodge() {
         onClick={handleContainerClick}
         onTouchMove={handleTouch}
         className={`relative w-full h-48 rounded-lg overflow-hidden bg-[var(--bg-primary)]/50 border border-[var(--border)] cursor-crosshair select-none ${
-          hasSlowMo ? "border-[#60a5fa]/50" : ""
+          slowMoActive ? "border-[#60a5fa]/50" : ""
         }`}
         tabIndex={0}
         role="application"
         aria-label="Asteroid Dodge game"
-        style={hasShield ? { boxShadow: "inset 0 0 30px rgba(250, 175, 50, 0.15)" } : undefined}
+        style={shieldActive ? { boxShadow: "inset 0 0 30px rgba(250, 175, 50, 0.15)" } : undefined}
       >
         {/* Stars background */}
         <div className="absolute inset-0">
@@ -491,14 +508,14 @@ export function AsteroidDodge() {
         </div>
 
         {/* SlowMo indicator */}
-        {hasSlowMo && (
+        {slowMoActive && (
           <div className="absolute top-2 left-1/2 -translate-x-1/2 font-mono text-[10px] text-[#60a5fa] animate-pulse">
             ⏱ SLOW MODE
           </div>
         )}
 
         {/* 2X Score indicator */}
-        {has2x && (
+        {x2Active && (
           <div className="absolute top-2 right-2 font-mono text-[10px] text-[#fbbf24] animate-pulse">
             ⭐ 2X SCORE
           </div>
@@ -506,12 +523,12 @@ export function AsteroidDodge() {
 
         {/* Engine trail */}
         <div className="absolute inset-0 pointer-events-none">
-          {trail.map((t, i) => {
-            const index = trail.length - 1 - i; // reverse order
-            const size = 4 - (index / trail.length) * 3;
+          {trail.map((t, idx) => {
+            const i = trail.length - 1 - idx;
+            const size = 4 - (i / trail.length) * 3;
             return (
               <div
-                key={i}
+                key={idx}
                 className="absolute bottom-2 rounded-full bg-[var(--accent)]"
                 style={{
                   left: `${t.x}%`,
@@ -534,7 +551,7 @@ export function AsteroidDodge() {
           animate={{ scale: gameOver ? [1, 1.5, 0] : 1 }}
           transition={{ duration: 0.3 }}
         >
-          {hasShield && (
+          {shieldActive && (
             <div className="absolute inset-[-6px] rounded-full border-2 border-[var(--accent-alt)] animate-pulse opacity-60" />
           )}
           🛸
@@ -609,7 +626,6 @@ export function AsteroidDodge() {
                 onClick={(e) => {
                   e.stopPropagation();
                   startGame();
-                  // Focus for keyboard
                   gameRef.current?.focus();
                 }}
                 className="px-6 py-2 rounded-lg font-mono text-sm text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors"

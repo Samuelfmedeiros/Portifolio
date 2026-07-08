@@ -311,9 +311,9 @@ export function MemoryMatrix() {
         setScore((s) => s + points);
 
         if (isMilestone) {
-          sound(playComboMilestone);
+          sound((ctx) => playComboMilestone(ctx, newComboCount));
         } else {
-          sound(playCorrect);
+          sound((ctx) => playCorrect(ctx, newComboCount));
         }
 
         // Check if all targets found
