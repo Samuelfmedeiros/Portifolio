@@ -2,22 +2,17 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="mobile-web-app-capable" content="yes" />
   <title>Simon Game</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-    html, body {
-      overscroll-behavior: none;
-      overflow: hidden;
-      height: 100%;
-    }
+    /* ─── Reset ──────────────────────────────────────── */
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+
     body {
       background: #0a0a0f;
       display: flex;
@@ -27,344 +22,667 @@
       min-height: 100dvh;
       font-family: monospace;
       color: #e2e8f0;
-      touch-action: manipulation;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
+      touch-action: pan-y;
+      -webkit-tap-highlight-color: transparent;
+      overscroll-behavior: none;
+      -webkit-overflow-scrolling: auto;
       user-select: none;
-      position: fixed;
-      width: 100%;
+      -webkit-user-select: none;
     }
-    .landscape-blocker {
-      display: none;
-      position: fixed;
-      inset: 0;
-      background: #0a0a0f;
-      z-index: 9999;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      color: #94a3b8;
-      font-size: 1.2rem;
-      text-align: center;
-      padding: 2rem;
-      gap: 1rem;
-    }
-    .landscape-blocker .icon {
-      font-size: 3rem;
-      animation: rotate-phone 2s ease-in-out infinite;
-    }
-    @keyframes rotate-phone {
-      0%, 100% { transform: rotate(0deg); }
-      50% { transform: rotate(90deg); }
-    }
-    @media (orientation: landscape) and (max-height: 500px) {
-      .landscape-blocker { display: flex; }
-    }
+
+    /* ─── Game container ─────────────────────────────── */
     .game-container {
       background: #12121a;
-      padding: 2rem 2rem 1.5rem;
+      padding: 2rem 1.5rem 1.5rem;
       border-radius: 16px;
       border: 1px solid rgba(34, 211, 238, 0.15);
       box-shadow: 0 0 30px rgba(0,0,0,0.5);
-      max-width: 95vw;
-      max-height: 98dvh;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
+      max-width: calc(100% - 16px);
+      width: 100%;
+      margin: 10px;
+      touch-action: pan-y;
     }
+
     .simon-title {
       text-align: center;
-      font-size: clamp(1rem, 4vw, 1.5rem);
+      font-size: clamp(1.15rem, 5vw, 1.5rem);
       font-weight: bold;
       color: #22d3ee;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
       letter-spacing: 0.15em;
       text-transform: uppercase;
     }
+
+    /* ─── Mode toggle ────────────────────────────────── */
+    .mode-toggle {
+      text-align: center;
+      margin-bottom: 0.5rem;
+      display: flex;
+      justify-content: center;
+      gap: 6px;
+    }
+    .mode-btn {
+      padding: 8px 18px;
+      border: 2px solid #2a2a3a;
+      background: transparent;
+      color: #94a3b8;
+      border-radius: 20px;
+      font-family: monospace;
+      font-size: clamp(0.65rem, 3vw, 0.85rem);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
+      overflow: hidden;
+    }
+    .mode-btn.active {
+      background: rgba(34, 211, 238, 0.1);
+      border-color: #22d3ee;
+      color: #22d3ee;
+    }
+    .mode-btn:hover { border-color: rgba(34, 211, 238, 0.5); }
+    .mode-btn:active { transform: scale(0.96); }
+
+    /* ─── Status ─────────────────────────────────────── */
     .status-text {
       text-align: center;
       font-size: clamp(0.65rem, 2.5vw, 0.75rem);
       color: #94a3b8;
-      margin-bottom: 0.75rem;
+      margin-bottom: 0.5rem;
       min-height: 1.2em;
     }
+    .streak-bar {
+      text-align: center;
+      font-size: clamp(0.6rem, 2.5vw, 0.7rem);
+      color: #64748b;
+      margin-bottom: 0.5rem;
+      min-height: 1em;
+    }
+
+    /* ─── Grid + Color Buttons ───────────────────────── */
     .grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 0.5rem;
-      width: min(12rem, 82vw);
-      height: min(12rem, 82vw);
+      gap: clamp(0.3rem, 1.2vw, 0.5rem);
+      width: min(200px, 88vw);
+      height: min(200px, 88vw);
       margin: 0 auto;
       touch-action: manipulation;
     }
+    .grid.hard { width: min(200px, 88vw); height: min(200px, 88vw); }
+    .grid.hard-6 {
+      width: min(300px, 92vw);
+      height: min(200px, 88vw);
+      grid-template-columns: 1fr 1fr 1fr;
+    }
+
     .color-btn {
       border: none;
-      border-radius: 0.75rem;
+      border-radius: clamp(0.5rem, 2vw, 0.85rem);
       cursor: default;
-      transition: all 0.15s ease;
+      transition: transform 0.1s ease, filter 0.1s ease, box-shadow 0.1s ease;
       outline: 2px solid transparent;
       outline-offset: -2px;
-      touch-action: manipulation;
-      -webkit-tap-highlight-color: transparent;
       position: relative;
       overflow: hidden;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      min-width: 0;
+      -webkit-appearance: none;
+      appearance: none;
     }
-    .color-btn:focus-visible {
-      outline-color: #ffffff80;
-    }
+    .color-btn:focus-visible { outline-color: #ffffff80; }
+
     .color-btn.active {
-      transform: scale(1.1);
-      filter: brightness(1.4);
-      box-shadow: 0 0 20px rgba(34,211,238,0.3);
-      outline-color: #ffffff40;
+      transform: scale(1.12);
+      filter: brightness(1.5);
+      box-shadow: 0 0 25px currentColor;
+      outline-color: #ffffff60;
+      z-index: 2;
+      animation: touchPulse 0.3s ease-out;
     }
-    .color-btn.dim {
-      filter: brightness(0.5);
+    .color-btn.dim { filter: brightness(0.4); }
+    .color-btn.clickable { cursor: pointer; }
+    .color-btn.clickable:hover { filter: brightness(1.1); }
+    .color-btn.clickable:active {
+      transform: scale(1.08);
+      filter: brightness(1.3);
     }
-    .color-btn.clickable {
-      cursor: pointer;
+    .color-btn.wrong-flash {
+      animation: wrongPulse 0.5s ease-out;
     }
-    .color-btn.clickable:hover {
-      filter: brightness(1.1);
+    .color-btn:disabled {
+      opacity: 1;
     }
-    /* Touch ripple */
-    .color-btn .ripple {
+
+    /* ─── Ripple effect ──────────────────────────────── */
+    .ripple {
       position: absolute;
       border-radius: 50%;
-      background: rgba(255,255,255,0.45);
+      background: rgba(255, 255, 255, 0.35);
+      transform: scale(0);
+      animation: rippleAnim 0.6s ease-out forwards;
       pointer-events: none;
-      animation: ripple-anim 0.5s ease-out forwards;
+      will-change: transform, opacity;
     }
-    @keyframes ripple-anim {
-      0% { width: 0; height: 0; opacity: 0.6; }
-      100% { width: 140%; height: 140%; opacity: 0; }
+    @keyframes rippleAnim {
+      0%   { transform: scale(0); opacity: 0.5; }
+      100% { transform: scale(4); opacity: 0; }
     }
+
+    @keyframes wrongPulse {
+      0%, 100% { filter: brightness(1); }
+      20% { filter: brightness(2); background: #fff !important; }
+    }
+    @keyframes touchPulse {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.15); filter: brightness(1.6); box-shadow: 0 0 35px currentColor; }
+      100% { transform: scale(1.12); filter: brightness(1.5); box-shadow: 0 0 25px currentColor; }
+    }
+
+    /* ─── Score ──────────────────────────────────────── */
     .score-text {
       text-align: center;
-      font-size: clamp(0.9rem, 3vw, 1.125rem);
+      font-size: clamp(1rem, 5vw, 1.25rem);
       font-weight: bold;
       color: #22d3ee;
       margin-top: 0.75rem;
-      margin-bottom: 0.5rem;
+      margin-bottom: 0.25rem;
     }
+    .round-progress {
+      height: 3px;
+      background: #1e293b;
+      border-radius: 2px;
+      margin: 0 auto 0.5rem;
+      width: min(80%, 240px);
+      overflow: hidden;
+    }
+    .round-progress-fill {
+      height: 100%;
+      background: linear-gradient(90deg, #06b6d4, #22d3ee);
+      border-radius: 2px;
+      transition: width 0.2s ease;
+    }
+
     .btn-play {
       display: block;
-      margin: 0 auto;
-      padding: 0.7rem 1.5rem;
+      margin: 0.5rem auto 0;
+      padding: 0.75rem 1.5rem;
       border: none;
-      border-radius: 8px;
+      border-radius: 10px;
       background: #06b6d4;
       color: #fff;
       font-family: monospace;
-      font-size: clamp(0.7rem, 2.5vw, 0.8rem);
+      font-size: clamp(0.7rem, 3vw, 0.85rem);
+      font-weight: 600;
       cursor: pointer;
       transition: all 0.2s ease;
       touch-action: manipulation;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+      position: relative;
+      overflow: hidden;
+      -webkit-appearance: none;
+      appearance: none;
     }
-    .btn-play:hover {
-      filter: brightness(1.15);
+    .btn-play:hover { filter: brightness(1.15); }
+    .btn-play:active { transform: scale(0.97); }
+
+    .high-scores {
+      margin-top: 0.75rem;
+      padding-top: 0.5rem;
+      border-top: 1px solid #1e293b;
+      font-size: clamp(0.5rem, 2.5vw, 0.6rem);
+      color: #475569;
+      text-align: center;
     }
-    .btn-play:active {
-      transform: scale(0.97);
-    }
+    .high-scores span { margin: 0 4px; }
+    .high-scores .hs-normal, .high-scores .hs-hard { font-weight: bold; }
+    .high-scores .hs-normal { color: #22d3ee; }
+    .high-scores .hs-hard { color: #a855f7; }
+
     .footer {
       text-align: center;
-      margin-top: 1.25rem;
-      font-size: 0.6rem;
-      color: #475569;
+      margin-top: 0.75rem;
+      font-size: clamp(0.45rem, 2vw, 0.55rem);
+      color: #333366;
     }
 
-    /* Mobile — bigger buttons */
-    @media (max-width: 480px) {
-      .game-container { padding: 1.25rem; max-width: 92vw; }
-      .grid { width: min(12rem, 82vw); height: min(12rem, 82vw); gap: 0.4rem; }
-      .color-btn { border-radius: 0.65rem; }
-      .simon-title { font-size: clamp(1rem, 5vw, 1.3rem); }
-      .btn-play { padding: 0.65rem 1.25rem; font-size: clamp(0.65rem, 3vw, 0.8rem); }
+    .screen-shake {
+      animation: scrnShake 0.4s ease-out;
     }
-    /* Small phones */
-    @media (max-width: 380px) {
-      .game-container { padding: 0.9rem; }
-      .grid { width: min(11rem, 85vw); height: min(11rem, 85vw); gap: 0.3rem; }
-      .color-btn { border-radius: 0.5rem; }
+    @keyframes scrnShake {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-3px, 1px); }
+      30% { transform: translate(3px, -1px); }
+      50% { transform: translate(-2px, 2px); }
+      70% { transform: translate(2px, -2px); }
+      90% { transform: translate(-1px, 1px); }
     }
-    /* Very small / short screens */
-    @media (max-height: 600px) {
-      .game-container { padding: 0.75rem; }
-      .grid { width: min(9.5rem, 70vw); height: min(9.5rem, 70vw); gap: 0.3rem; }
-      .simon-title { font-size: 0.9rem; margin-bottom: 0.25rem; }
-      .status-text { font-size: 0.6rem; margin-bottom: 0.35rem; min-height: 0.9em; }
-      .score-text { margin-top: 0.35rem; margin-bottom: 0.25rem; font-size: 0.85rem; }
-      .btn-play { padding: 0.4rem 0.9rem; font-size: 0.6rem; }
-      .footer { margin-top: 0.5rem; }
+
+    /* ─── Portrait Lock Overlay: show in landscape on mobile ─── */
+    #rotate-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: #0a0a0f;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      color: #e2e8f0;
+      font-family: monospace;
+      text-align: center;
+      gap: 1rem;
+      padding: 2rem;
     }
-    /* Touch feedback — pulse on tap */
+    #rotate-overlay .rotate-icon {
+      font-size: 3rem;
+      animation: rotatePhone 2s ease-in-out infinite;
+    }
+    #rotate-overlay .rotate-title {
+      font-size: 1.2rem;
+      color: #22d3ee;
+      font-weight: bold;
+    }
+    #rotate-overlay .rotate-desc {
+      font-size: 0.85rem;
+      color: #64748b;
+      max-width: 280px;
+    }
+    @keyframes rotatePhone {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(90deg); }
+    }
+    @media (orientation: landscape) and (pointer: coarse) {
+      #rotate-overlay {
+        display: flex !important;
+      }
+    }
+
+    /* ─── Touch-specific: stronger feedback ──────────── */
     @media (hover: none) and (pointer: coarse) {
       .color-btn.active {
-        transform: scale(1.15);
-        filter: brightness(1.5);
+        animation: touchDoubleFlash 0.35s ease-out;
       }
+      .color-btn.clickable:active {
+        transform: scale(1.12);
+        filter: brightness(1.5) !important;
+        box-shadow: 0 0 30px currentColor;
+      }
+      .mode-btn {
+        padding: 12px 24px;
+        border-width: 2px;
+      }
+      .btn-play {
+        padding: 0.9rem 2rem;
+        font-size: clamp(0.75rem, 4vw, 0.9rem);
+      }
+      .game-container {
+        padding: 1.5rem 0.75rem 1.25rem;
+        max-width: calc(100% - 8px);
+        margin: 4px;
+      }
+      /* Even bigger buttons on very small touch screens */
+      .grid {
+        width: min(220px, 92vw);
+        height: min(220px, 92vw);
+      }
+      .grid.hard-6 {
+        width: min(330px, 95vw);
+        height: min(220px, 92vw);
+      }
+    }
+
+    @keyframes touchDoubleFlash {
+      0% { transform: scale(1); filter: brightness(1); }
+      15% { transform: scale(1.18); filter: brightness(1.8); box-shadow: 0 0 40px currentColor; }
+      30% { transform: scale(1.05); filter: brightness(1.2); box-shadow: 0 0 15px currentColor; }
+      60% { transform: scale(1.15); filter: brightness(1.6); box-shadow: 0 0 35px currentColor; }
+      100% { transform: scale(1.12); filter: brightness(1.5); box-shadow: 0 0 25px currentColor; }
+    }
+
+    /* ─── Small screens ──────────────────────────────── */
+    @media (max-width: 420px) {
+      .game-container {
+        padding: 1.25rem 0.6rem 1rem;
+        border-radius: 12px;
+        max-width: calc(100% - 6px);
+        margin: 3px;
+      }
+      .grid { gap: 0.25rem; }
+      .color-btn { border-radius: 0.4rem; }
+    }
+
+    /* ─── Landscape on mobile ────────────────────────── */
+    @media (orientation: landscape) and (max-height: 500px) {
+      body {
+        min-height: 100dvh;
+        align-items: flex-start;
+        padding: 8px 0;
+      }
+      .game-container {
+        padding: 0.75rem 1rem 0.5rem;
+        max-width: calc(100% - 8px);
+        margin: 4px;
+      }
+      .simon-title { font-size: clamp(0.9rem, 3vw, 1.1rem); margin-bottom: 0.1rem; }
+      .mode-toggle { margin-bottom: 0.2rem; }
+      .mode-btn { padding: 5px 14px; font-size: clamp(0.55rem, 2vw, 0.7rem); }
+      .status-text { font-size: clamp(0.55rem, 2vw, 0.65rem); margin-bottom: 0.2rem; }
+      .streak-bar { font-size: clamp(0.5rem, 2vw, 0.6rem); margin-bottom: 0.2rem; }
+      .grid { width: min(150px, 65vh); height: min(150px, 65vh); gap: 0.3rem; }
+      .grid.hard-6 { width: min(225px, 90vh); height: min(150px, 65vh); }
+      .score-text { font-size: clamp(0.8rem, 3vw, 1rem); margin-top: 0.3rem; margin-bottom: 0.1rem; }
+      .btn-play { padding: 0.5rem 1.2rem; font-size: clamp(0.6rem, 2vw, 0.75rem); margin-top: 0.2rem; }
+      .high-scores { margin-top: 0.4rem; padding-top: 0.3rem; }
+      .footer { margin-top: 0.4rem; }
+    }
+    @media (orientation: landscape) and (max-height: 400px) {
+      .simon-title { display: none; }
+      .mode-toggle { margin-bottom: 0.1rem; }
+      .grid { width: min(120px, 55vh); height: min(120px, 55vh); gap: 0.25rem; }
+      .grid.hard-6 { width: min(185px, 75vh); height: min(120px, 55vh); }
     }
   </style>
 </head>
 <body>
-  <div class="landscape-blocker" id="landscape-blocker">
-    <div class="icon">📱</div>
-    <div>Gire o dispositivo</div>
-    <small>Modo retrato necessário</small>
+  <!-- Portrait Lock Overlay -->
+  <div id="rotate-overlay">
+    <div class="rotate-icon">📱</div>
+    <div class="rotate-title">Modo Retrato</div>
+    <div class="rotate-desc">Gire o dispositivo para o modo retrato para jogar Simon Game</div>
   </div>
 
   <div class="game-container">
-    <div class="simon-title">Simon Game</div>
+    <div class="simon-title">🎹 Simon</div>
     <div id="root"></div>
-    <div class="footer">memorize a sequência &bull; repita &bull; pontue</div>
+    <div class="footer">memorize a sequência • repita • pontue</div>
   </div>
 
   <script type="text/babel">
     const { useState, useEffect, useCallback, useRef } = React;
 
-    const COLORS = ["#ef4444", "#22c55e", "#3b82f6", "#f59e0b"];
-    const COLOR_LABELS = ["VERMELHO", "VERDE", "AZUL", "AMARELO"];
-
-    // ─── Haptic feedback ─────────────────────────────────────────────
-    const vibrate = (ms = 12) => {
-      try { navigator.vibrate?.(ms); } catch {}
-    };
-
-    // ─── Touch ripple on element ─────────────────────────────────────
-    function createRipple(e, el) {
-      const rect = el.getBoundingClientRect();
-      const touch = e.changedTouches?.[0] || e;
-      const x = (touch.clientX - rect.left) / rect.width * 100;
-      const y = (touch.clientY - rect.top) / rect.height * 100;
-      const ripple = document.createElement("span");
-      ripple.className = "ripple";
-      ripple.style.left = x + "%";
-      ripple.style.top = y + "%";
-      ripple.style.transform = "translate(-50%, -50%)";
-      ripple.style.position = "absolute";
-      ripple.style.borderRadius = "50%";
-      ripple.style.background = "rgba(255,255,255,0.45)";
-      ripple.style.pointerEvents = "none";
-      ripple.style.animation = "ripple-anim 0.5s ease-out forwards";
-      el.appendChild(ripple);
-      setTimeout(() => ripple.remove(), 500);
-    }
-
-    // ─── Portrait lock ───────────────────────────────────────────────
-    async function lockPortrait() {
+    // ─── Haptic Feedback ──────────────────────────────
+    function haptic(pattern) {
       try {
-        if (screen.orientation?.lock) {
-          await screen.orientation.lock("portrait");
+        if (navigator.vibrate) navigator.vibrate(pattern);
+      } catch(e) {}
+    }
+
+    // ─── Touch Ripple ─────────────────────────────────
+    function createRipple(e, el) {
+      if (!el) return;
+      const rect = el.getBoundingClientRect();
+      const size = Math.max(rect.width, rect.height) * 1.2;
+      const x = (e.clientX || e.touches?.[0]?.clientX || rect.left + rect.width/2) - rect.left - size/2;
+      const y = (e.clientY || e.touches?.[0]?.clientY || rect.top + rect.height/2) - rect.top - size/2;
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.cssText = `width:${size}px;height:${size}px;left:${x}px;top:${y}px;`;
+      el.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 700);
+    }
+
+    // ─── Portrait Lock ────────────────────────────────
+    function lockPortrait() {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          screen.orientation.lock('portrait').catch(() => {});
         }
-      } catch {}
+      } catch(e) {}
     }
-    if (typeof screen !== "undefined" && screen.orientation) {
-      lockPortrait();
-      document.addEventListener("visibilitychange", () => {
-        if (!document.hidden) lockPortrait();
-      });
+    // Attempt on first interaction
+    document.addEventListener('click', lockPortrait, { once: true });
+    document.addEventListener('touchstart', lockPortrait, { once: true });
+
+    // ─── Double-tap zoom prevention ───────────────────
+    document.addEventListener('touchstart', (e) => {
+      if (e.touches.length > 1) e.preventDefault();
+    }, { passive: false });
+    let lastTouchEnd = 0;
+    document.addEventListener('touchend', (e) => {
+      const now = Date.now();
+      if (now - lastTouchEnd <= 300) e.preventDefault();
+      lastTouchEnd = now;
+    }, { passive: false });
+
+    // ─── Sound Engine ─────────────────────────────────
+    let audioCtxShared = null;
+    function getAudioCtx() {
+      if (!audioCtxShared) {
+        try { audioCtxShared = new (window.AudioContext || window.webkitAudioContext)(); } catch { return null; }
+      }
+      return audioCtxShared;
     }
+
+    function playTone(freq, duration = 0.15, type = 'sine', volume = 0.12) {
+      try {
+        const ctx = getAudioCtx();
+        if (!ctx) return;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(volume, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + duration);
+      } catch(e) {}
+    }
+    function playError() { playTone(100, 0.4, 'sawtooth', 0.15); }
+    function playCorrect(idx) { playTone([200, 400, 600, 800, 1000, 1200][idx], 0.12); }
+    function playLevelUp() {
+      [523, 659, 784].forEach((f, i) => setTimeout(() => playTone(f, 0.12), i * 80));
+    }
+
+    const COLORS_4 = ["#ef4444", "#22c55e", "#3b82f6", "#f59e0b"];
+    const COLORS_6 = ["#ef4444", "#22c55e", "#3b82f6", "#f59e0b", "#f0f0f0", "#a855f7"];
+    const LABELS_4 = ["VERMELHO", "VERDE", "AZUL", "AMARELO"];
+    const LABELS_6 = ["VERMELHO", "VERDE", "AZUL", "AMARELO", "BRANCO", "ROXO"];
+    const KEYS_4 = ["1", "2", "3", "4"];
+    const KEYS_6 = ["1", "2", "3", "4", "5", "6"];
 
     function MiniGame() {
+      const [hardMode, setHardMode] = useState(false);
       const [sequence, setSequence] = useState([]);
       const [playerTurn, setPlayerTurn] = useState(false);
       const [activeIdx, setActiveIdx] = useState(null);
       const [score, setScore] = useState(0);
+      const [streak, setStreak] = useState(0);
       const [phase, setPhase] = useState("idle");
+      const [progress, setProgress] = useState(0);
       const playerIdx = useRef(0);
       const flashAbort = useRef(false);
-      const btnRefs = useRef([]);
+      const containerRef = useRef(null);
+
+      const COLORS = hardMode ? COLORS_6 : COLORS_4;
+      const NUM_COLORS = hardMode ? 6 : 4;
+
+      // ─── localStorage high scores ─────────────────────
+      const [highNormal, setHighNormal] = useState(
+        parseInt(localStorage.getItem('simonHighNormal') || '0')
+      );
+      const [highHard, setHighHard] = useState(
+        parseInt(localStorage.getItem('simonHighHard') || '0')
+      );
+
+      const saveHigh = (score, hard) => {
+        if (hard) {
+          if (score > highHard) {
+            setHighHard(score);
+            localStorage.setItem('simonHighHard', score.toString());
+          }
+        } else {
+          if (score > highNormal) {
+            setHighNormal(score);
+            localStorage.setItem('simonHighNormal', score.toString());
+          }
+        }
+      };
 
       const startGame = useCallback(() => {
-        const first = Math.floor(Math.random() * 4);
+        // Ensure AudioContext is resumed on user gesture
+        const ctx = getAudioCtx();
+        if (ctx && ctx.state === 'suspended') ctx.resume();
+
+        haptic(15);
+        const first = Math.floor(Math.random() * NUM_COLORS);
         setSequence([first]);
         setScore(0);
+        setStreak(0);
+        setProgress(0);
         setPhase("showing");
         playerIdx.current = 0;
         flashAbort.current = false;
-      }, []);
+      }, [NUM_COLORS]);
 
       const flashSequence = useCallback(async () => {
         flashAbort.current = false;
+        const baseSpeed = hardMode ? Math.max(200, 400 - Math.min(score, 20) * 8) : Math.max(250, 500 - Math.min(score, 20) * 10);
+
         for (let i = 0; i < sequence.length; i++) {
           if (flashAbort.current) return;
-          await new Promise((r) => setTimeout(r, 400));
+          setProgress(((i + 1) / sequence.length) * 100);
+          await new Promise((r) => setTimeout(r, baseSpeed));
           if (flashAbort.current) return;
           setActiveIdx(sequence[i]);
+          playCorrect(sequence[i]);
           await new Promise((r) => setTimeout(r, 300));
           if (flashAbort.current) return;
           setActiveIdx(null);
         }
         setPlayerTurn(true);
         setPhase("playing");
+        setProgress(0);
         playerIdx.current = 0;
-      }, [sequence]);
+      }, [sequence, score, hardMode]);
 
       useEffect(() => {
         if (phase === "showing" && sequence.length > 0) {
           flashSequence();
         }
-        return () => {
-          flashAbort.current = true;
-        };
+        return () => { flashAbort.current = true; };
       }, [phase, sequence, flashSequence]);
 
       const handleClick = useCallback(
         (idx, e) => {
           if (!playerTurn || phase !== "playing") return;
 
-          // Haptic
-          vibrate(12);
-
-          // Ripple
-          const el = btnRefs.current[idx];
-          if (el) createRipple(e, el);
+          // Haptic on press
+          haptic(12);
+          // Ripple on the clicked button
+          if (e && e.currentTarget) createRipple(e, e.currentTarget);
 
           setActiveIdx(idx);
-          setTimeout(() => setActiveIdx(null), 250);
+          playCorrect(idx);
+          setTimeout(() => setActiveIdx(null), 200);
 
           if (idx !== sequence[playerIdx.current]) {
-            vibrate(40); // longer buzz on error
+            // Wrong!
+            playError();
+            haptic([30, 20, 50]);
+            if (containerRef.current) {
+              containerRef.current.classList.add('screen-shake');
+              setTimeout(() => containerRef.current && containerRef.current.classList.remove('screen-shake'), 400);
+            }
             setPhase("gameover");
+            setStreak(0);
             setPlayerTurn(false);
+            saveHigh(score, hardMode);
             return;
           }
+
           playerIdx.current += 1;
+          setProgress((playerIdx.current / sequence.length) * 100);
+
           if (playerIdx.current === sequence.length) {
+            // Correct round!
+            playLevelUp();
+            haptic(20);
             setPlayerTurn(false);
             setScore((s) => s + 1);
-            const next = Math.floor(Math.random() * 4);
+            setStreak((s) => s + 1);
+            const next = Math.floor(Math.random() * NUM_COLORS);
             setSequence((seq) => [...seq, next]);
             setPhase("showing");
           }
         },
-        [playerTurn, phase, sequence]
+        [playerTurn, phase, sequence, score, hardMode, NUM_COLORS]
       );
+
+      // ─── Handle ripple + click on buttons ──────────
+      const onPointerDown = useCallback((idx, e) => {
+        // Create ripple on pointer down (works for both mouse and touch)
+        createRipple(e, e.currentTarget);
+        // Then handle the game click
+        handleClick(idx, e);
+      }, [handleClick]);
+
+      // ─── Keyboard support ──────────────────────────
+      useEffect(() => {
+        const handler = (e) => {
+          const keys = hardMode ? KEYS_6 : KEYS_4;
+          const digit = parseInt(e.key);
+          if (digit >= 1 && digit <= keys.length) {
+            handleClick(digit - 1);
+            return;
+          }
+          if (e.key === 'Enter' || e.key === ' ') {
+            if (phase === 'idle' || phase === 'gameover') startGame();
+          }
+          if (e.key === 'h' || e.key === 'H') {
+            if (phase === 'idle' || phase === 'gameover') setHardMode(h => !h);
+          }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, [handleClick, phase, startGame, hardMode]);
 
       const statusMessage = () => {
         switch (phase) {
-          case "idle":     return "Clique em Iniciar para jogar!";
-          case "showing":  return "\u{1F440} Observe a sequ\u00EAncia...";
-          case "playing":  return "\u{1F3AF} Repita a sequ\u00EAncia!";
-          case "gameover": return "\u{1F480} Game Over! Pontua\u00E7\u00E3o: " + score;
+          case "idle":     return "Clique em Iniciar ou pressione Enter!";
+          case "showing":  return "👀 Observe a sequência...";
+          case "playing":  return "🎯 Repita a sequência!";
+          case "gameover": return "💀 Game Over! Pontuação: " + score;
           default:         return "";
         }
       };
 
+      const currentHigh = hardMode ? highHard : highNormal;
+
       return (
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.5rem" }}>
+        <div ref={containerRef} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "0.25rem" }}>
+          <div className="mode-toggle">
+            <button className={"mode-btn" + (!hardMode ? " active" : "")} onClick={() => { if (phase === 'idle' || phase === 'gameover') setHardMode(false); }}>
+              🟢 Normal
+            </button>
+            <button className={"mode-btn" + (hardMode ? " active" : "")} onClick={() => { if (phase === 'idle' || phase === 'gameover') setHardMode(true); }} style={{ marginLeft: 4 }}>
+              🔴 Hard 6
+            </button>
+          </div>
+
           <p className="status-text">{statusMessage()}</p>
 
-          <div className="grid">
+          <p className="streak-bar">
+            {streak >= 3 ? '🔥'.repeat(Math.min(streak, 8)) : ''}
+            {streak >= 3 ? ` Streak: ${streak}` : ''}
+          </p>
+
+          <div className={"grid" + (hardMode ? " hard-6" : "")}>
             {COLORS.map((color, i) => (
               <button
                 key={i}
-                ref={(el) => (btnRefs.current[i] = el)}
-                onClick={(e) => handleClick(i, e)}
-                onTouchStart={() => {
-                  if (playerTurn && phase === "playing") vibrate(8);
-                }}
+                onClick={(e) => onPointerDown(i, e)}
                 disabled={phase !== "playing"}
                 className={
                   "color-btn" +
@@ -372,18 +690,33 @@
                   (phase === "playing" ? " clickable" : "")
                 }
                 style={{ backgroundColor: color }}
-                aria-label={COLOR_LABELS[i]}
+                aria-label={"Cor " + (hardMode ? LABELS_6 : LABELS_4)[i]}
               />
             ))}
           </div>
 
-          <p className="score-text">Score: {score}</p>
+          <p className="score-text">Round {score}</p>
+
+          {phase === "playing" && (
+            <div className="round-progress">
+              <div className="round-progress-fill" style={{ width: progress + '%' }} />
+            </div>
+          )}
 
           {(phase === "idle" || phase === "gameover") && (
-            <button onClick={() => { vibrate(10); startGame(); }} className="btn-play">
-              {phase === "gameover" ? "\u{1F504} Tentar Novamente" : "\u25B6 Iniciar Jogo"}
-            </button>
+            <>
+              <button onClick={(e) => { createRipple(e, e.currentTarget); startGame(); }} className="btn-play">
+                {phase === "gameover" ? "🔄 Tentar Novamente" : "▶ Iniciar Jogo"}
+              </button>
+              <p style={{ fontSize: '0.55rem', color: '#475569', marginTop: 4 }}>
+                Teclas 1-{NUM_COLORS} · Enter/Espaço · H = trocar modo
+              </p>
+            </>
           )}
+
+          <div className="high-scores">
+            🏆 Recordes: <span className="hs-normal">Normal: {highNormal}</span> · <span className="hs-hard">Hard: {highHard}</span>
+          </div>
         </div>
       );
     }

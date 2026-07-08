@@ -2,76 +2,151 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="HandheldFriendly" content="true" />
   <title>Portifolio Terminal</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin: 0; padding: 0; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     body {
       background: #0a0a0f;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
-      font-family: monospace;
+      min-height: 100vh; min-height: 100dvh;
+      font-family: 'Courier New', 'Fira Code', monospace;
       color: #c0c0d0;
+      touch-action: manipulation;
     }
-    .terminal-wrap {
-      width: 100%;
-      max-width: 720px;
-      padding: 1rem;
-    }
+    .terminal-wrap { width: 100%; max-width: 780px; padding: 1rem; }
     .terminal-card {
       background: linear-gradient(135deg, #0f0f1a 0%, #1a1a2e 100%);
-      border: 1px solid rgba(0, 255, 255, 0.12);
+      border: 1px solid rgba(34, 211, 238, 0.12);
       border-radius: 1rem;
       padding: 1.5rem;
-      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 1px rgba(0, 255, 255, 0.05);
+      box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 1px rgba(34, 211, 238, 0.05);
     }
+    .terminal-card.theme-amber {
+      border-color: rgba(245, 158, 11, 0.15);
+      --accent: #f59e0b;
+      --prompt-color: #f59e0b;
+    }
+    .terminal-card.theme-amber .terminal-title { color: #f59e0b; }
+    .terminal-card.theme-amber .history-prompt { color: #f59e0b; }
+    .terminal-card.theme-amber .input-prompt { color: #f59e0b; }
+    .terminal-card.theme-amber .history-cmd { color: #f59e0b; }
+    .terminal-card.theme-green {
+      border-color: rgba(34, 197, 94, 0.15);
+      --accent: #22c55e;
+      --prompt-color: #22c55e;
+    }
+    .terminal-card.theme-green .terminal-title { color: #22c55e; }
+    .terminal-card.theme-green .history-prompt { color: #22c55e; }
+    .terminal-card.theme-green .input-prompt { color: #22c55e; }
+    .terminal-card.theme-green .history-cmd { color: #22c55e; }
+
     .terminal-title {
       text-align: center;
-      font-size: 1rem;
+      font-size: 0.85rem;
       color: #22d3ee;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       opacity: 0.7;
     }
     .terminal-output {
-      height: 240px;
+      height: clamp(240px, 60vh, 400px);
       overflow-y: auto;
-      margin-bottom: 1rem;
+      margin-bottom: 0.75rem;
       padding: 0.75rem;
       background: rgba(0, 0, 0, 0.35);
       border-radius: 0.5rem;
       border: 1px solid rgba(255, 255, 255, 0.04);
       scroll-behavior: smooth;
+      -webkit-overflow-scrolling: touch;
     }
+    .terminal-wrap { width: 100%; max-width: min(780px, 100vw - 16px); padding: clamp(8px, 2vw, 16px); }
+    .terminal-card { padding: clamp(12px, 3vw, 24px); }
+    .history-cmd { font-size: clamp(11px, 2.5vw, 13px); }
+    .history-output { font-size: clamp(10px, 2.5vw, 12px); }
+    .input-prompt { font-size: clamp(11px, 2.5vw, 13px); }
+    .input-field { font-size: clamp(11px, 2.5vw, 13px); }
     .terminal-output::-webkit-scrollbar { width: 4px; }
     .terminal-output::-webkit-scrollbar-track { background: transparent; }
-    .terminal-output::-webkit-scrollbar-thumb { background: rgba(0, 255, 255, 0.2); border-radius: 2px; }
-    .history-entry { margin-bottom: 0.5rem; }
-    .history-cmd { color: #22d3ee; font-size: 0.75rem; }
+    .terminal-output::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.2); border-radius: 2px; }
+    /* Mobile: larger fonts, keyboard prevention */
+    @media (max-width: 640px) {
+      .history-cmd { font-size: clamp(13px, 3.5vw, 16px); }
+      .history-output { font-size: clamp(12px, 3.5vw, 15px); }
+      .input-prompt { font-size: clamp(13px, 3.5vw, 16px); }
+      .input-field { font-size: 16px !important; } /* iOS zoom prevention + readability */
+      .terminal-output { height: clamp(180px, 45dvh, 300px); }
+      .terminal-card { padding: 0.75rem; }
+      .terminal-title { font-size: 0.7rem; }
+      .help-hint { font-size: 0.5rem; }
+    }
+    /* Quick commands bar */
+    .quick-cmds {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 0.5rem;
+      justify-content: center;
+    }
+    .quick-cmd {
+      padding: 6px 12px;
+      font-size: 0.65rem;
+      background: rgba(34, 211, 238, 0.08);
+      border: 1px solid rgba(34, 211, 238, 0.12);
+      border-radius: 14px;
+      color: #22d3ee;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.15s;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+      user-select: none;
+    }
+    .quick-cmd:active { background: rgba(34, 211, 238, 0.2); transform: scale(0.95); }
+    .quick-cmd:hover { background: rgba(34, 211, 238, 0.12); }
+    .history-entry { margin-bottom: 0.35rem; }
+    .history-cmd {
+      color: #22d3ee;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
     .history-prompt { color: #22d3ee; }
     .history-output {
-      font-size: 0.675rem;
+      font-size: 0.7rem;
       color: #8888aa;
       white-space: pre-wrap;
-      margin-top: 0.2rem;
-      line-height: 1.4;
+      margin-top: 0.15rem;
+      line-height: 1.5;
     }
+    .typing-cursor {
+      display: inline-block;
+      width: 6px;
+      height: 13px;
+      background: #22d3ee;
+      animation: blink 0.6s step-end infinite;
+      vertical-align: middle;
+      margin-left: 1px;
+    }
+    @keyframes blink { 50% { opacity: 0; } }
     .input-line {
       display: flex;
       align-items: center;
       gap: 0.5rem;
-      color: #22d3ee;
     }
     .input-prompt {
       font-size: 0.75rem;
       flex-shrink: 0;
       color: #22d3ee;
+      white-space: pre;
     }
     .input-field {
       flex: 1;
@@ -79,41 +154,41 @@
       border: none;
       outline: none;
       color: #e0e0f0;
-      font-family: monospace;
+      font-family: 'Courier New', 'Fira Code', monospace;
       font-size: 0.75rem;
       caret-color: #22d3ee;
     }
-    .input-field::placeholder {
-      color: #444466;
-      font-style: italic;
-    }
+    .input-field::placeholder { color: #444466; font-style: italic; }
     .help-hint {
       text-align: center;
-      margin-top: 1rem;
-      font-size: 0.6rem;
+      margin-top: 0.5rem;
+      font-size: 0.55rem;
       color: #333355;
     }
     .footer {
       text-align: center;
-      margin-top: 0.75rem;
-      font-size: 0.55rem;
+      margin-top: 0.5rem;
+      font-size: 0.5rem;
       color: #333366;
     }
-    .footer a {
-      color: #5555aa;
-      text-decoration: none;
-    }
-    .footer a:hover {
-      color: #7777cc;
-    }
+    .footer a { color: #5555aa; text-decoration: none; }
+    .footer a:hover { color: #7777cc; }
+    /* ANSI-like colors */
+    .ansi-cyan { color: #22d3ee; }
+    .ansi-green { color: #22c55e; }
+    .ansi-red { color: #ef4444; }
+    .ansi-yellow { color: #f59e0b; }
+    .ansi-magenta { color: #a855f7; }
+    .ansi-dim { color: #64748b; }
+    .ansi-bold { font-weight: bold; }
   </style>
 </head>
 <body>
   <div class="terminal-wrap">
-    <div class="terminal-card">
-      <div class="terminal-title">▸ TERMINAL v2.0</div>
+    <div class="terminal-card" id="terminal-card">
+      <div class="terminal-title">▸ TERMINAL v3.0</div>
       <div id="root"></div>
-      <div class="help-hint">digite <strong style="color:#22d3ee;">help</strong> para comandos &middot; Tab para autocomplete</div>
+      <div class="help-hint">digite <strong style="color:#22d3ee;">help</strong> para comandos · Tab para autocomplete · ↑↓ para histórico</div>
     </div>
     <div class="footer">
       <a href="https://github.com/Samuelfmedeiros/terminal" target="_blank" rel="noopener noreferrer">código fonte →</a>
@@ -123,311 +198,536 @@
   <script type="text/babel">
     const { useState, useRef, useEffect, useCallback } = React;
 
+    const THEMES = ['cyber', 'amber', 'green'];
+    const THEME_ACCENTS = { cyber: '#22d3ee', amber: '#f59e0b', green: '#22c55e' };
+
     const BANNER = [
+      '',
       ' ╔══════════════════════════════════════╗',
-      ' ║     \u{1F6F0}\uFE0F  PORTIFOLIO  v2.0           ║',
-      ' ║     Samuel Medeiros \u2014 Dev Full Stack\u0009\u0009║',
+      ' ║   🖥️  PORTIFOLIO  v3.0               ║',
+      ' ║   Samuel Medeiros — Dev Full Stack   ║',
       ' ╚══════════════════════════════════════╝',
       '',
-      "Digite 'help' ou pressione Tab para autocompletar.",
+      " Digite 'help' para comandos disponíveis.",
       '',
     ].join('\n');
 
-    const PROMPT = 'C:\\\\Users\\\\Visitor';
+    const PROMPT = 'samuel@portfolio:~$';
 
-    const COMMANDS = ["help","ajuda","sobre","projetos","habilidades","contato","limpar","clear","cls","hora","date","whoami","theme","fix","run","matrix","sudo","stack","github","neofetch","uptime","ls","echo","banner","quote","exit","ipconfig","ping","cowsay","whois","pwd","holofote","skills"];
+    const WELCOME_TIPS = [
+      "💡 Dica: Tente 'jogos' para ver os mini-games interativos!",
+      "💡 Dica: Pressione Tab para autocompletar comandos.",
+      "💡 Dica: Use 'theme' para alternar entre temas cyber, amber e green.",
+      "💡 Dica: ↑ e ↓ navegam pelo histórico de comandos.",
+      "💡 Dica: 'neofetch' mostra informações do sistema!",
+    ];
 
     const QUOTES = [
-      '"A melhor maneira de prever o futuro \u00e9 cri\u00e1-lo." \u2014 Peter Drucker',
-      '"Dados s\u00e3o o novo petr\u00f3leo." \u2014 Clive Humby',
-      '"Sem dados, voc\u00ea \u00e9 apenas mais uma pessoa com uma opini\u00e3o." \u2014 W. Edwards Deming',
-      '"A simplicidade \u00e9 a sofistica\u00e7\u00e3o m\u00e1xima." \u2014 Leonardo da Vinci',
-      '"O \u00fanico jeito de fazer um \u00f3timo trabalho \u00e9 amar o que voc\u00ea faz." \u2014 Steve Jobs',
-      '"N\u00e3o \u00e9 o mais forte que sobrevive, mas o que melhor se adapta." \u2014 Charles Darwin',
-      '"A tecnologia move o mundo." \u2014 Steve Jobs',
-      '"Transformar problemas em oportunidades \u00e9 a ess\u00eancia da inova\u00e7\u00e3o." \u2014 Samuel Medeiros',
-      '"O sucesso \u00e9 a soma de pequenos esfor\u00e7os repetidos dia ap\u00f3s dia." \u2014 Robert Collier',
-      '"Se voc\u00ea pode medir, voc\u00ea pode gerenciar." \u2014 Peter Drucker',
+      '"A melhor maneira de prever o futuro é criá-lo." — Peter Drucker',
+      '"Dados são o novo petróleo." — Clive Humby',
+      '"Sem dados, você é apenas mais uma pessoa com uma opinião." — W. Edwards Deming',
+      '"A simplicidade é a sofisticação máxima." — Leonardo da Vinci',
+      '"O único jeito de fazer um ótimo trabalho é amar o que você faz." — Steve Jobs',
+      '"Não é o mais forte que sobrevive, mas o que melhor se adapta." — Charles Darwin',
+      '"A tecnologia move o mundo." — Steve Jobs',
+      '"First, solve the problem. Then, write the code." — John Johnson',
+      '"Any fool can write code that a computer can understand. Good programmers write code that humans can understand." — Martin Fowler',
+      '"Talk is cheap. Show me the code." — Linus Torvalds',
+      '"A imaginação é mais importante que o conhecimento." — Albert Einstein',
+      '"O sucesso é a soma de pequenos esforços repetidos dia após dia." — Robert Collier',
+      '"Se você pode medir, você pode gerenciar." — Peter Drucker',
+      '"It works on my machine." — Todo desenvolvedor',
+      '"Debugging é duas vezes mais difícil que escrever código. Portanto, se você escrever o código o mais engenhosamente possível, será incapaz de debugar." — Brian Kernighan',
+      '"O código é como poesia — cada linha importa." — Samuel Medeiros',
+    ];
+
+    const FORTUNES = [
+      'Você vai corrigir um bug hoje que estava te incomodando há semanas.',
+      'Hoje é um ótimo dia para fazer deploy na sexta-feira.',
+      'O café de hoje será excepcional.',
+      'Dica do dia: use `:wq` antes de sair.',
+      'Um commit sem mensagem adequada é como uma carta sem remetente.',
+      'A função que você procura já existe na stdlib.',
+      'Nem todo que usa `sudo` merece root.',
+      'Seu código está melhor do que você pensa.',
     ];
 
     function Terminal() {
       const [input, setInput] = useState('');
-      const [history, setHistory] = useState([{ cmd: '', output: BANNER }]);
+      const [history, setHistory] = useState([{ cmd: '', output: BANNER, tip: WELCOME_TIPS[Math.floor(Math.random() * WELCOME_TIPS.length)] }]);
+      const [theme, setTheme] = useState(0);
+      const [typingOutput, setTypingOutput] = useState(null);
+      const [typingText, setTypingText] = useState('');
+      const [typingIdx, setTypingIdx] = useState(0);
       const inputRef = useRef(null);
       const scrollRef = useRef(null);
-      const commandHistoryRef = useRef([]);
-      const [historyIndex, setHistoryIndex] = useState(-1);
+      const cmdHistory = useRef([]);
+      const cmdHistoryIdx = useRef(-1);
+      const typingAbort = useRef(false);
+      const typingSkip = useRef(false);
 
       useEffect(() => {
-        if (scrollRef.current) {
-          scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
-        }
+        const card = document.getElementById('terminal-card');
+        const themeName = THEMES[theme];
+        ['cyber', 'amber', 'green'].forEach(t => card.classList.remove('theme-' + t));
+        if (themeName !== 'cyber') card.classList.add('theme-' + themeName);
+        const accent = THEME_ACCENTS[themeName];
+        document.documentElement.style.setProperty('--accent-color', accent);
+      }, [theme]);
+
+      useEffect(() => {
+        if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+      }, [history, typingText]);
+
+      useEffect(() => {
+        if (inputRef.current && input !== 'typing') inputRef.current.focus();
       }, [history]);
 
-      const sanitizeInput = (str) => {
-        return str
-          .replace(/[<>]/g, '')
-          .replace(/javascript:/gi, '')
-          .replace(/on\\w+=/gi, '')
-          .replace(/[\\x00-\\x1F\\x7F-\\x9F]/g, '')
-          .slice(0, 500);
+      // Mobile auto-focus: focus on mount, retry on touch
+      useEffect(() => {
+        const tryFocus = () => {
+          if (inputRef.current) {
+            inputRef.current.focus();
+            if (typeof inputRef.current.selectionStart !== 'undefined') {
+              inputRef.current.selectionStart = inputRef.current.selectionEnd = inputRef.current.value.length;
+            }
+          }
+        };
+        tryFocus();
+        const timer = setTimeout(tryFocus, 500);
+        const touchHandler = () => tryFocus();
+        document.addEventListener('touchstart', touchHandler, { once: true });
+        return () => {
+          clearTimeout(timer);
+          document.removeEventListener('touchstart', touchHandler);
+        };
+      }, []);
+
+      // Keyboard prevention: visualViewport API keeps input visible
+      useEffect(() => {
+        if (!window.visualViewport) return;
+        const terminalCard = document.getElementById('terminal-card');
+        if (!terminalCard) return;
+        let origMargin = terminalCard.style.marginBottom;
+
+        const handleViewport = () => {
+          const diff = window.innerHeight - window.visualViewport.height;
+          if (diff > 100) {
+            // Keyboard open — add bottom margin so content stays above keyboard
+            terminalCard.style.marginBottom = diff + 'px';
+            if (scrollRef.current) scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+            if (inputRef.current) {
+              setTimeout(() => inputRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' }), 50);
+            }
+          } else {
+            terminalCard.style.marginBottom = '';
+          }
+        };
+        window.visualViewport.addEventListener('resize', handleViewport);
+        return () => window.visualViewport.removeEventListener('resize', handleViewport);
+      }, []);
+
+      const QUICK_COMMANDS = ['help', 'projetos', 'contato', 'theme', 'jogos', 'neofetch'];
+
+      const handleQuickCmd = (cmd) => {
+        setInput('');
+        executeCommand(cmd);
       };
 
-      const executeCommand = (cmd) => {
-        const trimmed = sanitizeInput(cmd).trim().toLowerCase();
-        let output = '';
+      const sanitizeInput = (str) => {
+        return str.replace(/[<>]/g, '').replace(/javascript:/gi, '').replace(/on\w+=/gi, '').replace(/[\x00-\x1F\x7F-\x9F]/g, '').slice(0, 500);
+      };
 
-        // Normalize limpar/clear/cls
+      const typeText = useCallback((text, onDone) => {
+        typingAbort.current = false;
+        typingSkip.current = false;
+        setTypingOutput(text);
+        setTypingText('');
+        setTypingIdx(0);
+
+        const interval = 10;
+        let pos = 0;
+        let skipTimer = null;
+
+        const tick = () => {
+          if (typingAbort.current) { onDone(); return; }
+          if (typingSkip.current) {
+            setTypingText(text);
+            pos = text.length;
+            setTimeout(() => { onDone(); }, 100);
+            return;
+          }
+          if (pos < text.length) {
+            setTypingText(text.slice(0, pos + 1));
+            pos++;
+            setTimeout(tick, interval);
+          } else {
+            setTimeout(() => { onDone(); }, 200);
+          }
+        };
+
+        const skipHandler = () => { typingSkip.current = true; };
+        window.addEventListener('keydown', skipHandler);
+        tick();
+        return () => {
+          typingAbort.current = true;
+          window.removeEventListener('keydown', skipHandler);
+        };
+      }, []);
+
+      const addHistory = useCallback((cmd, output) => {
+        setHistory(prev => [...prev, { cmd, output }]);
+        if (cmd) {
+          cmdHistory.current = [cmd, ...cmdHistory.current.filter(c => c !== cmd)].slice(0, 50);
+        }
+        cmdHistoryIdx.current = -1;
+      }, []);
+
+      const executeCommand = useCallback(async (rawCmd) => {
+        const trimmed = sanitizeInput(rawCmd).trim().toLowerCase();
+        if (!trimmed) { addHistory('', ''); return; }
+
+        addHistory(rawCmd, '');
+
+        // Normalize clear
         if (trimmed === 'limpar' || trimmed === 'clear' || trimmed === 'cls') {
           setHistory([]);
           return;
         }
 
+        let output = '';
+
         switch (trimmed) {
           case 'help':
           case 'ajuda':
-            output = `COMANDOS DISPON\u00cdVEIS:
-  ajuda         \u2014 Mostra esta mensagem
-  sobre         \u2014 Sobre Samuel
-  projetos      \u2014 Lista de projetos
-  habilidades   \u2014 Habilidades t\u00e9cnicas
-  skills        \u2014 N\u00edvel de profici\u00eancia em cada skill
-  contato       \u2014 Informa\u00e7\u00f5es de contato
-  limpar        \u2014 Limpa o terminal
-  hora          \u2014 Data e hora atual
-  date          \u2014 Data formatada completa
-  whoami        \u2014 Nome do usu\u00e1rio
-  theme         \u2014 Alterna o tema
-  stack         \u2014 Tech stack do projeto
-  github        \u2014 Info do GitHub
-  neofetch      \u2014 System info estilo neofetch
-  uptime        \u2014 Sess\u00e3o uptime
-  ls            \u2014 Lista arquivos do diret\u00f3rio
-  pwd           \u2014 Mostra diret\u00f3rio atual
-  echo <text>   \u2014 Repete o texto
-  banner        \u2014 Mostra o banner
-  quote         \u2014 Cita\u00e7\u00e3o inspiradora aleat\u00f3ria
-  ipconfig      \u2014 Informa\u00e7\u00f5es de rede
-  ping <host>   \u2014 Ping em um servidor
-  whois <nome>  \u2014 Informa\u00e7\u00f5es sobre algu\u00e9m
-  cowsay        \u2014 Vaca falante \u{1F404}
-  holofote      \u2014 Coloca Samuel no holofote
-
-\u26A1 EASTER EGGS (para devs):
-  fix path_variables        \u2014 Repara vari\u00e1veis do Windows
-  run routine:lights_out    \u2014 Modo Noturno M\u00e1ximo
-  matrix                     \u2014 Efeito Matrix
-  sudo rm -rf /             \u2014 \u26A0\uFE0F N\u00e3o fa\u00e7a isso`;
+            output = `\x1b[36mCOMANDOS DISPONÍVEIS:\x1b[0m
+  ajuda / help     — Mostra esta mensagem
+  sobre            — Sobre Samuel
+  projetos         — Lista de projetos
+  habilidades      — Habilidades técnicas
+  skills           — Nível de proficiência
+  jogos / games    — 🎮 Mini-games interativos
+  contato          — Informações de contato
+  limpar / clear   — Limpa o terminal
+  hora / date      — Data e hora atual
+  whoami           — Nome do usuário
+  theme            — Alterna tema: cyber, amber, green
+  stack            — Tech stack do projeto
+  github           — Info do GitHub
+  neofetch         — System info
+  fortune          — Conselho do dia
+  uname -a         — Informações do sistema
+  df -h            — Disco
+  ps aux           — Processos ativos
+  cal              — Calendário
+  weather          — Clima em Brasília
+  ls               — Lista diretório
+  pwd              — Diretório atual
+  echo <text>      — Repete o texto
+  banner           — Mostra o banner
+  quote            — Citação inspiradora
+  ipconfig         — Info de rede
+  ping <host>      — Ping
+  whois <nome>     — Info sobre alguém
+  cowsay           — 🐄
+  holofote         — Destaque!
+            \x1b[33m⚡ EASTER EGGS:\x1b[0m
+  fix path_variables   — Repara PATH
+  run routine:lights_out — Modo Noturno
+  matrix               — Efeito Matrix
+  sudo rm -rf /        — ⚠️ Não faça isso`;
             break;
 
           case 'sobre':
             output = `Samuel Medeiros
-Analista de Dados \u2014 Bras\u00edlia/DF
+Analista de Dados — Brasília/DF
 
 Especialidades:
-  \u2022 Power BI, SQL, DAX
-  \u2022 Python, Pandas, Machine Learning
-  \u2022 ETL e automa\u00e7\u00e3o
-  \u2022 IA Generativa e LLMs
+  • Power BI, SQL, DAX
+  • Python, Pandas, Machine Learning
+  • ETL e automação
+  • IA Generativa e LLMs
 
-Forma\u00e7\u00e3o:
-  \u2022 P\u00f3s-gradua\u00e7\u00e3o em Banco de Dados e BI \u2014 IESB
-  \u2022 An\u00e1lise e Desenvolvimento de Sistemas \u2014 IESB
+Formação:
+  • Pós-graduação em Banco de Dados e BI — IESB
+  • Análise e Desenvolvimento de Sistemas — IESB
 
-Experi\u00eancia:
-  \u2022 ANA (Ag\u00eancia Nacional de \u00c1guas)
-  \u2022 Global Hitss
-  \u2022 TRT 10\u00aa Regi\u00e3o`;
+Experiência:
+  • ANA (Agência Nacional de Águas)
+  • Global Hitss
+  • TRT 10ª Região`;
             break;
 
           case 'projetos':
-            output = `PROJETOS:
-  \u{1F43E} DogWalk        \u2014 Plataforma de passeio de c\u00e3es (Next.js + Supabase)
-  \u{1F6F0}\uFE0F Portifolio Samuel \u2014 Este portf\u00f3lio (Next.js + Framer Motion)
-  \u{1F4CA} ANA Dashboards  \u2014 Dashboards de dados (Power BI + SQL)`;
+            output = `\x1b[36mPROJETOS:\x1b[0m
+  🐾 DogWalk           — Plataforma de passeio de cães
+  🕷️ Arachne           — Motor de scraping + RAG
+  🐹 Capivara          — Hub pessoal multi-tenant
+  🖥️ Portifolio Samuel — Este portfólio
+  📖 LifeLog           — Blog pessoal (Astro 7)`;
+            break;
+
+          case 'jogos':
+          case 'games':
+            output = `\x1b[36m🎮 MINI-GAMES DO PORTIFOLIO:\x1b[0m
+  ☄️ Asteroid Dodge   — Desvie de asteroides no espaço
+  ⌨️ Code Typing      — Desafio de digitação de código
+  🧠 Memory Matrix    — Memorize e recrie padrões
+  🎹 Simon            — Sequência de cores clássica
+  💻 Terminal         — É este aqui! Meta! 😄
+
+  Todos disponíveis em: https://portifolio-30.vercel.app/games/{nome}/index.html`;
             break;
 
           case 'habilidades':
-            output = `HABILIDADES:
-  [Linguagens]    Python, SQL, TypeScript
-  [BI/Analytics] Power BI, Excel, Power Query, DAX
-  [ML/IA]         Scikit-learn, Pandas, LLMs
-  [Web]           Next.js, React, Tailwind CSS
-  [Banco]         PostgreSQL, Supabase, MySQL
-  [Ferramentas]   Docker, Git, Linux, Azure`;
+            output = `\x1b[36mHABILIDADES:\x1b[0m
+  [Linguagens]    Python, SQL, TypeScript, JavaScript
+  [BI/Analytics]  Power BI, DAX, Power Query, Excel
+  [ML/IA]         Scikit-learn, Pandas, LLMs, RAG
+  [Web]           Next.js, React, Vue 3, Tailwind
+  [Backend]       FastAPI, Node.js, PostgreSQL
+  [Ferramentas]   Docker, Git, Linux, Cloudflare
+  [Cloud]         Vercel, Cloudflare Pages, Supabase`;
             break;
 
           case 'skills':
-            output = `PROFICI\u00caNCIA EM HABILIDADES:
-
-  Power BI           \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591  95%  Expert
-  SQL & PostgreSQL   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591  95%  Expert
-  Python             \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  78%  Advanced
-  Machine Learning   \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  78%  Advanced
-  Next.js & React    \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  78%  Advanced
-  LLMs Locais        \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  60%  Proficient
-  Docker             \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591\u2591\u2591  60%  Proficient
-  Git & GitHub       \u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2591\u2591\u2591\u2591\u2591  78%  Advanced`;
+            output = `\x1b[36mPROFICIÊNCIA EM HABILIDADES:\x1b[0m
+  Power BI           ████████████████████████░  95%  Expert
+  SQL & PostgreSQL   ████████████████████████░  95%  Expert
+  Python             ████████████████████░░░░░  78%  Advanced
+  Machine Learning   ████████████████████░░░░░  78%  Advanced
+  Next.js & React    ████████████████████░░░░░  78%  Advanced
+  React Native       ██████████████████░░░░░░░  70%  Advanced
+  LLMs Locais        ████████████████░░░░░░░░░  60%  Proficient
+  Docker             ████████████████░░░░░░░░░  60%  Proficient
+  Git & GitHub       ████████████████████░░░░░  78%  Advanced`;
             break;
 
           case 'contato':
-            output = `CONTATO:
-  \u{1F4E7} Email:    samuelandrademedeiros@gmail.com
-  \u{1F4BC} LinkedIn: linkedin.com/in/samuelandrademedeiros
-  \u{1F43D} GitHub:   github.com/Samuelfmedeiros
-  \u{1F4F1} WhatsApp: wa.me/556191191722`;
+            output = `\x1b[36mCONTATO:\x1b[0m
+  📧 Email:    samuelandrademedeiros@gmail.com
+  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros
+  🐱 GitHub:   github.com/Samuelfmedeiros
+  📱 WhatsApp: wa.me/556191191722`;
             break;
 
           case 'hora':
-            output = `Hor\u00e1rio: ${new Date().toLocaleString("pt-BR")}`;
-            break;
-
-          case 'whoami':
-            output = 'Samuel Medeiros';
+            output = `Horário: ${new Date().toLocaleString("pt-BR")}`;
             break;
 
           case 'date':
             const d = new Date();
-            output = `Data atual: ${d.toLocaleDateString("pt-BR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}\nHor\u00e1rio: ${d.toLocaleTimeString("pt-BR")}`;
+            output = `Data: ${d.toLocaleDateString("pt-BR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}
+Horário: ${d.toLocaleTimeString("pt-BR")}`;
+            break;
+
+          case 'whoami':
+            output = 'samuel';
             break;
 
           case 'uptime':
-            output = `Session uptime: ${Math.floor(Math.random() * 120 + 1)} min`;
+            output = ` 10:42  up 3 days, 14:27, 1 user, load averages: 1.42 1.78 1.63`;
             break;
 
           case 'stack':
-            output = `TECH STACK:
-  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4
-  Anima\u00e7\u00f5es: Framer Motion, Lucide Icons
-  Backend:   Supabase (PostgreSQL), Cloudflare Workers
-  Testes:    Vitest, Playwright
-  Deploy:    Cloudflare Pages, Vercel
-  CI/CD:     GitHub Actions`;
+            output = `\x1b[36mTECH STACK:\x1b[0m
+  Frontend:  Next.js 16, React 19, Vue 3.5, TypeScript, Tailwind 4
+  Animações: Framer Motion, GSAP
+  Backend:   FastAPI, PostgreSQL, Redis
+  IA/ML:     OpenAI, Ollama, LangChain, RAG
+  Deploy:    Vercel, Cloudflare Pages, Docker
+  CI/CD:     GitHub Actions, Woodpecker`;
             break;
 
           case 'github':
             output = `GitHub: github.com/Samuelfmedeiros
-  Repos p\u00fablicos: portifolio, dog-walk, terminal e mais
-  Linguagens: TypeScript, Python, SQL, JavaScript`;
+  📌 portifolio — Portfólio Next.js
+  📌 dog-walk — Marketplace pet
+  📌 arachne — Scraping engine
+  📌 capivara — Hub pessoal
+  📌 lifelog — Blog Astro
+  📌 terminal — Este terminal
+  💬 6 públicos · ⭐ Stars: -- · 🍴 Forks: --`;
             break;
 
           case 'neofetch':
+            const tip = WELCOME_TIPS[Math.floor(Math.random() * WELCOME_TIPS.length)];
             output = `
-        \u256D\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256E         samuel@portfolio
-        \u2502   \u{1F6F0}\uFE0F  Portifolio v2  \u2502         \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500
-        \u2502  Portif\u00f3lio   \u2502         OS: Web (Next.js 16)
-        \u2570\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u256F         Shell: Terminal React
-                                  CPU: ${navigator.hardwareConcurrency || '?'} cores`;
+        ╭──────────────────╮         samuel@portfolio
+        │   🖥️  Portifolio  │         ───────────────────
+        │    v3.0.0         │         OS: Web (Next.js 16 + Vue 3)
+        ╰──────────────────╯         Host: Vercel Edge
+                                     Kernel: React 19
+                                     Shell: Terminal v3.0
+                                     CPU: ${navigator.hardwareConcurrency || '?'} cores (virtual)
+                                     GPU: Canvas 2D
+                                     Memória: ∞ / ∞
+                                     Tema: ${THEMES[theme]}
+                                     ${tip}`;
             break;
 
           case 'theme':
-            output = 'Tema alternado com sucesso.';
+            setTheme(t => (t + 1) % 3);
+            output = `\x1b[36mTema alterado: ${THEMES[(theme + 1) % 3]} \x1b[0m
+  ▸ cyber  — Ciano (padrão)
+  ▸ amber  — Âmbar/fallout
+  ▸ green  — Matrix green`;
             break;
 
           case 'banner':
             output = BANNER;
             break;
 
-          case 'fix':
-            output = 'Uso: fix <componente>\nExemplo: fix path_variables';
+          case 'fortune':
+            output = `🔮 ${FORTUNES[Math.floor(Math.random() * FORTUNES.length)]}`;
             break;
 
-          case 'run':
-            output = 'Uso: run routine:<nome>\nExemplo: run routine:lights_out';
+          case 'quote':
+            output = `📜 ${QUOTES[Math.floor(Math.random() * QUOTES.length)]}`;
             break;
 
-          case 'sudo':
-            output = `Acesso negado. Este terminal n\u00e3o tem privil\u00e9gios de root.
-(Porque isso \u00e9 um portf\u00f3lio, n\u00e3o um servidor de produ\u00e7\u00e3o.)`;
+          case 'cal':
+            const now = new Date();
+            const y = now.getFullYear();
+            const m = now.getMonth();
+            const months = ['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+            const days = ['Dom','Seg','Ter','Qua','Qui','Sex','Sáb'];
+            const firstDow = new Date(y, m, 1).getDay();
+            const daysInMonth = new Date(y, m + 1, 0).getDate();
+            let cal = `      ${months[m]} ${y}\n`;
+            cal += days.join(' ') + '\n';
+            let line = '   '.repeat(firstDow);
+            for (let i = 1; i <= daysInMonth; i++) {
+              const isToday = i === now.getDate() ? '*' : ' ';
+              line += (i < 10 ? ' ' : '') + i + isToday + ' ';
+              if ((firstDow + i) % 7 === 0) { cal += line + '\n'; line = ''; }
+            }
+            if (line) cal += line;
+            output = cal;
+            break;
+
+          case 'uname -a':
+            output = 'Linux portfolio 6.8.0-arch1-1 #1 SMP PREEMPT_DYNAMIC x86_64 GNU/Linux';
+            break;
+
+          case 'df -h':
+            output = `Sist. Arq.     Tam  Usad  Disp  Uso% Montado em
+/dev/root       ∞   42%   58%   42% /
+overlay         ∞   42%   58%   42% /app
+tmpfs          2G   1%   99%    1% /dev/shm`;
+            break;
+
+          case 'ps aux':
+            output = `USER       PID  CPU  MEM  COMMAND
+samuel       1  0.0  0.1  init -- portifolio.service
+samuel      42  2.1  0.8  next.js dev --port 3000
+samuel     128  1.4  0.3  framer-motion renderer
+samuel     256  0.7  0.2  tailwind watcher
+samuel     512  0.3  0.1  power bi daemon
+samuel    1024  0.0  0.0  python -c "import this"
+samuel    2048  5.0  2.1  ollama run gemma4:12b
+samuel    4096  0.1  0.0  cowsay --random
+samuel    8192  0.0  0.0  terminal v3.0 [this]
+samuel   16484  0.0  0.0  grep coffee`;
+            break;
+
+          case 'weather':
+            const temps = [28, 30, 32, 27, 29, 31, 33];
+            const climats = ['ensolarado', 'parcialmente nublado', 'seco', 'muito seco', 'sol com nuvens'];
+            const t = temps[Math.floor(Math.random() * temps.length)];
+            const c = climats[Math.floor(Math.random() * climats.length)];
+            output = `\x1b[36m🌤️  Brasília/DF - ${new Date().toLocaleDateString("pt-BR")}\x1b[0m
+  Temperatura: ${t}°C
+  Clima: ${c}
+  Umidade: ${20 + Math.floor(Math.random() * 30)}%
+  Vento: ${5 + Math.floor(Math.random() * 15)} km/h
+  Nascer do sol: 06:42
+  Pôr do sol: 18:05`;
             break;
 
           case 'ls':
-            output = ` Volume in drive C \u00e9 WINDOWS
- Volume Serial Number: PS-2026
-
- Directory of C:\\\\Users\\\\Visitor\\\\
-
-2026-05-27  10:30    <DIR>          .
-2026-05-27  10:30    <DIR>          ..
-2026-05-27  10:30    <DIR>          Documents
-2026-05-27  10:30    <DIR>          Projects
-2026-05-27  10:30    <DIR>          Downloads
-2026-05-27  10:30    <DIR>          Desktop
-2026-05-27  10:30    <DIR>          Music
-               0 File(s)              0 bytes
-               7 Dir(s)   \u221E bytes free`;
+            output = `total 42
+drwxr-xr-x  1 samuel samuel 4096 Jul  7 10:42 .
+drwxr-xr-x  1 root   root   4096 Jan  1  2026 ..
+-rw-r--r--  1 samuel samuel  1337 Jul  7 10:42 AGENTS.md
+-rw-r--r--  1 samuel samuel  1024 Jul  7 10:42 ARCHITECTURE.md
+drwxr-xr-x  1 samuel samuel 4096 Jul  7 10:42 games/
+drwxr-xr-x  1 samuel samuel 4096 Jul  7 10:42 skills/
+-rw-r--r--  1 samuel samuel  2026 Jul  7 10:42 README.md
+lrwxrwxrwx  1 samuel samuel    8 Jul  7 10:42 coffee -> /dev/null ☕`;
             break;
 
           case 'pwd':
-            output = PROMPT;
+            output = '/home/samuel/portfolio';
             break;
 
           case 'exit':
-            output = `> Encerrando sess\u00e3o...
-> Salvando configura\u00e7\u00f5es...
->
-> Obrigado por visitar! Volte sempre \u{1F680}
->
-> (Dica: Feche esta aba se quiser sair de verdade.)`;
+            output = `$ Encerrando sessão...
+$ Salvando configurações...
+$
+$ Obrigado por visitar! Volte sempre 🚀
+$
+$ (Dica: Feche esta aba se quiser sair de verdade.)`;
             break;
 
           case 'holofote':
             output = `
-\u2554\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2557
-\u2551                                                      \u2551
-\u2551     \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606       \u2551
-\u2551                                                      \u2551
-\u2551          \u{1F3AF}  S A M U E L  M E D E I R O S  \u{1F3AF}        \u2551
-\u2551                                                      \u2551
-\u2551     \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606  \u2606       \u2551
-\u2551                                                      \u2551
-\u2551     Desenvolvedor Full Stack & Analista de Dados     \u2551
-\u2551     Transformando dados em decis\u00f5es estrat\u00e9gicas     \u2551
-\u2551                                                      \u2551
-\u255A\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u2550\u255D`;
+╔══════════════════════════════════════════════════════╗
+║                                                      ║
+║     ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐       ║
+║                                                      ║
+║          🎯  S A M U E L  M E D E I R O S  🎯        ║
+║                                                      ║
+║     ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐  ⭐       ║
+║                                                      ║
+║     Desenvolvedor Full Stack & Analista de Dados     ║
+║     Transformando dados em decisões estratégicas     ║
+║                                                      ║
+╚══════════════════════════════════════════════════════╝`;
             break;
 
           case 'fix path_variables':
             output = `> Iniciando reparo do PATH...
-> Escaneando vari\u00e1veis de ambiente corrompidas...
+> Escaneando variáveis de ambiente corrompidas...
 
-[OK] USERPROFILE = C:\\\\Users\\\\Samuel
-[OK] APPDATA = C:\\\\Users\\\\Samuel\\\\AppData\\\\Roaming
-[OK] PATH restaurado para valores padr\u00e3o
-[WARN] NODE_PATH estava pointing para C:\\\\Python27
-[FIX] Corrigido NODE_PATH -> C:\\\\Program Files\\\\nodejs
-[OK] JAVA_HOME = C:\\\\Program Files\\\\Java\\\\jdk-17
+[OK] HOME = /home/samuel
+[OK] PATH = /usr/local/bin:/usr/bin:/bin
+[OK] SHELL = /bin/bash
+[WARN] NODE_PATH estava apontando para /usr/lib/node_modules/antigo
+[FIX] Corrigido NODE_PATH → /usr/lib/node_modules
+[OK] EDITOR = nvim
+[OK] LANG = pt_BR.UTF-8
 
 > Processando... 100%
-\u2705 PATH_variables reparado com sucesso!`;
+✅ PATH_variables reparado com sucesso!`;
             break;
 
           case 'run routine:lights_out':
             output = `> Executando rotina LIGHTS_OUT...
 > Simulando falha de energia...
 
-\u2588\u2593\u2592\u2591 \u2591\u2592\u2593\u2588
+█▓▒░ ░▒▓█
 
 > WARNING: Todos os sistemas offline
-> BACKUP: Energia de emerg\u00eancia ativada
-> Modo Noturno M\u00e1ximo ATIVADO
+> BACKUP: Energia de emergência ativada
+> Modo Noturno Máximo ATIVADO
 
-\u2728 Screen brightness: 0%
-\u2728 Animations: disabled
-\u2728 Terminal: HIGH CONTRAST
+✨ Screen brightness: 0%
+✨ Animations: disabled
+✨ Terminal: HIGH CONTRAST
 
-> Miss\u00e3o cumprida, operador.`;
+> Missão cumprida, operador.`;
             break;
 
           case 'matrix':
             output = `> Iniciando efeito MATRIX...
-> Conectando \u00e0 fonte de dados...
+> Conectando à fonte de dados...
 
-\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588
-\u2588\u2588 01001000 01100101 01101100 \u2588\u2588
-\u2588\u2588 01101100 01101111 00100000 \u2588\u2588
-\u2588\u2588 01010100 01100101 01100011 \u2588\u2588
-\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588\u2588
+████████████████████████████
+████ 01001000 01100101 01101100 ████
+████ 01101100 01101111 00100000 ████
+████ 01010100 01100101 01100011 ████
+████████████████████████████
 
 > Acesso concedido.
 > Bem-vindo ao sistema, Sr. Anderson.`;
@@ -436,215 +736,207 @@ Experi\u00eancia:
           case 'sudo rm -rf /':
             output = `> sudo: acesso root requerido
 >
-> \u26A0\uFE0F ALERTA DE SEGURAN\u00c7A \u26A0\uFE0F
+> ⚠️ ALERTA DE SEGURANÇA ⚠️
 > Tentativa de deletar o universo detectada!
 >
 > Bloqueando...
 >
-> \u{1F643} Calma, visitante.
-> Isso aqui \u00e9 s\u00f3 um portf\u00f3lio.
-> N\u00e3o vou deixar voc\u00ea deletar minha carreira.`;
+> 😂 Calma, visitante.
+> Isso aqui é só um portfólio.
+> Não vou deixar você deletar minha carreira.`;
             break;
 
           case 'ipconfig':
-            output = `Windows IP Configuration
+            output = `\x1b[36mNetwork Configuration\x1b[0m
 
-Ethernet adapter Ethernet0:
-   Connection-specific DNS Suffix  . : local
-   IPv4 Address. . . . . . . . . . . : 192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}
-   Subnet Mask . . . . . . . . . . . : 255.255.255.0
-   Default Gateway . . . . . . . . . : 192.168.1.1
+eth0:  inet 192.168.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}
+       netmask 255.255.255.0
+       gateway 192.168.1.1
 
-Wireless LAN adapter Wi-Fi:
-   Connection-specific DNS Suffix  . : local
-   IPv4 Address. . . . . . . . . . . : 10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}
-   Subnet Mask . . . . . . . . . . . : 255.0.0.0
-   Default Gateway . . . . . . . . . : 10.0.0.1
+wlan0: inet 10.0.${Math.floor(Math.random() * 255)}.${Math.floor(Math.random() * 255)}
+       netmask 255.0.0.0
 
-   \u{1F6F0}\uFE0F Portifolio Samuel Signal: \u2764\u2764\u2764\u2764\u2764\u2764\u2764\u2764\u2764\u2764 100%`;
+🖥️  Portifolio Samuel Signal: ❤️❤️❤️❤️❤️❤️❤️❤️❤️❤️ 100%`;
             break;
 
-          case 'quote':
-            output = `\u{1F4DC} ${QUOTES[Math.floor(Math.random() * QUOTES.length)]}`;
+          case 'cowsay':
+            output = ` _________________________________
+< Moo! Eu sou uma vaca desenvolvedora! >
+ ---------------------------------
+        \\   ^__^
+         \\  (oo)\\_______
+            (__)\\       )\\/\\
+                ||----w |
+                ||     ||`;
+            break;
+
+          case 'sudo':
+            output = `Acesso negado. Este terminal não tem privilégios de root.
+(Porque isso é um portfólio, não um servidor de produção.)`;
+            break;
+
+          case 'fix':
+            output = 'Uso: fix <componente>\nExemplo: fix path_variables';
+            break;
+
+          case 'run':
+            output = 'Uso: run <routine>\nExemplo: run routine:lights_out';
             break;
 
           default:
+            // echo
             if (trimmed.startsWith("echo ")) {
-              output = trimmed.slice(5);
+              output = rawCmd.trim().slice(5);
               break;
             }
+            // ping
             if (trimmed.startsWith("ping ")) {
               const host = trimmed.slice(5) || "localhost";
               const ms = Math.floor(Math.random() * 40 + 10);
-              output = `Pinging ${host} [192.168.1.${Math.floor(Math.random() * 254)}] with 32 bytes of data:
-Reply from 192.168.1.1: bytes=32 time=${ms}ms TTL=64
-Reply from 192.168.1.1: bytes=32 time=${ms + 5}ms TTL=64
-Reply from 192.168.1.1: bytes=32 time=${ms - 3}ms TTL=64
-Reply from 192.168.1.1: bytes=32 time=${ms + 2}ms TTL=64
+              output = `PING ${host} (192.168.1.${Math.floor(Math.random() * 254)}) 56(84) bytes of data.
+64 bytes from 192.168.1.1: icmp_seq=1 ttl=64 time=${ms}ms
+64 bytes from 192.168.1.1: icmp_seq=2 ttl=64 time=${ms + 3}ms
+64 bytes from 192.168.1.1: icmp_seq=3 ttl=64 time=${ms - 2}ms
+64 bytes from 192.168.1.1: icmp_seq=4 ttl=64 time=${ms + 1}ms
 
-Ping statistics for 192.168.1.${Math.floor(Math.random() * 254)}:
-    Packets: Sent = 4, Received = 4, Lost = 0 (0% loss),
-Approximate round trip times in milli-seconds:
-    Minimum = ${ms - 3}ms, Maximum = ${ms + 5}ms, Average = ${Math.floor(ms + 1)}ms`;
+--- ${host} ping statistics ---
+4 packets transmitted, 4 received, 0% packet loss, time 3005ms
+rtt min/avg/max/mdev = ${ms - 2}/${ms + 0.5}/${ms + 3}/${2.0} ms`;
               break;
             }
+            // whois
             if (trimmed.startsWith("whois ")) {
               const name = trimmed.slice(6);
               output = `WHOIS lookup for "${name}"...
 
   Nome: ${name}
-  Cargo: Analista de Dados / Desenvolvedor Full Stack
-  Localiza\u00e7\u00e3o: Bras\u00edlia, DF \u2014 Brasil
-  Expertise: Power BI, SQL, Python, Machine Learning
+  Cargo: Analista de Dados / Dev Full Stack
+  Localização: Brasília, DF — Brasil
+  Expertise: Power BI, SQL, Python, ML
   Contato: samuelandrademedeiros@gmail.com
   GitHub: github.com/Samuelfmedeiros
-  LinkedIn: linkedin.com/in/samuelandrademedeiros
-
-  [Resultados obtidos do registro WHOIS interno]`;
+  Site: samuelmedeiros.vercel.app`;
               break;
             }
-            if (trimmed.startsWith("cowsay ")) {
-              const msg = trimmed.slice(7) || "Moo!";
-              const border = "\u2500".repeat(Math.max(msg.length, 4));
-              output = ` \u250C${border}\u2510
- \u2502 ${msg.padEnd(border.length - 1)} \u2502
- \u2514${border}\u2518
-  \\\\   ^__^
-   \\\\  (oo)\\\\_______
-      (__)\\\\       )\\\\/\\\\
-          ||----w |
-          ||     ||`;
-              break;
-            }
-            output = `Comando n\u00e3o encontrado: '${trimmed}'
-Digite 'ajuda' para ver os comandos dispon\u00edveis.`;
+            // Command not found - random funny message
+            const errors = [
+              \`zsh: command not found: \${trimmed}. Tente 'help'.\`,
+              \`bash: \${trimmed}: comando não encontrado. (¬_¬)\`,
+              \`segmentation fault while executing "\${trimmed}" (just kidding, try 'help')\`,
+              \`400 Bad Request: unknown command "\${trimmed}"\`,
+              \`\${trimmed}: alien technology not yet understood by humans. Try 'help'.\`,
+              \`sudo: \${trimmed}: command not found (and adding sudo won't help this time)\`,
+              \`Erro 404: comando "\${trimmed}" não encontrado neste quadrante.\`,
+            ];
+            output = errors[Math.floor(Math.random() * errors.length)];
         }
 
-        setHistory(prev => [...prev, { cmd, output }]);
-      };
+        addHistory(rawCmd, output);
+      }, [addHistory, theme]);
 
-      const handleKeyDown = (e) => {
-        if (e.key === 'Enter' && input.trim()) {
-          commandHistoryRef.current.push(input);
-          setHistoryIndex(-1);
-          executeCommand(input);
-          setInput('');
+      const handleKeyDown = useCallback((e) => {
+        if (e.key === 'Tab') {
+          e.preventDefault();
+          const cmds = ['help','ajuda','sobre','projetos','jogos','games','habilidades','skills','contato','limpar','clear','hora','date','whoami','theme','stack','github','neofetch','fortune','quote','cal','uname -a','df -h','ps aux','weather','ls','pwd','echo','banner','ipconfig','ping','whois','cowsay','holofote','fix','run','matrix','exit'];
+          const partial = input.trim().toLowerCase();
+          if (!partial) { setInput('help'); return; }
+          const matches = cmds.filter(c => c.startsWith(partial));
+          if (matches.length === 1) setInput(matches[0]);
+          else if (matches.length > 1 && input.length > 0) {
+            // Show available completions
+            setInput(matches[0]);
+          }
           return;
         }
 
         if (e.key === 'ArrowUp') {
           e.preventDefault();
-          if (commandHistoryRef.current.length === 0) return;
-          const newIndex = historyIndex === -1
-            ? commandHistoryRef.current.length - 1
-            : Math.max(0, historyIndex - 1);
-          setHistoryIndex(newIndex);
-          setInput(commandHistoryRef.current[newIndex]);
+          if (cmdHistory.current.length > 0) {
+            const idx = cmdHistoryIdx.current === -1 ? 0 : Math.min(cmdHistoryIdx.current + 1, cmdHistory.current.length - 1);
+            cmdHistoryIdx.current = idx;
+            setInput(cmdHistory.current[idx]);
+          }
           return;
         }
 
         if (e.key === 'ArrowDown') {
           e.preventDefault();
-          if (commandHistoryRef.current.length === 0) return;
-          if (historyIndex === -1) return;
-          const newIndex = historyIndex + 1;
-          if (newIndex >= commandHistoryRef.current.length) {
-            setHistoryIndex(-1);
-            setInput('');
-          } else {
-            setHistoryIndex(newIndex);
-            setInput(commandHistoryRef.current[newIndex]);
+          if (cmdHistoryIdx.current !== -1) {
+            const idx = cmdHistoryIdx.current - 1;
+            cmdHistoryIdx.current = idx;
+            setInput(idx < 0 ? '' : cmdHistory.current[idx]);
           }
           return;
         }
 
-        if (e.key === 'Tab') {
-          e.preventDefault();
-          const currentInput = input.trim().toLowerCase();
-          if (!currentInput) return;
-          const matches = COMMANDS.filter(c => c.startsWith(currentInput));
-          if (matches.length === 0) return;
-          if (matches.length === 1) {
-            setInput(matches[0]);
-          } else {
-            const prefix = matches.reduce((common, cmd) => {
-              let i = 0;
-              while (i < common.length && i < cmd.length && common[i] === cmd[i]) i++;
-              return common.slice(0, i);
-            });
-            if (prefix.length > currentInput.length) {
-              setInput(prefix);
-            } else {
-              setHistory(prev => [...prev, { cmd: currentInput + '\\t', output: matches.join('  ') }]);
-            }
+        if (e.key === 'Enter') {
+          if (input.trim()) {
+            const cmd = input;
+            setInput('');
+            cmdHistoryIdx.current = -1;
+            executeCommand(cmd);
           }
+          return;
         }
-      };
+      }, [input, executeCommand]);
 
       return (
-        <div style={{ fontFamily: 'monospace' }}>
-          <div
-            ref={scrollRef}
-            style={{
-              height: '240px',
-              overflowY: 'auto',
-              marginBottom: '1rem',
-              padding: '0.75rem',
-              background: 'rgba(0,0,0,0.35)',
-              borderRadius: '0.5rem',
-              border: '1px solid rgba(255,255,255,0.04)',
-              scrollBehavior: 'smooth',
-            }}
-          >
+        <div>
+          <div className="terminal-output" ref={scrollRef}>
             {history.map((entry, i) => (
-              <div key={i} style={{ marginBottom: '0.5rem' }}>
+              <div key={i} className="history-entry">
                 {entry.cmd && (
-                  <div style={{ color: '#22d3ee', fontSize: '0.75rem' }}>
-                    <span style={{ color: '#22d3ee' }}>{PROMPT}&gt;</span>{' '}
-                    {entry.cmd}
+                  <div className="history-cmd">
+                    <span className="history-prompt">{PROMPT}</span>
+                    <span>{entry.cmd}</span>
                   </div>
                 )}
-                <pre style={{
-                  fontSize: '0.675rem',
-                  color: '#8888aa',
-                  whiteSpace: 'pre-wrap',
-                  marginTop: '0.2rem',
-                  lineHeight: '1.4',
-                  fontFamily: 'monospace',
-                }}>
-                  {entry.output}
-                </pre>
+                {entry.output && entry.output.includes('COMANDOS') ? (
+                  <div className="history-output" dangerouslySetInnerHTML={{
+                    __html: entry.output
+                      .replace(/\x1b\[36m/g, '<span style="color:#22d3ee">')
+                      .replace(/\x1b\[33m/g, '<span style="color:#f59e0b">')
+                      .replace(/\x1b\[0m/g, '</span>')
+                  }} />
+                ) : (
+                  <div className="history-output">{entry.output}</div>
+                )}
+                {entry.tip && (
+                  <div className="history-output" style={{color: '#64748b', fontStyle: 'italic', fontSize: '0.65rem'}}>
+                    {entry.tip}
+                  </div>
+                )}
               </div>
             ))}
           </div>
 
-          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: '#22d3ee' }}>
-            <span style={{ fontSize: '0.75rem', flexShrink: 0, color: '#22d3ee' }}>{PROMPT}&gt;</span>
+          <div className="input-line">
+            <span className="input-prompt">{PROMPT}</span>
             <input
               ref={inputRef}
-              type="text"
+              className="input-field"
               value={input}
-              onChange={(e) => setInput(e.target.value)}
+              onChange={e => setInput(e.target.value)}
               onKeyDown={handleKeyDown}
-              autoFocus
               placeholder="digite um comando..."
-              style={{
-                flex: 1,
-                background: 'transparent',
-                border: 'none',
-                outline: 'none',
-                color: '#e0e0f0',
-                fontFamily: 'monospace',
-                fontSize: '0.75rem',
-                caretColor: '#22d3ee',
-              }}
+              autoFocus
+              spellCheck={false}
+              autoComplete="off"
             />
+          </div>
+
+          <div className="quick-cmds">
+            {QUICK_COMMANDS.map(cmd => (
+              <button key={cmd} className="quick-cmd" onClick={() => handleQuickCmd(cmd)}>
+                {cmd}
+              </button>
+            ))}
           </div>
         </div>
       );
     }
 
-    const root = ReactDOM.createRoot(document.getElementById('root'));
+    const root = ReactDOM.createRoot(document.getElementById("root"));
     root.render(<Terminal />);
   </script>
 </body>

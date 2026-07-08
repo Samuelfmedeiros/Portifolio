@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no" />
   <title>Asteroid Dodge</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
@@ -18,6 +18,9 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      touch-action: none;
+      user-select: none;
+      -webkit-user-select: none;
     }
     #root { width: 100%; height: 100%; }
 
@@ -39,57 +42,73 @@
       background: #fff;
       border-radius: 50%;
       animation: twinkle var(--dur) ease-in-out infinite alternate;
+      pointer-events: none;
     }
     @keyframes twinkle {
-      0% { opacity: 0.2; }
+      0% { opacity: 0.15; }
       100% { opacity: 1; }
     }
 
     /* Canvas area */
     .game-canvas {
       position: relative;
-      width: min(400px, 85vw);
-      height: min(600px, calc(min(400px, 85vw) * 1.5));
+      width: 400px;
+      height: 600px;
       background: radial-gradient(ellipse at center, #0d0d2b 0%, #050510 100%);
       border: 2px solid rgba(34, 211, 238, 0.2);
       border-radius: 8px;
       overflow: hidden;
       cursor: none;
-      touch-action: none;
-      -webkit-touch-callout: none;
-      -webkit-user-select: none;
-      user-select: none;
     }
 
-    /* Player ship */
+    /* ── Ship ─────────────── */
     .ship {
       position: absolute;
       width: 32px;
       height: 32px;
-      transition: left 0.15s ease-out, top 0.15s ease-out;
       pointer-events: none;
       z-index: 10;
-      will-change: transform;
+      transition: filter 0.1s;
     }
-    .ship svg {
-      width: 100%;
-      height: 100%;
-      filter: drop-shadow(0 0 6px #22d3ee);
+    .ship svg { width: 100%; height: 100%; }
+    .ship.shielded { filter: drop-shadow(0 0 14px #22d3ee) drop-shadow(0 0 28px #06b6d4); }
+    .ship.blinking { animation: blink-iframes 0.15s ease-in-out infinite alternate; }
+    @keyframes blink-iframes {
+      0% { opacity: 1; }
+      100% { opacity: 0.2; }
     }
 
-    /* Asteroid */
+    /* Shield bubble */
+    .shield-bubble {
+      position: absolute;
+      border-radius: 50%;
+      border: 2px solid rgba(34, 211, 238, 0.7);
+      background: rgba(34, 211, 238, 0.08);
+      pointer-events: none;
+      z-index: 11;
+      animation: pulse-shield 0.8s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-shield {
+      0% { transform: scale(1); opacity: 0.7; }
+      100% { transform: scale(1.12); opacity: 1; }
+    }
+
+    /* ── Engine trail particle ── */
+    .trail-particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 4;
+    }
+
+    /* ── Asteroid ─────────── */
     .asteroid {
       position: absolute;
       pointer-events: none;
       z-index: 5;
-      animation: fall var(--speed) linear forwards;
-    }
-    @keyframes fall {
-      0% { transform: translateY(0) rotate(0deg); }
-      100% { transform: translateY(calc(100% + 50px)) rotate(360deg); }
     }
 
-    /* Explosion */
+    /* ── Explosion ────────── */
     .explosion {
       position: absolute;
       pointer-events: none;
@@ -97,12 +116,58 @@
       animation: explode 0.6s ease-out forwards;
     }
     @keyframes explode {
-      0% { transform: scale(1); opacity: 1; }
+      0% { transform: scale(0.5); opacity: 1; }
       50% { transform: scale(2.5); opacity: 0.8; }
       100% { transform: scale(3); opacity: 0; }
     }
 
-    /* HUD */
+    /* ── Power-up ─────────── */
+    .powerup {
+      position: absolute;
+      pointer-events: none;
+      z-index: 7;
+      animation: float-pu var(--float-dur) ease-in-out infinite alternate;
+    }
+    @keyframes float-pu {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(-6px) scale(1.08); }
+    }
+    .powerup-glow {
+      position: absolute;
+      border-radius: 50%;
+      inset: -6px;
+      opacity: 0.3;
+      z-index: -1;
+    }
+
+    /* Label that appears when collecting power-up */
+    .pu-label {
+      position: absolute;
+      pointer-events: none;
+      z-index: 25;
+      font-weight: 700;
+      font-size: 13px;
+      animation: float-up 1s ease-out forwards;
+    }
+    @keyframes float-up {
+      0% { opacity: 1; transform: translateY(0) scale(1); }
+      100% { opacity: 0; transform: translateY(-40px) scale(1.2); }
+    }
+
+    /* ── Flash effect ─────── */
+    .screen-flash {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      z-index: 40;
+      animation: flash-fade 0.3s ease-out forwards;
+    }
+    @keyframes flash-fade {
+      0% { opacity: 0.6; }
+      100% { opacity: 0; }
+    }
+
+    /* ── HUD ──────────────── */
     .hud {
       position: absolute;
       top: 8px;
@@ -110,23 +175,53 @@
       right: 0;
       display: flex;
       justify-content: space-between;
-      padding: 0 12px;
-      font-size: 14px;
-      font-weight: 600;
+      padding: 0 10px;
+      font-size: 13px;
+      font-weight: 700;
       z-index: 30;
       pointer-events: none;
     }
-    .hud span {
-      background: rgba(0,0,0,0.5);
-      padding: 4px 10px;
+    .hud-segment {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+    .hud-item {
+      background: rgba(0,0,0,0.55);
+      padding: 3px 8px;
       border-radius: 4px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.08);
+      white-space: nowrap;
+      font-size: 12px;
     }
     .hud .score { color: #22d3ee; }
+    .hud .high-score { color: #fbbf24; font-size: 11px; }
     .hud .lives { color: #ef4444; }
-    .hud .level { color: #22d3ee; }
+    .hud .level { color: #a78bfa; }
+    .hud .pu-indicator { color: #34d399; font-size: 11px; }
 
-    /* Start / Game Over overlay */
+    /* Active power-up bar */
+    .pu-bar {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 6px;
+      z-index: 31;
+      pointer-events: none;
+    }
+    .pu-badge {
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-size: 10px;
+      font-weight: 700;
+      background: rgba(0,0,0,0.6);
+      border: 1px solid;
+      white-space: nowrap;
+    }
+
+    /* ── Overlays ─────────── */
     .overlay {
       position: absolute;
       inset: 0;
@@ -134,33 +229,59 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: rgba(0,0,0,0.75);
+      background: rgba(0,0,0,0.78);
       z-index: 50;
       animation: fadeIn 0.3s ease;
+      padding: 20px;
     }
     @keyframes fadeIn {
       0% { opacity: 0; }
       100% { opacity: 1; }
     }
     .overlay h1 {
-      font-size: 32px;
-      margin-bottom: 8px;
+      font-size: 34px;
+      margin-bottom: 4px;
       color: #22d3ee;
+      text-shadow: 0 0 30px rgba(34, 211, 238, 0.3);
     }
     .overlay h2 {
-      font-size: 28px;
-      margin-bottom: 4px;
+      font-size: 30px;
+      margin-bottom: 2px;
       color: #ff4444;
+      text-shadow: 0 0 20px rgba(255, 68, 68, 0.3);
     }
-    .overlay p {
-      color: #aaa;
-      margin-bottom: 20px;
-      font-size: 14px;
+    .overlay .sub {
+      color: #888;
+      margin-bottom: 4px;
+      font-size: 13px;
+    }
+    .overlay .high-score-display {
+      color: #fbbf24;
+      font-size: 16px;
+      margin-bottom: 12px;
+      font-weight: 700;
+    }
+    .overlay .new-record {
+      color: #fbbf24;
+      font-size: 18px;
+      font-weight: 800;
+      margin-bottom: 6px;
+      animation: pulse-gold 0.6s ease-in-out infinite alternate;
+    }
+    @keyframes pulse-gold {
+      0% { text-shadow: 0 0 10px rgba(251, 191, 36, 0.3); }
+      100% { text-shadow: 0 0 30px rgba(251, 191, 36, 0.8); }
     }
     .overlay .final-score {
-      color: #ffd700;
-      font-size: 18px;
-      margin-bottom: 16px;
+      color: #fff;
+      font-size: 22px;
+      margin-bottom: 2px;
+      font-weight: 700;
+    }
+    .overlay .stats-line {
+      color: #aaa;
+      font-size: 13px;
+      margin-bottom: 14px;
     }
     .btn {
       padding: 12px 36px;
@@ -171,182 +292,227 @@
       cursor: pointer;
       background: #06b6d4;
       color: #fff;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: transform 0.12s, box-shadow 0.12s;
       pointer-events: all;
+      min-width: 160px;
     }
     .btn:hover {
       transform: scale(1.05);
-      box-shadow: 0 0 20px rgba(34, 211, 238, 0.4);
+      box-shadow: 0 0 24px rgba(34, 211, 238, 0.4);
     }
-    .btn:active {
-      transform: scale(0.97);
+    .btn:active { transform: scale(0.97); }
+
+    .controls-hint {
+      color: rgba(255,255,255,0.2);
+      font-size: 10px;
+      margin-top: 10px;
+      text-align: center;
+      line-height: 1.4;
     }
 
-    /* Objective hint */
-    .hint {
+    .hint-bottom {
       position: absolute;
-      bottom: 8px;
+      bottom: 6px;
       left: 0;
       right: 0;
       text-align: center;
-      font-size: 11px;
-      color: rgba(255,255,255,0.25);
+      font-size: 10px;
+      color: rgba(255,255,255,0.15);
       z-index: 1;
       pointer-events: none;
     }
 
+    /* ── Responsive ───────── */
     @media (max-width: 440px) {
       .game-canvas {
-        width: 92vw;
-        height: calc(92vw * 1.5);
-        max-height: 80vh;
+        width: 100vw;
+        height: 100vh;
+        border: none;
+        border-radius: 0;
       }
-      .hud { font-size: 12px; }
-      .hud span { padding: 2px 6px; }
-    }
-    @media (max-width: 360px) {
-      .game-canvas {
-        width: 95vw;
-        height: calc(95vw * 1.5);
-      }
-      .btn { padding: 10px 24px; font-size: 16px; }
-    }
-
-    /* Touch joystick */
-    .joystick {
-      position: absolute;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      height: 80px;
-      z-index: 15;
-      touch-action: none;
-      display: none;
-    }
-    .joystick-zone {
-      position: absolute;
-      top: 0;
-      bottom: 0;
-      width: 50%;
-      display: flex;
-      align-items: center;
-    }
-    .joystick-zone--left { left: 0; justify-content: flex-start; padding-left: 20px; }
-    .joystick-zone--right { right: 0; justify-content: flex-end; padding-right: 20px; }
-    .joystick-arrow {
-      font-size: 28px;
-      color: rgba(255,255,255,0.3);
-      pointer-events: none;
-      user-select: none;
-    }
-    .joystick-divider {
-      position: absolute;
-      top: 0;
-      left: 50%;
-      width: 1px;
-      height: 100%;
-      background: rgba(255,255,255,0.03);
-    }
-    @media (pointer: coarse), (max-width: 640px) {
-      .joystick { display: flex; }
+      .overlay h1 { font-size: 26px; }
+      .overlay h2 { font-size: 24px; }
+      .hud { font-size: 11px; padding: 4px 6px; }
+      .hud-item { font-size: 10px; padding: 2px 5px; }
     }
   </style>
 </head>
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect, useRef, useCallback } = React;
+    const { useState, useEffect, useRef, useCallback, useMemo } = React;
 
-    // ─── Constants ───────────────────────────────────────────────
-    const CANVAS_W = 400;
-    const CANVAS_H = 600;
+    // ════════════════════════════════════════════════
+    //  CONSTANTS
+    // ════════════════════════════════════════════════
+    const CW = 400, CH = 600;
     const SHIP_SIZE = 32;
-    const ASTEROID_SIZES = [24, 32, 40, 48];
-    const BASE_SPEED = 1.8;
+    const ASTEROID_SIZES = [24, 30, 36, 44];
     const MAX_LIVES = 3;
+    const BASE_SPEED = 1.6;
+    const INVINCIBILITY_MS = 1800; // i-frames after getting hit
 
-    // ─── Helpers ─────────────────────────────────────────────────
+    // Power-up types
+    const PU_TYPES = {
+      shield:    { label: '🛡️ Shield',    color: '#22d3ee', duration: 8000 },
+      speed:     { label: '⚡ Speed',      color: '#fbbf24', duration: 6000 },
+      slowTime:  { label: '⏸️ Slow',      color: '#a78bfa', duration: 5000 },
+      nuke:      { label: '💥 Nuke',       color: '#ff4444', duration: 0 },
+    };
+
+    const HIGH_SCORE_KEY = 'asteroid-dodge-hs';
+    const SOUND_ENABLED_KEY = 'asteroid-dodge-sound';
+
+    // ─── Helpers ───────────────────────────────────
     const rand = (min, max) => Math.random() * (max - min) + min;
-    const randInt = (min, max) => Math.floor(rand(min, max + 1));
+    const randInt = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
+    const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+    const dist = (a, b) => Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
 
-    // ─── Star background ─────────────────────────────────────────
+    // ════════════════════════════════════════════════
+    //  SOUND ENGINE  (Web Audio API / procedural)
+    // ════════════════════════════════════════════════
+    let audioCtx = null;
+    let soundEnabled = true;
+
+    function initAudio() {
+      if (!audioCtx) {
+        try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (e) { soundEnabled = false; }
+      }
+      if (audioCtx?.state === 'suspended') audioCtx.resume();
+    }
+
+    function playTone(freq, dur, type = 'square', vol = 0.12) {
+      if (!soundEnabled || !audioCtx) return;
+      try {
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+        osc.start();
+        osc.stop(audioCtx.currentTime + dur);
+      } catch (e) { /* ignore */ }
+    }
+
+    function playNoise(dur, vol = 0.06) {
+      if (!soundEnabled || !audioCtx) return;
+      try {
+        const bufSize = Math.floor(audioCtx.sampleRate * dur);
+        const buf = audioCtx.createBuffer(1, bufSize, audioCtx.sampleRate);
+        const data = buf.getChannelData(0);
+        for (let i = 0; i < bufSize; i++) data[i] = Math.random() * 2 - 1;
+        const src = audioCtx.createBufferSource();
+        src.buffer = buf;
+        const gain = audioCtx.createGain();
+        gain.gain.setValueAtTime(vol, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + dur);
+        const filter = audioCtx.createBiquadFilter();
+        filter.type = 'lowpass';
+        filter.frequency.setValueAtTime(400, audioCtx.currentTime);
+        src.connect(filter);
+        filter.connect(gain);
+        gain.connect(audioCtx.destination);
+        src.start();
+      } catch (e) { /* ignore */ }
+    }
+
+    const SOUNDS = {
+      shoot() { playTone(880, 0.08, 'square', 0.07); },
+      collision() { playNoise(0.25, 0.10); playTone(80, 0.2, 'sawtooth', 0.15); },
+      score() { playTone(660, 0.06, 'sine', 0.06); },
+      levelUp() {
+        playTone(523, 0.1, 'sine', 0.08);
+        setTimeout(() => playTone(659, 0.1, 'sine', 0.08), 100);
+        setTimeout(() => playTone(784, 0.15, 'sine', 0.08), 200);
+      },
+      gameOver() {
+        playTone(400, 0.15, 'sawtooth', 0.1);
+        setTimeout(() => playTone(300, 0.15, 'sawtooth', 0.1), 150);
+        setTimeout(() => playTone(200, 0.3, 'sawtooth', 0.1), 300);
+      },
+      powerUp() {
+        playTone(880, 0.08, 'sine', 0.07);
+        setTimeout(() => playTone(1100, 0.08, 'sine', 0.07), 60);
+        setTimeout(() => playTone(1320, 0.12, 'sine', 0.07), 120);
+      },
+      nuke() { playNoise(0.5, 0.15); playTone(60, 0.5, 'sawtooth', 0.2); },
+    };
+
+    // ════════════════════════════════════════════════
+    //  STARS
+    // ════════════════════════════════════════════════
     function Stars() {
-      const stars = Array.from({ length: 60 }, (_, i) => ({
-        id: i,
-        left: rand(0, 100) + '%',
-        top: rand(0, 100) + '%',
-        size: rand(1, 2.5) + 'px',
-        dur: rand(1.5, 4) + 's',
-        delay: rand(0, 3) + 's',
-      }));
+      const stars = useMemo(() =>
+        Array.from({ length: 70 }, (_, i) => ({
+          id: i, left: rand(0, 100) + '%', top: rand(0, 100) + '%',
+          size: rand(0.8, 2.5) + 'px', dur: rand(1.5, 4) + 's', delay: rand(0, 3) + 's',
+        })), []);
       return stars.map(s => (
-        <div
-          key={s.id}
-          className="star"
-          style={{
-            left: s.left,
-            top: s.top,
-            width: s.size,
-            height: s.size,
-            '--dur': s.dur,
-            animationDelay: s.delay,
-          }}
-        />
+        <div key={s.id} className="star"
+          style={{ left: s.left, top: s.top, width: s.size, height: s.size, '--dur': s.dur, animationDelay: s.delay }} />
       ));
     }
 
-    // ─── Ship component ──────────────────────────────────────────
-    function Ship({ x, y }) {
+    // ════════════════════════════════════════════════
+    //  SHIP SVG
+    // ════════════════════════════════════════════════
+    function ShipSVG({ color = '#44ddff', secondary = '#88eeff', flame = false }) {
       return (
-        <div
-          className="ship"
-          style={{ left: x - SHIP_SIZE / 2, top: y - SHIP_SIZE / 2 }}
-        >
-          <svg viewBox="0 0 32 32" fill="none">
-            <polygon points="16,2 6,28 16,22 26,28" fill="#44ddff" />
-            <polygon points="16,6 10,24 16,20 22,24" fill="#88eeff" />
-            <rect x="14" y="18" width="4" height="6" fill="#ff6633" rx="1" />
-          </svg>
-        </div>
+        <svg viewBox="0 0 32 32" fill="none">
+          <polygon points="16,2 6,28 16,22 26,28" fill={color} />
+          <polygon points="16,6 10,24 16,20 22,24" fill={secondary} />
+          <rect x="14" y="18" width="4" height="6" fill="#ff6633" rx="1" />
+          {flame && (
+            <>
+              <ellipse cx="16" cy="30" rx="4" ry="6" fill="#ff6600" opacity="0.7">
+                <animate attributeName="ry" values="6;8;5;7;6" dur="0.15s" repeatCount="indefinite" />
+              </ellipse>
+              <ellipse cx="16" cy="32" rx="2" ry="4" fill="#ffcc00" opacity="0.9">
+                <animate attributeName="ry" values="4;6;3;5;4" dur="0.12s" repeatCount="indefinite" />
+              </ellipse>
+            </>
+          )}
+        </svg>
       );
     }
 
-    // ─── Asteroid component ──────────────────────────────────────
-    function Asteroid({ x, y, size, speed, id }) {
-      const s = size;
+    // ════════════════════════════════════════════════
+    //  ASTEROID
+    // ════════════════════════════════════════════════
+    function AsteroidSVG({ size }) {
+      const hasExtra = (size * 7 + 13) % 10 > 4; // deterministic based on size
       return (
-        <div
-          className="asteroid"
-          key={id}
-          style={{
-            left: x - s / 2,
-            top: y - s / 2,
-            width: s,
-            height: s,
-            '--speed': speed + 's',
-          }}
-        >
-          <svg viewBox="0 0 48 48" width={s} height={s}>
-            <ellipse cx="24" cy="24" rx="22" ry="20" fill="#555" />
-            <ellipse cx="24" cy="24" rx="22" ry="20" fill="#666" opacity="0.6" />
-            <circle cx="16" cy="18" r="4" fill="#444" />
-            <circle cx="30" cy="22" r="5" fill="#3a3a3a" />
-            <circle cx="22" cy="32" r="3" fill="#4a4a4a" />
-            <ellipse cx="10" cy="14" rx="3" ry="2" fill="#3a3a3a" />
-          </svg>
-        </div>
+        <svg viewBox="0 0 48 48" width={size} height={size}>
+          <ellipse cx="24" cy="24" rx="22" ry="20" fill="#555" />
+          <ellipse cx="24" cy="24" rx="22" ry="20" fill="#666" opacity="0.6" />
+          <circle cx="16" cy="18" r="4" fill="#444" />
+          <circle cx="30" cy="22" r="5" fill="#3a3a3a" />
+          <circle cx="22" cy="32" r="3" fill="#4a4a4a" />
+          <ellipse cx="10" cy="14" rx="3" ry="2" fill="#3a3a3a" />
+          {hasExtra && (
+            <circle cx="28" cy="12" r="2.5" fill="#554" />
+          )}
+        </svg>
       );
     }
+    // Memoized to avoid re-rendering every frame
+    const Asteroid = React.memo(({ x, y, size, rotation }) => (
+      <div className="asteroid" style={{ left: x - size / 2, top: y - size / 2, transform: `rotate(${rotation}deg)` }}>
+        <AsteroidSVG size={size} />
+      </div>
+    ));
 
-    // ─── Explosion component ─────────────────────────────────────
-    function Explosion({ x, y, id }) {
+    // ════════════════════════════════════════════════
+    //  EXPLOSION
+    // ════════════════════════════════════════════════
+    function Explosion({ x, y, scale = 1 }) {
       return (
-        <div
-          className="explosion"
-          key={id}
-          style={{ left: x - 16, top: y - 16 }}
-        >
-          <svg viewBox="0 0 32 32" width="32" height="32">
+        <div className="explosion" style={{ left: x - 16 * scale, top: y - 16 * scale }}>
+          <svg viewBox="0 0 32 32" width={32 * scale} height={32 * scale}>
             <circle cx="16" cy="16" r="8" fill="#ff6600" opacity="0.9" />
             <circle cx="16" cy="16" r="4" fill="#ffcc00" />
           </svg>
@@ -354,206 +520,520 @@
       );
     }
 
-    // ─── Main Game Component ─────────────────────────────────────
+    // ════════════════════════════════════════════════
+    //  POWER-UP COMPONENT
+    // ════════════════════════════════════════════════
+    const PU_ICONS = {
+      shield: '🛡️',
+      speed: '⚡',
+      slowTime: '⏸️',
+      nuke: '💥',
+    };
+    const PU_COLORS = {
+      shield: '#22d3ee',
+      speed: '#fbbf24',
+      slowTime: '#a78bfa',
+      nuke: '#ff4444',
+    };
+
+    function PowerUp({ x, y, type }) {
+      const color = PU_COLORS[type] || '#fff';
+      return (
+        <div className="powerup" style={{ left: x - 14, top: y - 14, '--float-dur': rand(0.8, 1.4) + 's' }}>
+          <div className="powerup-glow" style={{ background: `radial-gradient(circle, ${color} 0%, transparent 70%)` }} />
+          <div style={{ fontSize: 22, textAlign: 'center', filter: `drop-shadow(0 0 6px ${color})` }}>
+            {PU_ICONS[type] || '❓'}
+          </div>
+        </div>
+      );
+    }
+
+    // ════════════════════════════════════════════════
+    //  MAIN GAME
+    // ════════════════════════════════════════════════
     function Game() {
+      // ─── Persistent state ──────────────────────
       const [status, setStatus] = useState('start'); // start | playing | over
       const [score, setScore] = useState(0);
       const [lives, setLives] = useState(MAX_LIVES);
       const [level, setLevel] = useState(1);
-      const [shipPos, setShipPos] = useState({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+      const [highScore, setHighScore] = useState(() => {
+        try { return parseInt(localStorage.getItem(HIGH_SCORE_KEY)) || 0; } catch (e) { return 0; }
+      });
+      const [isNewRecord, setIsNewRecord] = useState(false);
+      const [soundOn, setSoundOn] = useState(() => {
+        try { return localStorage.getItem(SOUND_ENABLED_KEY) !== 'off'; } catch (e) { return true; }
+      });
+
+      // ─── Transient visual state ────────────────
+      const [shipPos, setShipPos] = useState({ x: CW / 2, y: CH - 50 });
       const [asteroids, setAsteroids] = useState([]);
       const [explosions, setExplosions] = useState([]);
-      const [mousePos, setMousePos] = useState({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+      const [powerups, setPowerups] = useState([]);
+      const [trails, setTrails] = useState([]);
+      const [puLabels, setPuLabels] = useState([]);
+      const [flash, setFlash] = useState(null);
 
+      // ─── Active power-ups state ────────────────
+      const [activePU, setActivePU] = useState({ shield: false, speed: false, slowTime: false });
+      const [invincible, setInvincible] = useState(false);
+
+      // ─── Refs ──────────────────────────────────
       const frameRef = useRef(null);
-      const asteroidIdRef = useRef(0);
+      const gameRef = useRef({ score: 0, lives: MAX_LIVES, level: 1, speedMult: 1 });
+      const shipRef = useRef({ x: CW / 2, y: CH - 50 });
+      const asteroidsRef = useRef([]);
+      const powerupsRef = useRef([]);
+      const trailsRef = useRef([]);
+      const explosionRef = useRef([]);
+      const puLabelsRef = useRef([]);
+      const activePURef = useRef({ shield: false, speed: false, slowTime: false });
+      const keysRef = useRef({});
+      const mouseRef = useRef({ x: CW / 2, y: CH - 50, active: false });
+      const inputRef = useRef({ useMouse: true, useKeyboard: false });
       const lastSpawnRef = useRef(0);
-      const gameRef = useRef({ score: 0, lives: MAX_LIVES, level: 1 });
+      const asteroidIdRef = useRef(0);
+      const puIdRef = useRef(0);
+      const spawnIntervalRef = useRef(1200);
       const canvasRef = useRef(null);
-      const touchLeftRef = useRef(false);
-      const touchRightRef = useRef(false);
+      const slowTimeEndRef = useRef(0);
+      const speedEndRef = useRef(0);
+      const shieldHitRef = useRef(false);
+      const soundOnRef = useRef(true);
+      const invincibleEndRef = useRef(0);
+      const invincibleRef = useRef(false);
 
-      // ─── Keep mutable refs in sync ──────────────────────────
-      useEffect(() => { gameRef.current = { score, lives, level }; }, [score, lives, level]);
+      // Sync refs
+      useEffect(() => { gameRef.current = { score, lives, level, speedMult: activePU.speed ? 1.8 : 1 }; }, [score, lives, level, activePU]);
+      useEffect(() => { activePURef.current = activePU; }, [activePU]);
+      useEffect(() => { soundOnRef.current = soundOn; }, [soundOn]);
+      useEffect(() => { invincibleRef.current = invincible; }, [invincible]);
+      useEffect(() => { if (soundOn !== soundEnabled) { soundEnabled = soundOn; localStorage.setItem(SOUND_ENABLED_KEY, soundOn ? 'on' : 'off'); } }, [soundOn]);
 
-      // ─── Handle mouse / touch ───────────────────────────────
+      // ─── Sound toggle ──────────────────────────
+      const toggleSound = useCallback(() => {
+        setSoundOn(p => !p);
+      }, []);
+
+      // ─── Input handlers ────────────────────────
       const handlePointer = useCallback((clientX, clientY) => {
         const rect = canvasRef.current?.getBoundingClientRect();
         if (!rect) return;
-        const x = Math.max(SHIP_SIZE / 2, Math.min(CANVAS_W - SHIP_SIZE / 2, clientX - rect.left));
-        const y = Math.max(SHIP_SIZE / 2, Math.min(CANVAS_H - SHIP_SIZE / 2, clientY - rect.top));
-        setMousePos({ x, y });
+        const x = clamp(clientX - rect.left, SHIP_SIZE / 2, CW - SHIP_SIZE / 2);
+        const y = clamp(clientY - rect.top, SHIP_SIZE / 2, CH - SHIP_SIZE / 2);
+        mouseRef.current = { x, y, active: true };
+        inputRef.current.useMouse = true;
       }, []);
 
       const onMouseMove = useCallback((e) => handlePointer(e.clientX, e.clientY), [handlePointer]);
       const onTouchMove = useCallback((e) => {
-        if (e.touches.length > 0) {
-          handlePointer(e.touches[0].clientX, e.touches[0].clientY);
-        }
+        if (e.touches.length > 0) handlePointer(e.touches[0].clientX, e.touches[0].clientY);
       }, [handlePointer]);
 
-      // ─── Joystick touch handlers ────────────────────────────
-      const onJoystickStart = useCallback((e) => {
-        e.preventDefault();
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.touches[0].clientX - rect.left;
-        const mid = rect.width / 2;
-        touchLeftRef.current = x < mid;
-        touchRightRef.current = x >= mid;
-      }, []);
+      // Keyboard
+      useEffect(() => {
+        const onDown = (e) => {
+          keysRef.current[e.key] = true;
+          if (e.key === ' ' || e.key === 'Enter') {
+            if (status === 'playing') e.preventDefault();
+            if (status === 'over' || status === 'start') {
+              e.preventDefault();
+              initAudio();
+              startGame();
+              return;
+            }
+          }
+          // Track keyboard usage
+          if (['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','w','W','a','A','s','S','d','D'].includes(e.key)) {
+            inputRef.current.useKeyboard = true;
+            inputRef.current.useMouse = false;
+            e.preventDefault();
+          }
+        };
+        const onUp = (e) => { keysRef.current[e.key] = false; };
+        window.addEventListener('keydown', onDown);
+        window.addEventListener('keyup', onUp);
+        return () => { window.removeEventListener('keydown', onDown); window.removeEventListener('keyup', onUp); };
+      }, [status, startGame]);
 
-      const onJoystickMove = useCallback((e) => {
-        e.preventDefault();
-        const rect = e.currentTarget.getBoundingClientRect();
-        const x = e.touches[0].clientX - rect.left;
-        const mid = rect.width / 2;
-        touchLeftRef.current = x < mid;
-        touchRightRef.current = x >= mid;
-      }, []);
-
-      const onJoystickEnd = useCallback(() => {
-        touchLeftRef.current = false;
-        touchRightRef.current = false;
-      }, []);
-
-      // ─── Spawn asteroid ─────────────────────────────────────
+      // ─── Spawn asteroid ───────────────────────
       const spawnAsteroid = useCallback(() => {
         const size = ASTEROID_SIZES[randInt(0, ASTEROID_SIZES.length - 1)];
-        const x = rand(size / 2, CANVAS_W - size / 2);
+        const x = rand(size / 2, CW - size / 2);
         const y = -size;
-        const speed = BASE_SPEED + rand(0, 1.5) - level * 0.15;
-        const spd = Math.max(1.2, speed);
+        const speed = BASE_SPEED + rand(0, 1.2) * (1 - (activePURef.current.slowTime ? 0.6 : 0));
+        const spd = Math.max(0.8, speed);
         asteroidIdRef.current += 1;
-        return { id: asteroidIdRef.current, x, y, size, speed: spd };
-      }, [level]);
-
-      // ─── Collision detection ────────────────────────────────
-      const checkCollision = useCallback((ax, ay, aSize, sx, sy) => {
-        const r = aSize / 2 + SHIP_SIZE / 2 - 2;
-        const dx = ax - sx;
-        const dy = ay - sy;
-        return dx * dx + dy * dy < r * r;
+        return { id: asteroidIdRef.current, x, y, size, speed: spd, rotation: rand(0, 360) };
       }, []);
 
-      // ─── Game loop ──────────────────────────────────────────
+      // ─── Spawn power-up ───────────────────────
+      const spawnPowerUp = useCallback(() => {
+        const types = ['shield', 'speed', 'slowTime', 'nuke'];
+        const type = types[randInt(0, types.length - 1)];
+        const x = rand(20, CW - 20);
+        puIdRef.current += 1;
+        return { id: 'pu-' + puIdRef.current, x, y: -20, type, speed: rand(0.8, 1.4) };
+      }, []);
+
+      // ─── Activate power-up ─────────────────────
+      const activatePU = useCallback((type) => {
+        if (soundOnRef.current) SOUNDS.powerUp();
+        if (type === 'nuke') {
+          // Destroy all asteroids
+          if (soundOnRef.current) SOUNDS.nuke();
+          const asteroidIds = asteroidsRef.current.map(a => a.id);
+          const now = Date.now();
+          const newExplosions = asteroidIds.map(id => ({ id: now + Math.random(), x: asteroidsRef.current.find(a => a.id === id)?.x || CW/2, y: asteroidsRef.current.find(a => a.id === id)?.y || CH/2, scale: 1.2 }));
+          explosionRef.current = [...explosionRef.current, ...newExplosions];
+          setExplosions(prev => [...prev, ...newExplosions]);
+          asteroidsRef.current = [];
+          setAsteroids([]);
+          setFlash('nuke');
+          setTimeout(() => setFlash(null), 300);
+          return;
+        }
+
+        setActivePU(prev => ({ ...prev, [type]: true }));
+        const dur = PU_TYPES[type].duration;
+        if (type === 'slowTime') slowTimeEndRef.current = Date.now() + dur;
+        if (type === 'speed') speedEndRef.current = Date.now() + dur;
+        if (type === 'shield') shieldHitRef.current = false;
+      }, []);
+
+      // ─── Main game loop ────────────────────────
       useEffect(() => {
         if (status !== 'playing') return;
 
-        let spawnInterval = Math.max(300, 1200 - level * 60);
         let running = true;
+        let lastTime = 0;
+        let astSpawnInterval = 1200;
 
         const tick = (now) => {
           if (!running) return;
+          const dt = Math.min(now - lastTime, 33); // cap at ~30fps delta
+          lastTime = now;
 
-          // Spawn
-          if (now - lastSpawnRef.current > spawnInterval) {
+          const g = gameRef.current;
+          const apu = activePURef.current;
+
+          // Compute speed multiplier
+          let speedMul = 1;
+          if (apu.slowTime && Date.now() < slowTimeEndRef.current) speedMul = 0.45;
+          if (apu.speed && Date.now() < speedEndRef.current) speedMul = 1.6;
+
+          // Check expired power-ups
+          if (apu.slowTime && Date.now() > slowTimeEndRef.current) {
+            setActivePU(prev => ({ ...prev, slowTime: false }));
+          }
+          if (apu.speed && Date.now() > speedEndRef.current) {
+            setActivePU(prev => ({ ...prev, speed: false }));
+          }
+
+          // ── Spawn asteroids ──
+          astSpawnInterval = Math.max(280, 1200 - g.level * 50);
+          // At higher levels, spawn multiple per tick
+          const spawnCount = g.level >= 15 ? 2 : g.level >= 8 ? 1 : 1;
+          if (apu.slowTime && Date.now() < slowTimeEndRef.current) {
+            // Less spawns during slow time — skip multi-spawn
+          }
+          if (now - lastSpawnRef.current > astSpawnInterval) {
             lastSpawnRef.current = now;
-            setAsteroids(prev => [...prev, spawnAsteroid()]);
-            // Gradually increase spawn rate
-            spawnInterval = Math.max(300, spawnInterval - 8);
+            for (let i = 0; i < spawnCount; i++) {
+              const newAst = spawnAsteroid();
+              asteroidsRef.current = [...asteroidsRef.current, newAst];
+            }
           }
 
-          // Move ship toward mouse
-          setShipPos(prev => {
-            const dx = mousePos.x - prev.x;
-            const dy = mousePos.y - prev.y;
-            const dist = Math.sqrt(dx * dx + dy * dy);
-            if (dist < 1) return prev;
-            const speed = Math.min(dist, 12);
-            return {
-              x: prev.x + (dx / dist) * speed,
-              y: prev.y + (dy / dist) * speed,
+          // ── Side asteroids at higher levels ──
+          if (g.level >= 10 && Math.random() < 0.02 * (dt / 16)) {
+            const size = ASTEROID_SIZES[randInt(0, 2)];
+            const fromLeft = Math.random() > 0.5;
+            asteroidIdRef.current += 1;
+            const sideAst = {
+              id: asteroidIdRef.current, size,
+              x: fromLeft ? -size : CW + size,
+              y: rand(20, CH * 0.4),
+              speed: BASE_SPEED * 0.8 + rand(0, 0.5),
+              rotation: rand(0, 360),
+              vx: fromLeft ? 1 : -1,
             };
-          });
-
-          // Joystick movement (mobile)
-          if (touchLeftRef.current) {
-            setShipPos(prev => ({ ...prev, x: Math.max(SHIP_SIZE / 2, prev.x - 8) }));
+            asteroidsRef.current = [...asteroidsRef.current, sideAst];
           }
-          if (touchRightRef.current) {
-            setShipPos(prev => ({ ...prev, x: Math.min(CANVAS_W - SHIP_SIZE / 2, prev.x + 8) }));
+
+          // ── Move asteroids ──
+          const moveAmount = (dt / 16) * speedMul;
+          asteroidsRef.current = asteroidsRef.current.map(a => ({
+            ...a,
+            x: a.x + (a.vx || 0) * a.speed * moveAmount * 0.6,
+            y: a.y + a.speed * moveAmount,
+            rotation: (a.rotation || 0) + a.speed * moveAmount * 1.5,
+          }));
+
+          // Remove side asteroids that go off-screen horizontally
+          asteroidsRef.current = asteroidsRef.current.filter(a =>
+            !(a.vx && (a.x < -60 || a.x > CW + 60))
+          );
+
+          // ── Move ship (keyboard) ──
+          if (inputRef.current.useKeyboard) {
+            const k = keysRef.current;
+            const shipSpeed = (apu.speed && Date.now() < speedEndRef.current) ? 6.5 : 4;
+            let dx = 0, dy = 0;
+            if (k['ArrowLeft'] || k['a'] || k['A']) dx -= 1;
+            if (k['ArrowRight'] || k['d'] || k['D']) dx += 1;
+            if (k['ArrowUp'] || k['w'] || k['W']) dy -= 1;
+            if (k['ArrowDown'] || k['s'] || k['S']) dy += 1;
+            if (dx !== 0 || dy !== 0) {
+              const len = Math.sqrt(dx * dx + dy * dy);
+              shipRef.current = {
+                x: clamp(shipRef.current.x + (dx / len) * shipSpeed * (dt / 16), SHIP_SIZE / 2, CW - SHIP_SIZE / 2),
+                y: clamp(shipRef.current.y + (dy / len) * shipSpeed * (dt / 16), SHIP_SIZE / 2, CH - SHIP_SIZE / 2),
+              };
+              mouseRef.current.active = false;
+            }
+          }
+
+          // Move ship toward mouse (if mouse active)
+          if (mouseRef.current.active && !inputRef.current.useKeyboard) {
+            const mx = mouseRef.current.x, my = mouseRef.current.y;
+            const sx = shipRef.current.x, sy = shipRef.current.y;
+            const d = { x: mx - sx, y: my - sy };
+            const dist = Math.sqrt(d.x * d.x + d.y * d.y);
+            if (dist > 1) {
+              const spd = Math.min(dist, (apu.speed && Date.now() < speedEndRef.current) ? 18 : 12);
+              shipRef.current = {
+                x: sx + (d.x / dist) * spd * (dt / 16),
+                y: sy + (d.y / dist) * spd * (dt / 16),
+              };
+            } else {
+              inputRef.current.useMouse = false;
+            }
+          }
+
+          // ── Engine trail particles ──
+          trailsRef.current = trailsRef.current.map(t => ({
+            ...t,
+            life: t.life - (dt / 1000) * 1.8,
+            y: t.y + 0.2 * (dt / 16),
+          })).filter(t => t.life > 0);
+
+          // Add new trail particle
+          if (Math.random() < 0.7) {
+            trailsRef.current.push({
+              id: Date.now() + Math.random(),
+              x: shipRef.current.x + rand(-6, 6),
+              y: shipRef.current.y + SHIP_SIZE / 2 - 4,
+              life: 0.7 + rand(0, 0.3),
+              size: rand(2, 5),
+            });
+          }
+
+          // ── Move power-ups ──
+          powerupsRef.current = powerupsRef.current
+            .map(pu => ({ ...pu, y: pu.y + pu.speed * moveAmount }))
+            .filter(pu => pu.y < CH + 30);
+
+          // ── Collision & scoring ──
+          let newScore = g.score;
+          let newLives = g.lives;
+          const newExplosions = [];
+          const spawnedPU = [];
+          let died = false;
+
+          // Process asteroids
+          const survivingAsteroids = [];
+          for (const ast of asteroidsRef.current) {
+            // Out of bounds (passed bottom) = score
+            if (ast.y > CH + 30) {
+              newScore += Math.max(1, Math.floor(ast.size / 10));
+              if (soundOnRef.current && Math.random() < 0.3) SOUNDS.score();
+              continue;
+            }
+
+            // Check collision with ship
+            const r = ast.size / 2 + SHIP_SIZE / 2 - 4;
+            const dx = ast.x - shipRef.current.x;
+            const dy = ast.y - shipRef.current.y;
+            const hit = dx * dx + dy * dy < r * r;
+
+            if (hit) {
+              if (activePURef.current.shield && !shieldHitRef.current) {
+                // Shield absorbs hit
+                shieldHitRef.current = true;
+                setActivePU(prev => ({ ...prev, shield: false }));
+                newExplosions.push({ id: Date.now() + Math.random(), x: ast.x, y: ast.y, scale: 1.5 });
+                continue; // asteroid destroyed, shield saved us
+              }
+              if (invincibleRef.current) {
+                // Invincible — destroy asteroid but don't take damage
+                newExplosions.push({ id: Date.now() + Math.random(), x: ast.x, y: ast.y, scale: 1 });
+                continue;
+              }
+              newExplosions.push({ id: Date.now() + Math.random(), x: ast.x, y: ast.y, scale: 1 });
+              newLives -= 1;
+              if (newLives > 0) {
+                // Grant i-frames
+                invincibleEndRef.current = Date.now() + INVINCIBILITY_MS;
+                setInvincible(true);
+                setTimeout(() => setInvincible(false), INVINCIBILITY_MS);
+              }
+              if (newLives <= 0) died = true;
+              continue; // asteroid destroyed
+            }
+
+            survivingAsteroids.push(ast);
+          }
+
+          // Chance to spawn power-up when an asteroid is destroyed
+          if (newExplosions.length > 0) {
+            for (const exp of newExplosions) {
+              if (Math.random() < 0.12) {
+                const pu = spawnPowerUp();
+                pu.x = exp.x;
+                pu.y = exp.y;
+                spawnedPU.push(pu);
+              }
+            }
+          }
+
+          asteroidsRef.current = survivingAsteroids;
+          if (spawnedPU.length > 0) {
+            powerupsRef.current = [...powerupsRef.current, ...spawnedPU];
+          }
+          if (newExplosions.length > 0) {
+            explosionRef.current = [...explosionRef.current, ...newExplosions];
+            if (soundOnRef.current) SOUNDS.collision();
+          }
+
+          // Check power-up collection
+          const survivingPU = [];
+          const collectedLabels = [];
+          for (const pu of powerupsRef.current) {
+            const r = 16 + SHIP_SIZE / 2 - 2;
+            const dx = pu.x - shipRef.current.x;
+            const dy = pu.y - shipRef.current.y;
+            const collected = dx * dx + dy * dy < r * r;
+
+            if (collected) {
+              activatePU(pu.type);
+              collectedLabels.push({ id: Date.now() + Math.random(), x: pu.x, y: pu.y, text: PU_TYPES[pu.type]?.label || pu.type });
+            } else {
+              survivingPU.push(pu);
+            }
+          }
+          powerupsRef.current = survivingPU;
+          if (collectedLabels.length > 0) {
+            puLabelsRef.current = [...puLabelsRef.current, ...collectedLabels];
+          }
+
+          // Clean up old explosion labels
+          puLabelsRef.current = puLabelsRef.current.filter(l => l.id + 1200 > Date.now());
+
+          // ── Level up ──
+          const newLevel = Math.min(25, Math.floor(newScore / 30) + 1);
+          if (newLevel > g.level && !died) {
+            if (soundOnRef.current) SOUNDS.levelUp();
+            setFlash('levelup');
+            setTimeout(() => setFlash(null), 500);
+          }
+
+          // ── Sync React state ──
+          if (newScore !== g.score) setScore(newScore);
+          if (newLives !== g.lives) setLives(newLives);
+          if (newLevel !== g.level) setLevel(newLevel);
+          setAsteroids([...asteroidsRef.current]);
+          setPowerups([...powerupsRef.current]);
+          setTrails([...trailsRef.current]);
+          if (newExplosions.length > 0) {
+            setExplosions(prev => [...prev, ...newExplosions]);
+          }
+          if (spawnedPU.length > 0) {
+            setPowerups(prev => [...prev, ...spawnedPU]);
+          }
+          setShipPos({ ...shipRef.current });
+
+          if (collectedLabels.length > 0) {
+            setPuLabels(prev => [...prev, ...collectedLabels]);
+          }
+
+          if (died) {
+            // Game Over
+            const finalScore = newScore;
+            if (finalScore > highScore) {
+              setHighScore(finalScore);
+              setIsNewRecord(true);
+              try { localStorage.setItem(HIGH_SCORE_KEY, String(finalScore)); } catch (e) {}
+            } else {
+              setIsNewRecord(false);
+            }
+            if (soundOnRef.current) SOUNDS.gameOver();
+            setStatus('over');
+            setAsteroids([]);
+            setPowerups([]);
+            setTrails([]);
+            return;
           }
 
           frameRef.current = requestAnimationFrame(tick);
         };
 
+        lastSpawnRef.current = performance.now();
         frameRef.current = requestAnimationFrame(tick);
         return () => { running = false; cancelAnimationFrame(frameRef.current); };
-      }, [status, level, mousePos, spawnAsteroid]);
+      }, [status, spawnAsteroid, spawnPowerUp, activatePU, highScore]);
 
-      // ─── Collision detection loop ───────────────────────────
-      useEffect(() => {
-        if (status !== 'playing') return;
-
-        const interval = setInterval(() => {
-          setAsteroids(prev => {
-            if (prev.length === 0) return prev;
-            const g = gameRef.current;
-            let newScore = g.score;
-            let newLives = g.lives;
-            const newExplosions = [];
-            let died = false;
-
-            // Filter asteroids: check collision and out-of-bounds
-            const surviving = prev.filter(ast => {
-              const outOfBounds = ast.y > CANVAS_H + 30;
-              const hit = checkCollision(ast.x, ast.y, ast.size, shipPos.x, shipPos.y);
-
-              if (hit) {
-                newExplosions.push({ id: Date.now() + Math.random(), x: ast.x, y: ast.y });
-                newLives -= 1;
-                if (newLives <= 0) died = true;
-                return false;
-              }
-              if (outOfBounds) {
-                newScore += Math.max(1, Math.floor(ast.size / 10));
-                return false;
-              }
-              return true;
-            });
-
-            if (newScore !== g.score) setScore(newScore);
-            if (newLives !== g.lives) setLives(newLives);
-            if (newExplosions.length > 0) setExplosions(prev => [...prev, ...newExplosions]);
-
-            if (died) {
-              setStatus('over');
-              return [];
-            }
-
-            // Level up check
-            const newLevel = Math.min(20, Math.floor(newScore / 30) + 1);
-            if (newLevel !== g.level) setLevel(newLevel);
-
-            return surviving;
-          });
-        }, 30);
-
-        return () => clearInterval(interval);
-      }, [status, shipPos, checkCollision]);
-
-      // ─── Clean up explosions ────────────────────────────────
+      // ─── Clean up explosions after delay ──────
       useEffect(() => {
         if (explosions.length === 0) return;
         const timer = setTimeout(() => setExplosions([]), 700);
         return () => clearTimeout(timer);
       }, [explosions]);
 
-      // ─── Start / Restart ────────────────────────────────────
+      // ─── Clean up power-up labels after delay ──
+      useEffect(() => {
+        if (puLabels.length === 0) return;
+        const timer = setTimeout(() => setPuLabels([]), 1400);
+        return () => clearTimeout(timer);
+      }, [puLabels]);
+
+      // ─── Start / Restart ──────────────────────
       const startGame = useCallback(() => {
+        initAudio();
         setScore(0);
         setLives(MAX_LIVES);
         setLevel(1);
         setAsteroids([]);
         setExplosions([]);
-        setShipPos({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
-        setMousePos({ x: CANVAS_W / 2, y: CANVAS_H - 50 });
+        setPowerups([]);
+        setTrails([]);
+        setPuLabels([]);
+        setFlash(null);
+        setActivePU({ shield: false, speed: false, slowTime: false });
+        setInvincible(false);
+        setIsNewRecord(false);
+        shipRef.current = { x: CW / 2, y: CH - 50 };
+        setShipPos({ x: CW / 2, y: CH - 50 });
+        mouseRef.current = { x: CW / 2, y: CH - 50, active: false };
+        inputRef.current = { useMouse: true, useKeyboard: false };
+        asteroidsRef.current = [];
+        powerupsRef.current = [];
+        trailsRef.current = [];
+        explosionRef.current = [];
+        puLabelsRef.current = [];
+        activePURef.current = { shield: false, speed: false, slowTime: false };
+        invincibleRef.current = false;
+        invincibleEndRef.current = 0;
         asteroidIdRef.current = 0;
+        puIdRef.current = 0;
         lastSpawnRef.current = 0;
+        shieldHitRef.current = false;
+        slowTimeEndRef.current = 0;
+        speedEndRef.current = 0;
         setStatus('playing');
       }, []);
 
-      // ─── Render ─────────────────────────────────────────────
+      // ─── Render ───────────────────────────────
       return (
         <div className="game-container">
           <Stars />
@@ -563,69 +1043,132 @@
             ref={canvasRef}
             onMouseMove={status === 'playing' ? onMouseMove : undefined}
             onTouchMove={status === 'playing' ? onTouchMove : undefined}
+            onTouchStart={status === 'playing' ? (e) => {
+              if (e.touches.length > 0) handlePointer(e.touches[0].clientX, e.touches[0].clientY);
+            } : undefined}
           >
             {/* HUD */}
             <div className="hud">
-              <span className="score">✦ {score}</span>
-              <span className="level">Lv.{level}</span>
-              <span className="lives">{'♥'.repeat(lives)}{'♡'.repeat(MAX_LIVES - lives)}</span>
+              <div className="hud-segment">
+                <span className="hud-item score">✦ {score}</span>
+                {(highScore > 0) && (
+                  <span className="hud-item high-score">🏆 {highScore}</span>
+                )}
+              </div>
+              <div className="hud-segment">
+                <span className="hud-item level">Lv.{level}</span>
+                <span className="hud-item lives">{'♥'.repeat(lives)}{'♡'.repeat(MAX_LIVES - lives)}</span>
+                <span className="hud-item" style={{ cursor: 'pointer', pointerEvents: 'all' }}
+                  onClick={toggleSound} title="Toggle sound">
+                  {soundOn ? '🔊' : '🔇'}
+                </span>
+              </div>
             </div>
 
+            {/* Active power-up bar */}
+            {(activePU.shield || activePU.speed || activePU.slowTime) && (
+              <div className="pu-bar">
+                {activePU.shield && <span className="pu-badge" style={{ borderColor: '#22d3ee', color: '#22d3ee' }}>🛡️ Shield</span>}
+                {activePU.speed && <span className="pu-badge" style={{ borderColor: '#fbbf24', color: '#fbbf24' }}>⚡ Speed</span>}
+                {activePU.slowTime && <span className="pu-badge" style={{ borderColor: '#a78bfa', color: '#a78bfa' }}>⏸️ Slow</span>}
+              </div>
+            )}
+
+            {/* Screen flash */}
+            {flash === 'nuke' && <div className="screen-flash" style={{ background: 'rgba(255,68,68,0.5)' }} />}
+            {flash === 'levelup' && <div className="screen-flash" style={{ background: 'rgba(34,211,238,0.3)' }} />}
+
             {/* Ship */}
-            {status === 'playing' && <Ship x={shipPos.x} y={shipPos.y} />}
+            {status === 'playing' && (
+              <div className={'ship' + (activePU.shield ? ' shielded' : '') + (invincible ? ' blinking' : '')}
+                style={{ left: shipPos.x - SHIP_SIZE / 2, top: shipPos.y - SHIP_SIZE / 2 }}>
+                <ShipSVG flame={true} color={activePU.shield ? '#88eeff' : '#44ddff'} />
+              </div>
+            )}
+
+            {/* Shield bubble */}
+            {status === 'playing' && activePU.shield && (
+              <div className="shield-bubble"
+                style={{ left: shipPos.x - 26, top: shipPos.y - 26, width: 52, height: 52 }} />
+            )}
+
+            {/* Engine trail */}
+            {trails.map(t => (
+              <div key={t.id} className="trail-particle"
+                style={{
+                  left: t.x - t.size / 2, top: t.y - t.size / 2,
+                  width: t.size, height: t.size,
+                  opacity: clamp(t.life * 1.2, 0, 1),
+                  background: `radial-gradient(circle, rgba(34,211,238,${clamp(t.life * 0.6, 0, 0.5)}) 0%, transparent 70%)`,
+                }} />
+            ))}
 
             {/* Asteroids */}
             {asteroids.map(a => (
-              <Asteroid key={a.id} {...a} />
+              <Asteroid key={a.id} x={a.x} y={a.y} size={a.size} rotation={a.rotation || 0} />
+            ))}
+
+            {/* Power-ups */}
+            {powerups.map(pu => (
+              <PowerUp key={pu.id} x={pu.x} y={pu.y} type={pu.type} />
+            ))}
+
+            {/* Collect labels */}
+            {puLabels.map(l => (
+              <div key={l.id} className="pu-label"
+                style={{ left: l.x - 30, top: l.y - 10, color: '#34d399' }}>
+                {l.text}
+              </div>
             ))}
 
             {/* Explosions */}
             {explosions.map(e => (
-              <Explosion key={e.id} x={e.x} y={e.y} />
+              <Explosion key={e.id} x={e.x} y={e.y} scale={e.scale || 1} />
             ))}
 
-            {/* Touch joystick */}
-            <div
-              className="joystick"
-              onTouchStart={onJoystickStart}
-              onTouchMove={onJoystickMove}
-              onTouchEnd={onJoystickEnd}
-              onTouchCancel={onJoystickEnd}
-            >
-              <div className="joystick-zone joystick-zone--left">
-                <span className="joystick-arrow">◀</span>
-              </div>
-              <div className="joystick-zone joystick-zone--right">
-                <span className="joystick-arrow">▶</span>
-              </div>
-              <div className="joystick-divider" />
-            </div>
-
-            {/* Overlays */}
+            {/* Start overlay */}
             {status === 'start' && (
               <div className="overlay">
                 <h1>☄️ Asteroid Dodge</h1>
-                <p>Move mouse or tap ◀▶ to control the ship.<br />Dodge asteroids and survive!</p>
-                <button className="btn" onClick={startGame}>Start Game</button>
+                <div className="sub">Dodge asteroids and survive as long as you can!</div>
+                {highScore > 0 && (
+                  <div className="high-score-display">🏆 High Score: {highScore}</div>
+                )}
+                <div className="stats-line" style={{ marginBottom: 14 }}>
+                  ⏱️ Level {level} · ♥ {MAX_LIVES} lives
+                </div>
+                <button className="btn" onClick={() => { initAudio(); startGame(); }}>Start Game</button>
+                <div className="controls-hint">
+                  🖱️ Mouse / Touch · ⌨️ Arrow keys / WASD · Space to restart<br />
+                  🔊 Click volume icon in HUD to toggle sound
+                </div>
               </div>
             )}
 
+            {/* Game Over overlay */}
             {status === 'over' && (
               <div className="overlay">
                 <h2>💥 Game Over</h2>
                 <div className="final-score">Score: {score}</div>
-                <p>Level reached: {level}</p>
+                {isNewRecord && <div className="new-record">🏆 NEW HIGH SCORE!</div>}
+                {!isNewRecord && highScore > 0 && (
+                  <div className="high-score-display">🏆 High Score: {highScore}</div>
+                )}
+                <div className="stats-line">Level reached: {level} · Asteroids: ~{Math.floor(score * 0.6)}</div>
                 <button className="btn" onClick={startGame}>Play Again</button>
+                <div className="controls-hint">
+                  Space / Enter to restart · 🔊 Click volume icon in HUD
+                </div>
               </div>
             )}
           </div>
 
-          <div className="hint">Move mouse — or use ◀▶ on touch — dodge the asteroids!</div>
+          <div className="hint-bottom">Mouse / Touch / Arrow keys — dodge the asteroids!</div>
         </div>
       );
     }
 
-    // ─── Mount ─────────────────────────────────────────────────
+    // ─── Mount ──────────────────────────────────
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<Game />);
   </script>
