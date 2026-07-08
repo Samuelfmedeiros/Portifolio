@@ -5,7 +5,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `43b60e3` — feat(games): atualiza 5 jogos com melhorias mobile (v3 port) — auto-sync: 2026-07-05 21:01 — auto-sync: 2026-07-05 12:00 — auto-sync: 2026-07-05 06:06 — auto-sync: 2026-07-05 05:12 — docs: auto-update semanal — chore(memory): auto-log b43b0ef — auto-sync: 2026-07-04 21:01 — auto-sync: 2026-07-04 17:00 — auto-sync: 2026-07-04 06:01 — auto-sync: 2026-07-04 04:01 — docs: atualiza README.md, cria ARCHITECTURE.md — docs: auto-update AGENTS.md + HISTORY.md — chore(memory): auto-log d7abf19 — auto-sync: 2026-07-03
+- **Último commit:** `eb2d6c6` — build: permite build com warnings ESLint (ignoreDuringBuilds: true) — feat(games): atualiza 5 jogos com melhorias mobile (v3 port) — auto-sync: 2026-07-05 21:01 — auto-sync: 2026-07-05 12:00 — auto-sync: 2026-07-05 06:06 — auto-sync: 2026-07-05 05:12 — docs: auto-update semanal — chore(memory): auto-log b43b0ef — auto-sync: 2026-07-04 21:01 — auto-sync: 2026-07-04 17:00 — auto-sync: 2026-07-04 06:01 — auto-sync: 2026-07-04 04:01 — docs: atualiza README.md, cria ARCHITECTURE.md — docs: auto-update AGENTS.md + HISTORY.md — chore(memory): auto-log d7abf19 — auto-sync: 2026-07-03
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
 - **Testes:** 179 passando
 - **Lint:** 0 errors, 0 warnings
