@@ -95,6 +95,7 @@
       background: rgba(10,10,15,0.6); border-radius: 8px;
       filter: none; letter-spacing: 0.1em; text-shadow: 0 0 20px rgba(34,211,238,0.3);
     }
+    .stat-value.blurred { filter: blur(6px); user-select: none; }
     .char { position: relative; transition: color 0.05s; }
     .char.correct   { color: #22c55e; }
     .char.incorrect { color: #ef4444; background: #3d1214; border-radius: 2px; }
@@ -546,7 +547,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
     }
 
     // ─── Heat Map Component ────────────────────────────────
-    function HeatMapPanel({ heatMap, totalKeystrokes }) {
+    function HeatMapPanel({ heatMap, totalKeystrokes, onClear }) {
       const [open, setOpen] = useState(false);
 
       const entries = useMemo(() => {
@@ -577,9 +578,16 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
 
       return (
         <div className="heatmap-panel">
-          <div className="heatmap-header" onClick={() => setOpen(!open)}>
-            <span>🔥 Heat Map · {errorRate}% error rate · {totalErrors} errors</span>
-            <span className={`arrow ${open ? 'open' : ''}`}>▶</span>
+          <div className="heatmap-header">
+            <span onClick={() => setOpen(!open)} style={{cursor: 'pointer', flex: 1}}>🔥 Heat Map · {errorRate}% error rate · {totalErrors} errors</span>
+            <span style={{display: 'flex', alignItems: 'center', gap: '0.5rem'}}>
+              {totalKeystrokes > 0 && onClear && (
+                <button className="btn btn-secondary" onClick={(e) => { e.stopPropagation(); onClear(); }}
+                  style={{padding: '0.15rem 0.5rem', fontSize: '0.65rem', background: '#3d1214', border: '1px solid #6b0d0d', color: '#ef4444'}}
+                  title="Clear all heat map data">🗑 Clear</button>
+              )}
+              <span className={`arrow ${open ? 'open' : ''}`}>▶</span>
+            </span>
           </div>
           {open && (
             <div className="heatmap-body">
@@ -735,6 +743,7 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const [timedChars, setTimedChars] = useState(0);
       const [timedCorrect, setTimedCorrect] = useState(0);
       const [timedSnippetsDone, setTimedSnippetsDone] = useState(0);
+      const [countdown, setCountdown] = useState(null); // 3-2-1 countdown
 
       const snippet = SNIPPETS[snippetIndex];
       const codeChars = snippet.code;
@@ -795,22 +804,18 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
       const accuracy = calcAccuracy(correctCount, totalTyped);
       const totalKeystrokes = Object.values(heatMap).reduce((s, v) => s + v.total, 0);
 
-      // ─── Timer Logic ──────────────────────────────────
+      // ─── Timer Logic (drift-free via Date.now()) ─────
       useEffect(() => {
-        if (timedActive && timeRemaining > 0) {
-          const interval = setInterval(() => {
-            setTimeRemaining(prev => {
-              const next = prev - 1;
-              if (next <= 0) {
-                clearInterval(interval);
-                return 0;
-              }
-              return next;
-            });
-          }, 1000);
-          return () => clearInterval(interval);
-        }
-      }, [timedActive, timeRemaining]);
+        if (!timedActive || !startTime) return;
+        const tick = () => {
+          const elapsed = Math.floor((Date.now() - startTime) / 1000);
+          const remaining = Math.max(timerDuration - elapsed, 0);
+          setTimeRemaining(remaining);
+        };
+        tick();
+        const interval = setInterval(tick, 200);
+        return () => clearInterval(interval);
+      }, [timedActive, startTime, timerDuration]);
 
       // Timer warning sounds
       useEffect(() => {
@@ -1097,14 +1102,16 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
               <div className="stat-label">Accuracy</div>
             </div>
             <div className="stat">
-              <div className="stat-value purple">
-                {isTimed ? `${timedSnippetsDone}` : `${progress.toFixed(0)}%`}
+              <div className={`stat-value purple ${blindMode && isRunning ? 'blurred' : ''}`}>
+                {blindMode && isRunning ? '???' : (isTimed ? `${timedSnippetsDone}` : `${progress.toFixed(0)}%`)}
               </div>
               <div className="stat-label">{isTimed ? 'Snippets' : 'Progress'}</div>
             </div>
             {isTimed && (
               <div className="stat">
-                <div className="stat-value red">{timedCorrect}</div>
+                <div className={`stat-value red ${blindMode && isRunning ? 'blurred' : ''}`}>
+                  {blindMode && isRunning ? '???' : timedCorrect}
+                </div>
                 <div className="stat-label">Correct</div>
               </div>
             )}
@@ -1198,7 +1205,8 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
           </div>
 
           {/* ───── Heat Map ───── */}
-          <HeatMapPanel heatMap={heatMap} totalKeystrokes={totalKeystrokes} />
+          <HeatMapPanel heatMap={heatMap} totalKeystrokes={totalKeystrokes}
+            onClear={() => { setHeatMap({}); }} />
 
           {/* ───── Footer ───── */}
           <div className="footer">

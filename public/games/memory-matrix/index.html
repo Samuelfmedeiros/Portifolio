@@ -2,14 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>🧠 Memory Matrix</title>
   <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone@7/babel.min.js"></script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-
     body {
       font-family: 'Courier New', monospace;
       background: #0a0a0f;
@@ -19,18 +18,16 @@
       justify-content: center;
       align-items: center;
     }
-
     .game-container {
       background: #12121a;
       border-radius: 16px;
       padding: 32px 28px;
       border: 1px solid #2a2a3a;
       box-shadow: 0 0 40px rgba(0, 0, 0, 0.5);
-      max-width: 420px;
+      max-width: 480px;
       width: 100%;
       margin: 20px;
     }
-
     .game-title {
       text-align: center;
       font-size: 14px;
@@ -39,54 +36,44 @@
       letter-spacing: 2px;
       font-weight: 700;
     }
-
     .stats {
       display: flex;
       justify-content: space-between;
       align-items: center;
       padding: 0 8px;
-      margin-bottom: 16px;
+      margin-bottom: 12px;
       font-size: 12px;
+      flex-wrap: wrap;
+      gap: 4px;
     }
-
-    .stats span {
-      color: #94a3b8;
-    }
-
-    .stats .accent {
-      color: #22d3ee;
-    }
-
-    .stats .accent-alt {
-      color: #22d3ee;
-    }
-
+    .stats span { color: #94a3b8; }
+    .stats .accent { color: #22d3ee; }
+    .stats .accent-alt { color: #22d3ee; }
+    .stats .streak { color: #f59e0b; font-weight: bold; }
     .message-area {
       text-align: center;
-      margin-bottom: 20px;
-      min-height: 24px;
+      margin-bottom: 16px;
+      min-height: 28px;
     }
-
-    .message-area p {
-      font-size: 13px;
-      color: #94a3b8;
-    }
-
+    .message-area p { font-size: 13px; color: #94a3b8; }
     .message-area .countdown {
       color: #22d3ee;
-      animation: pulse 1s infinite;
+      font-size: 18px;
+      font-weight: bold;
+      animation: pulse 0.5s infinite;
     }
-
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
     .grid-wrapper {
       display: flex;
       justify-content: center;
     }
-
     .grid {
       display: grid;
       gap: 8px;
     }
-
     .cell {
       width: 56px;
       height: 56px;
@@ -97,62 +84,70 @@
       align-items: center;
       justify-content: center;
       font-size: 18px;
-      transition: all 0.2s ease;
+      transition: all 0.15s ease;
       cursor: pointer;
       outline: none;
+      position: relative;
     }
-
-    .cell:disabled {
-      cursor: default;
-    }
-
+    .cell:disabled { cursor: default; }
     .cell.revealed {
-      background: rgba(34, 211, 238, 0.15);
+      background: rgba(34, 211, 238, 0.18);
       border-color: #22d3ee;
-      box-shadow: 0 0 15px rgba(34, 211, 238, 0.25);
+      box-shadow: 0 0 20px rgba(34, 211, 238, 0.3);
+      animation: cellGlow 0.6s ease-in-out infinite alternate;
     }
-
+    @keyframes cellGlow {
+      0% { box-shadow: 0 0 10px rgba(34, 211, 238, 0.2); }
+      100% { box-shadow: 0 0 25px rgba(34, 211, 238, 0.5); }
+    }
+    .cell.wave-reveal {
+      animation: wavePop 0.35s ease-out forwards;
+    }
+    @keyframes wavePop {
+      0% { transform: scale(1); opacity: 1; background: rgba(34, 211, 238, 0.1); }
+      40% { transform: scale(1.2); background: rgba(34, 211, 238, 0.4); }
+      100% { transform: scale(1); opacity: 1; background: rgba(34, 211, 238, 0.15); border-color: #22d3ee; }
+    }
     .cell.selected-correct {
-      background: rgba(34, 197, 94, 0.15);
+      background: rgba(34, 197, 94, 0.2);
       border-color: #22c55e;
-      box-shadow: 0 0 10px rgba(34, 197, 94, 0.2);
+      box-shadow: 0 0 15px rgba(34, 197, 94, 0.3);
+      animation: popCorrect 0.3s ease-out;
     }
-
+    @keyframes popCorrect {
+      0% { transform: scale(1); }
+      40% { transform: scale(1.15); }
+      100% { transform: scale(1); }
+    }
     .cell.selected-wrong {
-      background: rgba(239, 68, 68, 0.15);
+      background: rgba(239, 68, 68, 0.2);
       border-color: #ef4444;
-      box-shadow: 0 0 10px rgba(244, 67, 54, 0.2);
+      box-shadow: 0 0 15px rgba(239, 68, 68, 0.3);
+      animation: shake 0.3s ease-out;
     }
-
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-4px); }
+      40% { transform: translateX(4px); }
+      60% { transform: translateX(-3px); }
+      80% { transform: translateX(3px); }
+    }
     .cell.idle {
       background: rgba(18, 18, 26, 0.3);
       border-color: #2a2a3a;
       opacity: 0.6;
     }
-
     .cell.input-ready {
       background: rgba(18, 18, 26, 0.4);
       border-color: #2a2a3a;
     }
-
     .cell.input-ready:hover {
       border-color: rgba(34, 211, 238, 0.5);
       background: rgba(34, 211, 238, 0.08);
     }
-
-    .cell .check-mark {
-      color: #4caf50;
-    }
-
-    .cell .cross-mark {
-      color: #f44336;
-    }
-
-    .btn-container {
-      text-align: center;
-      margin-top: 20px;
-    }
-
+    .cell .check-mark { color: #4caf50; font-size: 20px; }
+    .cell .cross-mark { color: #f44336; font-size: 20px; }
+    .btn-container { text-align: center; margin-top: 20px; }
     .btn {
       padding: 10px 28px;
       border-radius: 10px;
@@ -165,21 +160,100 @@
       transition: all 0.2s ease;
       outline: none;
     }
-
-    .btn:hover {
-      filter: brightness(1.15);
+    .btn:hover { filter: brightness(1.15); }
+    .btn:active { transform: scale(0.97); }
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid #2a2a3a;
+      color: #94a3b8;
+      margin-left: 8px;
     }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
+    .combo-badge {
+      display: inline-block;
+      background: rgba(245, 158, 11, 0.15);
+      border: 1px solid rgba(245, 158, 11, 0.3);
+      border-radius: 12px;
+      padding: 2px 10px;
+      font-size: 11px;
+      font-weight: bold;
+      color: #f59e0b;
+      margin-left: 8px;
+      animation: comboPop 0.4s ease-out;
     }
+    @keyframes comboPop {
+      0% { transform: scale(0.5); opacity: 0; }
+      60% { transform: scale(1.2); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+    .screen-shake {
+      animation: scrnShake 0.3s ease-out;
+    }
+    @keyframes scrnShake {
+      0%, 100% { transform: translate(0, 0); }
+      10% { transform: translate(-2px, 1px); }
+      30% { transform: translate(2px, -1px); }
+      50% { transform: translate(-1px, 2px); }
+      70% { transform: translate(1px, -2px); }
+      90% { transform: translate(-1px, 1px); }
+    }
+    .level-complete {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0,0,0,0.6);
+      z-index: 10;
+      border-radius: 10px;
+    }
+    .level-complete h2 {
+      font-size: 24px;
+      color: #22d3ee;
+      animation: fadeInUp 0.3s ease-out;
+    }
+    .level-complete p {
+      font-size: 12px;
+      color: #94a3b8;
+      margin-top: 4px;
+    }
+    @keyframes fadeInUp {
+      0% { opacity: 0; transform: translateY(10px); }
+      100% { opacity: 1; transform: translateY(0); }
+    }
+    .game-over-screen {
+      text-align: center;
+      padding: 10px 0;
+    }
+    .game-over-screen h2 { font-size: 20px; color: #ef4444; margin-bottom: 4px; }
+    .game-over-screen .stats-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+      margin: 16px 0;
+    }
+    .game-over-screen .stat-item {
+      background: rgba(0,0,0,0.3);
+      border-radius: 8px;
+      padding: 10px;
+    }
+    .game-over-screen .stat-item .val {
+      font-size: 18px;
+      font-weight: bold;
+      color: #22d3ee;
+    }
+    .game-over-screen .stat-item .lbl {
+      font-size: 10px;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+    .game-over-screen .btn-container { margin-top: 12px; }
 
     @media (max-width: 480px) {
       .game-container { padding: 20px 16px; }
-      .cell { width: 48px; height: 48px; }
+      .cell { width: 48px; height: 48px; font-size: 16px; }
     }
-
     @media (max-width: 380px) {
       .cell { width: 40px; height: 40px; font-size: 14px; }
       .grid { gap: 6px; }
@@ -189,21 +263,74 @@
 <body>
   <div id="root"></div>
   <script type="text/babel">
-    const { useState, useEffect, useCallback } = React;
+    const { useState, useEffect, useCallback, useRef } = React;
 
+    // ─── Sound Engine ────────────────────────────────────────
+    function playTone(freq, duration = 0.15, type = 'sine') {
+      try {
+        const ctx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
+        osc.type = type;
+        osc.frequency.setValueAtTime(freq, ctx.currentTime);
+        gain.gain.setValueAtTime(0.15, ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + duration);
+        osc.connect(gain);
+        gain.connect(ctx.destination);
+        osc.start(ctx.currentTime);
+        osc.stop(ctx.currentTime + duration);
+      } catch(e) {}
+    }
+
+    function playCorrect() { playTone(800, 0.1, 'sine'); }
+    function playWrong() { playTone(200, 0.3, 'sawtooth'); }
+    function playReveal() { playTone(600, 0.08, 'sine'); }
+    function playLevelUp() {
+      [523, 659, 784, 1047].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.15, 'sine'), i * 100);
+      });
+    }
+    function playGameOver() {
+      [400, 350, 300, 200].forEach((f, i) => {
+        setTimeout(() => playTone(f, 0.3, 'sawtooth'), i * 150);
+      });
+    }
+
+    // ─── Memory Matrix ───────────────────────────────────────
     function MemoryMatrix() {
       const [gridSize, setGridSize] = useState(3);
       const [cells, setCells] = useState([]);
       const [targets, setTargets] = useState([]);
-      const [phase, setPhase] = useState("idle");
+      const [phase, setPhase] = useState("idle"); // idle | showing | input | levelComplete | gameOver
       const [level, setLevel] = useState(0);
       const [score, setScore] = useState(0);
-      const [highScore, setHighScore] = useState(0);
+      const [highScore, setHighScore] = useState(
+        parseInt(localStorage.getItem('memoryMatrixHigh') || '0')
+      );
+      const [streak, setStreak] = useState(0);
+      const [bestStreak, setBestStreak] = useState(0);
       const [message, setMessage] = useState("Pressione INICIAR para jogar");
       const [showTimer, setShowTimer] = useState(0);
+      const [combo, setCombo] = useState(0);
+      const shakeRef = useRef(null);
 
       const totalCells = gridSize * gridSize;
-      const targetCount = Math.min(gridSize + level, totalCells - 1);
+      const targetCount = Math.min(gridSize + Math.floor(level / 2), totalCells - 1);
+
+      // ─── High score save ─────────────────────────────────
+      useEffect(() => {
+        if (highScore > 0) {
+          localStorage.setItem('memoryMatrixHigh', highScore.toString());
+          // Also save to leaderboard
+          try {
+            const lb = JSON.parse(localStorage.getItem('memoryMatrixLB') || '[]');
+            const entry = { score: highScore, bestStreak, date: new Date().toISOString().split('T')[0] };
+            // Only add if it's a new entry that would appear in top 5
+            const all = [...lb, entry].sort((a, b) => b.score - a.score).slice(0, 5);
+            localStorage.setItem('memoryMatrixLB', JSON.stringify(all));
+          } catch(e) {}
+        }
+      }, [highScore]);
 
       const generateGrid = useCallback(() => {
         const total = gridSize * gridSize;
@@ -212,29 +339,31 @@
           targetSet.add(Math.floor(Math.random() * total));
         }
         const targetArr = Array.from(targetSet);
-
         const newCells = Array.from({ length: total }, (_, i) => ({
           index: i,
           isTarget: targetSet.has(i),
           revealed: false,
           selected: false,
           correct: null,
+          waveDelay: 0,
         }));
-
         return { cells: newCells, targets: targetArr };
       }, [gridSize, targetCount]);
 
       const showPhase = useCallback(() => {
         const { cells: newCells, targets: newTargets } = generateGrid();
-        newCells.forEach((c) => {
-          if (c.isTarget) c.revealed = true;
+        // Wave reveal: set delay per cell
+        const targetIndices = newTargets.sort(() => Math.random() - 0.5);
+        targetIndices.forEach((idx, i) => {
+          newCells[idx].revealed = true;
+          newCells[idx].waveDelay = i * 60;
         });
         setCells(newCells);
         setTargets(newTargets);
         setPhase("showing");
         setMessage("Memorize as células destacadas...");
 
-        const showDuration = Math.max(1000, 3000 - level * 200);
+        const showDuration = Math.max(800, 3000 - level * 120);
         setShowTimer(Math.ceil(showDuration / 1000));
       }, [generateGrid, level]);
 
@@ -244,9 +373,7 @@
           setShowTimer((prev) => {
             if (prev <= 1) {
               clearInterval(timer);
-              setCells((prev) =>
-                prev.map((c) => ({ ...c, revealed: false }))
-              );
+              setCells((prev) => prev.map((c) => ({ ...c, revealed: false })));
               setPhase("input");
               setMessage("Selecione as células que estavam destacadas!");
               return 0;
@@ -261,6 +388,9 @@
         setGridSize(3);
         setLevel(0);
         setScore(0);
+        setStreak(0);
+        setBestStreak(0);
+        setCombo(0);
         setMessage("Nível 1 — Memorize!");
         showPhase();
       }, [showPhase]);
@@ -282,29 +412,50 @@
           );
 
           if (isCorrect) {
-            setScore((s) => s + 10);
+            playCorrect();
+            const comboMult = Math.min(combo + 1, 4);
+            setScore((s) => s + 10 * comboMult);
+          } else {
+            playWrong();
+            // Screen shake
+            if (shakeRef.current) {
+              shakeRef.current.classList.add('screen-shake');
+              setTimeout(() => shakeRef.current && shakeRef.current.classList.remove('screen-shake'), 300);
+            }
           }
 
-          const newSelected = cells.filter((c) => c.selected).length + 1;
-          const correctSelected = cells.filter((c) => c.selected && c.correct).length + (isCorrect ? 1 : 0);
+          const selectedCells = cells.filter((c) => c.selected);
+          const correctSelected = selectedCells.filter((c) => c.correct).length + (isCorrect ? 1 : 0);
+          const wrongSelected = selectedCells.filter((c) => c.selected && c.correct === false).length + (isCorrect ? 0 : 1);
 
           if (correctSelected === targetCount) {
-            setPhase("result");
-            setMessage("🎯 NÍVEL COMPLETO!");
-            setScore((s) => s + 50);
-            setHighScore((h) => Math.max(h, score + 50 + 10));
+            // Level complete!
+            playLevelUp();
+            const newStreak = streak + 1;
+            setStreak(newStreak);
+            if (newStreak > bestStreak) setBestStreak(newStreak);
+            setCombo((c) => c + 1);
+            setPhase("levelComplete");
+            const bonus = 50 * (combo + 1);
+            setScore((s) => s + bonus);
+            if (score + bonus + 10 * (combo + 1) * targetCount > highScore) {
+              setHighScore(score + bonus + 10 * (combo + 1) * targetCount);
+            }
+
             setTimeout(() => {
               const nextLevel = level + 1;
               setLevel(nextLevel);
-              if (nextLevel % 3 === 0 && gridSize < 5) {
-                setGridSize((g) => Math.min(5, g + 1));
+              if (nextLevel % 4 === 0 && gridSize < 6) {
+                setGridSize((g) => Math.min(6, g + 1));
               }
               setMessage(`Nível ${nextLevel + 1} — Memorize!`);
               showPhase();
-            }, 1500);
-          } else if (!isCorrect && newSelected - correctSelected >= 2) {
-            setPhase("result");
-            setMessage(`❌ GAME OVER! Score: ${score}`);
+            }, 1200);
+          } else if (!isCorrect && wrongSelected >= 2) {
+            // Game over — 2 wrong
+            playGameOver();
+            setPhase("gameOver");
+            setHighScore((h) => Math.max(h, score));
             setCells((prev) =>
               prev.map((c) => ({
                 ...c,
@@ -312,17 +463,25 @@
                 correct: c.isTarget ? true : c.selected ? false : null,
               }))
             );
-            setHighScore((h) => Math.max(h, score));
           }
         },
-        [phase, cells, targets, targetCount, level, gridSize, score, showPhase]
+        [phase, cells, targets, targetCount, level, gridSize, score, highScore, streak, bestStreak, combo, showPhase]
       );
 
+      // Keyboard support
+      useEffect(() => {
+        const handler = (e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            if (phase === 'idle' || phase === 'gameOver') startGame();
+          }
+        };
+        window.addEventListener('keydown', handler);
+        return () => window.removeEventListener('keydown', handler);
+      }, [phase, startGame]);
+
       function getCellClassName(cell) {
-        if (cell.revealed) return "cell revealed";
-        if (cell.selected) {
-          return cell.correct ? "cell selected-correct" : "cell selected-wrong";
-        }
+        if (cell.revealed) return "cell revealed" + (cell.waveDelay > 0 ? " wave-reveal" : "");
+        if (cell.selected) return cell.correct ? "cell selected-correct" : "cell selected-wrong";
         if (phase === "input") return "cell input-ready";
         return "cell idle";
       }
@@ -333,49 +492,117 @@
         return null;
       }
 
+      // Leaderboard
+      const leaderboard = (() => {
+        try { return JSON.parse(localStorage.getItem('memoryMatrixLB') || '[]'); } catch(e) { return []; }
+      })();
+
       return (
-        <div className="game-container">
+        <div className="game-container" ref={shakeRef}>
           <h3 className="game-title">🧠 MEMORY MATRIX</h3>
 
           <div className="stats">
             <span>Nível: <span className="accent">{level + 1}</span></span>
-            <span>Score: <span className="accent">{score}</span></span>
+            <span>
+              Score: <span className="accent">{score}</span>
+              {combo >= 2 && <span className="combo-badge">x{combo} COMBO 🔥</span>}
+            </span>
             <span>Best: <span className="accent-alt">{highScore}</span></span>
+          </div>
+
+          <div className="stats" style={{ marginTop: -8 }}>
+            <span>Grade: <span className="accent">{gridSize}×{gridSize}</span></span>
+            <span>Streak: <span className="streak">{'🔥'.repeat(Math.min(streak, 5))}{streak > 0 ? ` ${streak}` : '—'}</span></span>
           </div>
 
           <div className="message-area">
             <p>
               {phase === "showing" ? (
-                <span className="countdown">{showTimer}s restantes...</span>
+                <span className="countdown">{showTimer}s</span>
               ) : (
                 message
               )}
             </p>
           </div>
 
-          <div className="grid-wrapper">
+          <div className="grid-wrapper" style={{ position: 'relative' }}>
             <div
               className="grid"
               style={{ gridTemplateColumns: `repeat(${gridSize}, 1fr)` }}
             >
-              {cells.map((cell) => (
+              {cells.map((cell, i) => (
                 <button
                   key={cell.index}
                   className={getCellClassName(cell)}
                   onClick={() => handleCellClick(cell.index)}
                   disabled={phase !== "input"}
+                  aria-label={`Célula ${i + 1}${cell.isTarget ? ', alvo' : ''}`}
+                  style={cell.waveDelay > 0 ? { animationDelay: cell.waveDelay + 'ms' } : {}}
+                  tabIndex={phase === "input" ? 0 : -1}
                 >
                   {getCellContent(cell)}
                 </button>
               ))}
             </div>
+
+            {phase === "levelComplete" && (
+              <div className="level-complete">
+                <h2>🎯 NÍVEL COMPLETO!</h2>
+                <p>{combo >= 2 ? `🔥 Combo x${combo}! +${50 * combo} bônus!` : `+${50} bônus!`}</p>
+              </div>
+            )}
           </div>
 
-          {(phase === "idle" || phase === "result") && (
+          {phase === "gameOver" && (
+            <div className="game-over-screen">
+              <h2>❌ GAME OVER</h2>
+              <div className="stats-grid">
+                <div className="stat-item">
+                  <div className="val">{score}</div>
+                  <div className="lbl">Score Final</div>
+                </div>
+                <div className="stat-item">
+                  <div className="val">{level}</div>
+                  <div className="lbl">Níveis</div>
+                </div>
+                <div className="stat-item">
+                  <div className="val">{bestStreak}</div>
+                  <div className="lbl">Best Streak</div>
+                </div>
+                <div className="stat-item">
+                  <div className="val">{gridSize}×{gridSize}</div>
+                  <div className="lbl">Grade Máxima</div>
+                </div>
+              </div>
+
+              {leaderboard.length > 0 && (
+                <div style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>
+                  🏆 Top Scores:
+                  {leaderboard.slice(0, 3).map((e, i) => (
+                    <span key={i} style={{ marginLeft: 8 }}>
+                      {i + 1}º {e.score}pts
+                    </span>
+                  ))}
+                </div>
+              )}
+
+              <div className="btn-container">
+                <button className="btn" onClick={startGame}>🔄 TENTAR NOVAMENTE</button>
+              </div>
+            </div>
+          )}
+
+          {(phase === "idle") && (
             <div className="btn-container">
-              <button className="btn" onClick={startGame}>
-                {phase === "result" ? "🔄 REINICIAR" : "🚀 INICIAR"}
-              </button>
+              {highScore > 0 && (
+                <p style={{ fontSize: 11, color: '#64748b', marginBottom: 8 }}>
+                  🏆 Recorde: {highScore} pts
+                </p>
+              )}
+              <button className="btn" onClick={startGame}>🚀 INICIAR JOGO</button>
+              <p style={{ fontSize: 10, color: '#333', marginTop: 8 }}>
+                Enter/Space para começar · Use o mouse/touch para selecionar
+              </p>
             </div>
           )}
         </div>
