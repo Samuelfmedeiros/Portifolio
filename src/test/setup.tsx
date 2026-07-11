@@ -52,6 +52,12 @@ Object.defineProperty(HTMLElement.prototype, 'scrollTo', {
   value: vi.fn(),
 })
 
+// Mock scrollBy (used by GameShowcase)
+Object.defineProperty(HTMLElement.prototype, 'scrollBy', {
+  writable: true,
+  value: vi.fn(),
+})
+
 // Mock window.scrollY
 Object.defineProperty(window, 'scrollY', { writable: true, value: 0 })
 
