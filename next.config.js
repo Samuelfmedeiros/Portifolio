@@ -6,10 +6,12 @@ const path = require('path');
 const nextConfig = {
   reactStrictMode: true,
   poweredByHeader: false,
-  eslint: { ignoreDuringBuilds: true },
 
   // Fix workspace root inference (stray pnpm-lock in home dir)
   outputFileTracingRoot: path.join(__dirname),
+
+  // Turbopack (Next.js 16 default) — webpack config removido, não é necessário
+  turbopack: {},
 
   // Headers de segurança
   async headers() {
@@ -31,7 +33,7 @@ const nextConfig = {
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://avatars.githubusercontent.com https://*.googleusercontent.com https://api.qrserver.com",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://capivara.seu.pet https://api.github.com https://jwsdquwkrkonkqghyfns.supabase.co https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google https://www.google-analytics.com",
+              "connect-src 'self' https://capivara.seu.pet https://api.github.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google https://www.google-analytics.com",
               "frame-src 'self' https://googleads.g.doubleclick.net https://td.doubleclick.net https://fundingchoicesmessages.google.com https://ep2.adtrafficquality.google https://www.google.com",
               "form-action 'self'",
               "base-uri 'self'",
@@ -47,23 +49,6 @@ const nextConfig = {
     formats: ['image/avif', 'image/webp'],
     deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048, 3840],
     imageSizes: [16, 32, 48, 64, 96, 128, 256, 384],
-  },
-
-  // Tree-shaking
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-    reactRemoveProperties: true,
-  },
-
-  // Webpack fallbacks
-  webpack: (config) => {
-    config.resolve.fallback = {
-      ...config.resolve.fallback,
-      fs: false,
-      path: false,
-      crypto: false,
-    };
-    return config;
   },
 };
 

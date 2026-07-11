@@ -51,7 +51,7 @@ describe("ProfileSection", () => {
 
   it("renders CTA button Baixar Curriculo", () => {
     render(<ProfileSection />);
-    expect(screen.getByText("Baixar Currículo")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /Baixar Curriculo/i })).toBeInTheDocument();
   });
 
   it("renders all 7 timeline items (default expanded via P2)", () => {
@@ -94,7 +94,7 @@ describe("ProfileSection", () => {
 
   it("renders Baixar Curriculo as button that opens download modal", () => {
     render(<ProfileSection />);
-    const btn = screen.getByRole("button", { name: /Baixar Currículo/i });
+    const btn = screen.getByRole("button", { name: /Baixar Curriculo/i });
     expect(btn).toBeInTheDocument();
   });
 });
