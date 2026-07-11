@@ -36,6 +36,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #0d1117 0%, #1a1a2e 50%, #16213e 100%)",
     hasDemo: false,
     icon: "🕷️",
+    imageUrl: "/projects/arachne.webp",
   },
 
   {
