@@ -74,6 +74,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
     hasDemo: false,
     icon: "🔲",
+    imageUrl: "/projects/memory-matrix.webp",
   },
   {
     id: 1002,
@@ -91,6 +92,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: false,
     icon: "🧠",
+    imageUrl: "/projects/simon-game.webp",
   },
   {
     id: 1003,
@@ -108,6 +110,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     hasDemo: false,
     icon: "⌨️",
+    imageUrl: "/projects/code-typing.webp",
   },
   {
     id: 1004,
@@ -125,6 +128,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
     hasDemo: false,
     icon: "💻",
+    imageUrl: "/projects/terminal.webp",
   },
   {
     id: 1005,
@@ -142,6 +146,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
     hasDemo: false,
     icon: "🚀",
+    imageUrl: "/projects/asteroid-dodge.webp",
   },
 ];
 
