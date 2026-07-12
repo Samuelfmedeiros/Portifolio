@@ -82,7 +82,7 @@ test.describe('Performance Audit', () => {
     await page.goto(BASE_URL, { waitUntil: 'commit' });
 
     // Track layout shifts
-    let cls = 0;
+    const cls = 0;
     await page.evaluate(() => {
       new PerformanceObserver((list) => {
         for (const entry of list.getEntries()) {
