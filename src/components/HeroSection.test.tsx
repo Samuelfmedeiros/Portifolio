@@ -8,7 +8,6 @@ import React from "react";
 // Mock DownloadModal since it uses createPortal
 vi.mock("./DownloadModal", () => ({
   DownloadModal: vi.fn(({ open, onClose }: { open: boolean; onClose: () => void }) => {
-    const React = require("react");
     if (!open) return null;
     return React.createElement(
       "div",
