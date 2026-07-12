@@ -1,10 +1,8 @@
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:3000';
-
 test.describe('Keyboard Navigation & Focus', () => {
   test('tab order — Home page', async ({ page }) => {
-    await page.goto(BASE_URL);
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     // Tab through page and collect focused elements
@@ -31,7 +29,7 @@ test.describe('Keyboard Navigation & Focus', () => {
   });
 
   test('focus indicators visible', async ({ page }) => {
-    await page.goto(BASE_URL);
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     const focusInfo = await page.evaluate(() => {
@@ -54,7 +52,7 @@ test.describe('Keyboard Navigation & Focus', () => {
   });
 
   test('nav aria-current detection', async ({ page }) => {
-    await page.goto(BASE_URL);
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     const nav = await page.evaluate(() => {

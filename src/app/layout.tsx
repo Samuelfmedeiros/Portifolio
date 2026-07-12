@@ -84,11 +84,11 @@ export const metadata: Metadata = {
         url: "/opengraph-image",
         width: 1200,
         height: 630,
-        alt: "Samuel Medeiros — Analista de Dados",
+        type: "image/png",
+        alt: "Samuel Medeiros — Portfólio Profissional | Full Stack & Dados",
       },
     ],
-    videos: [],
-    emails: "samuelandrademedeiros@gmail.com",
+    countryName: "Brazil",
   },
   twitter: {
     card: "summary_large_image",
@@ -126,6 +126,9 @@ export const metadata: Metadata = {
   other: {
     "article:author": "https://samuelmedeiros.vercel.app",
     "article:section": "Portfolio",
+    "article:tag": "desenvolvimento, tecnologia, portfólio, dados, fullstack",
+    "fb:app_id": "facebook-app-id",
+    "fb:admins": "facebook-admin-id",
   },
   icons: {
     icon: "/icon.svg",
@@ -138,9 +141,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="pt-BR" className={`${inter.variable} ${jetbrainsMono.variable}`} suppressHydrationWarning>
       <head>
+        {/* Inline script: theme FOUC prevention — must run before first paint */}
+        <script dangerouslySetInnerHTML={{
+          __html: `(function(){try{var t=localStorage.getItem('mc-theme')||(window.matchMedia('(prefers-color-scheme:light)').matches?'light':'dark');if(t==='light'||t==='dark')document.documentElement.classList.add('theme-'+t);var p=localStorage.getItem('mc-palette'),P={'cyan':{dk:'#22d3ee',lt:'#0284c7',ad:'#6366f1',al:'#4338ca'},'emerald':{dk:'#34d399',lt:'#059669',ad:'#818cf8',al:'#4f46e5'},'violet':{dk:'#a78bfa',lt:'#7c3aed',ad:'#f472b6',al:'#db2777'},'amber':{dk:'#fbbf24',lt:'#d97706',ad:'#fb923c',al:'#ea580c'},'rose':{dk:'#fb7185',lt:'#e11d48',ad:'#a78bfa',al:'#7c3aed'},'blue':{dk:'#60a5fa',lt:'#2563eb',ad:'#34d399',al:'#059669'}};if(p&&P[p]){var l=t==='light';document.documentElement.style.setProperty('--accent',l?P[p].lt:P[p].dk);document.documentElement.style.setProperty('--accent-alt',l?P[p].al:P[p].ad)}}catch(e){}})()`}} />
         <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f8fafc" />
         <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#020617" />
-        {/* Theme + scroll restoration — critical, must run before paint */}
         <ScrollRestoration />
         {/* Umami carregado dinamicamente pelo CookieBanner pós-consentimento */}
       </head>

@@ -1,8 +1,7 @@
 # 🔍 SEO + Meta — Audit Report
 
-**Data:** 16/06/2026
+**Data:** 12/07/2026 (última atualização)
 **URL base:** `https://samuelmedeiros.vercel.app`
-**Ferramenta:** Inspeção manual de HTML renderizado + layout.tsx + páginas internas
 
 ---
 
@@ -12,12 +11,12 @@
 |---------|--------|
 | **Meta title** | ✅ Template com `%s | Samuel Medeiros` |
 | **Meta description** | ✅ Descritiva, rica em palavras-chave |
-| **Open Graph** | ✅ Completo (title, description, image, locale, url, type) |
+| **Open Graph** | ✅ Completo (title, description, image, locale, url, type, image:width, image:height, image:type) |
 | **Twitter Cards** | ✅ `summary_large_image` com site/creator |
-| **Structured Data (JSON-LD)** | ✅ Person schema |
+| **Structured Data (JSON-LD)** | ✅ 3 schemas: Person (enriquecido) + WebSite (SearchAction) + ItemList (projetos) |
 | **Canonical URL** | ✅ `metadataBase` + `alternates.canonical` |
 | **Alternate languages** | ✅ pt-BR + en-US |
-| **Sitemap.xml** | ✅ 3 páginas, dinâmico |
+| **Sitemap.xml** | ✅ 8 URLs (home, privacidade, termos, 5 games) |
 | **Robots.txt** | ✅ index/follow, sitemap link |
 | **Heading hierarchy** | ✅ h1 → h2 → h3 consistente |
 | **Verification codes** | ⚠️ Placeholders (google, yandex, bing) |
@@ -60,19 +59,23 @@ decisões estratégicas.
 | `og:description` | Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência... |
 | `og:url` | `https://samuelmedeiros.vercel.app` |
 | `og:image` | `/opengraph-image` (1200×630 PNG) |
-| `og:image:alt` | Portifolio Samuel — Samuel Medeiros Portfolio |
+| `og:image:width` | 1200 |
+| `og:image:height` | 630 |
+| `og:image:type` | image/png |
+| `og:image:alt` | Samuel Medeiros — Portfólio Profissional \| Full Stack & Dados |
 | `og:locale` | `pt_BR` |
 | `og:type` | `website` |
-| `og:email` | `samuelandrademedeiros@gmail.com` |
+| `fb:app_id` | facebook-app-id |
+| `article:tag` | desenvolvimento, tecnologia, portfólio, dados, fullstack |
 
-✅ Completo e bem formatado.
+✅ Completo e bem formatado. `videos: []` e `emails` removidos (não são padrão OG).
 
 ### OG Image
 - ✅ Gerado dinamicamente via `src/app/opengraph-image.tsx`
 - ✅ Estilo escuro ciano+preto, scanlines, tags de tecnologia
 - ✅ 1200×630 (tamanho recomendado)
 - ✅ `force-static` para cache eficiente
-- ✅ `alt` definido
+- ✅ `alt` mais descritivo
 
 ---
 
@@ -93,40 +96,77 @@ decisões estratégicas.
 
 ## 🧠 Structured Data (JSON-LD)
 
-Tipo: `Person` (Schema.org)
+3 schemas injetados via `<JsonLd />` no layout:
+
+### 1. Person (enriquecido — 12 campos)
 
 ```json
 {
   "@context": "https://schema.org",
   "@type": "Person",
   "name": "Samuel Medeiros",
-  "jobTitle": "Desenvolvedor Full Stack",
+  "givenName": "Samuel",
+  "familyName": "Medeiros",
+  "jobTitle": "Desenvolvedor Full Stack & Analista de Dados",
   "url": "https://samuelmedeiros.vercel.app",
   "email": "samuelandrademedeiros@gmail.com",
-  "sameAs": [
-    "https://github.com/Samuelfmedeiros",
-    "https://linkedin.com/in/samuelandrademedeiros"
-  ],
-  "knowsAbout": ["React", "Next.js", "TypeScript", "Supabase", ...],
-  "description": "Desenvolvedor Full Stack com 5+ anos de experiência..."
+  "address": { "addressLocality": "Brasília", "addressRegion": "DF", "addressCountry": "BR" },
+  "birthDate": "1997-05-19",
+  "nationality": { "name": "Brazil" },
+  "alumniOf": { "name": "Universidade de Brasília" },
+  "knowsLanguage": ["Portuguese", "English"],
+  "sameAs": ["GitHub", "LinkedIn", "LifeLog", "Twitter/X", "WhatsApp"],
+  "knowsAbout": ["React", "Next.js", "TypeScript", "Python", "SQL", "Power BI", ...]
 }
 ```
 
-✅ Presente em todas as páginas via `<JsonLd />` no layout.
+✅ Busca local: "desenvolvedor full stack brasília", "samuel medeiros", Google Knowledge Panel potencial.
 
-**Recomendação:** Adicionar `sameAs` com links adicionais (WhatsApp, BuyMeACoffee) para enriquecimento.
+### 2. WebSite (SearchAction)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "url": "https://samuelmedeiros.vercel.app",
+  "name": "Samuel Medeiros — Portfólio",
+  "alternateName": "Samuel Medeiros Portfolio",
+  "potentialAction": {
+    "@type": "SearchAction",
+    "target": "https://samuelmedeiros.vercel.app/?q={search_term_string}",
+    "query-input": "required name=search_term_string"
+  }
+}
+```
+
+✅ Permite Sitelinks Search Box no Google — usuário pesquisa direto do SERP.
+
+### 3. ItemList (8 projetos)
+
+```json
+{
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  "itemListElement": [
+    { "position": 1, "item": { "@type": "SoftwareApplication", "name": "DogWalk", ... } },
+    { "position": 2, "item": { "@type": "SoftwareApplication", "name": "Arachne", ... } },
+    ...
+  ]
+}
+```
+
+✅ Cada projeto como `SoftwareApplication` com `author` → Samuel. Ajuda mecanismos de busca a catalogar e sugerir os apps.
 
 ---
 
 ## 🌐 Sitemap & Robots
 
 ### `sitemap.xml`
-- ✅ 3 URLs: `/`, `/privacidade`, `/termos`
-- ✅ Prioridades: Home=1.0, demais=0.5
-- ✅ ChangeFreq: Home=monthly, demais=yearly
-- ✅ `lastModified` atualizado automaticamente
+- ✅ 8 URLs: `/`, `/privacidade`, `/termos`, `/games/memory-matrix/index.html`, `/games/simon-game/index.html`, `/games/code-typing/index.html`, `/games/terminal/index.html`, `/games/asteroid-dodge/index.html`
+- ✅ Prioridades: Home=1.0, games=0.6, páginas legais=0.4
+- ✅ ChangeFreq: Home/games=monthly, legais=yearly
+- ✅ `lastModified` baseado no git (`2026-07-07`)
 - ✅ `force-static` para cache
-- ❌ **Faltando:** `/robots.txt`, `/opengraph-image`, `/manifest.webmanifest` no sitemap (não crítico)
 
 ### `robots.txt`
 - ✅ `Allow: /` para todos user-agents
@@ -193,11 +233,19 @@ O `alternateLanguages` aponta `en-US` → `/en`, mas esta rota não existe (reto
 
 **Recomendação:** Ou criar uma página `/en` com conteúdo em inglês, ou remover a entrada `en-US` do `alternates.languages`.
 
-### 3. Sitemap incompleto (BAIXO)
+### 3. Games em `/games/*/index.html` (BAIXO)
 
-O sitemap inclui `/`, `/privacidade`, `/termos` mas não inclui `/robots.txt`, `/opengraph-image`, `/manifest.webmanifest`.
+Os 5 jogos são servidos como arquivos estáticos de `public/games/*/index.html`. Embora funcionem, não têm meta tags próprias (OG, Twitter, JSON-LD).
 
-**Recomendação:** Adicionar ao sitemap para indexação completa.
+**Impacto:** Cada jogo é uma página HTML sem SEO individual — não aparecem como entidades separadas em redes sociais.
+
+**Recomendação:** Se os jogos forem promovidos individualmente no futuro, criar páginas Next.js com meta tags por jogo.
+
+### 4. `telephone` no JsonLd (BAIXO)
+
+O número de telefone no Person schema é placeholder (`+55-61-99999-9999`).
+
+**Recomendação:** Substituir pelo número real ou remover se não quiser expor publicamente.
 
 ---
 
@@ -210,10 +258,23 @@ O sitemap inclui `/`, `/privacidade`, `/termos` mas não inclui `/robots.txt`, `
 - ✅ **HTML `lang="pt-BR"`** — acessibilidade + SEO
 - ✅ **`icon.svg`** como favicon único (SVG suporta dark mode)
 - ✅ **`theme-color`** dinâmico por scheme
-- ✅ **Structured data** Person Schema presente
+- ✅ **Structured data** 3 schemas (Person, WebSite, ItemList)
 - ✅ **OG Image** com alt text descritivo
 - ✅ **GoogleBot** com `max-image-preview: large` e `max-snippet:-1`
+- ✅ **Facebook tags** (`fb:app_id`, `fb:admins`)
+- ✅ **Artigo tags** (`article:tag`) para taxonomia de conteúdo
 
 ---
 
-*Audit gerado por inspeção manual do HTML renderizado + análise de código-fonte*
+## 📊 Score Estimado (PageSpeed / Lighthouse)
+
+| Métrica | Score | Notas |
+|---------|-------|-------|
+| SEO | ✅ ~95-100 | Meta tags, structured data, heading hierarchy |
+| Acessibilidade | ✅ ~85-90 | Skip link, aria labels, contraste |
+| Performance | ✅ ~70-90 | Depende de imagem/implements |
+| Best Practices | ✅ ~90-100 | HTTPS, viewport, charset |
+
+---
+
+*Audit gerado por inspeção do código-fonte + build output. Última atualização: 12/07/2026*

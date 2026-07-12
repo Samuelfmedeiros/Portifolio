@@ -1,11 +1,9 @@
 
 import { test } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:3000';
-
 test.describe('Performance Audit', () => {
   test('page performance metrics', async ({ page }) => {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'networkidle' });
     await page.waitForTimeout(1000);
 
     const metrics = await page.evaluate(() => {
@@ -41,7 +39,7 @@ test.describe('Performance Audit', () => {
   });
 
   test('image loading attributes', async ({ page }) => {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'networkidle' });
 
     const imgInfo = await page.evaluate(() => {
       const imgs = document.querySelectorAll('img');
@@ -79,7 +77,7 @@ test.describe('Performance Audit', () => {
 
   test('layout shift (CLS) and font loading', async ({ page }) => {
     // Use a fresh page for CLS measurement
-    await page.goto(BASE_URL, { waitUntil: 'commit' });
+    await page.goto('/', { waitUntil: 'commit' });
 
     // Track layout shifts
     const cls = 0;
@@ -141,7 +139,7 @@ test.describe('Performance Audit', () => {
   });
 
   test('bundle size analysis', async ({ page }) => {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'networkidle' });
 
     const resources = await page.evaluate(() => {
       const entries = performance.getEntriesByType('resource');

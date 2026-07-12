@@ -1,8 +1,6 @@
 
 import { test, expect } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:3000';
-
 test.describe('Dead Links & Rotas', () => {
   const routes = [
     { name: 'Home', path: '/' },
@@ -16,14 +14,14 @@ test.describe('Dead Links & Rotas', () => {
 
   for (const route of routes) {
     test(`${route.name} (${route.path}) — HTTP status 200`, async ({ page }) => {
-      const response = await page.goto(`${BASE_URL}${route.path}`, { waitUntil: 'networkidle' });
+      const response = await page.goto(route.path, { waitUntil: 'networkidle' });
       expect(response?.status()).toBe(200);
       console.log(`  ${route.path} → ${response?.status()}`);
     });
   }
 
   test('Home — all internal links resolve', async ({ page }) => {
-    await page.goto(BASE_URL, { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'networkidle' });
 
     const links = await page.evaluate(() => {
       const allLinks = document.querySelectorAll('a[href]');
@@ -38,7 +36,7 @@ test.describe('Dead Links & Rotas', () => {
     console.log(`\n=== Internal Links to Check (${links.length}) ===`);
     for (const link of links) {
       try {
-        const resp = await page.request.get(`${BASE_URL}${link}`);
+        const resp = await page.request.get(`${link}`);
         const status = resp.status();
         const ok = status === 200 ? '✅' : '❌';
         console.log(`  ${ok} ${link} → ${status}`);
@@ -50,7 +48,7 @@ test.describe('Dead Links & Rotas', () => {
   });
 
   test('robots.txt — correct content', async ({ page }) => {
-    const resp = await page.goto(`${BASE_URL}/robots.txt`, { waitUntil: 'networkidle' });
+    const resp = await page.goto('/robots.txt', { waitUntil: 'networkidle' });
     expect(resp?.status()).toBe(200);
     const text = await page.locator('body').innerText();
     console.log('\n=== robots.txt ===');
@@ -60,7 +58,7 @@ test.describe('Dead Links & Rotas', () => {
   });
 
   test('sitemap.xml — valid URLs', async ({ page }) => {
-    const resp = await page.goto(`${BASE_URL}/sitemap.xml`, { waitUntil: 'networkidle' });
+    const resp = await page.goto('/sitemap.xml', { waitUntil: 'networkidle' });
     expect(resp?.status()).toBe(200);
     const text = await page.locator('body').innerText();
     console.log('\n=== sitemap.xml ===');
