@@ -26,8 +26,8 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 - Cookie Banner com consentimento LGPD + opções
 
 ## 🗺️ Próximos Passos
+- [x] E2E Playwright em CI
 - [ ] Deploy automático Vercel via CI (atualmente manual via CLI)
-- [ ] E2E Playwright em CI
 - [ ] Modo escuro toggle persistente
 - [ ] SEO: mais meta tags + schema.org
 

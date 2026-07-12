@@ -1,11 +1,9 @@
 
 import { test } from '@playwright/test';
 
-const BASE_URL = 'http://localhost:3000';
-
 test.describe('DOM Inspection', () => {
   test('navbar DOM structure', async ({ page }) => {
-    await page.goto(BASE_URL);
+    await page.goto('/');
     await page.waitForLoadState('networkidle');
 
     const info = await page.evaluate(() => {

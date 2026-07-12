@@ -21,7 +21,7 @@ export default defineConfig({
   },
 
   webServer: process.env.TEST_BASE_URL ? undefined : {
-    command: 'npx serve out -l 3000',
+    command: 'pnpm start',
     url: 'http://localhost:3000',
     reuseExistingServer: !process.env.CI,
     timeout: 120000,
