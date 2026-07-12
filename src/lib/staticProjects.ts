@@ -57,6 +57,24 @@ export const STATIC_PROJECTS: Repo[] = [
     icon: "🚀",
     imageUrl: "/projects/portifolio.webp",
   },
+  {
+    id: 999004,
+    name: "lifelog",
+    description:
+      "Blog pessoal com posts sobre tecnologia, projetos e aprendizados — Astro, MDX, TypeScript e design system próprio.",
+    html_url: "https://github.com/Samuelfmedeiros/lifelog",
+    homepage: "https://lifelog-sepia.vercel.app",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "TypeScript",
+    topics: ["featured", "web", "blog", "astro", "mdx"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #0d1117 0%, #1a1a2e 50%, #16213e 100%)",
+    hasDemo: true,
+    icon: "📝",
+    imageUrl: "/projects/lifelog.webp",
+  },
   // Games — ordem definida pelo Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge
   {
     id: 1001,
@@ -154,6 +172,7 @@ export const FEATURED_PROJECTS = [
   "DogWalk",
   "Arachne",
   "Portifolio",
+  "lifelog",
   "memory-matrix",
   "simon-game",
   "code-typing",
