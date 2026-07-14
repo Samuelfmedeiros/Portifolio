@@ -3,10 +3,10 @@ import { describe, it, expect } from 'vitest'
 import { JsonLd } from './JsonLd'
 
 describe('JsonLd', () => {
-  it('renders 3 script tags with application/ld+json type', () => {
+  it('renders 4 script tags with application/ld+json type', () => {
     const { container } = render(<JsonLd />)
     const scripts = container.querySelectorAll('script[type="application/ld+json"]')
-    expect(scripts).toHaveLength(3)
+    expect(scripts).toHaveLength(4)
   })
 
   it('contains valid JSON-LD schema', () => {

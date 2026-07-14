@@ -72,6 +72,37 @@ export function JsonLd() {
     image: `${SITE_URL}/opengraph-image`,
   };
 
+  const organization = {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    name: "Samuel Medeiros",
+    alternateName: "Samuel Andrade Medeiros",
+    url: SITE_URL,
+    logo: `${SITE_URL}/icon.svg`,
+    email: "samuelandrademedeiros@gmail.com",
+    foundingDate: "2020-01",
+    address: {
+      "@type": "PostalAddress",
+      addressLocality: "Brasília",
+      addressRegion: "DF",
+      addressCountry: "BR",
+    },
+    sameAs: [
+      "https://github.com/Samuelfmedeiros",
+      "https://linkedin.com/in/samuelandrademedeiros",
+      "https://lifelog-sepia.vercel.app",
+      "https://x.com/Samuelfmedeiros",
+    ],
+    knowsAbout: [
+      "React", "Next.js", "TypeScript", "Python", "SQL",
+      "Power BI", "Machine Learning", "Cloudflare Workers",
+      "PostgreSQL", "GitHub Actions", "CI/CD", "LLMs",
+      "Business Intelligence", "Data Analysis",
+    ],
+    description:
+      "Desenvolvedor Full Stack com 5+ anos de experiência. Especializado em React, Next.js, TypeScript, Python e Cloudflare. Transformando dados em decisões estratégicas.",
+  };
+
   const website = {
     "@context": "https://schema.org",
     "@type": "WebSite",
@@ -125,6 +156,11 @@ export function JsonLd() {
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(person) }}
+        suppressHydrationWarning
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(organization) }}
         suppressHydrationWarning
       />
       <script
