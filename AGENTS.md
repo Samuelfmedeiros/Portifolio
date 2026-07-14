@@ -27,7 +27,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 🗺️ Próximos Passos
 - [x] E2E Playwright em CI
-- [ ] Deploy automático Vercel via CI (atualmente manual via CLI)
+- [x] Deploy automático Vercel via CI — `deploy.yml` com health check + rollback
 - [ ] Modo escuro toggle persistente
 - [ ] SEO: mais meta tags + schema.org
 
