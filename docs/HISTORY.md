@@ -1,6 +1,6 @@
 # 🛸 Portifolio Samuel — História do Projeto
 
-> **De um conceito de interface sci-fi a um portfólio profissional com 222 testes, 5 jogos e i18n completo.**
+> **De um conceito de interface sci-fi a um portfólio profissional com 219 testes, 5 jogos e i18n completo.**
 
 ---
 
@@ -52,7 +52,7 @@ Expansão das seções:
 ## Sprint 5-6: Maturidade (Junho 2026)
 
 Qualidade industrial:
-- **222 testes** (Vitest + RTL) — todos os componentes, hooks e libs cobertos
+- **219 testes** (Vitest + RTL) — todos os componentes, hooks e libs cobertos
 - **CI/CD** — GitHub Actions (lint → test → build)
 - **CSP** rigorosa sincronizada entre next.config.js e vercel.json
 - **i18n PT/EN** completo — todos os componentes bilingual
@@ -75,17 +75,15 @@ Adição de recursos de apoio:
 ## Onde Estamos Hoje (Julho 2026)
 
 ### ✅ O Que Funciona
-- Portfólio completo com 5 seções + 5 jogos
-- 222 testes passando, 0 erros lint
+- Portfólio completo com 5 seções + 5 jogos + timeline interativa
+- **219 testes** passando, 0 erros lint
 - i18n PT/EN, analytics, segurança
-- Deploy Vercel + self-host redundante
+- Deploy automático Vercel via CI (`deploy.yml` com health check + rollback)
+- Playwright E2E no pipeline CI
+- Tema escuro toggle persistente com 6 paletas (dark/light + FOUC prevention)
+- Schema.org (Person/WebSite/ItemList/Organization) + OG + Twitter Card + sitemap
 - Stripe + Mercado Pago integrados
-
-### ❌ O Que Falta
-- Deploy automático Vercel via CI (manual hoje)
-- E2E Playwright no pipeline
-- Toggle persistente de tema escuro
-- Schema.org + SEO avançado
+- PostgreSQL 18 local via Capivara (contact form, CV, events)
 
 ---
 
@@ -93,13 +91,14 @@ Adição de recursos de apoio:
 
 | Métrica | Início (Maio) | Hoje (Julho) |
 |---------|:-------------:|:------------:|
-| Testes | 0 | 222 |
+| Testes | 0 | **219** |
 | Seções | 2 | 7 (Hero, Profile, Skills, Projetos, Jogos, Contato, Footer) |
 | Jogos | 0 | 5 |
 | Commits | 0 | 300+ |
-| Deploy | Dev only | Vercel + self-host (redundante) |
+| Deploy | Dev only | Vercel CI automático + health check + rollback |
 | i18n | PT-only | PT/EN completo |
 | Analytics | ❌ | Umami (eventos + pageviews) |
+| Banco | ❌ | PostgreSQL 18 via Capivara |
 
 ---
 
