@@ -1,92 +1,101 @@
-# 🚀 Deploy - Portifolio Samuel
+# 🚀 Deploy — Portifolio Samuel
 
 ## Stack
-- **Framework:** Next.js 16.2.5 (App Router)
-- **Deploy:** Vercel (automático via GitHub)
+- **Framework:** Next.js 16 (App Router)
+- **Deploy:** Vercel (automático via GitHub Actions — `deploy.yml`)
 - **Build:** Turbopack + SWC Minify
+- **CI:** Build + Lint + Test → Playwright E2E → Deploy
 
 ---
 
-## 📦 Deploy Automático (Vercel + GitHub)
+## 📦 Deploy Automático (Recomendado)
 
 O deploy é automático a cada push na `master`:
 
-1. **Commita e pusha:**
-   ```bash
-   git add -A && git commit -m "feat: sua mudança"
-   git push origin master
-   ```
+```bash
+git add -A && git commit -m "feat: sua mudança"
+git push origin master
+```
 
-2. **Vercel faz o resto:**
-   - Detecta o push no GitHub
-   - Roda `pnpm build` automaticamente
-   - Deploy em ~2-3 minutos
-   - URL: `https://samuelmedeiros.vercel.app`
+A Vercel detecta o push, roda `pnpm build`, e deploya em ~2-3 minutos.
+
+**Pipeline CI (`deploy.yml`):**
+1. Build + Lint + Test (Vitest)
+2. Playwright E2E contra produção
+3. Deploy Vercel com health check
+4. Rollback automático se health check falhar
+
+**Status:** https://vercel.com/samuelfmedeiros/portifolio/activity
+**Live:** https://samuelmedeiros.vercel.app
 
 ---
 
 ## 🛠️ Deploy Manual (CLI)
 
-Se precisar deployar manualmente:
-
 ```bash
-# Install deps (primeira vez)
-pnpm install
-
-# Build local
+# 1. Build local pra verificar erros
 pnpm build
 
-# Deploy produção
+# 2. Deploy produção
 pnpm deploy:vercel
-
-# OU com vercel direto
+# OU
 vercel --prod
+```
+
+⚠️ **Build no WSL/NTFS:** `next build` em filesystem Windows (`/mnt/c/`, `/mnt/d/`, `/mnt/f/`) pode falhar com `ERR_OSSL_EVP_UNSUPPORTED` ou `ERR_DLOPEN_FAILED`. Copiar pra `/tmp/` e buildar de lá se necessário.
+
+---
+
+## 🧪 Validação Pós-Deploy
+
+```bash
+# Headers de segurança
+curl -sI https://samuelmedeiros.vercel.app/ | grep -E "(Strict-Transport|Content-Security|X-Frame|Permissions)"
+
+# Conteúdo renderizado
+curl -sL https://samuelmedeiros.vercel.app/ | grep -o "▸ HABILIDADES\|▸ JORNADA" | head -5
+
+# Testes locais
+pnpm test:run       # Vitest (uma vez)
+pnpm test:e2e       # Playwright E2E
+pnpm lint           # ESLint
 ```
 
 ---
 
 ## 📊 Scripts Úteis
 
-```bash
-# Dev server
-pnpm dev
-
-# Build produção
-pnpm build
-
-# Build com análise de bundle
-pnpm build:analyze
-
-# Rodar testes
-pnpm test          # watch mode
-pnpm test:run      # uma vez
-pnpm test:e2e      # E2E com Playwright
-
-# Lint
-pnpm lint          # check
-pnpm lint:fix      # auto-fix
-
-# Deploy
-pnpm deploy:dry    # preview
-pnpm deploy:vercel # produção
-```
+| Comando | Descrição |
+|---------|-----------|
+| `pnpm dev` | Dev server (Turbopack) |
+| `pnpm build` | Build produção |
+| `pnpm build:analyze` | Build com análise de bundle |
+| `pnpm test` | Vitest watch mode |
+| `pnpm test:run` | Vitest (uma vez) |
+| `pnpm test:e2e` | Playwright E2E |
+| `pnpm lint` | ESLint check |
+| `pnpm lint:fix` | ESLint auto-fix |
+| `pnpm deploy:dry` | Preview deploy |
+| `pnpm deploy:vercel` | Deploy produção |
 
 ---
 
 ## ⚡ Otimizações Ativas
 
-- ✅ **SWC Minify** - bundles menores
-- ✅ **Tree-shaking** - remove código morto
-- ✅ **Imagens WebP/AVIF** - next-gen formats
-- ✅ **Console removal** - remove logs em produção
-- ✅ **Security headers** - HSTS, X-Frame-Options, etc.
+- ✅ SWC Minify — bundles menores
+- ✅ Tree-shaking — remove código morto
+- ✅ Imagens WebP/AVIF — next-gen formats
+- ✅ Console removal — remove logs em produção
+- ✅ Security headers — HSTS, X-Frame-Options, CSP
+- ✅ Code splitting automático (Next.js)
+- ✅ Lazy loading em componentes pesados
+- ✅ prefetch de rotas
 
 ---
 
 ## 🐛 Troubleshooting
 
 ### Build falha no F: drive
-Se der `disk I/O error`:
 ```bash
 # Limpa cache do pnpm
 pnpm store prune
@@ -101,18 +110,15 @@ cd /tmp/mc-build && pnpm install && pnpm build
 - Linka o projeto: `vercel link`
 - Vê logs: `vercel logs`
 
----
+### Git push falha
+```bash
+# Verificar remote
+git remote -v
 
-## 📈 Performance
-
-**Target:** Lighthouse 90+
-- Code splitting automático (Next.js)
-- Lazy loading em componentes pesados
-- prefetch de rotas
-- Imagens otimizadas
-
-**Bundle size atual:** ~3MB (build completo)
+# Reconfigurar se necessário
+git remote set-url origin git@github.com:Samuelfmedeiros/portifolio.git
+```
 
 ---
 
-**Último deploy:** 28/05/2026 - Cleanup + GitHub Stats real
+**Última atualização:** Julho 2026

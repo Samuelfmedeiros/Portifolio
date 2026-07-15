@@ -31,6 +31,7 @@ Next.js 16 + Turbopack + React 19 + Tailwind 4 + Framer Motion + GSAP + Supabase
 - **Analytics:** Umami self-hosted (eventos + pageviews)
 
 ## Documentação
-- `AGENTS.md` — Estado atual do projeto
-- `MEMORY.md` — Diário de bordo de commits
+- `AGENTS.md` — Estado atual do projeto + diretrizes de design
+- `README.md` — Visão geral, badges, instruções de setup
+- `DEPLOY.md` — Deploy automático + troubleshooting
 - `docs/HISTORY.md` — História completa do projeto

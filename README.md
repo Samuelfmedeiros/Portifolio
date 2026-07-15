@@ -16,7 +16,7 @@
     <img src="https://img.shields.io/badge/Live-→_samuelmedeiros.vercel.app-06b6d4?style=flat-square&logoColor=white" alt="Live">
   </a>
   <a href="#-testes">
-    <img src="https://img.shields.io/badge/Testes-222_passing-22c55e?style=flat-square" alt="Testes">
+    <img src="https://img.shields.io/badge/Testes-219_passing-22c55e?style=flat-square" alt="Testes">
   </a>
   <a href="https://github.com/Samuelfmedeiros/Portifolio/actions">
     <img src="https://img.shields.io/github/actions/workflow/status/Samuelfmedeiros/Portifolio/ci.yml?branch=master&style=flat-square&logo=github&label=CI" alt="CI">
@@ -44,176 +44,114 @@ Portfólio profissional de **Samuel Medeiros** — desenvolvedor full stack e an
 ### O que você encontra aqui
 
 - **Arquitetura Next.js 16** — App Router, server components, API routes, Turbopack
-- **Design system próprio** — tema escuro ciano+preto, glassmorphism, tipografia consistente
+- **Design system próprio** — tema escuro ciano+preto, glassmorphism, tipografia consistente (dark/light + 6 paletas)
 - **Animações cinematográficas** — Framer Motion com spring physics, parallax multicamada
-- **Qualidade industrial** — 222 testes, CI/CD, CSP, acessibilidade, SEO
+- **Qualidade industrial** — 219 testes, CI/CD, CSP, acessibilidade (95+), SEO (100)
 - **5 mini-games embutidos** — React no navegador, zero dependência externa
+- **i18n PT/EN** — completo em todos os componentes
+- **Terminal interativo** — 15+ comandos simulando um ambiente real
+- **Analytics** — Umami self-hosted (eventos + pageviews)
 
 ---
 
 ## Stack
 
-| Área | Tecnologias |
-|------|------------|
-| **Core** | Next.js 16 · React 19 · TypeScript (strict) |
-| **Estilo** | Tailwind CSS 4 · Glassmorphism · CSS custom properties |
-| **Animações** | Framer Motion (layout animations, spring, gesture) |
+| Categoria | Tecnologia |
+|-----------|-----------|
+| **Framework** | Next.js 16 (App Router + Turbopack) |
+| **Linguagem** | TypeScript 5 |
+| **Estilização** | Tailwind CSS 4 |
+| **Animações** | Framer Motion |
 | **Ícones** | Lucide React |
-| **Testes** | Vitest · React Testing Library · Playwright |
-| **Analytics** | Umami (self-hosted) |
-| **Infra** | GitHub Actions · systemd (self-host) · Vercel |
-| **Banco** | PostgreSQL 18 (local) · Capivara API · Cloudflare Tunnel |
+| **Backend** | Capivara API (PostgreSQL 18 local) |
+| **Testes** | Vitest + Testing Library + Playwright |
+| **CI/CD** | GitHub Actions → Vercel |
+| **Analytics** | Umami self-hosted |
 
 ---
 
 ## Seções
 
-| Seção | O que faz |
-|-------|-----------|
-| **Hero** | TypeWriter com múltiplos títulos, parallax layers, cockpit SVG animado |
-| **Profile** | Timeline de carreira interativa (clique pra expandir), grid de skills com barra de nível, HUD panels |
-| **Projetos** | Grid com filtros por categoria, dados ao vivo do GitHub + fallback estático, GitHub Stats |
-| **Jogos** | Carrossel com 5 jogos clássicos rodando em iframe — Memory Matrix, Simon, Code Typing, Terminal, Asteroid Dodge |
-| **Contato** | Formulário com validação, rate-limit de 30s, consentimento LGPD, integração Resend |
+| Seção | Componente | Destaque |
+|-------|-----------|----------|
+| **Hero** | `HeroSection.tsx` | TypeWriter, parallax L0-L3, cockpit SVG |
+| **Profile** | `ProfileSection.tsx` | Timeline interativa, Skills grid com barra |
+| **Projetos** | `ProjectHangar.tsx` | Grid filtrável, dados GitHub + fallback estático |
+| **Jogos** | `GameShowcase.tsx` | 5 jogos em iframe, React via CDN |
+| **Contato** | `ContactForm.tsx` | Validação, rate-limit, LGPD, Capivara API |
+| **Terminal** | `Terminal.tsx` | 15+ comandos interativos |
 
-## Banco de Dados
+---
 
-O portfólio usa **PostgreSQL 18 local** como banco principal, acessado via **API intermediária no Capivara** (FastAPI :8001).
+## Começando
 
-### Arquitetura
+```bash
+# Clone
+git clone https://github.com/Samuelfmedeiros/portifolio.git
+cd portifolio
 
+# Instalar dependências (pnpm obrigatório)
+pnpm install
+
+# Dev server
+pnpm dev
+
+# Build
+pnpm build
+
+# Testes
+pnpm test:run
+pnpm test:e2e
 ```
-Visitante → Vercel (Next.js) → capivara.seu.pet (Cloudflare Tunnel) → Capivara API → PG18
-```
 
-### Endpoints públicos (sem auth)
+**Pré-requisitos:** Node.js 22+, pnpm 9+
 
-| Endpoint | Função |
-|----------|--------|
-| `POST /api/portifolio/public/messages` | Salvar contato |
-| `POST /api/portifolio/public/cv-downloads` | Registrar download de CV |
-| `POST /api/portifolio/public/events` | Monitoramento |
+---
 
-### Endpoints admin (auth JWT)
+## Scripts
 
-| Endpoint | Função |
-|----------|--------|
-| `GET /api/portifolio/messages` | Listar mensagens |
-| `GET /api/portifolio/cv-downloads` | Listar downloads |
-| `GET /api/portifolio/events` | Listar eventos |
-
-### Tabelas
-
-- `messages` — contatos recebidos (nome, email, conteúdo, IP, data)
-- `cv_downloads` — downloads de currículo (nome, email, IP, referrer)
-- `monitoring_events` — eventos de monitoramento (tipo, payload JSON)
-
-### Infra
-
-- **PG18**: `localhost:5432`, database `portifolio`, user `portifolio`
-- **Capivara**: FastAPI em `/home/samuel/projetos/Capivara/backend/`, systemd user service
-- **Tunnel**: Cloudflare Tunnel (cloudflared), domínio `capivara.seu.pet`
+| Comando | Descrição |
+|---------|-----------|
+| `pnpm dev` | Dev server (Turbopack) |
+| `pnpm build` | Build produção |
+| `pnpm build:analyze` | Build com análise de bundle |
+| `pnpm test` | Vitest watch mode |
+| `pnpm test:run` | Vitest (uma vez) |
+| `pnpm test:e2e` | Playwright E2E |
+| `pnpm lint` | ESLint check |
+| `pnpm lint:fix` | ESLint auto-fix |
 
 ---
 
 ## Testes
 
-```
-pnpm test:run       222 testes · 36 arquivos · 🟢 tudo passando
-pnpm test:e2e       Smoke tests E2E com Playwright
-```
-
-Cobertura inclui todos os componentes, hooks, libs e páginas — cada PR é verificado no CI.
-
----
-
-## Início Rápido
+**219 testes passando** — cobertura de:
+- Todos os 45 componentes
+- Hooks (useLocalStorage, useAnalytics)
+- Libs (GitHub API, staticProjects, Capivara API)
+- 5 jogos (GameShowcase)
+- 8 E2E smoke tests (Playwright contra produção)
 
 ```bash
-git clone https://github.com/Samuelfmedeiros/Portifolio.git
-cd Portifolio
-pnpm install
-pnpm dev
-```
-
-Abra [http://localhost:3000](http://localhost:3000).
-
-### Build produção
-
-```bash
-pnpm build
-pnpm start          # http://localhost:3000
+pnpm test:run    # Vitest
+pnpm test:e2e    # Playwright
 ```
 
 ---
 
-## Estrutura
+## Documentação
 
-```
-src/
-├── app/
-│   ├── api/
-│   │   ├── contact-notify/    # → POST: formulário de contato via Resend
-│   │   ├── download-cv/       # → POST: download de currículo com consentimento
-│   │   └── game/[slug]/       # → GET: proxy dos mini-games estáticos
-│   ├── layout.tsx             # Root layout · metadata · SEO · analytics
-│   ├── page.tsx               # Landing page com todas as seções
-│   ├── privacidade/           # Política de privacidade (LGPD)
-│   └── termos/                # Termos de uso
-├── components/
-│   ├── HeroSection.tsx        # Apresentação + parallax + cockpit
-│   ├── ProfileSection.tsx     # Timeline + Skills grid + experiência
-│   ├── ProjectHangar.tsx      # Grid de projetos com filtro
-│   ├── GameShowcase.tsx       # Carrossel horizontal de jogos
-│   ├── ContactForm.tsx        # Formulário com validação + LGPD
-│   ├── Navbar.tsx             # Navegação responsiva (sem hamburger)
-│   ├── Terminal.tsx           # Terminal interativo com 15+ comandos
-│   ├── MiniGames/             # Código dos jogos (React + hooks)
-│   ├── monetization/          # Stripe, BuyMeACoffee, GitHub Sponsors
-│   └── *.tsx                  # Componentes auxiliares (Footer, DownloadModal, etc.)
-├── hooks/
-│   ├── useAnalytics.ts        # Tracking Umami tipado
-│   └── useLocalStorage.ts     # Persistência local com SSR safety
-├── lib/
-│   ├── github.ts              # Cliente GitHub API com cache
-│   ├── supabase.ts            # Cliente Supabase (fallback incluso)
-│   ├── staticProjects.ts      # Projetos estáticos fallback
-│   └── types.ts               # Tipos compartilhados
-└── test/
-    └── setup.tsx              # Setup Vitest + mocks
-```
-
----
-
-## Jogos Embutidos
-
-Todos os jogos são HTML/CSS/JS puro (React via CDN) servidos como arquivos estáticos e embutidos via iframe. Código fonte aberto nos repositórios abaixo.
-
-| Jogo | Repositório | Descrição |
-|------|-------------|-----------|
-| 🧠 Memory Matrix | [github](https://github.com/Samuelfmedeiros/memory-matrix) | Memorize células em grid progressivo 3×3 → 5×5 |
-| 🎨 Simon Game | [github](https://github.com/Samuelfmedeiros/simon-game) | Sequência clássica de cores |
-| ⌨️ Code Typing | [github](https://github.com/Samuelfmedeiros/code-typing) | Digite snippets de código o mais rápido possível |
-| 💻 Terminal | [github](https://github.com/Samuelfmedeiros/terminal) | Shell interativo com 15+ comandos e easter eggs |
-| 🚀 Asteroid Dodge | [github](https://github.com/Samuelfmedeiros/asteroid-dodge) | Desvie de asteroides com o mouse |
-
----
-
-## Variáveis de Ambiente
-
-Todas opcionais — o projeto tem fallback hardcoded incluso.
-
-```env
-NEXT_PUBLIC_SUPABASE_URL=
-NEXT_PUBLIC_SUPABASE_ANON_KEY=
-```
+| Arquivo | Conteúdo |
+|---------|----------|
+| [AGENTS.md](./AGENTS.md) | Estado atual do projeto + diretrizes de design |
+| [DEPLOY.md](./DEPLOY.md) | Deploy automático + manual + troubleshooting |
+| [SECURITY.md](./SECURITY.md) | Política de segurança + headers + auditoria |
+| [docs/ARCHITECTURE.md](./docs/ARCHITECTURE.md) | Stack, seções, performance |
+| [docs/HISTORY.md](./docs/HISTORY.md) | História completa do projeto |
+| [docs/STRIPE_PORTIFOLIO.md](./docs/STRIPE_PORTIFOLIO.md) | Integração Stripe (consultoria) |
 
 ---
 
 ## Licença
 
-MIT © [Samuel Medeiros](https://github.com/Samuelfmedeiros)
-
-<p align="center">
-  <sub>Feito com ☕, 🎮 e muito cyan · Brasília/DF · 2026</sub>
-</p>
+MIT © Samuel Medeiros
