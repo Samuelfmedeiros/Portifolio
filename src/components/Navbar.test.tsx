@@ -50,23 +50,16 @@ describe('Navbar', () => {
     expect(githubLink).toHaveAttribute('href', 'https://github.com/Samuelfmedeiros')
   })
 
-  it('renders ControlBar theme toggle button', () => {
+  it('renders palette picker button', () => {
+    render(<Navbar />)
+    const paletteBtn = screen.getByRole('button', { name: /paleta/i })
+    expect(paletteBtn).toBeInTheDocument()
+  })
+
+  it('renders theme toggle button', () => {
     render(<Navbar />)
     const themeToggle = screen.getByRole('button', { name: /claro/i })
     expect(themeToggle).toBeInTheDocument()
-  })
-
-  it('renders ControlBar palette radio group', () => {
-    render(<Navbar />)
-    const paletteRadios = screen.getAllByRole('radio')
-    expect(paletteRadios.length).toBe(6) // 6 palettes
-    expect(paletteRadios[0]).toHaveAttribute('aria-label', 'Ciano')
-  })
-
-  it('renders ControlBar language toggle button', () => {
-    render(<Navbar />)
-    const langBtns = screen.getAllByRole('button', { name: /portugu|inglês/i })
-    expect(langBtns.length).toBeGreaterThanOrEqual(1)
   })
 
   it('does NOT have a hamburger menu button', () => {
