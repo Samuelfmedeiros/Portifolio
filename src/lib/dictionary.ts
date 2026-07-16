@@ -271,16 +271,6 @@ export const dict = {
     "cookie.close": "Fechar banner de cookies",
     "terminal.input": "Digite um comando",
     "palette.toggle": "Trocar paleta de cores",
-
-    // ── ControlBar ──
-    "controlbar.aria": "Controles de aparência",
-    "controlbar.light": "Claro",
-    "controlbar.dark": "Escuro",
-    "controlbar.palette": "Paleta de cores",
-    "aria.theme.light": "Ativar modo claro",
-    "aria.theme.dark": "Ativar modo escuro",
-    "aria.language.en": "Mudar para inglês",
-    "aria.language.pt": "Mudar para português",
   },
 
   en: {
@@ -548,15 +538,5 @@ export const dict = {
     "cookie.close": "Close cookie banner",
     "terminal.input": "Type a command",
     "palette.toggle": "Change color palette",
-
-    // ── ControlBar ──
-    "controlbar.aria": "Appearance controls",
-    "controlbar.light": "Light",
-    "controlbar.dark": "Dark",
-    "controlbar.palette": "Color palette",
-    "aria.theme.light": "Switch to light mode",
-    "aria.theme.dark": "Switch to dark mode",
-    "aria.language.en": "Switch to English",
-    "aria.language.pt": "Switch to Portuguese",
   },
 };
