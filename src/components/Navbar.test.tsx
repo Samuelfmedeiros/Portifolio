@@ -50,16 +50,33 @@ describe('Navbar', () => {
     expect(githubLink).toHaveAttribute('href', 'https://github.com/Samuelfmedeiros')
   })
 
-  it('renders palette picker button', () => {
+  it('renders ControlBar with toolbar role', () => {
     render(<Navbar />)
-    const paletteBtn = screen.getByRole('button', { name: /paleta/i })
-    expect(paletteBtn).toBeInTheDocument()
+    const toolbar = screen.getByRole('toolbar')
+    expect(toolbar).toBeInTheDocument()
+    expect(toolbar).toHaveAttribute('aria-label', 'controlbar.aria')
   })
 
-  it('renders theme toggle button', () => {
+  it('renders ControlBar palette radio group with 6 palettes', () => {
     render(<Navbar />)
-    const themeToggle = screen.getByRole('button', { name: /claro/i })
+    const paletteRadios = screen.getAllByRole('radio')
+    expect(paletteRadios.length).toBe(6)
+    // Check first palette has expected label from our mock (fallback = key)
+    expect(paletteRadios[0]).toHaveAttribute('aria-label')
+  })
+
+  it('renders ControlBar theme toggle button', () => {
+    render(<Navbar />)
+    const themeToggle = screen.getByRole('button', { name: /light/i })
     expect(themeToggle).toBeInTheDocument()
+  })
+
+  it('renders ControlBar language toggle button', () => {
+    render(<Navbar />)
+    // The language toggle button — no aria-label matching since it uses "controlbar.*" keys
+    // that our mock returns as fallback. Just check it's a button that says "PT" or "EN"
+    const langBtn = screen.getByText(/^PT$|^EN$/)
+    expect(langBtn).toBeInTheDocument()
   })
 
   it('does NOT have a hamburger menu button', () => {
@@ -70,8 +87,8 @@ describe('Navbar', () => {
 
   it('renders mobile nav with icon + label pairs', () => {
     render(<Navbar />)
-    expect(screen.getByText('🚀')).toBeInTheDocument()
-    expect(screen.getByText('📂')).toBeInTheDocument()
-    expect(screen.getByText('📬')).toBeInTheDocument()
+    expect(screen.getByText('\u{1F680}')).toBeInTheDocument()
+    expect(screen.getByText('\u{1F4C2}')).toBeInTheDocument()
+    expect(screen.getByText('\u{1F4EC}')).toBeInTheDocument()
   })
 })

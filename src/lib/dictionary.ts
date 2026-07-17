@@ -267,10 +267,20 @@ export const dict = {
     "profile.label.education": "Educação",
     "profile.label.certification": "Certificação",
 
-    // ── Cookie / Terminal / Palette ──
+    // ── Cookie / Terminal / Palette / ControlBar ──
     "cookie.close": "Fechar banner de cookies",
     "terminal.input": "Digite um comando",
     "palette.toggle": "Trocar paleta de cores",
+
+    // ── ControlBar ──
+    "controlbar.aria": "Controles de aparência",
+    "controlbar.light": "Claro",
+    "controlbar.dark": "Escuro",
+    "controlbar.palette": "Paleta de cores",
+    "aria.theme.light": "Ativar modo claro",
+    "aria.theme.dark": "Ativar modo escuro",
+    "aria.language.en": "Mudar para inglês",
+    "aria.language.pt": "Mudar para português",
   },
 
   en: {
@@ -534,9 +544,19 @@ export const dict = {
     "profile.label.education": "Education",
     "profile.label.certification": "Certification",
 
-    // ── Cookie / Terminal / Palette ──
+    // ── Cookie / Terminal / Palette / ControlBar ──
     "cookie.close": "Close cookie banner",
     "terminal.input": "Type a command",
     "palette.toggle": "Change color palette",
+
+    // ── ControlBar ──
+    "controlbar.aria": "Appearance controls",
+    "controlbar.light": "Light",
+    "controlbar.dark": "Dark",
+    "controlbar.palette": "Color palette",
+    "aria.theme.light": "Activate light mode",
+    "aria.theme.dark": "Activate dark mode",
+    "aria.language.en": "Switch to English",
+    "aria.language.pt": "Switch to Portuguese",
   },
 };
