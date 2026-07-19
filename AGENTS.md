@@ -6,7 +6,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 ## 📍 Estado Atual
 - **Branch:** `master`
 - **Status:** ✅ Production em Vercel
-- **Testes:** 219 passando
+- **Testes:** ? passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 - **Stack:** Next.js 16 (App Router + Turbopack) + Tailwind 4 + Framer Motion + Playwright
