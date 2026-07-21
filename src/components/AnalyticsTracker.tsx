@@ -2,19 +2,16 @@
 
 import { useEffect } from "react";
 
-declare global {
-  interface Window {
-    umami?: {
-      track: (data: { url?: string; type?: string; label?: string; [key: string]: unknown }) => void;
-    };
-  }
-}
-
+/**
+ * Tracks page views via Umami.
+ * Note: Umami auto-tracks page views by default; this is an extra explicit call.
+ */
 export function AnalyticsTracker() {
   useEffect(() => {
     const path = window.location.pathname;
-    if (path && window.umami) {
-      window.umami.track?.({ url: path });
+    if (path && window.umami?.track) {
+      // Umami standard API: track(eventName, data?)
+      window.umami.track("page_view", { url: path });
     }
   }, []);
 
