@@ -16,6 +16,7 @@ const NAV_ITEMS = [
 ];
 
 import { useAnalytics } from "@/hooks/useAnalytics";
+import type { SectionName } from "@/hooks/useAnalytics";
 
 export const Navbar = memo(function Navbar() {
   const [scrolled, setScrolled] = useState(false);
@@ -79,7 +80,7 @@ export const Navbar = memo(function Navbar() {
     if (target) {
       const top = target.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top, behavior: "smooth" });
-      track({ type: "nav_click", section: href.replace("#", "") as any });
+      track({ type: "nav_click" as const, section: href.replace("#", "") as SectionName });
     }
   };
 
