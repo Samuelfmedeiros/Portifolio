@@ -21,7 +21,12 @@ export function useFocusTrap(
 ) {
   const triggerRef = useRef<Element | null>(null);
   const onCloseRef = useRef(onClose);
-  onCloseRef.current = onClose;
+
+  // Sync the latest onClose callback after each render (avoids stale closure
+  // without accessing .current during render, which React 19 forbids)
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
 
   useEffect(() => {
     if (!active) return;
