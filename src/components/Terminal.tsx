@@ -449,7 +449,7 @@ Approximate round trip times in milli-seconds:
 Digite 'ajuda' para ver os comandos disponíveis.`;
     }
     setHistory((prev) => [...prev.slice(-99), { cmd, output }]);
-    track({ type: "terminal_command", url: "terminal", label: `Comando: ${trimmed || "(vazio)"}` });
+    track({ type: "terminal_command", label: `Comando: ${trimmed || "(vazio)"}` });
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
