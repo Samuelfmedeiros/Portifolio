@@ -63,16 +63,11 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
 
   useEffect(() => {
     if (!open) return;
-    const handleKey = (e: KeyboardEvent) => {
-      if (e.key === "Escape") onClose();
-    };
-    window.addEventListener("keydown", handleKey);
     document.body.style.overflow = "hidden";
     return () => {
-      window.removeEventListener("keydown", handleKey);
       document.body.style.overflow = "";
     };
-  }, [open, onClose]);
+  }, [open]);
 
   const langColor = repo.language
     ? LANG_COLORS[repo.language] || "var(--accent)"
