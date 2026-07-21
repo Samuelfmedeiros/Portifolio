@@ -560,14 +560,9 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true, onClose);
   useEffect(() => {
-    const handleKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose(); };
-    window.addEventListener('keydown', handleKey);
     document.body.style.overflow = 'hidden';
-    return () => {
-      window.removeEventListener('keydown', handleKey);
-      document.body.style.overflow = '';
-    };
-  }, [onClose]);
+    return () => { document.body.style.overflow = ''; };
+  }, []);
 
   return (
     <motion.div
