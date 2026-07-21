@@ -20,6 +20,8 @@ export function useFocusTrap(
   onClose: () => void
 ) {
   const triggerRef = useRef<Element | null>(null);
+  const onCloseRef = useRef(onClose);
+  onCloseRef.current = onClose;
 
   useEffect(() => {
     if (!active) return;
@@ -40,7 +42,7 @@ export function useFocusTrap(
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
         e.preventDefault();
-        onClose();
+        onCloseRef.current();
         return;
       }
 
@@ -75,5 +77,5 @@ export function useFocusTrap(
         triggerRef.current.focus();
       }
     };
-  }, [active, onClose, containerRef]);
+  }, [active, containerRef]); // onClose intentionally removed — stale closure avoided via ref
 }
