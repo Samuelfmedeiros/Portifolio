@@ -17,9 +17,26 @@ export function ContactForm() {
   const [status, setStatus] = useState<FormStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const [copied, setCopied] = useState(false);
+  const [rateLimitCountdown, setRateLimitCountdown] = useState(0);
   const lastSentRef = useRef<number>(0);
   const { track } = useAnalytics();
   const { t } = useLanguage();
+
+  /** Fallback copy using legacy execCommand */
+  function fallbackCopy(text: string) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+    } catch {
+      // clipboard completamente indisponível — faz nada
+    }
+  }
 
   const MAX_MESSAGE_LENGTH = 500;
   const messageLength = content.length;
@@ -32,9 +49,20 @@ export function ContactForm() {
     if (!isFormValid) return;
 
     const now = Date.now();
-    if (now - lastSentRef.current < 30_000) {
+    const elapsed = now - lastSentRef.current;
+    if (elapsed < 30_000) {
+      const remaining = Math.ceil((30_000 - elapsed) / 1000);
       setStatus("error");
-      setErrorMessage("Aguarde 30 segundos entre envios.");
+      setErrorMessage(`Aguarde ${remaining}s entre envios.`);
+      if (rateLimitCountdown <= 0) {
+        setRateLimitCountdown(remaining);
+        const interval = setInterval(() => {
+          setRateLimitCountdown((prev) => {
+            if (prev <= 1) { clearInterval(interval); return 0; }
+            return prev - 1;
+          });
+        }, 1000);
+      }
       return;
     }
 
@@ -135,7 +163,13 @@ export function ContactForm() {
         <span className="text-[var(--border)]">|</span>
         <button
           onClick={() => {
-            navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
+            const email = "samuelandrademedeiros@gmail.com";
+            // Fallback: clipboard API + document.execCommand para HTTPS localhost
+            if (navigator.clipboard?.writeText) {
+              navigator.clipboard.writeText(email).catch(() => fallbackCopy(email));
+            } else {
+              fallbackCopy(email);
+            }
             setCopied(true);
             setTimeout(() => setCopied(false), 2000);
           }}
@@ -266,16 +300,18 @@ export function ContactForm() {
 
             <button
               type="submit"
-              disabled={status === "sending" || !isFormValid}
+              disabled={status === "sending" || !isFormValid || rateLimitCountdown > 0}
               aria-busy={status === "sending"}
               className={`w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] transition-colors flex items-center justify-center gap-2 ${
-                !isFormValid && status !== "sending"
+                (!isFormValid || rateLimitCountdown > 0) && status !== "sending"
                   ? "opacity-40 cursor-not-allowed"
                   : "hover:bg-[var(--accent)]/10"
               } disabled:opacity-50`}
             >
               {status === "sending" ? (
                 t("contact.form.sending")
+              ) : rateLimitCountdown > 0 ? (
+                `Aguarde ${rateLimitCountdown}s...`
               ) : (
                 <>
                   <Send className="w-4 h-4" aria-hidden="true" /> {t("contact.form.submit")}

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import fs from "fs";
 import path from "path";
 
-const LOG_FILE = path.join(process.cwd(), "data", "cv-downloads.jsonl");
+const CAPIVARA_API = "https://capivara.seu.pet/api/portifolio/public";
 
 interface DownloadLog {
   timestamp: string;
@@ -19,16 +19,6 @@ function getClientIp(req: NextRequest): string {
   const realIp = req.headers.get("x-real-ip");
   if (realIp) return realIp;
   return req.headers.get("x-vercel-forwarded-for") ?? "unknown";
-}
-
-function appendLog(entry: DownloadLog) {
-  try {
-    const dir = path.dirname(LOG_FILE);
-    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
-    fs.appendFileSync(LOG_FILE, JSON.stringify(entry) + "\n", "utf-8");
-  } catch {
-    // silent — log é best-effort
-  }
 }
 
 export async function POST(req: NextRequest) {
@@ -52,31 +42,26 @@ export async function POST(req: NextRequest) {
       email: typeof email === "string" && email.trim() ? email.trim() : undefined,
     };
 
-    // Log em background (não bloqueia o download)
-    appendLog(entry);
-
-    // ── Notificações (await para garantir no Vercel) ──────────
+    // ── Persistência + Notificações (paralelo, não bloqueia o download) ──
     const notifications: Promise<void>[] = [];
 
-    // Telemetry
+    // Capivara: persistir evento de download
     notifications.push(
-      fetch("https://capivara.seu.pet/api/telemetry/ingest", {
+      fetch(`${CAPIVARA_API}/cv-downloads`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          event_type: "cv_download",
-          source: "portifolio",
-          payload: {
-            name: entry.name || "anonimo",
-            ip: entry.ip,
-            user_agent: entry.userAgent,
-            referrer: entry.referrer,
-          },
+          name: entry.name || "anonimo",
+          email: entry.email || null,
+          ip: entry.ip,
+          user_agent: entry.userAgent,
+          referrer: entry.referrer,
+          timestamp: entry.timestamp,
         }),
       }).then(() => {}).catch(() => {})
     );
 
-    // Telegram
+    // Telegram notification
     const botToken = process.env.TELEGRAM_BOT_TOKEN;
     const chatId = process.env.TELEGRAM_CHAT_ID || "-1003963506968";
     if (botToken) {

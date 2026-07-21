@@ -3,9 +3,8 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { CockpitBackground } from "@/components/CockpitBackground";
-import { AppWrapper } from "@/components/AppWrapper";
-import { Navbar } from "@/components/Navbar";
 import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { Navbar } from "@/components/Navbar";
 import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
 import { Footer } from "@/components/Footer";
 import { SupportButton } from "@/components/SupportButton";
@@ -117,18 +116,15 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    google: "google-site-verification-code",
-    yandex: "yandex-verification-code",
-    other: {
-      "msvalidate.01": "bing-site-verification-code",
-    },
+    // SEO verification codes — preencher com valores reais se aplicável
+    // google: "your-code",
+    // yandex: "your-code",
+    // other: { "msvalidate.01": "your-code" },
   },
   other: {
-    "article:author": "https://samuelmedeiros.vercel.app",
+    "article:author": SITE_URL,
     "article:section": "Portfolio",
     "article:tag": "desenvolvimento, tecnologia, portfólio, dados, fullstack",
-    "fb:app_id": "facebook-app-id",
-    "fb:admins": "facebook-admin-id",
   },
   icons: {
     icon: "/icon.svg",
@@ -156,14 +152,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CookieBannerProvider>
             <MonetizationProvider>
               <ConditionalAnalytics />
-              <AppWrapper>
-                <CockpitBackground />
+              <CockpitBackground />
                 <ScrollProgress />
                 <Navbar />
                 <main id="main-content" tabIndex={-1} className="pt-20 md:pt-24">
                   <ErrorBoundary>{children}</ErrorBoundary>
                 </main>
-                {/* AdSense banner — só aparece quando configurado no .env.local */}
+                {/* AdSense banner — só aparece quando configurado no .env local */}
                 <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
                   <AdSense slot={ADSENSE_CONFIG.footerSlot || "footer"} format="horizontal" className="min-h-[90px]" />
                 </div>
@@ -172,7 +167,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   <ConsultingButton />
                 </div>
                 <Footer />
-              </AppWrapper>
             </MonetizationProvider>
           </CookieBannerProvider>
           </LanguageProvider>

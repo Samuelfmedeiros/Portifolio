@@ -448,13 +448,13 @@ Approximate round trip times in milli-seconds:
         output = `Comando não encontrado: '${trimmed}'
 Digite 'ajuda' para ver os comandos disponíveis.`;
     }
-    setHistory((prev) => [...prev, { cmd, output }]);
-    track({ type: "external_link", url: "terminal", label: `Comando: ${trimmed || "(vazio)"}` });
+    setHistory((prev) => [...prev.slice(-99), { cmd, output }]);
+    track({ type: "terminal_command", url: "terminal", label: `Comando: ${trimmed || "(vazio)"}` });
   };
 
   const handleKeyDown = (e: KeyboardEvent) => {
     if (e.key === "Enter" && input.trim()) {
-      commandHistoryRef.current.push(input);
+      commandHistoryRef.current = [...commandHistoryRef.current.slice(-49), input];
       setHistoryIndex(-1);
       executeCommand(input);
       setInput("");
