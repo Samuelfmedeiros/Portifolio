@@ -2,13 +2,19 @@
 
 import { useEffect } from "react";
 
+declare global {
+  interface Window {
+    umami?: {
+      track: (data: { url?: string; type?: string; label?: string; [key: string]: unknown }) => void;
+    };
+  }
+}
+
 export function AnalyticsTracker() {
   useEffect(() => {
-    // Page view tracking via Umami (configured in layout)
-    // Legacy Supabase RPC removed — using Umami analytics instead
     const path = window.location.pathname;
-    if (path && typeof window !== "undefined" && (window as any).umami) {
-      (window as any).umami.track?.({ url: path });
+    if (path && window.umami) {
+      window.umami.track?.({ url: path });
     }
   }, []);
 

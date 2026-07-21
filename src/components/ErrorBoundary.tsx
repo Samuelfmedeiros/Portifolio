@@ -21,6 +21,29 @@ export class ErrorBoundary extends Component<Props, State> {
     return { hasError: true, error };
   }
 
+  componentDidCatch(error: Error, info: React.ErrorInfo) {
+    // Report to external service
+    try {
+      fetch("/api/contact-notify", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          type: "error_boundary",
+          error: error.message,
+          stack: error.stack?.slice(0, 500),
+          componentStack: info.componentStack?.slice(0, 500),
+        }),
+      }).catch(() => {});
+    } catch {
+      // fire-and-forget, não quebra o app
+    }
+  }
+
+  handleReset = () => {
+    this.setState({ hasError: false, error: null });
+    window.location.reload();
+  };
+
   render() {
     if (this.state.hasError) {
       return (
@@ -34,7 +57,7 @@ export class ErrorBoundary extends Component<Props, State> {
               {this.state.error?.message || "Erro desconhecido"}
             </pre>
             <button
-              onClick={() => this.setState({ hasError: false, error: null })}
+              onClick={this.handleReset}
               className="glass px-6 py-2 rounded-lg font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10 border-[var(--border)] transition-colors"
             >
               REINICIAR SISTEMA
