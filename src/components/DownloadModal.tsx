@@ -141,11 +141,11 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
 
             {status === "success" ? (
               <div className="text-center py-8">
-                <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-emerald-500/10 flex items-center justify-center">
-                  <Download size={24} className="text-emerald-400" />
+                <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[var(--success)]/10 flex items-center justify-center">
+                  <Download size={24} className="text-[var(--success)]" />
                 </div>
-                <p className="text-sm font-semibold text-emerald-400 font-mono">
-                  Download iniciado! 🚀
+                <p className="text-sm font-semibold text-[var(--success)] font-mono">
+                  {t("cv.success", "Download iniciado! 🚀")}
                 </p>
               </div>
             ) : (
