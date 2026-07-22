@@ -13,9 +13,10 @@ test.describe('Dead Links & Rotas', () => {
   ];
 
   for (const route of routes) {
-    test(`${route.name} (${route.path}) — HTTP status 200`, async ({ page }) => {
+    const expectedStatus = route.path === '/pagina-inexistente' ? 404 : 200;
+    test(`${route.name} (${route.path}) — HTTP status ${expectedStatus}`, async ({ page }) => {
       const response = await page.goto(route.path, { waitUntil: 'networkidle' });
-      expect(response?.status()).toBe(200);
+      expect(response?.status()).toBe(expectedStatus);
       console.log(`  ${route.path} → ${response?.status()}`);
     });
   }
