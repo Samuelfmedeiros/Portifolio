@@ -165,7 +165,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t("cv.name.placeholder")}
-                    className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-slate-200 placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
                   />
                 </div>
 
@@ -184,7 +184,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t("cv.email.placeholder")}
-                    className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-slate-200 placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
                   />
                 </div>
 
