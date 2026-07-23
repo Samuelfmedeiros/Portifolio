@@ -114,12 +114,15 @@ export const Navbar = memo(function Navbar() {
     const target = document.querySelector(href);
     if (href === "#hero") {
       window.scrollTo({ top: 0, behavior: "smooth" });
+      setActiveSection("profile");
       return;
     }
     if (target) {
+      const sectionId = href.replace("#", "") as SectionName;
       const top = target.getBoundingClientRect().top + window.scrollY - 80;
       window.scrollTo({ top, behavior: "smooth" });
-      track({ type: "nav_click" as const, section: href.replace("#", "") as SectionName });
+      setActiveSection(sectionId);
+      track({ type: "nav_click" as const, section: sectionId });
     }
   };
 
