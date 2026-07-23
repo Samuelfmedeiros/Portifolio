@@ -26,6 +26,8 @@ export const Navbar = memo(function Navbar() {
   const { t } = useLanguage();
 
   const rafRef = useRef<number | null>(null);
+  const navigatingRef = useRef(false);
+  const navTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
 
   // Scroll detection — requestAnimationFrame throttle
   useEffect(() => {
@@ -50,6 +52,9 @@ export const Navbar = memo(function Navbar() {
     const observer = new IntersectionObserver(
       (entries) => {
         if (!alive) return;
+        // During a smooth-scroll navigation, observer is paused so rapid
+        // clicks don't get overwritten by intermediate sections.
+        if (navigatingRef.current) return;
 
         // 1. Among sections that entered viewport, pick the one with
         //    the highest visible ratio (most prominent on screen).
@@ -106,11 +111,22 @@ export const Navbar = memo(function Navbar() {
     return () => {
       alive = false;
       observer.disconnect();
+      if (navTimeoutRef.current !== null) clearTimeout(navTimeoutRef.current);
     };
   }, []);
 
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
+
+    // Cancel any pending nav timeout from a previous rapid click
+    if (navTimeoutRef.current !== null) {
+      clearTimeout(navTimeoutRef.current);
+      navTimeoutRef.current = null;
+    }
+
+    // Cancel in-progress smooth scroll so animations don't pile up
+    window.scrollTo({ top: window.scrollY, behavior: "instant" });
+
     const target = document.querySelector(href);
     if (href === "#hero") {
       window.scrollTo({ top: 0, behavior: "smooth" });
@@ -120,8 +136,16 @@ export const Navbar = memo(function Navbar() {
     if (target) {
       const sectionId = href.replace("#", "") as SectionName;
       const top = target.getBoundingClientRect().top + window.scrollY - 80;
-      window.scrollTo({ top, behavior: "smooth" });
       setActiveSection(sectionId);
+      navigatingRef.current = true;
+      window.scrollTo({ top, behavior: "smooth" });
+
+      // Pause the observer long enough for the smooth scroll to finish,
+      // so rapid nav clicks don't get overwritten by intermediate sections.
+      navTimeoutRef.current = setTimeout(() => {
+        navigatingRef.current = false;
+      }, 600);
+
       track({ type: "nav_click" as const, section: sectionId });
     }
   };
