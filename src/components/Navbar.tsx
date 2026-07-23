@@ -43,20 +43,59 @@ export const Navbar = memo(function Navbar() {
     };
   }, []);
 
-  // IntersectionObserver — robust cleanup with Set
+  // IntersectionObserver — picks most visible section, with fallback scan when sections leave
   useEffect(() => {
     const ids = NAV_ITEMS.map((i) => i.href.replace("#", ""));
     let alive = true;
     const observer = new IntersectionObserver(
       (entries) => {
         if (!alive) return;
+
+        // 1. Among sections that entered viewport, pick the one with
+        //    the highest visible ratio (most prominent on screen).
+        //    This handles the case where #jornada (child of #profile)
+        //    and #profile are both visible — the dominant one wins.
+        let bestEntered: string | null = null;
+        let bestRatio = 0;
+
         for (const entry of entries) {
-          if (entry.isIntersecting) {
-            setActiveSection(entry.target.id);
+          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
+            bestRatio = entry.intersectionRatio;
+            bestEntered = entry.target.id;
           }
         }
+
+        if (bestEntered) {
+          setActiveSection(bestEntered);
+          return;
+        }
+
+        // 2. No section entered → sections left viewport.
+        //    Scan ALL sections to find the most visible one.
+        //    This fixes the bug where scrolling back to top keeps
+        //    "jornada" active (because #profile never re-enters).
+        let fallback = ids[0];
+        let fallbackRatio = 0;
+        const viewH = window.innerHeight;
+
+        for (const id of ids) {
+          const el = document.getElementById(id);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            const visiblePx = Math.min(rect.bottom, viewH) - Math.max(rect.top, 0);
+            const ratio = visiblePx / Math.max(rect.height, 1);
+            if (ratio > fallbackRatio) {
+              fallbackRatio = ratio;
+              fallback = id;
+            }
+          }
+        }
+
+        if (fallbackRatio > 0.01) {
+          setActiveSection(fallback);
+        }
       },
-      { threshold: 0.3 }
+      { threshold: 0 }
     );
 
     for (const id of ids) {
