@@ -128,6 +128,8 @@ export function PixDonate({ className = "" }: { className?: string }) {
 /**
  * Gera payload Pix BR Code estático (formato EMV 2022)
  * Sem valor fixo — o usuário define no app do banco.
+ * Campos de tamanho usam dígitos decimais com padding zero,
+ * NÃO String.fromCharCode — codepoints de controle quebram o payload.
  */
 function generatePixPayload(
   key: string,
@@ -136,9 +138,10 @@ function generatePixPayload(
 ): string {
   // Merchant Account Information — Pix
   const gui = "BR.GOV.BCB.PIX";
-  const keyField = `01${String.fromCharCode(key.length)}${key}`;
+  const keyLen = String(key.length).padStart(2, "0");
+  const keyField = `01${keyLen}${key}`;
   const mai = `0014${gui}${keyField}`;
-  const maiLen = String.fromCharCode(mai.length);
+  const maiLen = String(mai.length).padStart(2, "0");
 
   // Merchant Category Code — 0000 (general)
   const mcc = "0000";
@@ -146,25 +149,27 @@ function generatePixPayload(
   // Transaction Currency — 986 (BRL)
   const currency = "986";
 
-  // Country Code — 58 (Brazil)
-  const country = "58";
+  // Country Code — BR
+  const country = "BR";
 
   // Merchant Name — max 25 chars
   const trimmedName = name.slice(0, 25);
-  const nameField = `59${String.fromCharCode(trimmedName.length)}${trimmedName}`;
+  const nameLen = String(trimmedName.length).padStart(2, "0");
+  const nameField = `59${nameLen}${trimmedName}`;
 
   // Merchant City — max 15 chars
   const trimmedCity = city.slice(0, 15);
-  const cityField = `60${String.fromCharCode(trimmedCity.length)}${trimmedCity}`;
+  const cityLen = String(trimmedCity.length).padStart(2, "0");
+  const cityField = `60${cityLen}${trimmedCity}`;
 
   // CRC (placeholder, will be calculated)
   const crcPlaceholder = "6304";
 
   const payload = `00020126${maiLen}${mai}5204${mcc}5303${currency}5802${country}${nameField}${cityField}${crcPlaceholder}`;
 
-  // Calculate CRC16-CCITT
+  // Calculate CRC16-CCITT (includes "6304" placeholder, which is kept in final output)
   const crc = crc16(payload);
-  return payload.slice(0, -4) + crc;
+  return payload + crc;
 }
 
 function crc16(data: string): string {
