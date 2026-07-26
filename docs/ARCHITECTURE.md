@@ -35,3 +35,13 @@ Next.js 16 + Turbopack + React 19 + Tailwind 4 + Framer Motion + GSAP + Supabase
 - `README.md` — Visão geral, badges, instruções de setup
 - `DEPLOY.md` — Deploy automático + troubleshooting
 - `docs/HISTORY.md` — História completa do projeto
+
+## Decisões Arquiteturais (ADRs)
+
+| ADR | Status | Decisão |
+|-----|--------|---------|
+| **ADR-002**: Splash Boot Sequence | ✅ Aceito | Splash estilo boot de nave com scanlines CRT, progress bar, skip button |
+| **ADR-003**: Deploy Vercel + CI/CD | ✅ Aceito | Vercel + GitHub Actions (lint → test → deploy), preview em PRs |
+| **ADR-001**: Tema Treasure Planet | ❌ Deprecado | Tema ciano+preto inspirado em Planeta do Tesouro (substituído)
+
+> ADRs originais em `docs/adr/`
