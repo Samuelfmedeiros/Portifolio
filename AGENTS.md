@@ -113,3 +113,17 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Tracking script:** Injetado no `<head>` do layout (data-website-id dde11802-...)
 - **Dados:** 4 sites monitorados (Portifolio Samuel, Capivara, Arachne, Dogwalk)
 - **Eventos:** section_view, theme_toggle, cv_download, nav_click, contact_submit, click-consulting-cta
+
+---
+
+## 🛡️ REGRA DE SEGURANÇA CONTÍNUA (04/08/2026)
+
+> **"Segurança é acompanhamento."** — Samuel. Política unificada com LifeLog e LEVE LAVANDA.
+
+- **A cada entrega:** `pnpm audit` + verificar headers no `vercel.json` + integridade do lockfile
+- **Semanalmente:** revisar `docs/SEGURANCA.md` + atualizar inventário
+- **Mensalmente:** revisar dependências + domínios na CSP (remover stale)
+- **Ao adicionar feature:** reavaliar superfície de ataque
+- **Referências:** OWASP Top 10:2025, HttpArmor, OWASP Web Checklist
+- **Cron:** `Portfolio Security Watchdog` (diário, 24h, silent unless issues)
+- **Doc completo:** `docs/SEGURANCA.md`
