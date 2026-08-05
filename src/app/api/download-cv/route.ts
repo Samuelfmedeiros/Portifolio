@@ -106,6 +106,77 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // ── Email via Resend (se configurado) ──────────────────────
+    const resendKey = process.env.RESEND_API_KEY;
+    if (resendKey) {
+      notifications.push(
+        (async () => {
+          try {
+            const nome = entry.name || "Anônimo";
+            const email = entry.email || "—";
+            const ip = entry.ip;
+            const ref = entry.referrer !== "direct" ? entry.referrer : "—";
+            const now = new Date().toLocaleString("pt-BR", {
+              timeZone: "America/Sao_Paulo",
+              day: "2-digit",
+              month: "2-digit",
+              year: "numeric",
+              hour: "2-digit",
+              minute: "2-digit",
+            });
+            const res = await fetch("https://api.resend.com/emails", {
+              method: "POST",
+              headers: {
+                Authorization: `Bearer ${resendKey}`,
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                from: "Portifolio Samuel <contato@seu.pet>",
+                to: "samuelandrademedeiros@gmail.com",
+                subject: `📄 Currículo baixado — ${nome}`,
+                html: `
+                  <div style="background:#0a0a0f;color:#e0e0e0;font-family:'Segoe UI',Arial,sans-serif;padding:32px;max-width:600px;margin:0 auto;border:2px solid #00e5ff;border-radius:12px">
+                    <div style="text-align:center;padding:20px;background:linear-gradient(135deg,#00e5ff22,#0a0a0f);border-radius:8px;margin-bottom:24px;border-bottom:3px solid #00e5ff">
+                      <div style="font-size:48px;line-height:1">📄</div>
+                      <h1 style="color:#00e5ff;font-size:28px;margin:8px 0 4px;text-transform:uppercase;letter-spacing:2px">CURRÍCULO BAIXADO</h1>
+                      <p style="color:#888;font-size:13px;margin:0">Portifolio Samuel — Download do CV</p>
+                    </div>
+                    <div style="background:#111118;border:1px solid #00e5ff44;border-radius:8px;padding:16px;margin-bottom:16px">
+                      <div style="margin-bottom:12px">
+                        <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">👤 Nome</span>
+                        <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${nome}</div>
+                      </div>
+                      <div style="margin-bottom:12px">
+                        <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">📧 Email</span>
+                        <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${email}</div>
+                      </div>
+                      <div style="margin-bottom:12px">
+                        <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">🌐 IP</span>
+                        <div style="color:#e0e0e0;font-size:14px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${ip}</div>
+                      </div>
+                      <div>
+                        <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold">🔗 Referrer</span>
+                        <div style="color:#e0e0e0;font-size:14px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${ref}</div>
+                      </div>
+                    </div>
+                    <div style="text-align:center;padding:8px;border-top:1px solid #222;margin-top:16px">
+                      <span style="color:#555;font-size:11px">🛸 Enviado via samuelmedeiros.vercel.app</span>
+                    </div>
+                    <div style="background:#00e5ff;height:2px;border-radius:2px;margin-top:12px;width:100%"></div>
+                  </div>
+                `,
+              }),
+            });
+            if (!res.ok) {
+              console.error("Resend falhou:", res.status, await res.text().catch(() => ""));
+            }
+          } catch (err) {
+            console.error("Erro email Resend:", err instanceof Error ? err.message : "unknown");
+          }
+        })()
+      );
+    }
+
     // Aguarda notificações antes de responder (evita corte do Vercel)
     await Promise.allSettled(notifications);
 
