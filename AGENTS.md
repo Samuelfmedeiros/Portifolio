@@ -116,6 +116,13 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 
 ---
 
+## 🔒 Deps — pnpm 10 via corepack + overrides (04/08/2026)
+
+- **Use SEMPRE o pnpm do packageManager** (pnpm@10.34.5): `COREPACK_ENABLE_STRICT=0 corepack pnpm@10.34.5 <cmd>`. O pnpm global é 9.12.3 — regenerar lockfile com ele quebra o CI (ERR_PNPM_EEXIST).
+- **Store:** o corepack pnpm 10 pode cair em /tmp/.pnpm-store (efêmero). Configurar uma vez: `corepack pnpm@10.34.5 config set store-dir /home/samuel/.pnpm-store --global`. node_modules instalado com major diferente exige `install --config.confirmModulesPurge=false`.
+- **pnpm.overrides no package.json** fixa deps transitivas vulneráveis do vercel CLI (tar>=7.5.19, undici>=7.29.0, minimatch>=10.2.3, path-to-regexp>=8.4.0, js-yaml>=4.3.0, sharp>=0.35.0, @fastify/static>=10.1.1). Audit: 68→6 (0 high/critical; produção limpa).
+- **Audit:** produção sempre `pnpm audit --prod` (deve dar "No known vulnerabilities"). As 6 restantes são dev tooling (vercel/netlify/vitest) low/moderate.
+
 ## 🛡️ REGRA DE SEGURANÇA CONTÍNUA (04/08/2026)
 
 > **"Segurança é acompanhamento."** — Samuel. Política unificada com LifeLog e LEVE LAVANDA.
