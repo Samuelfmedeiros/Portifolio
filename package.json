@@ -21,7 +21,7 @@
     "gsap": "^3.15.0",
     "lucide-react": "^1.28.0",
     "mercadopago": "^3.2.0",
-    "next": "^16.2.12",
+    "next": "^16.3.0",
     "react": "19.2.7",
     "react-dom": "19.2.7",
     "stripe": "^22.4.0"
@@ -44,10 +44,21 @@
     "netlify-cli": "^26.2.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "vercel": "^55.0.0",
+    "vercel": "^58.5.1",
     "vitest": "^4.1.10"
   },
   "overrides": {
     "@opentelemetry/api": "1.9.1"
+  },
+  "pnpm": {
+    "overrides": {
+      "tar": "^7.5.19",
+      "undici": "^7.29.0",
+      "minimatch": "^10.2.3",
+      "path-to-regexp": "^8.4.0",
+      "js-yaml": "^4.3.0",
+      "sharp": "^0.35.0",
+      "@fastify/static": "^10.1.1"
+    }
   }
 }
