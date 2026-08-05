@@ -8,6 +8,7 @@ import { submitContactForm } from "@/lib/supabase";
 import type { FormStatus } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { loadUmamiScript } from "@/lib/umami";
 
 export function ContactForm() {
   const [name, setName] = useState("");
@@ -102,6 +103,8 @@ export function ContactForm() {
     setEmail("");
     setContent("");
     setLgpdConsent(false);
+    // Consentimento implícito (LGPD do form) → carrega Umami para coletar a sessão
+    loadUmamiScript();
     track({ type: "contact_submit" });
   };
 

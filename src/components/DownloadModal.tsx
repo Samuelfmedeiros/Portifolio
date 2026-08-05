@@ -7,6 +7,7 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { submitCVDownload } from "@/lib/supabase";
+import { loadUmamiScript } from "@/lib/umami";
 
 interface DownloadModalProps {
   open: boolean;
@@ -32,6 +33,9 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
     downloadingRef.current = true;
     setStatus("loading");
     setErrorMsg("");
+
+    // Consentimento implícito (LGPD do modal) → carrega Umami antes do download
+    loadUmamiScript();
 
     try {
       const res = await fetch("/api/download-cv", {

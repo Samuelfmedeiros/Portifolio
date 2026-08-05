@@ -4,6 +4,7 @@ import { useState, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { loadUmamiScript } from "@/lib/umami";
 
 const CONSENT_KEY = "mc-analytics-consent";
 
@@ -36,18 +37,6 @@ function getStoredConsent(): AnalyticsConsent {
     // localStorage unavailable
   }
   return null;
-}
-
-/** Injeta o script do Umami dinamicamente (chamado após consentimento) */
-function loadUmamiScript() {
-  if (typeof window === "undefined") return;
-  // Evita duplicata
-  if (document.querySelector('script[src*="capivara.seu.pet/api/umami/script.js"]')) return;
-  const script = document.createElement("script");
-  script.async = true;
-  script.src = "https://capivara.seu.pet/api/umami/script.js";
-  script.setAttribute("data-website-id", "39676cee-8416-4a33-ba06-cbc7af177c27");
-  document.head.appendChild(script);
 }
 
 export function CookieBannerProvider({ children }: { children: React.ReactNode }) {
