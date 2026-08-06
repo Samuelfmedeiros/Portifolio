@@ -5,12 +5,22 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `45bb7b9` — auto-sync: 2026-08-05 02:00 — fix(deploy): remove node-linker=hoisted — causa ERR_PNPM_EEXIST na Vercel — auto-sync: 2026-08-02 04:27 — docs: atualiza estado no AGENTS.md (commit acd55d6, 218 testes) — chore: add issue/PR templates and contributing guide — feat(games): atualiza 5 jogos com melhorias mobile (v3 port) — auto-sync: 2026-07-05 21:01 — auto-sync: 2026-07-05 12:00 — auto-sync: 2026-07-05 06:06 — auto-sync: 2026-07-05 05:12 — docs: auto-update semanal — chore(memory): auto-log b43b0ef — auto-sync: 2026-07-04 21:01 — auto-sync: 2026-07-04 17:00 — auto-sync: 2026-07-04 06:01 — auto-sync: 2026-07-04 04:01 — docs: atualiza README.md, cria ARCHITECTURE.md — docs: auto-update AGENTS.md + HISTORY.md — chore(memory): auto-log d7abf19 — auto-sync: 2026-07-03
+- **Último commit:** `1aa9c44` — docs: auto-update semanal — VRT Playwright 4 secoes + fix CV endereco
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
-- **Testes:** 218 passando
+- **Testes:** 222 passando (VRT adicionado)
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
+
+## Sessao 2026-08-05 — VRT + CV fix
+- **VRT Playwright**: toHaveScreenshot em 4 secoes principais (home, projetos, games, contato)
+- **CV fix**: remove endereco completo e CEP — fica apenas "Brasilia-DF" (regenerado do DOCX fonte)
+- **4 commits** · push bare+origin OK · HEAD: `1aa9c44`
+
+## Sessão 2026-08-05 — VRT + CV fix
+- **VRT Playwright**: toHaveScreenshot em 4 seções principais (home, projetos, games, contato)
+- **CV fix**: remove endereço completo e CEP — fica apenas "Brasília-DF" (regenerado do DOCX fonte)
+- **4 commits** · push bare+origin OK · HEAD: 
 ## ✅ Features Implementadas
 - Parallax scene multicamada (L0-L3) com cockpit SVG animado
 - 5 mini-games embutidos (iframe + React via CDN)
