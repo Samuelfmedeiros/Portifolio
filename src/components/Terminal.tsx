@@ -58,38 +58,7 @@ export function Terminal() {
     switch (trimmed) {
       case "help":
       case "ajuda":
-        output = `COMANDOS DISPONÍVEIS:
-  ajuda         — Mostra esta mensagem
-  sobre         — Sobre Samuel
-  projetos      — Lista de projetos
-  habilidades   — Habilidades técnicas
-  skills        — Nível de proficiência em cada skill
-  contato       — Informações de contato
-  limpar        — Limpa o terminal
-  hora          — Data e hora atual
-  date          — Data formatada completa
-  whoami        — Nome do usuário
-  theme         — Alterna o tema
-  stack         — Tech stack do projeto
-  github        — Info do GitHub
-  neofetch      — System info estilo neofetch
-  uptime        — Sessão uptime
-  ls            — Lista arquivos do diretório
-  pwd           — Mostra diretório atual
-  echo <text>   — Repete o texto
-  banner        — Mostra o banner
-  quote         — Citação inspiradora aleatória
-  ipconfig      — Informações de rede
-  ping <host>   — Ping em um servidor
-  whois <nome>  — Informações sobre alguém
-  cowsay        — Vaca falante 🐄
-  holofote      — Coloca Samuel no holofote
-
-⚡ EASTER EGGS (para devs):
-  fix path_variables        — Repara variáveis do Windows
-  run routine:lights_out    — Modo Noturno Máximo
-  matrix                     — Efeito Matrix
-  sudo rm -rf /             — ⚠️ Não faça isso`;
+        output = t("terminal.help");
         break;
 
       case "sobre":

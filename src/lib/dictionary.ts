@@ -281,6 +281,9 @@ export const dict = {
     "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Repos públicos: portifolio, dog-walk e mais\n  Linguagens: TypeScript, Python, SQL, JavaScript\n  Contribuições: Frequentes",
     "terminal.theme_toggled": "Tema alternado com sucesso.",
 
+    // ── Terminal Commands ──
+    "terminal.help": "COMANDOS DISPONÍVEIS:\n  ajuda         — Mostra esta mensagem\n  sobre         — Sobre Samuel\n  projetos      — Lista de projetos\n  habilidades   — Habilidades técnicas\n  skills        — Nível de proficiência em cada skill\n  contato       — Informações de contato\n  limpar        — Limpa o terminal\n  hora          — Data e hora atual\n  date          — Data formatada completa\n  whoami        — Nome do usuário\n  theme         — Alterna o tema\n  stack         — Tech stack do projeto\n  github        — Info do GitHub\n  neofetch      — System info estilo neofetch\n  uptime        — Sessão uptime\n  ls            — Lista arquivos do diretório\n  pwd           — Mostra diretório atual\n  echo <text>   — Repete o texto\n  banner        — Mostra o banner\n  quote         — Citação inspiradora aleatória\n  ipconfig      — Informações de rede\n  ping <host>   — Ping em um servidor\n  whois <nome>  — Informações sobre alguém\n  cowsay        — Vaca falante 🐄\n  holofote      — Coloca Samuel no holofote\n\n⚡ EASTER EGGS (para devs):\n  fix path_variables — Repara PATH corrompido\n  run routine:lights_out — Modo Noturno Máximo\n  matrix                — Efeito Matrix\n  sudo rm -rf /        — ⚠️ Não faça isso",
+
     // ── Manifest ──
     "manifest.description": "Portfólio profissional — Desenvolvedor Full Stack & Analista de Dados",
   },
@@ -559,6 +562,9 @@ export const dict = {
     "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animations: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testing:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
     "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Public repos: portifolio, dog-walk & more\n  Languages: TypeScript, Python, SQL, JavaScript\n  Contributions: Frequent",
     "terminal.theme_toggled": "Theme toggled successfully.",
+
+    // ── Terminal Commands ──
+    "terminal.help": "AVAILABLE COMMANDS:\n  help          — Show this message\n  about         — About Samuel\n  projects      — List projects\n  skills        — Technical skills\n  contact       — Contact information\n  clear         — Clear terminal\n  time          — Current date and time\n  date          — Full formatted date\n  whoami        — Current user\n  theme         — Toggle theme\n  stack         — Tech stack\n  github        — GitHub info\n  neofetch      — System info\n  uptime        — Session uptime\n  ls            — List files\n  pwd           — Show current directory\n  echo <text>   — Repeat text\n  banner        — Show banner\n  quote         — Random inspirational quote\n  ipconfig      — Network info\n  ping <host>   — Ping a server\n  whois <name>  — Information about someone\n  cowsay        — Talking cow 🐄\n  spotlight     — Puts Samuel in the spotlight\n\n⚡ EASTER EGGS (for devs):\n  fix path_variables — Fix corrupted PATH\n  run routine:lights_out — Maximum Night Mode\n  matrix                — Matrix effect\n  sudo rm -rf /        — ⚠️ Don't do this",
 
     // ── Manifest ──
     "manifest.description": "Professional Portfolio — Full Stack Developer & Data Analyst",

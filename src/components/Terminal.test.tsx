@@ -23,7 +23,7 @@ describe('Terminal', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'ajuda{Enter}')
-    expect(screen.getByText(/COMANDOS DISPONÍVEIS/)).toBeInTheDocument()
+    expect(screen.getByText(/terminal.help/)).toBeInTheDocument()
   })
 
   it('executes whoami command', async () => {
