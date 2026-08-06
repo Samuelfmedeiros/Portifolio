@@ -37,22 +37,21 @@ describe('Terminal', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'projetos{Enter}')
-    expect(screen.getByText(/DogWalk/)).toBeInTheDocument()
+    expect(screen.getByText(/terminal.projects/)).toBeInTheDocument()
   })
 
   it('executes habilidades command', async () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'habilidades{Enter}')
-    expect(screen.getByText(/Python/)).toBeInTheDocument()
-    expect(screen.getByText(/SQL/)).toBeInTheDocument()
+    expect(screen.getByText(/terminal.skills/)).toBeInTheDocument()
   })
 
   it('executes contato command', async () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'contato{Enter}')
-    expect(screen.getByText(/samuelandrademedeiros@gmail.com/)).toBeInTheDocument()
+    expect(screen.getByText(/terminal.contact/)).toBeInTheDocument()
   })
 
   it('shows error for unknown command', async () => {

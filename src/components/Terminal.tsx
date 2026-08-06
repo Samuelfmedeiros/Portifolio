@@ -101,21 +101,11 @@ export function Terminal() {
         break;
 
       case "habilidades":
-        output = `HABILIDADES:
-  [Linguagens]    Python, SQL, TypeScript
-  [BI/Analytics] Power BI, Excel, Power Query, DAX
-  [ML/IA]         Scikit-learn, Pandas, LLMs
-  [Web]           Next.js, React, Tailwind CSS
-  [Banco]         PostgreSQL, Supabase, MySQL
-  [Ferramentas]   Docker, Git, Linux, Azure`;
+        output = t("terminal.skills");
         break;
 
       case "contato":
-        output = `CONTATO:
-  📧 Email:    samuelandrademedeiros@gmail.com
-  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros
-  🐙 GitHub:   github.com/Samuelfmedeiros
-  📱 WhatsApp: wa.me/556191191722`;
+        output = t("terminal.contact");
         break;
 
       case "limpar":
@@ -142,20 +132,11 @@ export function Terminal() {
         break;
 
       case "stack":
-        output = `TECH STACK:
-  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4
-  Animações: Framer Motion, Lucide Icons
-  Backend:   Supabase (PostgreSQL), Cloudflare Workers
-  Testes:    Vitest, Playwright
-  Deploy:    Cloudflare Pages, Vercel
-  CI/CD:     GitHub Actions`;
+        output = t("terminal.stack");
         break;
 
       case "github":
-        output = `GitHub: github.com/Samuelfmedeiros
-  Repos públicos: portifolio, dog-walk e mais
-  Linguagens: TypeScript, Python, SQL, JavaScript
-  Contribuições: Frequentes`;
+        output = t("terminal.github");
         break;
 
       case "neofetch":
@@ -173,7 +154,7 @@ export function Terminal() {
 
       case "theme":
         themeToggle();
-        output = "Tema alternado com sucesso.";
+        output = t("terminal.theme_toggled");
         break;
 
       case "fix path_variables":

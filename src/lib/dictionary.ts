@@ -280,6 +280,9 @@ export const dict = {
     "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animações: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testes:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
     "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Repos públicos: portifolio, dog-walk e mais\n  Linguagens: TypeScript, Python, SQL, JavaScript\n  Contribuições: Frequentes",
     "terminal.theme_toggled": "Tema alternado com sucesso.",
+
+    // ── Manifest ──
+    "manifest.description": "Portfólio profissional — Desenvolvedor Full Stack & Analista de Dados",
   },
 
   en: {
@@ -556,5 +559,8 @@ export const dict = {
     "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animations: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testing:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
     "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Public repos: portifolio, dog-walk & more\n  Languages: TypeScript, Python, SQL, JavaScript\n  Contributions: Frequent",
     "terminal.theme_toggled": "Theme toggled successfully.",
+
+    // ── Manifest ──
+    "manifest.description": "Professional Portfolio — Full Stack Developer & Data Analyst",
   },
 };
