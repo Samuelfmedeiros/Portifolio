@@ -1,0 +1,59 @@
+{
+  "timestamp": "2026-08-06T17:56:39.867Z",
+  "url": "https://samuelmedeiros.vercel.app",
+  "duration": "6.0",
+  "routes": {
+    "/": {
+      "url": "https://samuelmedeiros.vercel.app/",
+      "title": "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
+      "contentSize": 213941,
+      "servesHtml": {
+        "ok": true,
+        "detail": "content-type=text/html; charset=utf-8 status=200"
+      },
+      "renderChecks": [
+        {
+          "id": "root-mounted",
+          "desc": "Next.js renderizou",
+          "ok": true,
+          "detail": "root len=213946"
+        },
+        {
+          "id": "hero-section",
+          "desc": "Seção Hero presente",
+          "ok": false,
+          "detail": "sem #hero"
+        },
+        {
+          "id": "profile-section",
+          "desc": "Seção Profile presente",
+          "ok": true,
+          "detail": "profile OK"
+        },
+        {
+          "id": "game-section",
+          "desc": "Seção Games/Projetos presente",
+          "ok": true,
+          "detail": "body 9279 chars"
+        },
+        {
+          "id": "temas-presentes",
+          "desc": "Temas/Paletas carregaram",
+          "ok": true,
+          "detail": "2 elementos de tema"
+        }
+      ]
+    }
+  },
+  "consoleErrors": [],
+  "networkErrors": [],
+  "navigationFailures": [
+    {
+      "route": "/",
+      "error": "[render] Seção Hero presente: sem #hero"
+    }
+  ],
+  "passed": 1,
+  "failed": 1,
+  "loginOk": true
+}
