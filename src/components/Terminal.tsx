@@ -93,30 +93,11 @@ export function Terminal() {
         break;
 
       case "sobre":
-        output = `Samuel Medeiros
-Analista de Dados — Brasília/DF
-
-Especialidades:
-  • Power BI, SQL, DAX
-  • Python, Pandas, Machine Learning
-  • ETL e automação
-  • IA Generativa e LLMs
-
-Formação:
-  • Pós-graduação em Ciência de Dados e Machine Learning Engineering — IESB
-  • Análise e Desenvolvimento de Sistemas — IESB
-
-Experiência:
-  • ANA (Agência Nacional de Águas)
-  • Global Hitss
-  • TRT 10ª Região`;
+        output = t("terminal.about");
         break;
 
       case "projetos":
-        output = `PROJETOS:
-  🐾 DogWalk        — Plataforma de passeio de cães (Next.js + Supabase)
-  🛰️ Portifolio Samuel — Este portfólio (Next.js + Framer Motion)
-  📊 ANA Dashboards  — Dashboards de dados (Power BI + SQL)`;
+        output = t("terminal.projects");
         break;
 
       case "habilidades":

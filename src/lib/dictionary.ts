@@ -271,6 +271,15 @@ export const dict = {
     "cookie.close": "Fechar banner de cookies",
     "terminal.input": "Digite um comando",
     "palette.toggle": "Trocar paleta de cores",
+
+    // ── Terminal Commands ──
+    "terminal.about": "Samuel Medeiros\nAnalista de Dados — Brasília/DF\n\nEspecialidades:\n  • Power BI, SQL, DAX\n  • Python, Pandas, Machine Learning\n  • ETL e automação\n  • IA Generativa e LLMs\n\nFormação:\n  • Pós-graduação em Ciência de Dados e Machine Learning Engineering — IESB\n  • Análise e Desenvolvimento de Sistemas — IESB\n\nExperiência:\n  • ANA (Agência Nacional de Águas)\n  • Global Hitss\n  • TRT 10ª Região",
+    "terminal.projects": "PROJETOS:\n  🐾 DogWalk        — Plataforma de passeio de cães (Next.js + Supabase)\n  🛰️ Portifolio Samuel — Este portfólio (Next.js + Framer Motion)\n  📊 ANA Dashboards  — Dashboards de dados (Power BI + SQL)",
+    "terminal.skills": "HABILIDADES:\n  [Linguagens]    Python, SQL, TypeScript\n  [BI/Analytics] Power BI, Excel, Power Query, DAX\n  [ML/IA]         Scikit-learn, Pandas, LLMs\n  [Web]           Next.js, React, Tailwind CSS\n  [Banco]         PostgreSQL, Supabase, MySQL\n  [Ferramentas]   Docker, Git, Linux, Azure",
+    "terminal.contact": "CONTATO:\n  📧 Email:    samuelandrademedeiros@gmail.com\n  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros\n  🐙 GitHub:   github.com/Samuelfmedeiros\n  📱 WhatsApp: wa.me/556191191722",
+    "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animações: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testes:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
+    "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Repos públicos: portifolio, dog-walk e mais\n  Linguagens: TypeScript, Python, SQL, JavaScript\n  Contribuições: Frequentes",
+    "terminal.theme_toggled": "Tema alternado com sucesso.",
   },
 
   en: {
@@ -538,5 +547,14 @@ export const dict = {
     "cookie.close": "Close cookie banner",
     "terminal.input": "Type a command",
     "palette.toggle": "Change color palette",
+
+    // ── Terminal Commands ──
+    "terminal.about": "Samuel Medeiros\nData Analyst — Brasília/DF\n\nSpecialties:\n  • Power BI, SQL, DAX\n  • Python, Pandas, Machine Learning\n  • ETL & Automation\n  • Generative AI & LLMs\n\nEducation:\n  • Post-Grad in Data Science & ML Engineering — IESB\n  • Systems Analysis & Development — IESB\n\nExperience:\n  • ANA (Brazilian Water Agency)\n  • Global Hitss\n  • TRT 10th Region",
+    "terminal.projects": "PROJECTS:\n  🐾 DogWalk        — Dog walking platform (Next.js + Supabase)\n  🛰️ Portifolio Samuel — This portfolio (Next.js + Framer Motion)\n  📊 ANA Dashboards  — Data dashboards (Power BI + SQL)",
+    "terminal.skills": "SKILLS:\n  [Languages]    Python, SQL, TypeScript\n  [BI/Analytics] Power BI, Excel, Power Query, DAX\n  [ML/AI]        Scikit-learn, Pandas, LLMs\n  [Web]          Next.js, React, Tailwind CSS\n  [Database]     PostgreSQL, Supabase, MySQL\n  [Tools]        Docker, Git, Linux, Azure",
+    "terminal.contact": "CONTACT:\n  📧 Email:    samuelandrademedeiros@gmail.com\n  💼 LinkedIn: linkedin.com/in/samuelandrademedeiros\n  🐙 GitHub:   github.com/Samuelfmedeiros\n  📱 WhatsApp: wa.me/556191191722",
+    "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animations: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testing:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
+    "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Public repos: portifolio, dog-walk & more\n  Languages: TypeScript, Python, SQL, JavaScript\n  Contributions: Frequent",
+    "terminal.theme_toggled": "Theme toggled successfully.",
   },
 };
