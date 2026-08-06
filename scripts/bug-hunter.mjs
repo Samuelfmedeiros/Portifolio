@@ -24,18 +24,21 @@ const ROUTE_RENDER_CHECKS = {
         const root = document.querySelector('#__next') || document.querySelector('#root') || document.body;
         return { ok: root && root.innerHTML.length > 500, detail: `root len=${root?.innerHTML?.length || 0}` };
       }) },
-    { id: 'hero-section', desc: 'Seção Hero presente', check: (page) => page.evaluate(() => {
-        const hero = document.querySelector('#hero') || document.querySelector('[class*="hero"]');
-        return { ok: !!hero, detail: hero ? 'hero OK' : 'sem #hero' };
+    { id: 'content-presente', desc: 'Conteúdo principal carregou', check: (page) => page.evaluate(() => {
+        const body = document.body?.innerText || '';
+        return { ok: body.length > 2000, detail: `body ${body.length} chars` };
       }) },
-    { id: 'profile-section', desc: 'Seção Profile presente', check: (page) => page.evaluate(() => {
+    { id: 'secao-profile', desc: 'Seção Profile presente', check: (page) => page.evaluate(() => {
         const profile = document.querySelector('#profile') || document.querySelector('[class*="profile"]');
         return { ok: !!profile, detail: profile ? 'profile OK' : 'sem #profile' };
       }) },
-    { id: 'game-section', desc: 'Seção Games/Projetos presente', check: (page) => page.evaluate(() => {
-        const body = document.body?.innerText || '';
-        const hasProjetos = /projeto|game|projetos|\$\\{/i.test(body) && body.length > 2000;
-        return { ok: hasProjetos, detail: `body ${body.length} chars` };
+    { id: 'secao-projects', desc: 'Seção Projects presente', check: (page) => page.evaluate(() => {
+        const projects = document.querySelector('#projects') || document.querySelector('[class*="project"]');
+        return { ok: !!projects, detail: projects ? 'projects OK' : 'sem #projects' };
+      }) },
+    { id: 'secao-contact', desc: 'Seção Contact presente', check: (page) => page.evaluate(() => {
+        const contact = document.querySelector('#contact') || document.querySelector('[class*="contact"]');
+        return { ok: !!contact, detail: contact ? 'contact OK' : 'sem #contact' };
       }) },
     { id: 'temas-presentes', desc: 'Temas/Paletas carregaram', check: (page) => page.evaluate(() => {
         const palettes = document.querySelectorAll('[class*="palette"], [class*="theme"]');
