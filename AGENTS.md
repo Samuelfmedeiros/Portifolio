@@ -5,9 +5,9 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `ff41895` — i18n: terminal.help usa t() — 26 comandos traduziveis PT/EN
+- **Último commit:** `6b15722` — auto-sync: 2026-08-07 03:30 — i18n: terminal.help usa t() — 26 comandos traduziveis PT/EN
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
-- **Testes:** 222 passando (VRT adicionado)
+- **Testes:** 219 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
