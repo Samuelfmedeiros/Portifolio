@@ -146,7 +146,7 @@ export const dict = {
     "footer.brand.desc": "Analista de Dados — Brasília/DF.",
     "footer.social.title": "Redes",
     "footer.cv.title": "Currículo",
-    "footer.cv.download": "Download em PDF ↓",
+    "footer.cv.download": "Baixar em PDF ↓",
     "footer.lgpd.title": "Proteção de Dados (LGPD)",
     "footer.lgpd.text": "Seus dados estão protegidos conforme a LGPD (Lei 13.709/2018). Não compartilhamos seus dados com terceiros. Você pode solicitar acesso, correção ou exclusão dos seus dados a qualquer momento.",
     "footer.lgpd.link": "Leia a Política de Privacidade completa →",
