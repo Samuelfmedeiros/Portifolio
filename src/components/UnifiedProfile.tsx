@@ -7,6 +7,7 @@ import {
 } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import { Tooltip } from "./Tooltip";
+import { useLanguage } from "@/lib/i18n";
 
 /* ──────────────────── DATA UNIFICADA ──────────────────── */
 
@@ -78,6 +79,7 @@ const levelWidth: Record<string, number> = { Expert: 95, Advanced: 78, Proficien
 /* ──────────────────── COMPONENTES ──────────────────── */
 
 function SkillsCompact() {
+  const { t } = useLanguage();
   return (
     <div className="mb-8">
       <motion.h3 
@@ -85,7 +87,7 @@ function SkillsCompact() {
         whileInView={{ opacity: 1, y: 0 }}
         className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-3"
       >
-        ▸ HABILIDADES
+        ▸ {t("profile.skills.heading")}
       </motion.h3>
       <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
         {skills.map((skill) => (

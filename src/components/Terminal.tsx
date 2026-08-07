@@ -142,20 +142,7 @@ export function Terminal() {
         break;
 
       case "run routine:lights_out":
-        output = `> Executando rotina LIGHTS_OUT...
-> Simulando falha de energia...
-
-█▓▒░ ░▒▓█
-
-> WARNING: Todos os sistemas offline
-> BACKUP: Energia de emergência ativada
-> Modo Noturno Máximo ATIVADO
-
-✨ Screen brightness: 0%
-✨ Animations: disabled
-✨ Terminal: HIGH CONTRAST
-
-> Missão cumprida, operador.`;
+        output = t("terminal.lights_out");
         // Trigger extreme dark mode via CSS class
         document.documentElement.classList.add('lights-out');
         setTimeout(() => document.documentElement.classList.remove('lights-out'), 5000);
