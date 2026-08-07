@@ -217,7 +217,7 @@ export function Footer() {
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
     setCopied(true);
-    track({ type: "external_link", url: "email", label: "Copiar email" });
+    track({ type: "external_link", url: "email", label: t("footer.copy.email", "Copiar email") });
     setTimeout(() => setCopied(false), 2000);
   };
 
@@ -290,8 +290,8 @@ export function Footer() {
               <a
                 href="mailto:samuelandrademedeiros@gmail.com"
                 className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-                aria-label="Email"
-                onClick={() => track({ type: "external_link", url: "mail", label: "Email" })}
+                aria-label={t("aria.email", "Email")}
+                onClick={() => track({ type: "external_link", url: "mail", label: t("aria.email", "Email") })}
               >
                 <Mail className="w-5 h-5" />
               </a>
@@ -304,7 +304,7 @@ export function Footer() {
               {t("footer.cv.title")}
             </h3>
             <button
-              onClick={() => { setShowDownloadModal(true); track({ type: "external_link", url: "cv-download", label: "Baixar Currículo" }); }}
+              onClick={() => { setShowDownloadModal(true); track({ type: "external_link", url: "cv-download", label: t("hero.btn.cv", "Baixar Currículo") }); }}
               className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
             >
               {t("footer.cv.download")}

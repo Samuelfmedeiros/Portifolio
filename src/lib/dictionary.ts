@@ -224,6 +224,13 @@ export const dict = {
     "monetization.coffee": "Coffee",
     "monetization.sponsor": "Sponsor",
     "monetization.consulting": "Consultoria Técnica",
+    "monetization.support.title": "Apoie este projeto",
+    "monetization.support.subtitle": "Sua contribuição mantém o portfólio e os projetos open-source ativos 🚀",
+    "monetization.pix.key": "Chave Pix (email)",
+    "monetization.pix.copy": "Copiar chave",
+    "monetization.pix.hint": "Escaneie o QR Code ou copie a chave e pague pelo app do seu banco 💙",
+    "monetization.bmc.subtitle": "Contribuição única — internacional",
+    "monetization.security": "Pagamento 100% seguro • Você escolhe o valor",
 
     // ── Misc ──
     "cookie.banner.text": "Utilizamos analytics para melhorar sua experiência. E anúncios para sustentar o site. Aceita?",
@@ -522,6 +529,13 @@ export const dict = {
     "monetization.coffee": "Coffee",
     "monetization.sponsor": "Sponsor",
     "monetization.consulting": "Technical Consulting",
+    "monetization.support.title": "Support this project",
+    "monetization.support.subtitle": "Your contribution keeps the portfolio and open-source projects alive 🚀",
+    "monetization.pix.key": "Pix key (email)",
+    "monetization.pix.copy": "Copy key",
+    "monetization.pix.hint": "Scan the QR Code or copy the key and pay through your bank app 💙",
+    "monetization.bmc.subtitle": "One-time contribution — international",
+    "monetization.security": "100% secure payment • You choose the amount",
 
     // ── Misc ──
     "cookie.banner.text": "We use analytics to improve your experience. And ads to support the site. Accept?",

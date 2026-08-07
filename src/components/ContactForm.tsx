@@ -197,7 +197,7 @@ export function ContactForm() {
             animate={{ opacity: 1, scale: 1 }}
             className="text-center py-8"
             role="status"
-            aria-label="Mensagem enviada com sucesso"
+            aria-label={t("contact.form.success", "Mensagem enviada com sucesso")}
           >
             <CheckCircle className="w-12 h-12 mx-auto mb-4 text-[var(--success)]" />
             <p className="font-mono text-sm text-[var(--accent)]">{t("contact.form.success")}</p>
@@ -224,7 +224,7 @@ export function ContactForm() {
                 placeholder={t("contact.form.name.placeholder")}
                 aria-describedby="contact-name-desc"
               />
-              <span id="contact-name-desc" className="sr-only">Digite seu nome completo</span>
+              <span id="contact-name-desc" className="sr-only">{t("contact.form.name", "Digite seu nome completo")}</span>
             </div>
 
             <div>

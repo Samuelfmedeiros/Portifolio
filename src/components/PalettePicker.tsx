@@ -23,7 +23,7 @@ export const PalettePicker = memo(function PalettePicker() {
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full"
         aria-label={t("palette.toggle", "Trocar paleta de cores")}
-        title="Paleta de cores"
+        title={t("palette.toggle", "Trocar paleta de cores")}
         onClick={() => { setOpen((v) => !v); track({ type: "external_link", url: "palette", label: "Abrir paleta" }); }}
       >
         <Palette className="w-4 h-4 text-[var(--accent)]" />

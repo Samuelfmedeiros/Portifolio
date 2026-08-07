@@ -18,7 +18,7 @@ interface GameOption {
 }
 
 const GAMES: GameOption[] = [
-  { id: "simon", label: "Sequência", icon: "🧠", component: <MiniGame /> },
+  { id: "simon", label: "Simon", icon: "🧠", component: <MiniGame /> },
   { id: "asteroid", label: "Asteroids", icon: "🚀", component: <AsteroidDodge /> },
   { id: "typing", label: "Code Type", icon: "⌨️", component: <CodeTyping /> },
   { id: "memory", label: "Memory", icon: "🔲", component: <MemoryMatrix /> },

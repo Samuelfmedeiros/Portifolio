@@ -483,6 +483,7 @@ function TimelineItem({ item, index, onSelect, isSelected, total }: {
 /* ──────────────────── TIMELINE MODAL ──────────────────── */
 
 function TimelineModal({ item, onClose }: { item: TimelineItem; onClose: () => void }) {
+  const { t } = useLanguage();
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true, onClose);
   useEffect(() => {
@@ -531,7 +532,7 @@ function TimelineModal({ item, onClose }: { item: TimelineItem; onClose: () => v
             <button
               onClick={onClose}
               className="w-7 h-7 rounded-lg bg-[var(--border)]/50 hover:bg-[var(--border)] flex items-center justify-center transition-colors"
-              aria-label="Fechar"
+              aria-label={t("aria.close", "Fechar")}
             >
               <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                 <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
@@ -554,7 +555,7 @@ function TimelineModal({ item, onClose }: { item: TimelineItem; onClose: () => v
           {/* Skills */}
           {item.skillsUsed && item.skillsUsed.length > 0 && (
             <div className="mb-3">
-              <h4 className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider mb-2">Habilidades</h4>
+              <h4 className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider mb-2">{t("profile.skills.title", "Habilidades")}</h4>
               <div className="flex flex-wrap gap-1.5">
                 {item.skillsUsed.map((skill) => (
                   <span key={skill} className="text-[10px] font-mono px-2 py-1 rounded-full bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/20">

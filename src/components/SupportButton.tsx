@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Wallet, Copy, Check, X, Heart, Coffee } from "lucide-react";
 import { useState } from "react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 import { BMC_CONFIG } from "@/lib/monetization";
 
 const PIX_KEY = "samuelandrademedeiros@gmail.com";
@@ -17,6 +18,7 @@ export function SupportButton() {
   const [open, setOpen] = useState(false);
   const [copied, setCopied] = useState(false);
   const { track } = useAnalytics();
+  const { t } = useLanguage();
 
   const handleOpen = () => {
     setOpen(true);
@@ -57,7 +59,7 @@ export function SupportButton() {
       >
         <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <Heart className="w-4 h-4 relative z-10" />
-        <span className="relative z-10">Apoiar</span>
+        <span className="relative z-10">{t("monetization.support", "Apoiar")}</span>
       </motion.button>
 
       {/* Modal */}
@@ -91,10 +93,10 @@ export function SupportButton() {
                   <Heart className="w-5 h-5 text-[var(--accent)]" />
                 </div>
                 <h2 className="text-base font-semibold text-[var(--text-primary)] font-mono">
-                  Apoie este projeto
+                  {t("monetization.support.title", "Apoie este projeto")}
                 </h2>
                 <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                  Sua contribuição mantém o portfólio e os projetos open-source ativos 🚀
+                  {t("monetization.support.subtitle", "Sua contribuição mantém o portfólio e os projetos open-source ativos 🚀")}
                 </p>
               </div>
 
@@ -110,7 +112,7 @@ export function SupportButton() {
                   {/* Chave */}
                   <div className="w-full">
                     <p className="text-[9px] font-mono text-[var(--text-secondary)] mb-1 text-center uppercase tracking-wider">
-                      Chave Pix (email)
+                      {t("monetization.pix.key", "Chave Pix (email)")}
                     </p>
                     <div className="flex items-center gap-1.5">
                       <code className="flex-1 text-[11px] font-mono text-[var(--accent)] truncate bg-[var(--bg-primary)]/80 px-2.5 py-1.5 rounded-lg border border-[var(--border)]/40">
@@ -119,7 +121,7 @@ export function SupportButton() {
                       <button
                         onClick={handleCopy}
                         className="shrink-0 w-8 h-8 rounded-lg flex items-center justify-center border border-[var(--border)]/60 hover:border-[var(--accent)]/40 hover:bg-[var(--accent)]/5 transition-all"
-                        aria-label="Copiar chave"
+                        aria-label={t("monetization.pix.copy", "Copiar chave")}
                       >
                         {copied ? <Check className="w-3.5 h-3.5 text-emerald-400" /> : <Copy className="w-3.5 h-3.5 text-[var(--text-secondary)]" />}
                       </button>
@@ -127,7 +129,7 @@ export function SupportButton() {
                   </div>
 
                   <p className="text-[9px] text-[var(--text-secondary)] text-center">
-                    Escaneie o QR Code ou copie a chave e pague pelo app do seu banco 💙
+                    {t("monetization.pix.hint", "Escaneie o QR Code ou copie a chave e pague pelo app do seu banco 💙")}
                   </p>
                 </div>
 
@@ -144,7 +146,7 @@ export function SupportButton() {
                     </div>
                     <div className="flex-1 min-w-0">
                       <p className="text-sm font-semibold text-[var(--text-primary)]">Buy Me a Coffee</p>
-                      <p className="text-[9px] text-[var(--text-secondary)]">Contribuição única — internacional</p>
+                      <p className="text-[9px] text-[var(--text-secondary)]">{t("monetization.bmc.subtitle", "Contribuição única — internacional")}</p>
                     </div>
                     <svg className="w-3.5 h-3.5 text-[var(--text-secondary)] group-hover:text-[var(--accent)] transition-colors shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                       <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -153,7 +155,7 @@ export function SupportButton() {
                 )}
 
                 <p className="text-[9px] text-center text-[var(--text-secondary)]/50 pt-1">
-                  Pagamento 100% seguro • Você escolhe o valor
+                  {t("monetization.security", "Pagamento 100% seguro • Você escolhe o valor")}
                 </p>
               </div>
             </motion.div>
