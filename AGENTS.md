@@ -5,22 +5,22 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `1aa9c44` — docs: auto-update semanal — VRT Playwright 4 secoes + fix CV endereco
+- **Último commit:** `ff41895` — i18n: terminal.help usa t() — 26 comandos traduziveis PT/EN
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
 - **Testes:** 222 passando (VRT adicionado)
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
 
-## Sessao 2026-08-05 — VRT + CV fix
-- **VRT Playwright**: toHaveScreenshot em 4 secoes principais (home, projetos, games, contato)
-- **CV fix**: remove endereco completo e CEP — fica apenas "Brasilia-DF" (regenerado do DOCX fonte)
-- **4 commits** · push bare+origin OK · HEAD: `1aa9c44`
+## Sessão 2026-08-06 — Bug Hunter + i18n Terminal completo
+- **Bug Hunter Portifólio**: auditoria de render SPA Next.js — verifica se componentes React montaram corretamente
+- **i18n Terminal completo**: terminal.help agora usa t() — 26 comandos traduzíveis PT/EN, último reduto de PT hardcoded eliminado
+- HEAD: ff41895 · 8 commits · push bare+origin OK
 
 ## Sessão 2026-08-05 — VRT + CV fix
 - **VRT Playwright**: toHaveScreenshot em 4 seções principais (home, projetos, games, contato)
 - **CV fix**: remove endereço completo e CEP — fica apenas "Brasília-DF" (regenerado do DOCX fonte)
-- **4 commits** · push bare+origin OK · HEAD: 
+- **4 commits** · push bare+origin OK · HEAD: `1aa9c44`
 ## ✅ Features Implementadas
 - Parallax scene multicamada (L0-L3) com cockpit SVG animado
 - 5 mini-games embutidos (iframe + React via CDN)
