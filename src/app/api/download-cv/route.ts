@@ -24,7 +24,8 @@ function getClientIp(req: NextRequest): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { name, email, consent } = body;
+    const { name, email, consent, locale } = body;
+    const isEn = locale === "en";
 
     if (!consent) {
       return NextResponse.json(
@@ -181,9 +182,10 @@ export async function POST(req: NextRequest) {
     await Promise.allSettled(notifications);
 
     // Serve o PDF
-    const pdfPath = path.join(process.cwd(), "public", "Samuel_Andrade_2026.pdf");
+    const pdfName = isEn ? "Samuel_Andrade_Resume_2026.pdf" : "Samuel_Andrade_2026.pdf";
+    const pdfPath = path.join(process.cwd(), "public", pdfName);
     if (!fs.existsSync(pdfPath)) {
-      return NextResponse.json({ error: "Currículo não encontrado" }, { status: 404 });
+      return NextResponse.json({ error: isEn ? "Resume not found" : "Currículo não encontrado" }, { status: 404 });
     }
 
     const pdfBuffer = fs.readFileSync(pdfPath);
@@ -192,7 +194,7 @@ export async function POST(req: NextRequest) {
       status: 200,
       headers: {
         "Content-Type": "application/pdf",
-        "Content-Disposition": 'attachment; filename="Samuel_Andrade_2026.pdf"',
+        "Content-Disposition": `attachment; filename="${pdfName}"`,
         "Content-Length": String(pdfBuffer.length),
       },
     });

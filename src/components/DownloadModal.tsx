@@ -22,7 +22,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   const [errorMsg, setErrorMsg] = useState("");
   const downloadingRef = useRef(false);
   const { track } = useAnalytics();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, open, () => { if (status !== "loading") onClose(); });
 
@@ -45,6 +45,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
           name: name || undefined,
           email: email || undefined,
           consent: true,
+          locale,
         }),
       });
 
@@ -68,7 +69,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = "Samuel_Andrade_2026.pdf";
+      a.download = locale === "en" ? "Samuel_Andrade_Resume_2026.pdf" : "Samuel_Andrade_2026.pdf";
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
