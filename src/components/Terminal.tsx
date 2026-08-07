@@ -34,7 +34,8 @@ export function Terminal() {
   const [historyIndex, setHistoryIndex] = useState(-1);
   const [isFocused, setIsFocused] = useState(false);
   const { toggle: themeToggle } = useTheme();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const dateLocale = locale === "en" ? "en-US" : "pt-BR";
   const { track } = useAnalytics();
 
   useEffect(() => {
@@ -83,7 +84,7 @@ export function Terminal() {
         return;
 
       case "hora":
-        output = `Horário: ${new Date().toLocaleString("pt-BR")}`;
+        output = t("terminal.time").replace("{time}", new Date().toLocaleString(dateLocale));
         break;
 
       case "whoami":
@@ -91,13 +92,14 @@ export function Terminal() {
         break;
 
       case "date":
-        output = `Data atual: ${new Date().toLocaleDateString("pt-BR", { weekday: "long", year: "numeric", month: "long", day: "numeric" })}\nHorário: ${new Date().toLocaleTimeString("pt-BR")}`;
+        const fullDate = new Date().toLocaleDateString(dateLocale, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
+        output = `${t("terminal.date").replace("{date}", fullDate)}\n${t("terminal.time").replace("{time}", new Date().toLocaleTimeString(dateLocale))}`;
         break;
 
       case "uptime":
         const uptimeSecs = Math.floor((Date.now() - performance.now()) / 1000);
         const mins = Math.floor(uptimeSecs / 60);
-        output = `Session uptime: ${mins} min`;
+        output = t("terminal.uptime").replace("{mins}", String(mins));
         break;
 
       case "stack":
@@ -109,16 +111,12 @@ export function Terminal() {
         break;
 
       case "neofetch":
-        output = `
-        ╭───────────────╮         samuel@portfolio
-        │   🛰️  Portifolio v2  │         ──────────────────
-        │  Portifólio   │         OS: Web (Next.js 16)
-        ╰───────────────╯         Host: ${typeof navigator !== 'undefined' ? navigator.platform : 'unknown'}
-                                  Shell: Terminal React
-                                  Theme: ${typeof document !== 'undefined' ? document.documentElement.classList.contains('theme-dark') ? 'Night Vision' : 'Daylight Ops' : 'unknown'}
-                                  CPU: ${typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || '??' : '?'} cores
-                                  Memory: ${typeof navigator !== 'undefined' && (navigator as Navigator & { deviceMemory?: number }).deviceMemory ? (navigator as Navigator & { deviceMemory?: number }).deviceMemory + 'GB' : '??'}
-                                  Browser: ${typeof navigator !== 'undefined' ? navigator.userAgent.split(' ').pop() || 'unknown' : 'unknown'}`;
+        output = t("terminal.neofetch")
+          .replace("{host}", typeof navigator !== 'undefined' ? navigator.platform : 'unknown')
+          .replace("{theme}", typeof document !== 'undefined' ? document.documentElement.classList.contains('theme-dark') ? 'Night Vision' : 'Daylight Ops' : 'unknown')
+          .replace("{cpu}", String(typeof navigator !== 'undefined' ? navigator.hardwareConcurrency || '??' : '?'))
+          .replace("{memory}", typeof navigator !== 'undefined' && (navigator as Navigator & { deviceMemory?: number }).deviceMemory ? (navigator as Navigator & { deviceMemory?: number }).deviceMemory + 'GB' : '??')
+          .replace("{browser}", typeof navigator !== 'undefined' ? navigator.userAgent.split(' ').pop() || 'unknown' : 'unknown');
         break;
 
       case "theme":
@@ -127,18 +125,7 @@ export function Terminal() {
         break;
 
       case "fix path_variables":
-        output = `> Iniciando reparo do PATH...
-> Escaneando variáveis de ambiente corrompidas...
-
-[OK] USERPROFILE = C:\\Users\\Samuel
-[OK] APPDATA = C:\\Users\\Samuel\\AppData\\Roaming
-[OK] PATH restaurado para valores padrão
-[WARN] NODE_PATH estava pointing para C:\\Python27
-[FIX] Corrigido NODE_PATH -> C:\\Program Files\\nodejs
-[OK] JAVA_HOME = C:\\Program Files\\Java\\jdk-17
-
-> Processando... 100%
-✅ PATH_variables reparado com sucesso!`;
+        output = t("terminal.fix_path");
         break;
 
       case "run routine:lights_out":
@@ -149,62 +136,27 @@ export function Terminal() {
         break;
 
       case "matrix":
-        output = `> Iniciando efeito MATRIX...
-> Conectando à fonte de dados...
-
-████████████████████████████
-██ 01001000 01100101 01101100 ██
-██ 01101100 01101111 00100000 ██
-██ 01010100 01100101 01100011 ██
-████████████████████████████
-
-> Acesso concedido.
-> Bem-vindo ao sistema, Sr. Anderson.`;
+        output = t("terminal.matrix");
         break;
 
       case "sudo rm -rf /":
-        output = `> sudo: acesso root requerido
-> 
-> ⚠️ ALERTA DE SEGURANÇA ⚠️
-> Tentativa de deletar o universo detectada!
-> 
-> Bloqueando...
-> 
-> 🙃 Calma, visitante. 
-> Isso aqui é só um portfólio.
-> Não vou deixar você deletar minha carreira.`;
+        output = t("terminal.sudo_rm");
         break;
 
       case "fix":
-        output = `Uso: fix <componente>
-Exemplo: fix path_variables`;
+        output = t("terminal.fix_usage");
         break;
 
       case "run":
-        output = `Uso: run routine:<nome>
-Exemplo: run routine:lights_out`;
+        output = t("terminal.run_usage");
         break;
 
       case "sudo":
-        output = `Acesso negado. Este terminal não tem privilégios de root.
-(Porque isso é um portfólio, não um servidor de produção.)`;
+        output = t("terminal.sudo");
         break;
 
       case "ls":
-        output = ` Volume in drive C é WINDOWS
- Volume Serial Number: PS-2026
-
- Directory of C:\\Users\\Visitor\\
-
-2026-05-27  10:30    <DIR>          .
-2026-05-27  10:30    <DIR>          ..
-2026-05-27  10:30    <DIR>          Documents
-2026-05-27  10:30    <DIR>          Projects
-2026-05-27  10:30    <DIR>          Downloads
-2026-05-27  10:30    <DIR>          Desktop
-2026-05-27  10:30    <DIR>          Music
-               0 File(s)              0 bytes
-               7 Dir(s)   ∞ bytes free`;
+        output = t("terminal.ls");
         break;
 
       case "pwd":
@@ -270,12 +222,7 @@ Wireless LAN adapter Wi-Fi:
         break;
 
       case "exit":
-        output = `> Encerrando sessão...
-> Salvando configurações...
-> 
-> Obrigado por visitar! Volte sempre 🚀
-> 
-> (Dica: Feche esta aba se quiser sair de verdade.)`;
+        output = t("terminal.exit");
         break;
 
       case "holofote":

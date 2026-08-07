@@ -18,110 +18,6 @@ import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
 /* ──────────────────── DATA ──────────────────── */
 
-const timeline = [
-  {
-    type: "experience" as const,
-    icon: Briefcase,
-    period: "2025 — Atual",
-    title: "Desenvolvedor Full Stack Autônomo",
-    company: "Capivara / Arachne / DogWalk",
-    description: "Arquitetura e desenvolvimento de plataformas completas do zero: Arachne (scraper inteligente com RAG), Capivara (hub pessoal multi-tenant com FastAPI e autenticação JWT), DogWalk (marketplace pet com Supabase, Stripe, Cloudflare Workers). Responsável por todo o ciclo — modelagem de dados, APIs REST, deploy em produção, CI/CD, testes automatizados e documentação técnica. Stack principal: Next.js, React, FastAPI, Supabase, Cloudflare, Docker, Python, TypeScript, PostgreSQL.",
-    tags: ["Next.js", "FastAPI", "Supabase", "Cloudflare", "Python"],
-    skillsUsed: ["Next.js & React", "Python", "SQL & PostgreSQL", "Docker", "Git & GitHub"],
-  },
-  {
-    type: "experience" as const,
-    icon: Briefcase,
-    period: "2025",
-    title: "Analista de Dados — ANA",
-    company: "Agência Nacional de Águas",
-    description: "Análise de dados hídricos em larga escala na Agência Nacional de Águas. Desenvolvimento de dashboards interativos no Power BI para monitoramento de recursos hídricos, automação de pipelines de ETL com Python e SQL, integração de fontes de dados heterogêneas (sensores, estações, bases históricas). Criação de relatórios executivos e técnicos para tomada de decisão em políticas públicas de recursos hídricos.",
-    tags: ["Power BI", "Python", "SQL", "ETL"],
-    skillsUsed: ["Power BI", "SQL & PostgreSQL", "Python"],
-  },
-  {
-    type: "experience" as const,
-    icon: Briefcase,
-    period: "2024 — 2025",
-    title: "Técnico de Suporte N1 — Global Hitss",
-    description: "Atendimento de suporte técnico N1 para funcionários da Global Hitss em ambiente corporativo com mais de 2.000 usuários. Diagnóstico e resolução de problemas de hardware, software, redes e periféricos. Administração de usuários e dispositivos no Azure Active Directory e Microsoft 365. Configuração e manutenção de estações de trabalho, impressoras e equipamentos de rede. Suporte presencial e remoto com SLA de até 4 horas.",
-    tags: ["Azure", "Microsoft 365", "Suporte"],
-    skillsUsed: ["Docker", "Git & GitHub"],
-  },
-  {
-    type: "education" as const,
-    icon: GraduationCap,
-    period: "Em Andamento",
-    title: "Pós-graduação em Ciência de Dados e Machine Learning Engineering",
-    company: "IESB",
-    description: "Curso de pós-graduação focado em Ciência de Dados e Machine Learning Engineering no IESB. Estudo aprofundado de algoritmos de ML (regressão, classificação, clustering, redes neurais), engenharia de features, avaliação de modelos, deployment em produção. Domínio de SQL para análise exploratória, Power BI para visualização de dados, Python (pandas, numpy, scikit-learn, tensorflow) para modelagem preditiva e ETL.",
-    tags: ["Data Science", "Machine Learning", "SQL", "Python"],
-    skillsUsed: ["Python", "Machine Learning", "SQL & PostgreSQL"],
-  },
-  {
-    type: "education" as const,
-    icon: GraduationCap,
-    period: "2022 — 2024",
-    title: "Análise e Desenvolvimento de Sistemas",
-    company: "IESB — Data & ML",
-    description: "Graduação tecnológica em Análise e Desenvolvimento de Sistemas com ênfase em Data & ML pelo IESB. Formação abrangente em ciência da computação: algoritmos, estruturas de dados, banco de dados relacionais e não-relacionais, engenharia de software, desenvolvimento web full-stack. Disciplinas específicas em machine learning, inteligência artificial, estatística aplicada e visualização de dados. Projetos práticos utilizando Python, SQL, React e Next.js.",
-    tags: ["Python", "Machine Learning", "Data Science"],
-    skillsUsed: ["Python", "Machine Learning", "Next.js & React"],
-  },
-  {
-    type: "certification" as const,
-    icon: Award,
-    period: "2023 — 2025",
-    title: "Certificações",
-    company: "Coursera / Udemy / DIO",
-    description: "Certificações em Machine Learning, LLMs Locais, Docker, Git e CI/CD, Linux e Power BI Avançado por plataformas como Coursera, Udemy e DIO. Aprendizado contínuo em tecnologias emergentes: deployment de modelos de linguagem local (Ollama, llama.cpp), automação de infraestrutura com Docker e GitHub Actions, análise de dados avançada com Power BI (DAX, M, modelagem dimensional), e administração de sistemas Linux para ambientes de produção.",
-    tags: ["ML", "LLMs", "Docker", "Git", "Python"],
-    skillsUsed: ["LLMs Locais", "Docker", "Git & GitHub"],
-  },
-  {
-    type: "experience" as const,
-    icon: Briefcase,
-    period: "2021 — 2023",
-    title: "Auxiliar Técnico Freelancer",
-    company: "Autônomo",
-    description: "Instalação, configuração e manutenção de computadores, impressoras e periféricos. Suporte técnico presencial/remoto, implantação de sistemas.",
-    tags: ["Suporte Técnico", "Hardware", "Redes"],
-    skillsUsed: ["Suporte Técnico"],
-  },
-  {
-    type: "experience" as const,
-    icon: Briefcase,
-    period: "2017 — 2020",
-    title: "Auxiliar Técnico",
-    company: "TRT 10ª Região (CETEFE)",
-    description: "Digitalização e organização de documentos judiciais, controle logístico de armazenamento digital, verificação de integridade de informações.",
-    tags: ["Documentação", "Gestão Digital", "Processos"],
-    skillsUsed: ["Gestão de Documentos"],
-  },
-];
-
-const skills = [
-  // Core
-  { icon: BarChart3, name: "Power BI", category: "BI", level: "Expert", color: "from-cyan-400 to-emerald-400", description: "Dashboards interativos, DAX, M, modelagem dimensional" },
-  { icon: Database, name: "SQL", category: "Data", level: "Expert", color: "from-cyan-400 to-emerald-400", description: "Consultas complexas, otimização, schema design, PostgreSQL" },
-  { icon: Code2, name: "Python", category: "Backend", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "FastAPI, automação, ETL, pandas, scikit-learn" },
-  { icon: Brain, name: "Machine Learning", category: "AI", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "Regressão, classificação, clustering, redes neurais" },
-  { icon: Globe, name: "Next.js", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "SSR, SSG, API Routes, App Router, Turbopack" },
-  { icon: Bot, name: "LLMs Locais", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400", description: "Ollama, llama.cpp, RAG, embedding, fine-tuning" },
-  { icon: Container, name: "Docker", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400", description: "Containerização, Docker Compose, multi-stage builds" },
-  { icon: GitBranch, name: "Git", category: "Tools", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "Versionamento, branching, rebase, hooks, workflow" },
-  // Fundidos
-  { icon: Brain, name: "ML Frameworks", category: "AI", level: "Proficient", color: "from-purple-400 to-pink-400", description: "TensorFlow, PyTorch, scikit-learn, Hugging Face" },
-  { icon: GitBranch, name: "Git & CI/CD", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400", description: "GitHub Actions, pipelines, deploy automatizado" },
-  // Adicionados
-  { icon: Globe, name: "Cloudflare", category: "DevOps", level: "Proficient", color: "from-purple-400 to-pink-400", description: "Pages, Workers, D1, Tunnel, DNS, edge computing" },
-  { icon: Code2, name: "TypeScript", category: "Web", level: "Advanced", color: "from-cyan-400 to-blue-400", description: "Tipagem estática, genéricos, interfaces, strict mode" },
-  // Arquivados
-  // TensorFlow + PyTorch → ML Frameworks
-  // GitLab + CI/CD → Git & CI/CD
-  // Spark, Hadoop, R, XML/JSON → removidos (não refletem stack atual)
-];
-
 const levelWidth: Record<string, number> = { Expert: 95, Advanced: 78, Proficient: 60 };
 
 /* ──────────────────── COCKPIT SVG ──────────────────── */
@@ -507,7 +403,7 @@ function TimelineItem({ item, index, onSelect, isSelected, total }: {
   isSelected?: boolean;
   total?: number;
 }) {
-  const isLast = index === (total ?? timeline.length) - 1;
+  const isLast = index === (total ?? 0) - 1;
 
   return (
     <motion.div
