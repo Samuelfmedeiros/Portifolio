@@ -36,7 +36,8 @@ function WhatsAppIcon({ className }: { className?: string }) {
 }
 
 export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms' }) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const dateLocale = locale === "en" ? "en-US" : "pt-BR";
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, open, onClose);
   if (!open) return null;
@@ -103,7 +104,7 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                 {activeTab === 'privacy' && (
                   <>
                     <p>
-                      <strong className="text-[var(--text-primary)]">{t("modal.updated")}:</strong> {new Date().toLocaleDateString("pt-BR")}
+                      <strong className="text-[var(--text-primary)]">{t("modal.updated")}:</strong> {new Date().toLocaleDateString(dateLocale)}
                     </p>
 
                     <h3 className="text-sm text-[var(--accent)] mt-4">{t("privacy.section1.title")}</h3>
@@ -116,51 +117,39 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                       {t("privacy.section2.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">3. Armazenamento</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("privacy.section3.title")}</h3>
                     <p>
-                      Os dados são armazenados no Supabase (servidores cloud seguros). Não vendemos,
-                      alugamos ou compartilhamos seus dados com terceiros para fins comerciais.
+                      {t("privacy.section3.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">4. Seus Direitos (LGPD)</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("privacy.section4.title")}</h3>
                     <p>
-                      Conforme a Lei Geral de Proteção de Dados (Lei 13.709/2018), você tem direito a:
+                      {t("privacy.section4.text")}
                     </p>
                     <ul className="list-disc list-inside space-y-1 ml-2">
-                      <li>Acesso aos seus dados pessoais</li>
-                      <li>Correção de dados incompletos, inexatos ou desatualizados</li>
-                      <li>Eliminação dos dados pessoais tratados com consentimento</li>
-                      <li>Revogação do consentimento a qualquer momento</li>
-                      <li>Portabilidade dos dados a outro fornecedor de serviço</li>
+                      <li>{t("privacy.rights.access")}</li>
+                      <li>{t("privacy.rights.correction")}</li>
+                      <li>{t("privacy.rights.deletion")}</li>
+                      <li>{t("privacy.rights.revocation")}</li>
+                      <li>{t("privacy.rights.portability")}</li>
                     </ul>
 
-                    <h3 className="text-sm text-[var(--accent)]">5. Cookies e Analytics</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("privacy.section5.title")}</h3>
                     <p>
-                      Utilizamos cookies apenas para: preferências de tema (claro/escuro) e
-                      consentimento de analytics. O rastreamento de page views só é ativado
-                      após seu consentimento explícito.
+                      {t("privacy.section5.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)] mt-4">5.1 Anúncios e Monetização</h3>
+                    <h3 className="text-sm text-[var(--accent)] mt-4">{t("privacy.section5.1.title")}</h3>
                     <p>
-                      Este site pode exibir anúncios do Google AdSense. Os anúncios são carregados
-                      apenas com seu consentimento explícito. Sem consentimento, nenhum script de
-                      anúncio é carregado. Quando permitido, você pode escolher entre anúncios
-                      personalizados (usam cookies de rastreamento) ou não personalizados (sem rastreamento).
-                      Você pode alterar essa preferência a qualquer momento através do banner de cookies.
+                      {t("privacy.section5.1.text1")}
                     </p>
                     <p>
-                      Este site também pode conter links de afiliados para serviços que realmente utilizo
-                      (hospedagem, banco de dados, ferramentas). Esses links são identificados com
-                      rel=&quot;sponsored&quot; e não requerem consentimento de cookies, pois são simples links
-                      de referência. Links de doação (Buy Me a Coffee, GitHub Sponsors) também não
-                      requerem consentimento.
+                      {t("privacy.section5.1.text2")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">6. Contato</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("privacy.section6.title")}</h3>
                     <p>
-                      Para exercer seus direitos ou esclarecer dúvidas sobre privacidade,
-                      entre em contato: samuelandrademedeiros@gmail.com
+                      {t("privacy.section6.text")}
                     </p>
                     </>
                     )}
@@ -168,48 +157,42 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
                     {activeTab === 'terms' && (
                   <>
                     <p>
-                      <strong className="text-[var(--text-primary)]">{t("modal.updated")}:</strong> {new Date().toLocaleDateString("pt-BR")}
+                      <strong className="text-[var(--text-primary)]">{t("modal.updated")}:</strong> {new Date().toLocaleDateString(dateLocale)}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)] mt-4">1. Aceitação dos Termos</h3>
+                    <h3 className="text-sm text-[var(--accent)] mt-4">{t("terms.section1.title")}</h3>
                     <p>
-                      Ao acessar e utilizar este portfólio, você concorda em cumprir e estar vinculado aos presentes Termos de Uso.
-                      Se você não concordar com qualquer parte destes termos, por favor não utilize este site.
+                      {t("terms.section1.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">2. Uso do Site</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("terms.section2.title")}</h3>
                     <p>
-                      Este portfólio é destinado exclusivamente para exibição de projetos profissionais, habilidades e experiências de Samuel Medeiros.
-                      Você pode visualizar o conteúdo para fins pessoais e profissionais, mas não pode reproduzir, distribuir ou criar obras derivadas sem permissão explícita.
+                      {t("terms.section2.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">3. Propriedade Intelectual</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("terms.section3.title")}</h3>
                     <p>
-                      Todo o conteúdo deste site, incluindo textos, imagens, gráficos, logotipos, ícones e código-fonte, é propriedade exclusiva de Samuel Medeiros, exceto quando indicado de outra forma.
-                      Todos os direitos de propriedade intelectual estão reservados.
+                      {t("terms.section3.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">4. Limitação de Responsabilidade</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("terms.section4.title")}</h3>
                     <p>
-                      Samuel Medeiros não será responsável por quaisquer danos diretos, indiretos, incidentais, consequentes ou punitivos resultantes do acesso ou uso deste site.
-                      Embora nos esforcemos para manter as informações atualizadas e corretas, não garantimos a exatidão, integridade ou utilidade das informações fornecidas.
+                      {t("terms.section4.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">5. Links Externos</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("terms.section5.title")}</h3>
                     <p>
-                      Este site pode conter links para sites de terceiros que não são controlados por Samuel Medeiros.
-                      Não assumimos responsabilidade pelo conteúdo, políticas de privacidade ou práticas de qualquer site de terceiros.
+                      {t("terms.section5.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">6. Alterações nos Termos</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("terms.section6.title")}</h3>
                     <p>
-                      Samuel Medeiros reserva-se o direito de modificar ou substituir estes Termos de Uso a qualquer momento.
-                      É sua responsabilidade revisar estes termos periodicamente para mudanças. Seu uso continuado do site após tais modificações constitui aceitação dos novos termos.
+                      {t("terms.section6.text")}
                     </p>
 
-                    <h3 className="text-sm text-[var(--accent)]">7. Contato</h3>
+                    <h3 className="text-sm text-[var(--accent)]">{t("terms.section7.title")}</h3>
                     <p>
-                      Para perguntas sobre estes Termos de Uso, entre em contato: samuelandrademedeiros@gmail.com
+                      {t("terms.section7.text")}
                     </p>
                   </>
                 )}
@@ -228,7 +211,8 @@ export function Footer() {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
   const { track } = useAnalytics();
   const [showDownloadModal, setShowDownloadModal] = useState(false);
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const dateLocale = locale === "en" ? "en-US" : "pt-BR";
 
   const handleCopyEmail = () => {
     navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
@@ -388,7 +372,7 @@ export function Footer() {
             © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]/60">
-            {t("footer.updated")}: {new Date().toLocaleDateString("pt-BR")}
+            {t("footer.updated")}: {new Date().toLocaleDateString(dateLocale)}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]/60">
             {t("footer.version")}
