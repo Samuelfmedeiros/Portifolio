@@ -288,8 +288,8 @@ Wireless LAN adapter Wi-Fi:
 ║                                                      ║
 ║     ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆       ║
 ║                                                      ║
-║     Desenvolvedor Full Stack & Analista de Dados     ║
-║     Transformando dados em decisoes estrategicas     ║
+║     ${t("terminal.spotlight.role")}     ║
+║     ${t("terminal.spotlight.tagline")}     ║
 ║                                                      ║
 ╚══════════════════════════════════════════════════════╝`;
         break;
@@ -321,17 +321,7 @@ Approximate round trip times in milli-seconds:
         // Check for whois
         if (trimmed.startsWith("whois ")) {
           const name = trimmed.slice(6);
-          output = `WHOIS lookup for "${name}"...
-
-  Nome: ${name}
-  Cargo: Analista de Dados / Desenvolvedor Full Stack
-  Localização: Brasília, DF — Brasil
-  Expertise: Power BI, SQL, Python, Machine Learning
-  Contato: samuelandrademedeiros@gmail.com
-  GitHub: github.com/Samuelfmedeiros
-  LinkedIn: linkedin.com/in/samuelandrademedeiros
-
-  [Resultados obtidos do registro WHOIS interno]`;
+          output = t("terminal.whois").replace("{name}", name);
           break;
         }
 

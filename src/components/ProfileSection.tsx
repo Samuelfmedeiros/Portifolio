@@ -864,11 +864,11 @@ export function ProfileSection() {
           >
             <TypeWriter
               phrases={[
-                "Desenvolvedor Full Stack & Analista de Dados — Brasília/DF",
-                "Transformando dados em decisões estratégicas",
-                "Python • SQL • Power BI • Machine Learning",
-                "Next.js • React • TypeScript • Node.js",
-                "4+ anos transformando negócios com dados",
+                t("hero.typewriter.1"),
+                t("hero.typewriter.2"),
+                t("hero.typewriter.3"),
+                t("hero.typewriter.4"),
+                t("hero.typewriter.5"),
               ]}
               speed={35}
               deleteSpeed={20}
