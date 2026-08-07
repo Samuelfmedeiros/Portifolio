@@ -94,13 +94,48 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     localStorage.setItem(STORAGE_KEY, next);
   }, []);
 
-  const toggle = useCallback(() => {
-    const next = theme === "dark" ? "light" : "dark";
-    setTheme(next);
-    if (typeof window !== "undefined" && window.umami?.track) {
-      window.umami.track("theme_toggle", { theme: next });
-    }
-  }, [theme, setTheme]);
+  const toggle = useCallback(
+    (e?: { clientX?: number; clientY?: number }) => {
+      const next = theme === "dark" ? "light" : "dark";
+
+      // View Transition API — clip-path circular a partir do clique (GPU compositor).
+      // Fallback: troca direta (browsers sem suporte — Firefox antigo, etc).
+      const apply = () => {
+        setTheme(next);
+        if (typeof window !== "undefined" && window.umami?.track) {
+          window.umami.track("theme_toggle", { theme: next });
+        }
+      };
+
+      if (typeof document !== "undefined" && document.startViewTransition) {
+        const x = e?.clientX ?? window.innerWidth / 2;
+        const y = e?.clientY ?? window.innerHeight / 2;
+        const t = document.startViewTransition(apply);
+        t.ready.then(() => {
+          const r = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          );
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${r}px at ${x}px ${y}px)`,
+              ],
+            },
+            {
+              duration: 600,
+              easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            }
+          );
+        });
+      } else {
+        apply();
+      }
+    },
+    [theme, setTheme]
+  );
 
   const setPalette = useCallback((id: string) => {
     setPaletteState(id);
