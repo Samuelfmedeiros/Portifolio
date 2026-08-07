@@ -22,6 +22,19 @@ export function TypeWriter({
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
 
+  // Se as frases mudaram (ex: troca de locale PT/EN), reinicia a digitação
+  // com as novas frases — senão continua mostrando o idioma antigo.
+  const phrasesKey = phrases.join("|");
+  const [lastKey, setLastKey] = useState(phrasesKey);
+  useEffect(() => {
+    if (phrasesKey !== lastKey) {
+      setLastKey(phrasesKey);
+      setCurrentText("");
+      setIsDeleting(false);
+      setCurrentPhraseIndex(0);
+    }
+  }, [phrasesKey, lastKey]);
+
   const tick = useCallback(() => {
     const fullText = phrases[currentPhraseIndex];
 

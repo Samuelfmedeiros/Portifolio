@@ -33,10 +33,15 @@ export function useT() {
 }
 
 export function getInitialLocale(): Locale {
-  // SEMPRE inicia em PT — não restaura o último locale salvo no localStorage.
-  // Samuel pediu (07/08/2026): site abre em PT por padrão; usuário troca
-  // manualmente via toggle se quiser EN, mas cada visita nova volta a PT.
-  return "pt";
+  // Detecta o idioma de origem do usuário (navigator.language):
+  // - "pt", "pt-BR", "pt-PT" → PT
+  // - qualquer outro → EN
+  // Samuel pediu (07/08/2026): abre no padrão do país de origem,
+  // pt-BR se vier do Brasil, inglês se vier de outro país.
+  if (typeof window === "undefined") return "pt";
+  const lang = (navigator.language || navigator.languages?.[0] || "pt").toLowerCase();
+  if (lang.startsWith("pt")) return "pt";
+  return "en";
 }
 
 /** Translate a key using the dictionary (for non-hook contexts) */

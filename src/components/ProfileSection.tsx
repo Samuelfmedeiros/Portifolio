@@ -12,6 +12,7 @@ import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { getAbout, getTimeline, getSkills, type TimelineItem } from "@/lib/profileData";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { gsap, ScrollTrigger } from "@/hooks/useGsapAnimation";
 
@@ -392,7 +393,21 @@ function CircuitLines() {
 /* ──────────────────── SKILLS GRID ──────────────────── */
 
 function SkillsCompact() {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const skillsI18n = getSkills(locale);
+  const localSkills = [
+    { icon: BarChart3, color: "from-cyan-400 to-emerald-400" },
+    { icon: Database, color: "from-blue-400 to-cyan-400" },
+    { icon: Code2, color: "from-violet-400 to-fuchsia-400" },
+    { icon: Brain, color: "from-emerald-400 to-teal-400" },
+    { icon: Globe, color: "from-sky-400 to-indigo-400" },
+    { icon: Bot, color: "from-amber-400 to-orange-400" },
+  ];
+  const items = skillsI18n.items.map((item, i) => ({
+    ...item,
+    icon: localSkills[i]?.icon ?? (localSkills[0]?.icon as typeof Code2),
+    color: localSkills[i]?.color ?? localSkills[0]?.color ?? "",
+  }));
   return (
     <div className="mb-8">
       <motion.h2
@@ -403,7 +418,7 @@ function SkillsCompact() {
         {t("profile.skills.heading", "▸ HABILIDADES")}
       </motion.h2>
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 md:gap-4 max-w-4xl mx-auto">
-        {skills.map((skill, i) => (
+        {items.map((skill, i) => (
           <motion.div
             key={skill.name}
             initial={{ opacity: 0, y: 20 }}
@@ -474,13 +489,25 @@ function SkillsCompact() {
 
 /* ──────────────────── TIMELINE ITEM ──────────────────── */
 
-function TimelineItem({ item, index, onSelect, isSelected }: { 
-  item: typeof timeline[0]; 
+// Ícones por tipo de timeline (global — usado em TimelineItem e TimelineModal)
+const TYPE_ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
+  experience: Briefcase,
+  education: GraduationCap,
+  certification: Award,
+};
+
+function timelineIcon(type: string): React.ComponentType<{ className?: string }> {
+  return TYPE_ICONS[type] ?? Briefcase;
+}
+
+function TimelineItem({ item, index, onSelect, isSelected, total }: { 
+  item: TimelineItem; 
   index: number; 
-  onSelect?: (item: typeof timeline[0]) => void;
+  onSelect?: (item: TimelineItem) => void;
   isSelected?: boolean;
+  total?: number;
 }) {
-  const isLast = index === timeline.length - 1;
+  const isLast = index === (total ?? timeline.length) - 1;
 
   return (
     <motion.div
@@ -512,7 +539,10 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
       >
         <div className="flex items-start gap-3">
           <div className="shrink-0 w-7 h-7 rounded-md bg-[var(--accent)]/10 flex items-center justify-center">
-            <item.icon className="w-3.5 h-3.5 text-[var(--accent)]" />
+            {(() => {
+              const IconComp = timelineIcon(item.type);
+              return <IconComp className="w-3.5 h-3.5 text-[var(--accent)]" />;
+            })()}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
@@ -556,7 +586,7 @@ function TimelineItem({ item, index, onSelect, isSelected }: {
 
 /* ──────────────────── TIMELINE MODAL ──────────────────── */
 
-function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: () => void }) {
+function TimelineModal({ item, onClose }: { item: TimelineItem; onClose: () => void }) {
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, true, onClose);
   useEffect(() => {
@@ -590,7 +620,10 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-                <item.icon className="w-5 h-5 text-[var(--accent)]" />
+                {(() => {
+                  const IconComp = timelineIcon(item.type);
+                  return <IconComp className="w-5 h-5 text-[var(--accent)]" />;
+                })()}
               </div>
               <div>
                 <h3 className="font-semibold text-sm md:text-base">{item.title}</h3>
@@ -660,7 +693,8 @@ function TimelineModal({ item, onClose }: { item: typeof timeline[0]; onClose: (
 export function ProfileSection() {
   const containerRef = useRef<HTMLDivElement>(null);
   const { track } = useAnalytics();
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+  const about = getAbout(locale);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -668,7 +702,7 @@ export function ProfileSection() {
       setMounted(true);
     });
   }, []);
-  const [selectedItem, setSelectedItem] = useState<typeof timeline[0] | null>(null);
+  const [selectedItem, setSelectedItem] = useState<TimelineItem | null>(null);
   const [showFullTimeline, setShowFullTimeline] = useState(true);
   const [showBio, setShowBio] = useState(false);
   const TIMELINE_DEFAULT_COUNT = 4;
@@ -710,14 +744,17 @@ export function ProfileSection() {
     certification: { label: t("profile.label.certification", "Certificação"), icon: Award },
   };
 
+  // Timeline traduzida (texto vem do dicionário localizado; ícones são locais)
+  const timelineData: TimelineItem[] = getTimeline(locale);
+
   // Always mount all items — Samuel: "sempre deve montar tudo, lógica é o contrário"
   const renderPlan: Array<
-    | { kind: 'item'; item: typeof timeline[0]; displayIndex: number; hidden: boolean }
+    | { kind: 'item'; item: TimelineItem; displayIndex: number; hidden: boolean }
     | { kind: 'sep'; icon: React.ComponentType<{ className?: string }>; label: string; hidden: boolean }
   > = [];
   let lastType: string | null = null;
   let pastCutoff = false;
-  for (const [i, item] of timeline.entries()) {
+  for (const [i, item] of timelineData.entries()) {
     if (!showFullTimeline && i >= TIMELINE_DEFAULT_COUNT) pastCutoff = true;
     if (lastType !== null && item.type !== lastType) {
       const cfg = typeConfig[item.type];
@@ -925,18 +962,9 @@ export function ProfileSection() {
               aria-label={t("profile.about.aria", "Sobre mim")}
             >
               <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-4 mt-3 border-t border-[var(--border)]/30">
-                <p>
-                  Sou <strong className="text-[var(--text-primary)]">Samuel Medeiros</strong>, Desenvolvedor Full Stack e Analista de Dados com sede em Brasília/DF. Minha atuação combina engenharia de software com análise de dados — construo plataformas web completas enquanto extraio insights estratégicos de dados complexos.
-                </p>
-                <p>
-                  No desenvolvimento, trabalho com <strong className="text-[var(--accent)]">Next.js, React, TypeScript, FastAPI e Python</strong> para criar aplicações escaláveis. Minha stack inclui Supabase para backend-as-a-service, Cloudflare para deploy e edge computing, Docker para containerização, e PostgreSQL para bancos de dados relacionais. Já entreguei projetos como um scraper inteligente com RAG semântico (Arachne), um hub pessoal multi-tenant (Capivara), e um marketplace pet com pagamentos Stripe (DogWalk).
-                </p>
-                <p>
-                  Na análise de dados, sou especialista em <strong className="text-[var(--accent)]">Power BI, SQL e Python</strong> — crio dashboards interativos, pipelines de ETL, e modelos preditivos com machine learning. Minha experiência na Agência Nacional de Águas (ANA) envolveu análise de dados hídricos em larga escala, automação de processos e relatórios executivos para tomada de decisão em políticas públicas.
-                </p>
-                <p>
-                  Atualmente curso Pós-graduação em Ciência de Dados e Machine Learning Engineering no IESB, e mantenho aprendizado contínuo em LLMs locais (Ollama, llama.cpp), CI/CD com GitHub Actions, e arquiteturas serverless. Acredito que tecnologia de qualidade começa com código limpo, testes automatizados e documentação clara.
-                </p>
+                {about.paragraphs.map((para, i) => (
+                  <p key={i} className="[&_strong]:text-[var(--text-primary)] [&_strong]:font-semibold" dangerouslySetInnerHTML={{ __html: para }} />
+                ))}
               </div>
             </motion.div>
           </AnimatePresence>
@@ -961,7 +989,7 @@ export function ProfileSection() {
           </motion.h2>
 
           {/* P2: CTA expandir quando colapsado */}
-          {!showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+          {!showFullTimeline && timelineData.length > TIMELINE_DEFAULT_COUNT && (
             <motion.button
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
@@ -971,7 +999,7 @@ export function ProfileSection() {
               whileTap={{ scale: 0.98 }}
             >
               <span className="text-[var(--accent)] opacity-60">⏵</span>
-              {t("profile.show.full", "Ver jornada completa ({count} itens)").replace("{count}", String(timeline.length - TIMELINE_DEFAULT_COUNT))}
+              {t("profile.show.full", "Ver jornada completa ({count} itens)").replace("{count}", String(timelineData.length - TIMELINE_DEFAULT_COUNT))}
             </motion.button>
           )}
 
@@ -998,13 +1026,14 @@ export function ProfileSection() {
                     index={entry.displayIndex}
                     onSelect={setSelectedItem}
                     isSelected={selectedItem?.title === entry.item.title && selectedItem?.period === entry.item.period}
+                    total={timelineData.length}
                   />
                 </div>
               )
             )}
 
             {/* P2: Botão "mostrar menos" quando expandido (sempre visível) */}
-            {showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+            {showFullTimeline && timelineData.length > TIMELINE_DEFAULT_COUNT && (
               <motion.button
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -1018,7 +1047,7 @@ export function ProfileSection() {
             )}
 
             {/* P2: Botão "ver completa" no final quando colapsado */}
-            {!showFullTimeline && timeline.length > TIMELINE_DEFAULT_COUNT && (
+            {!showFullTimeline && timelineData.length > TIMELINE_DEFAULT_COUNT && (
               <motion.button
                 initial={{ opacity: 0 }}
                 whileInView={{ opacity: 1 }}
@@ -1027,7 +1056,7 @@ export function ProfileSection() {
                 whileHover={{ scale: 1.01 }}
                 whileTap={{ scale: 0.98 }}
               >
-                ⏷ {t("profile.show.full", "Ver jornada completa ({count} itens)").replace("{count}", String(timeline.length - TIMELINE_DEFAULT_COUNT))}
+                ⏷ {t("profile.show.full", "Ver jornada completa ({count} itens)").replace("{count}", String(timelineData.length - TIMELINE_DEFAULT_COUNT))}
               </motion.button>
             )}
 
