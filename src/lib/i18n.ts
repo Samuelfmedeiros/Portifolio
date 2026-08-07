@@ -33,9 +33,9 @@ export function useT() {
 }
 
 export function getInitialLocale(): Locale {
-  if (typeof window === "undefined") return "pt";
-  const saved = localStorage.getItem(STORAGE_KEY);
-  if (saved === "en") return "en";
+  // SEMPRE inicia em PT — não restaura o último locale salvo no localStorage.
+  // Samuel pediu (07/08/2026): site abre em PT por padrão; usuário troca
+  // manualmente via toggle se quiser EN, mas cada visita nova volta a PT.
   return "pt";
 }
 

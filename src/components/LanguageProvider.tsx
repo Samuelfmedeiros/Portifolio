@@ -6,9 +6,8 @@ import { LanguageContext, getInitialLocale, translate, type Locale } from "@/lib
 export function LanguageProvider({ children }: { children: ReactNode }) {
   const [locale, setLocaleState] = useState<Locale>(getInitialLocale);
 
-  // Sync to localStorage + html lang attribute
+  // Sync to html lang attribute (não persiste locale — sempre PT na próxima visita)
   useEffect(() => {
-    localStorage.setItem("mc-locale", locale);
     document.documentElement.lang = locale === "pt" ? "pt-BR" : "en";
   }, [locale]);
 
