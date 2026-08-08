@@ -52,7 +52,7 @@ const getTagStyle = (tech: string) => {
     return "bg-cyan-500/15 text-cyan-400 border-cyan-500/30";
   if (["supabase", "postgresql", "postgres", "sql", "mysql"].includes(lower))
     return "bg-emerald-500/15 text-emerald-400 border-emerald-500/30";
-  if (["python", "pandas", "numpy", "scikit"].includes(lower))
+  if (["python", "fastapi", "pandas", "numpy", "scikit", "langchain", "crawl4ai"].includes(lower))
     return "bg-yellow-500/15 text-yellow-400 border-yellow-500/30";
   if (["tailwind", "css", "html"].includes(lower))
     return "bg-purple-500/15 text-purple-400 border-purple-500/30";
@@ -64,6 +64,41 @@ const getTagStyle = (tech: string) => {
     return "bg-blue-500/15 text-blue-400 border-blue-500/30";
   return "bg-[var(--border)]/50 text-[var(--text-secondary)] border-[var(--border)]/30";
 };
+
+// ── Filter categories ──
+// Mapeia topics/language/description dos projetos para as categorias do filtro.
+// As categorias seguem as keys do dicionário (projects.filter.*) — web, data, ai, devops, tools.
+type FilterCategory = "web" | "data" | "ai" | "devops" | "tools";
+
+const CATEGORY_KEYWORDS: Record<FilterCategory, string[]> = {
+  web: ["web", "marketplace", "blog", "astro", "mdx", "next.js", "nextjs", "react", "frontend", "site"],
+  data: ["data", "sql", "postgres", "etl", "analytics", "pandas", "dashboard", "bi"],
+  ai: ["ai", "rag", "mcp", "crawl4ai", "llm", "ml", "machine", "langchain", "embedding"],
+  devops: ["docker", "cloudflare", "devops", "ci", "deploy", "infra", "kubernetes"],
+  tools: ["tools", "terminal", "cli", "automation", "utility"],
+};
+
+function getProjectCategories(repo: Repo): FilterCategory[] {
+  const haystack = [
+    repo.language || "",
+    ...(repo.topics || []),
+    ...(repo.description || "").toLowerCase().split(/[\s,./-]+/),
+  ].map((s) => s.toLowerCase());
+
+  return (Object.keys(CATEGORY_KEYWORDS) as FilterCategory[]).filter((cat) =>
+    CATEGORY_KEYWORDS[cat].some((kw) => haystack.includes(kw))
+  );
+}
+
+// Labels dos filtros (keys do dicionário i18n)
+const FILTER_KEYS: { key: FilterCategory | ""; labelKey: string }[] = [
+  { key: "", labelKey: "projects.filter.all" },
+  { key: "web", labelKey: "projects.filter.web" },
+  { key: "data", labelKey: "projects.filter.data" },
+  { key: "ai", labelKey: "projects.filter.ai" },
+  { key: "devops", labelKey: "projects.filter.devops" },
+  { key: "tools", labelKey: "projects.filter.tools" },
+];
 
 // Extract tech tags from repo
 const extractTechTags = (repo: Repo): string[] => {
@@ -152,7 +187,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
         {/* Project image header — clickable if has demo */}
         {(repo.homepage || repo.hasDemo) ? (
           <a
-            href={repo.name === "Portifolio" ? (repo.html_url || "#") : (repo.homepage || "#")}
+            href={repo.homepage || "#"}
             target="_blank"
             rel="noopener noreferrer"
             className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
@@ -328,30 +363,28 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string }) {
   const { t } = useLanguage();
   const resolvedTitle = title || t("projects.section.title", "▸ PROJETOS");
-  const [activeFilter, setActiveFilter] = useState<string>("");
+  const [activeFilter, setActiveFilter] = useState<FilterCategory | "">("");
   const [selectedProject, setSelectedProject] = useState<Repo | null>(null);
   const { track } = useAnalytics();
-  // Collect all unique languages/tags for filter
-  const allTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    if (!repos) return [] as string[];
-    repos.forEach((r) => {
-      if (r.language) tagSet.add(r.language);
-      r.topics?.forEach((t) => {
-        if (t !== "featured") tagSet.add(t);
-      });
-    });
-    return Array.from(tagSet).sort();
+
+  // Collect all categories present in the current repos (for available filters)
+  const availableFilters = useMemo(() => {
+    const catSet = new Set<FilterCategory>();
+    if (!repos) return [] as FilterCategory[];
+    repos.forEach((r) => getProjectCategories(r).forEach((c) => catSet.add(c)));
+    return Array.from(catSet);
   }, [repos]);
 
-  // Filter repos
+  // Filter repos by active category
   const filteredRepos = useMemo(() => {
     if (!activeFilter) return repos;
-    return repos.filter(
-      (r) =>
-        r.language === activeFilter || r.topics?.includes(activeFilter)
-    );
+    return repos.filter((r) => getProjectCategories(r).includes(activeFilter));
   }, [repos, activeFilter]);
+
+  const handleFilter = (filter: FilterCategory | "") => {
+    setActiveFilter(filter);
+    track({ type: "project_filter", filter: filter || "all" });
+  };
 
   if (!repos || repos.length === 0) {
     return (
@@ -375,7 +408,29 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
 
       {/* Stats bar */}
       <div className="flex items-center justify-center gap-4 mb-6 font-mono text-xs text-[var(--text-secondary)]">
-        <span>{t("projects.count").replace("{count}", String(repos.length))}</span>
+        <span>{t("projects.count").replace("{count}", String(filteredRepos.length))}</span>
+      </div>
+
+      {/* Filter bar */}
+      <div className="flex flex-wrap items-center justify-center gap-2 mb-6" role="group" aria-label={t("projects.filter.all")}>
+        {FILTER_KEYS.filter((f) => !f.key || availableFilters.includes(f.key)).map((f) => {
+          const isActive = activeFilter === f.key;
+          return (
+            <button
+              key={f.key || "all"}
+              type="button"
+              onClick={() => handleFilter(f.key)}
+              aria-pressed={isActive}
+              className={`px-3 py-1.5 rounded-full text-[11px] font-mono border transition-all duration-200 ${
+                isActive
+                  ? "bg-[var(--accent)]/15 text-[var(--accent)] border-[var(--accent)]/50 shadow-[0_0_12px_color-mix(in_srgb,var(--accent)_20%,transparent)]"
+                  : "bg-transparent text-[var(--text-secondary)] border-[var(--border)]/40 hover:text-[var(--text-primary)] hover:border-[var(--border)]"
+              }`}
+            >
+              {t(f.labelKey)}
+            </button>
+          );
+        })}
       </div>
 
       {/* Cards grid */}
@@ -383,8 +438,8 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
         className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
         layout
       >
-        <AnimatePresence>
-          {repos.map((repo, i) => (
+        <AnimatePresence mode="popLayout">
+          {filteredRepos.map((repo, i) => (
             <ProjectCard key={repo.id} repo={repo} index={i} onSelect={setSelectedProject} />
           ))}
         </AnimatePresence>

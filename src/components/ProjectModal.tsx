@@ -3,7 +3,8 @@
 import { useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { X } from "lucide-react";
+import Image from "next/image";
+import { X, ExternalLink, Star, GitFork, Calendar } from "lucide-react";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useLanguage } from "@/lib/i18n";
 import type { Repo } from "@/lib/types";
@@ -78,6 +79,11 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
     .filter((t) => t !== "featured")
     .slice(0, 8);
 
+  const hasHomepage = !!(repo.homepage || repo.hasDemo);
+  const updated = repo.pushed_at
+    ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
+    : null;
+
   if (typeof document === "undefined") return null;
 
   return createPortal(
@@ -103,6 +109,20 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
             className="bg-[var(--bg-primary)] border border-[var(--border)] rounded-xl max-w-lg w-full max-h-[80vh] overflow-y-auto shadow-2xl"
             onClick={(e) => e.stopPropagation()}
           >
+            {/* Project cover header */}
+            {repo.imageUrl && (
+              <div className="relative h-[140px] w-full shrink-0 overflow-hidden" style={{ background: repo.imageGradient || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)" }}>
+                <Image
+                  src={repo.imageUrl}
+                  alt={`${repo.name} — capa`}
+                  fill
+                  className="object-cover"
+                  unoptimized
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[var(--bg-primary)] via-transparent to-transparent" />
+              </div>
+            )}
+
             <div className="p-5">
               {/* Header */}
               <div className="flex items-start justify-between mb-4">
@@ -145,11 +165,54 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
                 </p>
               )}
 
+              {/* Stats row */}
+              <div className="flex items-center gap-4 text-[11px] font-mono text-[var(--text-secondary)] mb-4 pb-4 border-b border-[var(--border)]/30">
+                <span className="flex items-center gap-1">
+                  <Star className="w-3.5 h-3.5" /> {repo.stargazers_count}
+                </span>
+                <span className="flex items-center gap-1">
+                  <GitFork className="w-3.5 h-3.5" /> {repo.forks_count}
+                </span>
+                {updated && (
+                  <span className="flex items-center gap-1">
+                    <Calendar className="w-3.5 h-3.5" /> {updated}
+                  </span>
+                )}
+              </div>
+
+              {/* Action links */}
+              {(hasHomepage || repo.html_url) && (
+                <div className="flex flex-wrap gap-3 mb-4">
+                  {hasHomepage && (
+                    <a
+                      href={repo.homepage || "#"}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-mono bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      {t("projects.view.live", "Site →")}
+                    </a>
+                  )}
+                  {repo.html_url && (
+                    <a
+                      href={repo.html_url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-[11px] font-mono bg-[var(--border)]/30 text-[var(--text-primary)] border border-[var(--border)]/40 hover:bg-[var(--border)]/50 transition-colors"
+                    >
+                      <ExternalLink className="w-3 h-3" />
+                      {t("projects.view.github", "GitHub →")}
+                    </a>
+                  )}
+                </div>
+              )}
+
               {/* Tech tags */}
               {techTags.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider mb-2">
-                    Tecnologias
+                    {t("projects.filter.tools", "Tecnologias")}
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {techTags.map((tag) => (

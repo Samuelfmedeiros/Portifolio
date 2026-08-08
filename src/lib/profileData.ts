@@ -221,6 +221,10 @@ const PROJECTS_PT: Record<string, ProjectI18n> = {
     description: "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion, animações cinematográficas, tema ciano+preto.",
     topics: ["web"],
   },
+  lifelog: {
+    description: "Blog pessoal com posts sobre tecnologia, projetos e aprendizados — Astro, MDX, TypeScript e design system próprio.",
+    topics: ["web", "blog", "astro", "mdx"],
+  },
 };
 
 const PROJECTS_EN: Record<string, ProjectI18n> = {
@@ -235,6 +239,10 @@ const PROJECTS_EN: Record<string, ProjectI18n> = {
   Portifolio: {
     description: "Professional sci-fi cockpit-style portfolio — Next.js, Framer Motion, cinematic animations, teal+black theme.",
     topics: ["web"],
+  },
+  lifelog: {
+    description: "Personal blog with posts about technology, projects and learnings — Astro, MDX, TypeScript and a custom design system.",
+    topics: ["web", "blog", "astro", "mdx"],
   },
 };
 
