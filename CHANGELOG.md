@@ -1,5 +1,14 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-07] — i18n 100% + CV locale-aware + auditoria CI
+### 🌐 i18n
+- Locale por origem (navigator.language): pt-BR/pt-PT → PT, outro → EN; não restaura último salvo
+- Zero PT hardcoded visível: Terminal (time/date/uptime/neofetch/fix/matrix/sudo/run/ls/exit/whois/holofote/lights_out), ProfileSection, Footer aria/tracking, PalettePicker, ContactForm, SupportButton (modal Pix), games label, UnifiedProfile skills
+- **Auditoria CI**: teste falha se achar texto PT hardcoded fora de t() — varre JSX text + aria/placeholder/title em 14 componentes
+### 📄 CV
+- Download segue o locale: EN → Samuel_Andrade_Resume_2026.pdf, PT → Samuel_Andrade_2026.pdf
+- 17 commits · push bare+origin OK
+
 ## [2026-08-06] — Bug Hunter + i18n Terminal completo
 
 ### 🐛 Bug Hunter

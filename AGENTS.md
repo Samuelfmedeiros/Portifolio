@@ -5,12 +5,19 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `6b15722` — auto-sync: 2026-08-07 03:30 — i18n: terminal.help usa t() — 26 comandos traduziveis PT/EN
+- **Último commit:** `d97540b` — auto-sync: 2026-08-07 18:30 — i18n 100% + CV locale-aware
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
 - **Testes:** 219 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
+
+## Sessão 2026-08-07 — i18n 100% + CV locale-aware + auditoria CI
+- **i18n por origem**: locale detectado via navigator.language (pt-BR/pt-PT → PT, outro → EN); NÃO restaura último salvo — cada visita detecta a origem
+- **CV locale-aware**: /api/download-cv serve Samuel_Andrade_2026.pdf (PT) ou Samuel_Andrade_Resume_2026.pdf (EN) conforme locale
+- **Zero PT hardcoded**: Terminal (todos os comandos), ProfileSection, Footer, PalettePicker, ContactForm, SupportButton (modal Pix), games label — varredura profunda
+- **Auditoria CI**: teste falha se achar texto PT hardcoded fora de t() (varre JSX text + aria/placeholder/title em 14 componentes)
+- 17 commits · push bare+origin OK · HEAD: `d97540b`
 
 ## Sessão 2026-08-06 — Bug Hunter + i18n Terminal completo
 - **Bug Hunter Portifólio**: auditoria de render SPA Next.js — verifica se componentes React montaram corretamente
