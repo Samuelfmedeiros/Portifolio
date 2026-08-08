@@ -124,7 +124,8 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
               ],
             },
             {
-              duration: 600,
+              // 400ms — rápida mas fluida. < 400ms fica seco, > 600ms arrasta.
+              duration: 400,
               easing: "cubic-bezier(0.65, 0, 0.35, 1)",
               pseudoElement: "::view-transition-new(root)",
             }

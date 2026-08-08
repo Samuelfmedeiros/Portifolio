@@ -384,4 +384,32 @@ button {
   transition: border-color 0.3s ease, transform 0.3s ease, box-shadow 0.3s ease;
 }
 
+/* ========== VIEW TRANSITIONS (tema) ==========
+   Suporte CSS pra animação circular da troca de tema (ThemeProvider).
+   Sem estes blocos o clip-path anima MAS o blend padrão do Chromium
+   (plus-lighter) faz o old snapshot clarear/sumir — "animação quebrada".
+   Config validada no LifeLog (mesma stack). */
+::view-transition-image-pair(root) {
+  isolation: isolate;
+}
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+::view-transition-new(root) {
+  z-index: 9999;
+}
+::view-transition-old(root) {
+  z-index: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none !important;
+  }
+}
+
 
