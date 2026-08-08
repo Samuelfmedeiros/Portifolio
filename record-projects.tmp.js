@@ -5,6 +5,7 @@ const { chromium } = require('playwright');
   const browser = await chromium.launch();
   const context = await browser.newContext({
     viewport: { width: 1280, height: 900 },
+    locale: 'pt-BR',
     recordVideo: { dir: '/tmp/portfolio-video', size: { width: 1280, height: 900 } },
   });
   const page = await context.newPage();
