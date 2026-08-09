@@ -224,7 +224,7 @@ export function Footer() {
   return (
     <footer className="border-t border-[var(--border)] mt-20" role="contentinfo">
       <div className="max-w-7xl mx-auto px-6 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8">
           {/* Brand */}
           <div>
             <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
@@ -294,6 +294,51 @@ export function Footer() {
                 onClick={() => track({ type: "external_link", url: "mail", label: t("aria.email", "Email") })}
               >
                 <Mail className="w-5 h-5" />
+              </a>
+            </div>
+          </div>
+
+          {/* Projetos */}
+          <div>
+            <h3 className="font-mono text-sm text-[var(--accent)] mb-2">
+              {t("footer.projects.title")}
+            </h3>
+            <div className="flex flex-col gap-1.5">
+              <a
+                href="https://seu.pet"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                onClick={() => track({ type: "external_link", url: "seu.pet", label: "DogWalk" })}
+              >
+                DogWalk
+              </a>
+              <a
+                href="https://arachne.seu.pet"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                onClick={() => track({ type: "external_link", url: "arachne", label: "Arachne" })}
+              >
+                Arachne
+              </a>
+              <a
+                href="https://lifelog-sepia.vercel.app"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                onClick={() => track({ type: "external_link", url: "lifelog", label: "LifeLog" })}
+              >
+                LifeLog
+              </a>
+              <a
+                href="https://github.com/Samuelfmedeiros"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                onClick={() => track({ type: "external_link", url: "github-projects", label: "GitHub" })}
+              >
+                GitHub →
               </a>
             </div>
           </div>

@@ -150,6 +150,7 @@ export const dict = {
     // ── Footer ──
     "footer.brand.desc": "Analista de Dados — Brasília/DF.",
     "footer.social.title": "Redes",
+    "footer.projects.title": "Projetos",
     "footer.cv.title": "Currículo",
     "footer.cv.download": "Baixar em PDF ↓",
     "footer.lgpd.title": "Proteção de Dados (LGPD)",
@@ -460,6 +461,7 @@ export const dict = {
     // ── Footer ──
     "footer.brand.desc": "Data Analyst — Brasília/DF.",
     "footer.social.title": "Social",
+    "footer.projects.title": "Projects",
     "footer.cv.title": "Resume",
     "footer.cv.download": "Download PDF ↓",
     "footer.lgpd.title": "Data Protection (LGPD)",

@@ -210,38 +210,38 @@ export interface ProjectI18n {
 
 const PROJECTS_PT: Record<string, ProjectI18n> = {
   DogWalk: {
-    description: "Marketplace completo de serviços pet — encontre passeadores verificados perto de você, acompanhe o passeio ao vivo com GPS e pague com PIX. Autenticação, pagamentos via Stripe e geolocalização em tempo real: React, Supabase, Stripe e Cloudflare.",
+    description: "Encontre passeadores verificados perto de você e acompanhe o passeio do seu pet ao vivo, com GPS e pagamento por PIX. Marketplace completo com autenticação, Stripe e geolocalização em tempo real.",
     topics: ["web", "marketplace"],
   },
   Arachne: {
-    description: "Motor de scraping inteligente com RAG semântico — captura páginas web, extrai dados estruturados de 44+ formatos de documento e responde perguntas sobre o conteúdo com busca híbrida (web + vetorial). Inclui MCP server, crawl4ai e exportação multi-formato: um ecossistema unificado de coleta, processamento e consulta de conhecimento.",
+    description: "Da página web à resposta: captura conteúdo de qualquer site, extrai dados de 44+ formatos de documento e conversa com o conhecimento via RAG semântico. MCP server + crawl4ai, com busca híbrida web e vetorial.",
     topics: ["web", "ai", "data", "fastapi", "python", "mcp", "crawl4ai", "rag"],
   },
   Portifolio: {
-    description: "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion e Tailwind com animações cinematográficas, tema ciano+preto, modo claro/escuro, 6 paletas de cores e suporte PT/EN. Este site, feito pra mostrar quem eu sou e o que eu construo.",
+    description: "Este site, em estilo cockpit sci-fi — Next.js, Framer Motion e animações cinematográficas. Modo claro/escuro, 6 paletas de cores, PT/EN e atenção total a mobile, acessibilidade e performance.",
     topics: ["web"],
   },
   lifelog: {
-    description: "Blog pessoal onde compartilho aprendizados reais de engenharia — otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX, TypeScript e design system próprio.",
+    description: "Aprendizados reais de engenharia sem filtro: otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX e design system próprio.",
     topics: ["web", "blog", "astro", "mdx"],
   },
 };
 
 const PROJECTS_EN: Record<string, ProjectI18n> = {
   DogWalk: {
-    description: "Complete pet services marketplace — find verified dog walkers near you, track the walk live with GPS and pay with PIX. Authentication, Stripe payments and real-time geolocation: React, Supabase, Stripe and Cloudflare.",
+    description: "Find verified dog walkers near you and track your pet's walk live, with GPS and PIX payment. Complete marketplace with authentication, Stripe and real-time geolocation.",
     topics: ["web", "marketplace"],
   },
   Arachne: {
-    description: "Intelligent scraping engine with semantic RAG — captures web pages, extracts structured data from 44+ document formats and answers questions about the content with hybrid search (web + vector). Includes MCP server, crawl4ai and multi-format export: a unified ecosystem for collecting, processing and querying knowledge.",
+    description: "From web page to answer: captures content from any site, extracts data from 44+ document formats and talks to the knowledge via semantic RAG. MCP server + crawl4ai, with hybrid web and vector search.",
     topics: ["web", "ai", "data", "fastapi", "python", "mcp", "crawl4ai", "rag"],
   },
   Portifolio: {
-    description: "Professional sci-fi cockpit-style portfolio — Next.js, Framer Motion and Tailwind with cinematic animations, teal+black theme, dark/light mode, 6 color palettes and PT/EN support. This site, built to show who I am and what I build.",
+    description: "This site, in sci-fi cockpit style — Next.js, Framer Motion and cinematic animations. Dark/light mode, 6 color palettes, PT/EN and full attention to mobile, accessibility and performance.",
     topics: ["web"],
   },
   lifelog: {
-    description: "Personal blog where I share real engineering learnings — performance optimization, refactors, dashboards and behind-the-scenes of my projects. Astro, MDX, TypeScript and a custom design system.",
+    description: "Real engineering learnings without filters: performance optimization, refactors, dashboards and behind-the-scenes of my projects. Astro, MDX and a custom design system.",
     topics: ["web", "blog", "astro", "mdx"],
   },
 };

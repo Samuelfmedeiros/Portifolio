@@ -105,7 +105,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
   const { track } = useAnalytics();
 
   const handleClick = () => {
-    if (!hasLink && onSelect) {
+    // Todos os cards abrem o modal de detalhes (padrão Arachne)
+    if (onSelect) {
       onSelect(repo);
     }
   };
@@ -121,12 +122,10 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
     >
       <GlassCard
         delay={0}
-        onClick={!hasLink ? handleClick : undefined}
-        className={`group relative h-full flex flex-col overflow-hidden transition-all duration-300 ${
-          hasLink ? 'hover:scale-[1.03]' : 'hover:scale-[1.03] cursor-pointer'
-        }`}
-        tabIndex={!hasLink ? 0 : undefined}
-        onKeyDown={!hasLink ? (e: React.KeyboardEvent) => { if (e.key === 'Enter') handleClick(); } : undefined}
+        onClick={handleClick}
+        className={`group relative h-full flex flex-col overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.03]`}
+        tabIndex={0}
+        onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
       >
         {/* Holo-card glow effect */}
         <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none bg-gradient-to-br from-[var(--accent)]/5 via-transparent to-[var(--accent-alt)]/5" />
@@ -157,7 +156,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             rel="noopener noreferrer"
             className="relative h-[160px] md:h-[200px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
             style={{ background: gradient }}
-            onClick={() => track({ type: "project_click", project: repo.name })}
+            onClick={(e) => { e.stopPropagation(); track({ type: "project_click", project: repo.name }); }}
           >
             <div className="absolute inset-0 opacity-20 bg-[radial-gradient(circle_at_50%_120%,rgba(255,255,255,0.3),transparent_60%)]" />
             {/* Grid overlay pattern */}
@@ -274,29 +273,36 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             )}
           </div>
 
-          {/* Action button — "Ver projeto" grande */}
-          <div className="mt-auto">
-            {repo.name === "Portifolio" && repo.html_url ? (
-              <a
-                href={repo.html_url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-mono bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-all duration-200 min-h-[40px]"
-              >
-                <ExternalLink className="w-4 h-4" />
-                {t("projects.view.github")}
-              </a>
-            ) : (repo.homepage || repo.hasDemo) ? (
+          {/* Action buttons — "Site →" e/ou "GitHub →" (2 quando ambos existem) */}
+          <div className="mt-auto flex gap-2">
+            {(repo.homepage || repo.hasDemo) && (
               <a
                 href={repo.homepage || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-mono bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-all duration-200 min-h-[40px]"
+                onClick={(e) => e.stopPropagation()}
+                className="flex-1 inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-sm font-mono bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-all duration-200 min-h-[40px]"
               >
                 <ExternalLink className="w-4 h-4" />
                 {t("projects.view.live")}
               </a>
-            ) : null}
+            )}
+            {repo.html_url && (
+              <a
+                href={repo.html_url}
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={(e) => e.stopPropagation()}
+                className={`inline-flex items-center justify-center gap-1.5 py-2.5 px-3 rounded-lg text-sm font-mono border transition-all duration-200 min-h-[40px] ${
+                  (repo.homepage || repo.hasDemo)
+                    ? "bg-transparent text-[var(--text-secondary)] border-[var(--border)]/40 hover:text-[var(--text-primary)] hover:border-[var(--border)]"
+                    : "flex-1 bg-[var(--accent)]/10 text-[var(--accent)] border-[var(--accent)]/30 hover:bg-[var(--accent)]/20"
+                }`}
+              >
+                <ExternalLink className="w-4 h-4" />
+                {t("projects.view.github")}
+              </a>
+            )}
           </div>
 
           {/* Affiliate "powered by" links */}
