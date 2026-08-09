@@ -103,7 +103,7 @@ export const dict = {
     "projects.source": "Código Fonte",
 
     // ── Blog ──
-    "blog.section.title": "▸ DO BLOG",
+    "blog.section.title": "Blog",
     "blog.latest": "ÚLTIMO POST",
     "blog.read": "Ler no LifeLog →",
 
@@ -413,7 +413,7 @@ export const dict = {
     "projects.source": "Source Code",
 
     // ── Blog ──
-    "blog.section.title": "▸ FROM THE BLOG",
+    "blog.section.title": "Blog",
     "blog.latest": "LATEST POST",
     "blog.read": "Read on LifeLog →",
 
