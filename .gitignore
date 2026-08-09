@@ -76,3 +76,5 @@ secrets/
 *.key
 .tokensave
 graphify-out/
+*.tmp.cjs
+*.tmp.js
