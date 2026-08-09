@@ -102,6 +102,11 @@ export const dict = {
     "projects.visit": "Visitar",
     "projects.source": "Código Fonte",
 
+    // ── Blog ──
+    "blog.section.title": "▸ DO BLOG",
+    "blog.latest": "ÚLTIMO POST",
+    "blog.read": "Ler no LifeLog →",
+
     // ── Games ──
     "games.section.title": "▸ JOGOS",
     "games.show.all": "Mostrar todos",
@@ -406,6 +411,11 @@ export const dict = {
     "projects.empty": "No projects found",
     "projects.visit": "Visit",
     "projects.source": "Source Code",
+
+    // ── Blog ──
+    "blog.section.title": "▸ FROM THE BLOG",
+    "blog.latest": "LATEST POST",
+    "blog.read": "Read on LifeLog →",
 
     // ── Games ──
     "games.section.title": "▸ GAMES",

@@ -5,7 +5,7 @@ export const STATIC_PROJECTS: Repo[] = [
     id: 999001,
     name: "DogWalk",
     description:
-      "Marketplace de serviços pet com autenticação, pagamentos e geolocalização — React, Supabase, Stripe e Cloudflare.",
+      "Marketplace completo de serviços pet — encontre passeadores verificados perto de você, acompanhe o passeio ao vivo com GPS e pague com PIX. Autenticação, pagamentos via Stripe e geolocalização em tempo real: React, Supabase, Stripe e Cloudflare.",
     html_url: "",
     homepage: "https://seu.pet",
     stargazers_count: 0,
@@ -24,7 +24,7 @@ export const STATIC_PROJECTS: Repo[] = [
     id: 999002,
     name: "Arachne",
     description:
-      "Motor de scraping inteligente com RAG semântico, parsing de 44+ formatos de documento, busca híbrida (web + vetorial), MCP server, crawl4ai e exportação multi-formato. Integra captura web, extração estruturada, busca semântica e agentes autônomos em um ecossistema unificado.",
+      "Motor de scraping inteligente com RAG semântico — captura páginas web, extrai dados estruturados de 44+ formatos de documento e responde perguntas sobre o conteúdo com busca híbrida (web + vetorial). Inclui MCP server, crawl4ai e exportação multi-formato: um ecossistema unificado de coleta, processamento e consulta de conhecimento.",
     html_url: "",
     homepage: "",
     stargazers_count: 0,
@@ -43,7 +43,7 @@ export const STATIC_PROJECTS: Repo[] = [
     id: 999003,
     name: "Portifolio",
     description:
-      "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion, animações cinematográficas, tema ciano+preto.",
+      "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion e Tailwind com animações cinematográficas, tema ciano+preto, modo claro/escuro, 6 paletas de cores e suporte PT/EN. Este site, feito pra mostrar quem eu sou e o que eu construo.",
     html_url: "https://github.com/Samuelfmedeiros/Portifolio",
     homepage: "https://samuelmedeiros.vercel.app",
     stargazers_count: 0,
@@ -61,7 +61,7 @@ export const STATIC_PROJECTS: Repo[] = [
     id: 999004,
     name: "lifelog",
     description:
-      "Blog pessoal com posts sobre tecnologia, projetos e aprendizados — Astro, MDX, TypeScript e design system próprio.",
+      "Blog pessoal onde compartilho aprendizados reais de engenharia — otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX, TypeScript e design system próprio.",
     html_url: "https://github.com/Samuelfmedeiros/lifelog",
     homepage: "https://lifelog-sepia.vercel.app",
     stargazers_count: 0,

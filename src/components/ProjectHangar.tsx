@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Image from "next/image";
 import { ExternalLink, Star, GitFork, Calendar, Zap } from "lucide-react";
@@ -155,7 +155,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             href={repo.name === "Portifolio" ? (repo.html_url || "#") : (repo.homepage || "#")}
             target="_blank"
             rel="noopener noreferrer"
-            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
+            className="relative h-[160px] md:h-[200px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
             style={{ background: gradient }}
             onClick={() => track({ type: "project_click", project: repo.name })}
           >
@@ -172,7 +172,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 src={repo.imageUrl}
                 alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
                 fill
-                className="absolute inset-0 w-full h-full object-cover transition-transform duration-500 group-hover/image:scale-110"
+                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/image:scale-110"
                 unoptimized
                 loading="lazy"
               />
@@ -193,7 +193,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
           </a>
         ) : (
           <div
-            className="relative h-[120px] w-full shrink-0 overflow-hidden flex items-center justify-center"
+            className="relative h-[160px] md:h-[200px] w-full shrink-0 overflow-hidden flex items-center justify-center"
             style={{ background: gradient }}
             aria-hidden="true"
           >
@@ -210,7 +210,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 src={repo.imageUrl}
                 alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
                 fill
-                className="absolute inset-0 w-full h-full object-cover"
+                className="absolute inset-0 w-full h-full object-cover object-top"
                 unoptimized
                 loading="lazy"
               />
@@ -227,12 +227,12 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 
         <div className="relative p-1 flex flex-col flex-1">
           {/* Name (always visible now) */}
-          <p className="text-xs font-mono font-semibold text-[var(--text-primary)] mb-1 truncate">
+          <p className="text-sm md:text-base font-mono font-semibold text-[var(--text-primary)] mb-1 truncate">
             {repo.icon && repo.name}
           </p>
 
           {/* Description */}
-          <p className="text-xs text-[var(--text-secondary)] mb-3 line-clamp-2 flex-1 mt-1">
+          <p className="text-sm text-[var(--text-secondary)] mb-3 line-clamp-3 md:line-clamp-2 flex-1 mt-1">
             {localizedDescription || "No description provided"}
           </p>
 
@@ -242,7 +242,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
               {techTags.map((tag) => (
                 <span
                   key={tag}
-                  className={`text-[9px] font-mono px-1.5 py-0.5 rounded border ${getTagStyle(tag)}`}
+                  className={`text-[10px] font-mono px-1.5 py-0.5 rounded border ${getTagStyle(tag)}`}
                 >
                   {tag}
                 </span>
@@ -251,7 +251,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
           )}
 
           {/* Stats row */}
-          <div className="flex items-center gap-3 text-[10px] text-[var(--text-secondary)] mb-3 pb-3 border-b border-[var(--border)]/30">
+          <div className="flex items-center gap-3 text-[11px] text-[var(--text-secondary)] mb-3 pb-3 border-b border-[var(--border)]/30">
             {repo.language && (
               <span className="flex items-center gap-1">
                 <span
@@ -262,28 +262,28 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
               </span>
             )}
             <span className="flex items-center gap-0.5">
-              <Star className="w-3 h-3" /> {repo.stargazers_count}
+              <Star className="w-3.5 h-3.5" /> {repo.stargazers_count}
             </span>
             <span className="flex items-center gap-0.5">
-              <GitFork className="w-3 h-3" /> {repo.forks_count}
+              <GitFork className="w-3.5 h-3.5" /> {repo.forks_count}
             </span>
             {updated && (
               <span className="flex items-center gap-0.5 ml-auto">
-                <Calendar className="w-3 h-3" /> {updated}
+                <Calendar className="w-3.5 h-3.5" /> {updated}
               </span>
             )}
           </div>
 
-          {/* Action links */}
-          <div className="flex gap-3">
+          {/* Action button — "Ver projeto" grande */}
+          <div className="mt-auto">
             {repo.name === "Portifolio" && repo.html_url ? (
               <a
                 href={repo.html_url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-mono bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-all duration-200 min-h-[40px]"
               >
-                <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                <ExternalLink className="w-4 h-4" />
                 {t("projects.view.github")}
               </a>
             ) : (repo.homepage || repo.hasDemo) ? (
@@ -291,9 +291,9 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                 href={repo.homepage || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-[10px] font-mono text-[var(--accent-alt)] hover:text-[var(--text-primary)] transition-colors flex items-center gap-1 group/link"
+                className="w-full inline-flex items-center justify-center gap-2 py-2.5 px-4 rounded-lg text-sm font-mono bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-all duration-200 min-h-[40px]"
               >
-                <ExternalLink className="w-3 h-3 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 transition-transform" />
+                <ExternalLink className="w-4 h-4" />
                 {t("projects.view.live")}
               </a>
             ) : null}
@@ -328,30 +328,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string }) {
   const { t } = useLanguage();
   const resolvedTitle = title || t("projects.section.title", "▸ PROJETOS");
-  const [activeFilter, setActiveFilter] = useState<string>("");
   const [selectedProject, setSelectedProject] = useState<Repo | null>(null);
   const { track } = useAnalytics();
-  // Collect all unique languages/tags for filter
-  const allTags = useMemo(() => {
-    const tagSet = new Set<string>();
-    if (!repos) return [] as string[];
-    repos.forEach((r) => {
-      if (r.language) tagSet.add(r.language);
-      r.topics?.forEach((t) => {
-        if (t !== "featured") tagSet.add(t);
-      });
-    });
-    return Array.from(tagSet).sort();
-  }, [repos]);
-
-  // Filter repos
-  const filteredRepos = useMemo(() => {
-    if (!activeFilter) return repos;
-    return repos.filter(
-      (r) =>
-        r.language === activeFilter || r.topics?.includes(activeFilter)
-    );
-  }, [repos, activeFilter]);
 
   if (!repos || repos.length === 0) {
     return (
@@ -378,9 +356,9 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
         <span>{t("projects.count").replace("{count}", String(repos.length))}</span>
       </div>
 
-      {/* Cards grid */}
+      {/* Cards grid — 2 colunas desktop, 1 mobile (cards maiores) */}
       <motion.div
-        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5"
+        className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-5 md:gap-6"
         layout
       >
         <AnimatePresence>

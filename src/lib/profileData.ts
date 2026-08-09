@@ -210,31 +210,39 @@ export interface ProjectI18n {
 
 const PROJECTS_PT: Record<string, ProjectI18n> = {
   DogWalk: {
-    description: "Marketplace de serviços pet com autenticação, pagamentos e geolocalização — React, Supabase, Stripe e Cloudflare.",
+    description: "Marketplace completo de serviços pet — encontre passeadores verificados perto de você, acompanhe o passeio ao vivo com GPS e pague com PIX. Autenticação, pagamentos via Stripe e geolocalização em tempo real: React, Supabase, Stripe e Cloudflare.",
     topics: ["web", "marketplace"],
   },
   Arachne: {
-    description: "Motor de scraping inteligente com RAG semântico, parsing de 44+ formatos de documento, busca híbrida (web + vetorial), MCP server, crawl4ai e exportação multi-formato. Integra captura web, extração estruturada, busca semântica e agentes autônomos em um ecossistema unificado.",
+    description: "Motor de scraping inteligente com RAG semântico — captura páginas web, extrai dados estruturados de 44+ formatos de documento e responde perguntas sobre o conteúdo com busca híbrida (web + vetorial). Inclui MCP server, crawl4ai e exportação multi-formato: um ecossistema unificado de coleta, processamento e consulta de conhecimento.",
     topics: ["web", "ai", "data", "fastapi", "python", "mcp", "crawl4ai", "rag"],
   },
   Portifolio: {
-    description: "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion, animações cinematográficas, tema ciano+preto.",
+    description: "Portfolio profissional estilo cockpit sci-fi — Next.js, Framer Motion e Tailwind com animações cinematográficas, tema ciano+preto, modo claro/escuro, 6 paletas de cores e suporte PT/EN. Este site, feito pra mostrar quem eu sou e o que eu construo.",
     topics: ["web"],
+  },
+  lifelog: {
+    description: "Blog pessoal onde compartilho aprendizados reais de engenharia — otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX, TypeScript e design system próprio.",
+    topics: ["web", "blog", "astro", "mdx"],
   },
 };
 
 const PROJECTS_EN: Record<string, ProjectI18n> = {
   DogWalk: {
-    description: "Pet service marketplace with authentication, payments and geolocation — React, Supabase, Stripe and Cloudflare.",
+    description: "Complete pet services marketplace — find verified dog walkers near you, track the walk live with GPS and pay with PIX. Authentication, Stripe payments and real-time geolocation: React, Supabase, Stripe and Cloudflare.",
     topics: ["web", "marketplace"],
   },
   Arachne: {
-    description: "Intelligent scraping engine with semantic RAG, parsing of 44+ document formats, hybrid search (web + vector), MCP server, crawl4ai and multi-format export. Integrates web capture, structured extraction, semantic search and autonomous agents in a unified ecosystem.",
+    description: "Intelligent scraping engine with semantic RAG — captures web pages, extracts structured data from 44+ document formats and answers questions about the content with hybrid search (web + vector). Includes MCP server, crawl4ai and multi-format export: a unified ecosystem for collecting, processing and querying knowledge.",
     topics: ["web", "ai", "data", "fastapi", "python", "mcp", "crawl4ai", "rag"],
   },
   Portifolio: {
-    description: "Professional sci-fi cockpit-style portfolio — Next.js, Framer Motion, cinematic animations, teal+black theme.",
+    description: "Professional sci-fi cockpit-style portfolio — Next.js, Framer Motion and Tailwind with cinematic animations, teal+black theme, dark/light mode, 6 color palettes and PT/EN support. This site, built to show who I am and what I build.",
     topics: ["web"],
+  },
+  lifelog: {
+    description: "Personal blog where I share real engineering learnings — performance optimization, refactors, dashboards and behind-the-scenes of my projects. Astro, MDX, TypeScript and a custom design system.",
+    topics: ["web", "blog", "astro", "mdx"],
   },
 };
 

@@ -7,6 +7,8 @@ import { FadeInSection } from "@/components/FadeInSection";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
+import { BlogSection } from "@/components/BlogSection";
+import { getLatestLifelogPost } from "@/lib/lifelogRss";
 
 async function HangarWithData() {
   const repos = await getRepos();
@@ -44,6 +46,11 @@ async function HangarWithData() {
   );
 }
 
+async function BlogWithData() {
+  const post = await getLatestLifelogPost();
+  return <BlogSection post={post} />;
+}
+
 export default function Home() {
   return (
     <>
@@ -53,6 +60,13 @@ export default function Home() {
           <section id="projects" className="scroll-mt-20">
             <Suspense fallback={<HangarSkeleton />}>
               <HangarWithData />
+            </Suspense>
+          </section>
+        </FadeInSection>
+        <FadeInSection delay={0.2}>
+          <section id="blog" className="scroll-mt-20">
+            <Suspense fallback={null}>
+              <BlogWithData />
             </Suspense>
           </section>
         </FadeInSection>
