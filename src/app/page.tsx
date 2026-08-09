@@ -8,7 +8,7 @@ import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
 import { ContactForm } from "@/components/ContactForm";
 import { BlogSection } from "@/components/BlogSection";
-import { getLatestLifelogPost } from "@/lib/lifelogRss";
+import { getLatestLifelogPosts } from "@/lib/lifelogRss";
 
 async function HangarWithData() {
   const repos = await getRepos();
@@ -47,8 +47,8 @@ async function HangarWithData() {
 }
 
 async function BlogWithData() {
-  const post = await getLatestLifelogPost();
-  return <BlogSection post={post} />;
+  const posts = await getLatestLifelogPosts();
+  return <BlogSection posts={posts} />;
 }
 
 export default function Home() {
