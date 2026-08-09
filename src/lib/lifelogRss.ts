@@ -7,7 +7,7 @@
 
 const LIFELOG_RSS_URL = "https://lifelog-sepia.vercel.app/rss.xml";
 const FETCH_TIMEOUT_MS = 5000;
-export const LIFELOG_CACHE_TTL = 3600; // 1h ISR
+export const LIFELOG_CACHE_TTL = 1800; // 30min ISR — alinhado com revalidate da página (Samuel 09/08/2026)
 export const MAX_POSTS = 8; // server busca mais; componente filtra PT/EN e mostra 3
 
 export interface LifelogPost {
@@ -81,7 +81,8 @@ export async function getLatestLifelogPosts(): Promise<LifelogPost[]> {
       next: { revalidate: LIFELOG_CACHE_TTL },
       signal: controller.signal,
       headers: { Accept: "application/rss+xml, application/xml, text/xml" },
-      cache: "force-cache",
+      // Sem force-cache: com revalidate ISR, o Next decide quando revalidar.
+      // force-cache aqui fazia o fetch reutilizar o cache antigo do build (bug 09/08).
     });
 
     clearTimeout(timer);
