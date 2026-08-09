@@ -72,6 +72,18 @@ export function parseRssItems(xml: string, max: number = MAX_POSTS): LifelogPost
 
     if (posts.length >= max) break;
   }
+
+  // Ordena por data de publicação desc — posts PT/EN com a mesma pubDate
+  // (ex: grade cíclica 2 posts/dia) têm ordem instável no RSS; o portifólio
+  // deve mostrar os 3 MAIS RECENTES, não os primeiros do XML (bug 09/08/2026).
+  posts.sort((a, b) => {
+    const da = Date.parse(a.date || "");
+    const db = Date.parse(b.date || "");
+    if (!Number.isNaN(da) && !Number.isNaN(db) && da !== db) return db - da;
+    // Empate na data: título como tiebreaker determinístico
+    return a.title.localeCompare(b.title);
+  });
+
   return posts;
 }
 
