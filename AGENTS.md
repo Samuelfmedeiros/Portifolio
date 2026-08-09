@@ -5,9 +5,9 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `f516032` — auto-sync: 2026-08-09 04:00 — fix(theme): completa CSS VT da animação circular (isolation + mix-blend normal, validado no LifeLog) + duração 600→400ms — fluida e rápida — auto-sync: 2026-08-07 18:30 — i18n 100% + CV locale-aware
+- **Último commit:** `c1f6956` — auto-sync: 2026-08-09 05:00 — auto-sync: 2026-08-09 04:00 — fix(theme): completa CSS VT da animação circular (isolation + mix-blend normal, validado no LifeLog) + duração 600→400ms — fluida e rápida — auto-sync: 2026-08-07 18:30 — i18n 100% + CV locale-aware
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
-- **Testes:** ? passando
+- **Testes:** 239 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
