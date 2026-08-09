@@ -8,7 +8,7 @@
 const LIFELOG_RSS_URL = "https://lifelog-sepia.vercel.app/rss.xml";
 const FETCH_TIMEOUT_MS = 5000;
 export const LIFELOG_CACHE_TTL = 1800; // 30min ISR — alinhado com revalidate da página (Samuel 09/08/2026)
-export const MAX_POSTS = 8; // server busca mais; componente filtra PT/EN e mostra 3
+export const MAX_POSTS = 30; // pega bastante; filtro EN durante parse garante os 3 PT mais recentes sempre presentes
 
 export interface LifelogPost {
   title: string;
@@ -52,6 +52,10 @@ export function parseRssItems(xml: string, max: number = MAX_POSTS): LifelogPost
     if (!/^https?:\/\//i.test(url)) continue;
     // Rejeita referências de entidade não resolvidas (&xxe; etc.)
     if (/&[a-zA-Z0-9#]+;/.test(title)) continue;
+    // Filtra versões EN durante o parse — o portifólio mostra posts PT.
+    // (antes filtravamos depois do slice(0,8): post PT podia ficar de fora
+    //  quando havia muitos posts EN intercalados no RSS — bug 09/08/2026)
+    if (/\/en\//.test(url)) continue;
 
     const cover = enclosureMatch?.[1]?.trim();
     const accent = accentMatch ? accentMatch[1].trim() : undefined;
