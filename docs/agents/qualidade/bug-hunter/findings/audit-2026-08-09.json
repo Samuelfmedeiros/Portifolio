@@ -1,12 +1,12 @@
 {
-  "timestamp": "2026-08-09T03:00:45.582Z",
+  "timestamp": "2026-08-09T09:01:06.969Z",
   "url": "https://samuelmedeiros.vercel.app",
-  "duration": "7.5",
+  "duration": "8.2",
   "routes": {
     "/": {
       "url": "https://samuelmedeiros.vercel.app/",
       "title": "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
-      "contentSize": 211363,
+      "contentSize": 227889,
       "servesHtml": {
         "ok": true,
         "detail": "content-type=text/html; charset=utf-8 status=200"
@@ -16,13 +16,13 @@
           "id": "root-mounted",
           "desc": "Next.js renderizou",
           "ok": true,
-          "detail": "root len=211592"
+          "detail": "root len=227895"
         },
         {
           "id": "content-presente",
           "desc": "Conteúdo principal carregou",
           "ok": true,
-          "detail": "body 8839 chars"
+          "detail": "body 10267 chars"
         },
         {
           "id": "secao-profile",
