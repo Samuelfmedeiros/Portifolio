@@ -10,6 +10,10 @@ import { ContactForm } from "@/components/ContactForm";
 import { BlogSection } from "@/components/BlogSection";
 import { getLatestLifelogPosts } from "@/lib/lifelogRss";
 
+// ISR: revalida a página a cada 30min — garante que posts novos do LifeLog
+// apareçam na seção Blog sem precisar de novo deploy (Samuel 09/08/2026).
+export const revalidate = 1800;
+
 async function HangarWithData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter(
