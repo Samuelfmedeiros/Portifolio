@@ -1,60 +1,17 @@
 {
-  "timestamp": "2026-08-10T03:01:05.980Z",
+  "timestamp": "2026-08-10T09:00:58.021Z",
   "url": "https://samuelmedeiros.vercel.app",
-  "duration": "9.8",
-  "routes": {
-    "/": {
-      "url": "https://samuelmedeiros.vercel.app/",
-      "title": "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
-      "contentSize": 256264,
-      "servesHtml": {
-        "ok": true,
-        "detail": "content-type=text/html; charset=utf-8 status=200"
-      },
-      "renderChecks": [
-        {
-          "id": "root-mounted",
-          "desc": "Next.js renderizou",
-          "ok": true,
-          "detail": "root len=256269"
-        },
-        {
-          "id": "content-presente",
-          "desc": "Conteúdo principal carregou",
-          "ok": true,
-          "detail": "body 9173 chars"
-        },
-        {
-          "id": "secao-profile",
-          "desc": "Seção Profile presente",
-          "ok": true,
-          "detail": "profile OK"
-        },
-        {
-          "id": "secao-projects",
-          "desc": "Seção Projects presente",
-          "ok": true,
-          "detail": "projects OK"
-        },
-        {
-          "id": "secao-contact",
-          "desc": "Seção Contact presente",
-          "ok": true,
-          "detail": "contact OK"
-        },
-        {
-          "id": "temas-presentes",
-          "desc": "Temas/Paletas carregaram",
-          "ok": true,
-          "detail": "2 elementos de tema"
-        }
-      ]
-    }
-  },
+  "duration": "22.0",
+  "routes": {},
   "consoleErrors": [],
   "networkErrors": [],
-  "navigationFailures": [],
-  "passed": 1,
-  "failed": 0,
+  "navigationFailures": [
+    {
+      "route": "/",
+      "error": "page.goto: Timeout 20000ms exceeded.\nCall log:\n  - navigating to \"https://samuelmedeiros.vercel.app/\", waiting until \"networkidle\"\n"
+    }
+  ],
+  "passed": 0,
+  "failed": 1,
   "loginOk": true
 }
