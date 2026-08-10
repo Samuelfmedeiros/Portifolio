@@ -67,9 +67,39 @@ function isAllowed(text: string): boolean {
   return false;
 }
 
+interface Violation {
+  comp: string;
+  line: number;
+  text: string;
+}
+
+/** Monta report legível agrupado por componente (pra falha de teste no CI/UI). */
+function buildReport(violations: Violation[]): string {
+  if (violations.length === 0) {
+    return "i18n audit — zero strings PT hardcoded fora de t() ✅";
+  }
+  const lines: string[] = [
+    `i18n audit — ${violations.length} string(s) PT hardcoded fora de t()`,
+    "",
+  ];
+  const byComp = new Map<string, Violation[]>();
+  for (const v of violations) {
+    if (!byComp.has(v.comp)) byComp.set(v.comp, []);
+    byComp.get(v.comp)!.push(v);
+  }
+  for (const [comp, vs] of byComp) {
+    lines.push(`${comp} — ${vs.length} ocorrência(s)`);
+    for (const v of vs) {
+      lines.push(`  • L${v.line}: "${v.text}"`);
+    }
+    lines.push("");
+  }
+  return lines.join("\n");
+}
+
 describe("i18n audit — zero PT hardcoded fora de t()", () => {
   it("não encontra texto PT visível fora de t() nos componentes", () => {
-    const violations: string[] = [];
+    const violations: Violation[] = [];
 
     for (const comp of COMPONENTS) {
       if (!existsSync(join(process.cwd(), comp))) continue;
@@ -90,12 +120,16 @@ describe("i18n audit — zero PT hardcoded fora de t()", () => {
           if (text.length < 2 || !/[A-Za-zÁ-Úá-ú]/.test(text)) continue;
           if (isAllowed(text)) continue;
           if (PT_PATTERN.test(text)) {
-            violations.push(`${comp}:${idx + 1} — "${text}"`);
+            violations.push({ comp, line: idx + 1, text });
           }
         }
       });
     }
 
+    // Lança erro manual com report formatado (evita o diff JSON cru do Vitest)
+    if (violations.length > 0) {
+      throw new Error(buildReport(violations));
+    }
     expect(violations).toEqual([]);
   });
 });
