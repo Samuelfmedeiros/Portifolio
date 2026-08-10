@@ -1,5 +1,21 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-09] — RSS/LifeLog fixes + i18n audit + vulns
+
+### 📡 RSS / ISR (LifeLog)
+- Sort por `pubDate` desc no parser — ordem estável dos 3 posts
+- Filtra posts EN durante o parse + `MAX_POSTS 30` — só posts PT recentes
+- Remove `force-cache` do fetch — posts novos refletem no ISR
+- ISR `revalidate: 30min` na página — posts novos do LifeLog refletem
+
+### 🧪 Testes / Limpeza
+- Report do i18n audit agrupado por componente — output legível
+- Gitignore tmp + findings audit 09/08; remove arquivos tmp commitados por engano
+- `pnpm update` — 61 vulns (1C/43H) → 6 (0C/2H devDeps)
+- Revert melhorias região projetos (filtro/modal/i18n) — não aprovado
+
+**20 commits · HEAD: `23322b8` ✅ push bare+origin**
+
 ## [2026-08-07] — i18n 100% + CV locale-aware + auditoria CI
 ### 🌐 i18n
 - Locale por origem (navigator.language): pt-BR/pt-PT → PT, outro → EN; não restaura último salvo
