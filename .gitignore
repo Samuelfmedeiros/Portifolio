@@ -78,3 +78,6 @@ secrets/
 graphify-out/
 *.tmp.cjs
 *.tmp.js
+
+# CV artifacts (intermediários de geração)
+docs/cv/*.html
