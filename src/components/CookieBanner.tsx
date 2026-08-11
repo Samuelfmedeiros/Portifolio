@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, createContext, useContext, useCallback } from "react";
+import { useState, useEffect, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X, Eye, EyeOff } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
@@ -64,7 +64,15 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   // wraps MonetizationProvider, so we manage ads consent directly
   const [, setAdsChoice] = useState<"none" | "non-personalized" | "personalized">("none");
 
-  // No more need for the initialization effect — state is lazy-initialized
+  // BUG #1 FIX (11/08/2026): consentimento já salvo == "accepted" deve carregar
+  // o Umami no boot, sem depender de clique. State é lazy-initialized para o
+  // consent, mas loadUmamiScript() precisa ser chamado explicitamente no mount.
+  useEffect(() => {
+    if (getStoredConsent() === "accepted") {
+      loadUmamiScript();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const accept = useCallback(() => {
     try {
