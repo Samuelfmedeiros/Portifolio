@@ -11,9 +11,19 @@ Analista de Dados e Produto | Criação de Dashboards e Insights Estratégicos |
 
 ## Resumo Profissional
 
-Profissional de Tecnologia da Informação com experiência em análise de dados, suporte técnico e automação de processos. Atuação no tratamento, organização e análise de dados para geração de insights e apoio à tomada de decisão. Experiência na criação de dashboards em Power BI, consultas em SQL e automação de rotinas com Python, além de conhecimentos em Ciência de Dados e Machine Learning aplicados à análise e interpretação de dados.
+Profissional de Tecnologia da Informação com experiência em análise de dados e desenvolvimento full stack. Atuação na criação de dashboards em Power BI, consultas em SQL e automação de rotinas com Python, além do desenvolvimento de plataformas web completas com React, Next.js e FastAPI. Experiência com integração de APIs e pagamentos, bancos de dados relacionais, infraestrutura em Docker e Cloudflare, e aplicações com LLMs locais e RAG. Conhecimentos em Ciência de Dados e Machine Learning aplicados à análise e interpretação de dados.
 
 ## Experiências Profissionais
+
+### Desenvolvedor Full Stack & Analista de Dados — Freelancer (2025 – Atual)
+
+- Desenvolvimento e manutenção de plataformas web completas (frontend e backend) com React, Next.js, TypeScript e FastAPI
+- Criação de dashboards interativos e pipelines de dados com Power BI, SQL e Python
+- Integração de pagamentos com Stripe Connect e autenticação segura (JWT, 2FA)
+- Construção de sistemas de extração de dados (scraping) com busca semântica RAG e LLMs locais
+- Infraestrutura e deploy com Docker, Cloudflare (Tunnel, Pages, R2, D1) e CI/CD (GitHub Actions)
+- Automação de testes E2E e unitários com Playwright, Vitest e pytest — mais de 2.000 testes automatizados
+- Cinco projetos web em produção, incluindo marketplace, plataforma de dados e blog bilíngue
 
 ### Agência Nacional de Águas (ANA) — Analista de Dados (2025)
 
@@ -38,13 +48,6 @@ Profissional de Tecnologia da Informação com experiência em análise de dados
 - Implantação de sistemas e novas tecnologias
 - Gestão de usuários e permissões (Office 365, Active Directory)
 
-### Tribunal Regional do Trabalho da 10ª Região (CETEFE) — Auxiliar Técnico (2017 – 2020)
-
-- Digitalização e organização de documentos judiciais
-- Controle e logística de armazenamento digital
-- Verificação e conferência de conteúdos digitais
-- Criação e edição de documentos, garantindo integridade da informação
-
 ## Formação Acadêmica
 
 Pós-graduação em Ciência de Dados e Big Data Analytics — Centro Universitário IESB (em andamento)
@@ -53,7 +56,8 @@ Graduação em Análise e Desenvolvimento de Sistemas — Centro Universitário 
 
 ## Competências Técnicas
 
-- **Programação e Automação:** Python, automação de processos, integração de APIs, manipulação de dados
-- **Banco de Dados e BI:** SQL Server, PostgreSQL, Power BI, Power Query, DAX, ETL, transformação e integração de dados (JSON, XML)
-- **Data & Machine Learning:** TensorFlow, R, PyTorch, Hadoop, Spark, modelagem e análise de dados
-- **Ferramentas e Tecnologias:** Git, GitHub, GitLab, CI/CD, Linux, Microsoft Azure
+- **Programação e Automação:** Python (FastAPI, automação, ETL, scraping), JavaScript/TypeScript (React, Next.js, Node.js), integração de APIs, automação de processos
+- **Banco de Dados e BI:** PostgreSQL, SQL Server, SQLite, Power BI, Power Query, DAX, ETL, transformação e integração de dados (JSON, XML)
+- **Data & Machine Learning:** TensorFlow, R, PyTorch, Hadoop, Spark, modelagem e análise de dados, LLMs locais (Ollama), RAG semântico, MCP
+- **DevOps e Infraestrutura:** Docker, Cloudflare (Tunnel, Pages, R2, D1), Linux, CI/CD (GitHub Actions), Git, GitHub, GitLab
+- **Testes e Qualidade:** Playwright, Vitest, pytest, testes E2E e unitários

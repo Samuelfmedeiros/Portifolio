@@ -13,16 +13,17 @@ REPO = pathlib.Path.home() / "projetos/portifolio"
 SRC = REPO / "docs" / "cv"
 OUT = REPO / "public"
 
-CSS = """
-body { font-family: Calibri, Arial, sans-serif; font-size: 10.5pt; color: #1a1a1a; margin: 0; }
+CSS = """\
+@page { size: A4; margin: 1.2cm; }
+body { font-family: Calibri, Arial, sans-serif; font-size: 10pt; color: #1a1a1a; margin: 0; }
 h1, h2, h3, p, li, div, blockquote { font-family: Calibri, Arial, sans-serif !important; }
-h1 { font-size: 17pt; margin: 0 0 2pt 0; }
-p.role { font-size: 11pt; color: #333; margin: 0 0 6pt 0; }
-p.contact { font-size: 9.5pt; margin: 0 0 8pt 0; }
-h2 { font-size: 11.5pt; border-bottom: 1.2pt solid #2b2b2b; padding-bottom: 2pt; margin: 10pt 0 5pt 0; }
-h3 { font-size: 10.5pt; margin: 7pt 0 2pt 0; }
-p { margin: 2pt 0; }
-p.bullet { margin: 1pt 0; }
+h1 { font-size: 15pt; margin: 0 0 2pt 0; }
+p.role { font-size: 10.5pt; color: #333; margin: 0 0 4pt 0; }
+p.contact { font-size: 9.5pt; margin: 0 0 6pt 0; }
+h2 { font-size: 11pt; border-bottom: 1pt solid #2b2b2b; padding-bottom: 1.5pt; margin: 7pt 0 3pt 0; }
+h3 { font-size: 10pt; margin: 4pt 0 1.5pt 0; }
+p { margin: 1.5pt 0; }
+p.bullet { margin: 0.5pt 0; }
 a { color: #1a1a1a; text-decoration: none; }
 """
 
