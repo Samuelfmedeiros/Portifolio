@@ -71,6 +71,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 - **Tema visual:** ciano+preto, cinematográfico, animações fortes. ~~Treasure Planet~~ (arquivado 2026-06).
 - **Splash:** ❌ Removido (14/06/2026). Ambiente (grid + cockpit) SEMPRE visível. Hero content fadeIn com stagger por cima. Splash anterior arquivado em `src/components/_old/SplashScreen.tsx`.
 - **Sessões:** HeroSection min-h-[70vh], scroll-mt-20 pra navbar, games em abas (um por vez + toggle "ver todos").
+- 🔴 **HeroSection.tsx é CÓDIGO MORTO (11/08/2026):** nenhuma página o importa (só o próprio teste). O hero real é `ProfileSection.tsx`, que consome dados de `profileData.ts` (getSkills/getTimeline/getAbout). NÃO editar HeroSection achando que muda o site — editar `profileData.ts`/`ProfileSection.tsx`.
 - **CSP:** sincronizada entre `next.config.js` e `vercel.json`. Vercel prioriza `vercel.json`.
 - **Componentes:** GameShowcase com tabs + grid toggle. KeyboardShortcuts só desktop.
 
