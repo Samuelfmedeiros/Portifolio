@@ -3,7 +3,9 @@
 > Data Analyst & Full Stack Developer
 
 Brasília-DF · (61) 99119-1722 · samuelandrademedeiros@gmail.com  
-LinkedIn: https://www.linkedin.com/in/samuelandrademedeiros
+LinkedIn: https://www.linkedin.com/in/samuelandrademedeiros  
+Site: https://samuelmedeiros.vercel.app  
+GitHub: https://github.com/Samuelfmedeiros
 
 ## Objective
 
@@ -20,7 +22,7 @@ Information Technology professional with experience in data analysis and full st
 - Development and maintenance of complete web platforms (frontend and backend) with React, Next.js, TypeScript, and FastAPI
 - Creation of interactive dashboards and data pipelines with Power BI, SQL, and Python
 - Payment integration with Stripe Connect and secure authentication (JWT, 2FA)
-- Building of data extraction systems (scraping) with semantic RAG search and local LLMs
+- Building of data extraction systems (web scraping) with semantic RAG search and local LLMs
 - Infrastructure and deployment with Docker, Cloudflare (Tunnel, Pages, R2, D1), and CI/CD (GitHub Actions)
 - Automation of E2E and unit tests with Playwright, Vitest, and pytest — more than 2,000 automated tests
 - Five web projects in production, including marketplace, data platform, and bilingual blog
@@ -56,8 +58,8 @@ Bachelor's Degree in Systems Analysis and Development — IESB University Center
 
 ## Technical Skills
 
-- **Programming and Automation:** Python (FastAPI, automation, ETL, scraping), JavaScript/TypeScript (React, Next.js, Node.js), API integration, process automation
-- **Databases and BI:** PostgreSQL, SQL Server, SQLite, Power BI, Power Query, DAX, ETL, data transformation and integration (JSON, XML)
+- **Programming and Automation:** Python (FastAPI, automation, ETL, web scraping, pandas), JavaScript/TypeScript (React, Next.js, Node.js), REST API integration, process automation
+- **Databases and BI:** PostgreSQL, SQL Server, SQLite, Power BI, Power Query, DAX, Excel, ETL, data transformation and integration (JSON, XML)
 - **Data & Machine Learning:** TensorFlow, R, PyTorch, Hadoop, Spark, data modeling and analysis, local LLMs (Ollama), semantic RAG, MCP
 - **DevOps and Infrastructure:** Docker, Cloudflare (Tunnel, Pages, R2, D1), Linux, CI/CD (GitHub Actions), Git, GitHub, GitLab
 - **Testing and Quality:** Playwright, Vitest, pytest, E2E and unit tests

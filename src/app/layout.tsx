@@ -40,7 +40,7 @@ export const metadata: Metadata = {
     template: "%s | Samuel Medeiros",
   },
   description:
-    "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência em Brasília. Next.js, React, Python, SQL, Power BI, Machine Learning — transformando dados em decisões estratégicas.",
+    "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência em Brasília. Next.js, React, TypeScript, FastAPI, PostgreSQL, Docker, Cloudflare, Power BI e RAG/LLMs — transformando dados em decisões estratégicas.",
   keywords: [
     "desenvolvedor full stack",
     "analista de dados",
@@ -62,7 +62,12 @@ export const metadata: Metadata = {
     "typescript",
     "frontend",
     "backend",
-    "supabase",
+    "fastapi",
+    "docker",
+    "rag",
+    "llm",
+    "stripe",
+    "playwright",
     "cloudflare",
     "tailwind css",
   ],
@@ -77,7 +82,7 @@ export const metadata: Metadata = {
     siteName: "Samuel Medeiros",
     title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     description:
-      "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência. Next.js, React, Python, SQL, Power BI, Machine Learning.",
+      "Desenvolvedor Full Stack e Analista de Dados com 5+ anos de experiência. Next.js, React, TypeScript, FastAPI, PostgreSQL, Docker, Cloudflare, Power BI e RAG/LLMs.",
     images: [
       {
         url: "/opengraph-image",
@@ -94,7 +99,7 @@ export const metadata: Metadata = {
     site: "@Samuelfmedeiros",
     creator: "@Samuelfmedeiros",
     title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
-    description: "Desenvolvedor Full Stack e Analista de Dados. Next.js, Python, SQL, Power BI, Machine Learning. Brasília/DF.",
+    description: "Desenvolvedor Full Stack e Analista de Dados. Next.js, React, TypeScript, FastAPI, PostgreSQL, Docker, Cloudflare, Power BI, RAG/LLMs. Brasília/DF.",
     images: ["/opengraph-image"],
   },
   robots: {

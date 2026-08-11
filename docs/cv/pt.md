@@ -3,7 +3,9 @@
 > Analista de Dados & Desenvolvedor Full Stack
 
 Brasília-DF · (61) 99119-1722 · samuelandrademedeiros@gmail.com  
-LinkedIn: https://www.linkedin.com/in/samuelandrademedeiros
+LinkedIn: https://www.linkedin.com/in/samuelandrademedeiros  
+Site: https://samuelmedeiros.vercel.app  
+GitHub: https://github.com/Samuelfmedeiros
 
 ## Objetivo
 
@@ -11,7 +13,7 @@ Analista de Dados e Produto | Criação de Dashboards e Insights Estratégicos |
 
 ## Resumo Profissional
 
-Profissional de Tecnologia da Informação com experiência em análise de dados e desenvolvimento full stack. Atuação na criação de dashboards em Power BI, consultas em SQL e automação de rotinas com Python, além do desenvolvimento de plataformas web completas com React, Next.js e FastAPI. Experiência com integração de APIs e pagamentos, bancos de dados relacionais, infraestrutura em Docker e Cloudflare, e aplicações com LLMs locais e RAG. Conhecimentos em Ciência de Dados e Machine Learning aplicados à análise e interpretação de dados.
+Profissional de Tecnologia da Informação com experiência em análise de dados e desenvolvimento full stack. Atuação na criação de dashboards em Power BI, consultas em SQL e automação de rotinas com Python, além do desenvolvimento de plataformas web completas com React, Next.js e FastAPI. Experiência com integração de APIs e pagamentos, bancos de dados relacionais, infraestrutura em Docker e Cloudflare, e aplicações com LLMs locais e RAG. Conhecimentos em Ciência de Dados (Data Science) e Machine Learning aplicados à análise e interpretação de dados.
 
 ## Experiências Profissionais
 
@@ -20,7 +22,7 @@ Profissional de Tecnologia da Informação com experiência em análise de dados
 - Desenvolvimento e manutenção de plataformas web completas (frontend e backend) com React, Next.js, TypeScript e FastAPI
 - Criação de dashboards interativos e pipelines de dados com Power BI, SQL e Python
 - Integração de pagamentos com Stripe Connect e autenticação segura (JWT, 2FA)
-- Construção de sistemas de extração de dados (scraping) com busca semântica RAG e LLMs locais
+- Construção de sistemas de extração de dados (web scraping) com busca semântica RAG e LLMs locais
 - Infraestrutura e deploy com Docker, Cloudflare (Tunnel, Pages, R2, D1) e CI/CD (GitHub Actions)
 - Automação de testes E2E e unitários com Playwright, Vitest e pytest — mais de 2.000 testes automatizados
 - Cinco projetos web em produção, incluindo marketplace, plataforma de dados e blog bilíngue
@@ -56,8 +58,8 @@ Graduação em Análise e Desenvolvimento de Sistemas — Centro Universitário 
 
 ## Competências Técnicas
 
-- **Programação e Automação:** Python (FastAPI, automação, ETL, scraping), JavaScript/TypeScript (React, Next.js, Node.js), integração de APIs, automação de processos
-- **Banco de Dados e BI:** PostgreSQL, SQL Server, SQLite, Power BI, Power Query, DAX, ETL, transformação e integração de dados (JSON, XML)
+- **Programação e Automação:** Python (FastAPI, automação, ETL, web scraping, pandas), JavaScript/TypeScript (React, Next.js, Node.js), integração de APIs REST, automação de processos
+- **Banco de Dados e BI:** PostgreSQL, SQL Server, SQLite, Power BI, Power Query, DAX, Excel, ETL, transformação e integração de dados (JSON, XML)
 - **Data & Machine Learning:** TensorFlow, R, PyTorch, Hadoop, Spark, modelagem e análise de dados, LLMs locais (Ollama), RAG semântico, MCP
 - **DevOps e Infraestrutura:** Docker, Cloudflare (Tunnel, Pages, R2, D1), Linux, CI/CD (GitHub Actions), Git, GitHub, GitLab
 - **Testes e Qualidade:** Playwright, Vitest, pytest, testes E2E e unitários
