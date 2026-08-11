@@ -1,5 +1,9 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-11] — Bug Hunter findings versionados (dia leve)
+- `202863f`: versiona audits bug-hunter 2026-08-10/11 (114 linhas de findings)
+- 1 commit · push bare+origin OK · HEAD: `202863f`
+
 ## [2026-08-09] — RSS/LifeLog fixes + i18n audit + vulns
 
 ### 📡 RSS / ISR (LifeLog)
