@@ -89,6 +89,12 @@ html {
 .theme-light .border-green-500\/30 { border-color: rgba(21, 128, 61, 0.35); }
 .theme-light .border-blue-500\/30 { border-color: rgba(29, 78, 216, 0.35); }
 
+/* ===== Blog accents (cores do RSS LifeLog) — escurecidos no light p/ AA (12/08/2026) ===== */
+/* O RSS manda cores claras (#00d4ff, #22c55e, #38bdf8...) que falham 4.5:1 no light.
+   color-mix escurece mantendo o matiz; dark mantém a cor original viva. */
+.theme-light .blog-accent-text { color: color-mix(in srgb, var(--blog-accent) 45%, #1e293b) !important; }
+.theme-light .blog-accent-hover:hover { color: color-mix(in srgb, var(--blog-accent) 45%, #1e293b) !important; }
+
 body {
   background-color: var(--bg-primary);
   color: var(--text-primary);

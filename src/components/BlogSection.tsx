@@ -97,7 +97,7 @@ function BlogCard({ post, index }: BlogCardProps) {
         {/* Body */}
         <div className="p-4 md:p-5">
           <div className="flex items-center gap-2 text-xs mb-2 text-[var(--text-muted)]">
-            <span className="inline-flex items-center gap-1 font-mono" style={{ color: `var(--blog-accent)` }}>
+            <span className="inline-flex items-center gap-1 font-mono blog-accent-text" style={{ color: `var(--blog-accent)` }}>
               <PenLine className="w-3 h-3" />
               {post.project ? projectLabel.toUpperCase() : "LIFELOG"}
             </span>
@@ -106,7 +106,7 @@ function BlogCard({ post, index }: BlogCardProps) {
             )}
           </div>
 
-          <h3 className="text-base md:text-lg font-semibold leading-snug mb-2 text-[var(--text-primary)] line-clamp-2 group-hover:text-[var(--blog-accent)] transition-colors duration-300">
+          <h3 className="text-base md:text-lg font-semibold leading-snug mb-2 text-[var(--text-primary)] line-clamp-2 blog-accent-hover group-hover:text-[var(--blog-accent)] transition-colors duration-300">
             {post.title}
           </h3>
 
@@ -117,7 +117,7 @@ function BlogCard({ post, index }: BlogCardProps) {
           )}
 
           <div
-            className="mt-3 inline-flex items-center gap-1 text-sm font-semibold opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300"
+            className="mt-3 inline-flex items-center gap-1 text-sm font-semibold opacity-0 translate-y-1 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 blog-accent-text"
             style={{ color: `var(--blog-accent)` }}
           >
             Continuar lendo <ArrowUpRight className="w-4 h-4" />
