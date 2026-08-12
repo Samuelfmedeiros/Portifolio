@@ -1,12 +1,12 @@
 import { Suspense } from "react";
 import { ProfileSection } from "@/components/ProfileSection";
 import { ProjectHangar } from "@/components/ProjectHangar";
-import { GameShowcase } from "@/components/GameShowcase";
 import { HangarSkeleton } from "@/components/HangarSkeleton";
 import { FadeInSection } from "@/components/FadeInSection";
+import { LazyGameShowcase } from "@/components/LazyGameShowcase";
+import { LazyContactForm } from "@/components/LazyContactForm";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
-import { ContactForm } from "@/components/ContactForm";
 import { BlogSection } from "@/components/BlogSection";
 import { getLatestLifelogPosts } from "@/lib/lifelogRss";
 
@@ -43,7 +43,8 @@ async function HangarWithData() {
       <ProjectHangar repos={projects} />
       {games.length > 0 && (
         <section id="games" className="scroll-mt-20">
-          <GameShowcase repos={games} />
+          {/* 🔴 Bloco perf 12/08/2026 — lazy-hydration via LazyGameShowcase */}
+          <LazyGameShowcase repos={games} />
         </section>
       )}
     </>
@@ -76,7 +77,8 @@ export default function Home() {
         </FadeInSection>
         <FadeInSection delay={0.3}>
           <section id="contact" className="scroll-mt-20">
-            <ContactForm />
+            {/* 🔴 Bloco perf 12/08/2026 — lazy-hydration via LazyContactForm */}
+            <LazyContactForm />
           </section>
         </FadeInSection>
       </div>
