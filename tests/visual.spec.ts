@@ -37,10 +37,17 @@ for (const r of ROTAS) {
     // espera animações/API terminarem
     await page.waitForTimeout(1500);
     // 🔴 12/08/2026 lazy-hydration: GameShowcase/ContactForm hidratam via
-    // next/dynamic quando o scroll chega. Scroolla até o fim para disparar a
-    // hidratação de TODAS as seções lazy, espera o fallback sumir, e volta ao
-    // topo para o fullPage capturar o conteúdo REAL (determinístico).
-    await page.evaluate(() => window.scrollTo({ top: document.body.scrollHeight, behavior: 'instant' }));
+    // next/dynamic quando o scroll chega. Scroll PROGRESSIVO (400px/passo) até
+    // o fim para disparar a hidratação de TODAS as seções lazy (scrollTo direto
+    // ao bottom pularia o games e deixaria o fallback pra sempre), espera o
+    // fallback sumir, e volta ao topo para o fullPage capturar o conteúdo REAL.
+    await page.evaluate(async () => {
+      const total = document.body.scrollHeight;
+      for (let y = 0; y <= total; y += 400) {
+        window.scrollTo(0, y);
+        await new Promise((r) => setTimeout(r, 150));
+      }
+    });
     await page.waitForFunction(
       () => !document.body.innerText.toLowerCase().includes("carregando"),
       null,
