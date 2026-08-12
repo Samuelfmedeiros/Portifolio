@@ -1,0 +1,42 @@
+{
+  "timestamp": "2026-08-12T04:16:10.956Z",
+  "url": "https://samuelmedeiros.vercel.app",
+  "model": "nvidia/nemotron-nano-12b-v2-vl",
+  "shots": [
+    {
+      "viewport": "desktop",
+      "consoleErrors": [],
+      "pageErrors": [
+        "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "findings": {
+        "layout_breaks": [],
+        "overlap_elements": [
+          "menu 'POWER BI' sobrepõe 'SQL'",
+          "menu 'Python' sobrepõe 'Machine Lear...'",
+          "menu 'Machine Lear...' está parcialmente coberto pela barra com opções de subespecializações"
+        ],
+        "text_cut_or_illegible": [
+          "Texto duplicado e ilegível na seção de redação (Samuel Medeiros, Analista de Dados).",
+          "Mite grande imagem PNG com texto ilegível na seção de projetos."
+        ],
+        "contraste_problems": [],
+        "alignment_issues": [
+          "Menus estão sobrepostos e não alinhados corretamente na lista de habilidades.",
+          "Menu de tipos de rede (GitHub, linha, etc.) não está alinhado corretamente com os projetos e currículo."
+        ],
+        "mobile_problems": []
+      }
+    },
+    {
+      "viewport": "mobile",
+      "consoleErrors": [],
+      "pageErrors": [
+        "Error: Minified React error #418; visit https://react.dev/errors/418?args[]=HTML&args[]= for the full message or use the non-minified dev environment for full errors and additional helpful warnings."
+      ],
+      "findings": {
+        "raw": "```json\n{\n  \"layout_breaks\": [\n    {\n      \"description\": \"O layout da seção 'Sobrie' não mantém a verticalidade coerente quando visualizado na dimensão reduzida.\",\n      \"impact\": \"A estrutura visual é comprometida, afetando a experiência de navegação.\"\n    }\n  ],\n  \"element_overlaps\": [\n    {\n      \"description\": \"Os elementos interativos 'Sobrie' e 'Habilidades' se sobressaem parcialmente no topo da seção de habilidades.\",\n      \"impact\": \"Pode causar confusão para o usuário sobre quais elementos estão interativos.\"\n    }\n  ],\n  \"text_cut_off_or_illegible\": [\n    {\n      \"description\": \"Os textos em miniaturização das seções 'habilidades' e 'experiência' são ilegíveis.\",\n      \"impact\": \"Torna impossível identificar conquistas específicas ou compreender habilidades mencionadas.\",\n      \"section\": \"habilidades\"\n    },\n    {\n      \"description\": \"O texto no rodapé sobre privacidade é extenso e não se adapta bem ao layout miniaturizado.\",\n      \"impact\": \"Dificulta a leitura e compreensão de informações críticas.\",\n      \"section\": \"rodape\"\n    }\n  ],\n  \"contrast_issues\": [\n    {\n      \"description\": \"O contraste entre o texto e o fundo nas seções 'habilidades' e 'experiência' é insuficiente.\",\n      \"impact\": \"Dificulta a legibilidade,\n      \"section\": \"habilidades\"\n    }\n  ],\n  \"alignment_breaks\": [],\n  \"mobile_issues\": [\n    {\n      \"description\": \"O comprimento excessivo sidebar mobile causa rolagem vertical desnecessária.\",\n      \"impact\": \"Dificulta a navegação e acesso a informações importantes.\",\n      \"section\": \"sidebar\"\n    },\n    {\n      \"description\": \"Botões menores no rodapé não são facilmente accessíveis.\",\n      \"impact\": \"Reduz a usabilidade em dispositivos móveis.\",\n      \"section\": \"rodape\"\n    }\n  ]\n}\n```\n"
+      }
+    }
+  ]
+}

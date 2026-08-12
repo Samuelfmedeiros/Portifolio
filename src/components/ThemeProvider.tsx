@@ -60,13 +60,24 @@ export function useTheme() {
 }
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>(getInitialTheme);
-  const [palette, setPaletteState] = useState<string>(getInitialPalette);
+  // Fix #418 (hydration mismatch — mesmo padrão da issue #44):
+  // estado inicial SEMPRE "dark"/DEFAULT_PALETTE — determinístico, idêntico no
+  // server e no 1º render do client → hidratação consistente.
+  // O tema/paleta reais (localStorage + system) são lidos no useLayoutEffect
+  // abaixo, que roda ANTES do paint (sem flash, sem mismatch).
+  const [theme, setThemeState] = useState<Theme>("dark");
+  const [palette, setPaletteState] = useState<string>(DEFAULT_PALETTE);
 
-  // Apply theme class + palette on mount (synchronous before paint)
+  // Lê o tema/paleta reais pós-hydration, síncrono antes do paint (sem FOUC).
+  // Substitui o estado inicial do getInitialTheme/getInitialPalette que
+  // divergia server ("dark") vs client (localStorage/system) → React #418.
   useLayoutEffect(() => {
-    setThemeClass(theme);
-    applyPaletteToDoc(palette, theme);
+    const initialTheme = getInitialTheme();
+    const initialPalette = getInitialPalette();
+    setThemeState(initialTheme);
+    setPaletteState(initialPalette);
+    setThemeClass(initialTheme);
+    applyPaletteToDoc(initialPalette, initialTheme);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Re-apply palette when theme changes
@@ -98,41 +109,13 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     (e?: { clientX?: number; clientY?: number }) => {
       const next = theme === "dark" ? "light" : "dark";
 
-      // View Transition API — clip-path circular a partir do clique (GPU compositor).
-      // Fallback: troca direta (browsers sem suporte — Firefox antigo, etc).
-      const apply = () => {
-        setTheme(next);
-        if (typeof window !== "undefined" && window.umami?.track) {
-          window.umami.track("theme_toggle", { theme: next });
-        }
-      };
-
-      if (typeof document !== "undefined" && document.startViewTransition) {
-        const x = e?.clientX ?? window.innerWidth / 2;
-        const y = e?.clientY ?? window.innerHeight / 2;
-        const t = document.startViewTransition(apply);
-        t.ready.then(() => {
-          const r = Math.hypot(
-            Math.max(x, window.innerWidth - x),
-            Math.max(y, window.innerHeight - y)
-          );
-          document.documentElement.animate(
-            {
-              clipPath: [
-                `circle(0px at ${x}px ${y}px)`,
-                `circle(${r}px at ${x}px ${y}px)`,
-              ],
-            },
-            {
-              // 400ms — rápida mas fluida. < 400ms fica seco, > 600ms arrasta.
-              duration: 400,
-              easing: "cubic-bezier(0.65, 0, 0.35, 1)",
-              pseudoElement: "::view-transition-new(root)",
-            }
-          );
-        });
-      } else {
-        apply();
+      // Troca direta de tema — transição suave via CSS (globals.css).
+      // (Animação circular View Transition removida — era cópia indevida do LifeLog,
+      // que tem bug de travamento em GPU low-end; ver posts do LifeLog 22-24/07/2026.)
+      void e;
+      setTheme(next);
+      if (typeof window !== "undefined" && window.umami?.track) {
+        window.umami.track("theme_toggle", { theme: next });
       }
     },
     [theme, setTheme]
