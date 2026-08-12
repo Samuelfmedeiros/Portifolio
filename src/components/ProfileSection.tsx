@@ -333,7 +333,7 @@ function SkillsCompact() {
                   <skill.icon className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent)] group-hover:scale-110 transition-transform duration-300" />
                 </div>
                 <div className="flex-1 min-w-0">
-                  <span className="font-semibold text-sm md:text-base text-[var(--text-primary)] block truncate">
+                  <span className="font-semibold text-sm md:text-base text-[var(--text-primary)] block leading-snug">
                     {skill.name}
                   </span>
                 </div>
@@ -442,7 +442,7 @@ function TimelineItem({ item, index, onSelect, isSelected, total }: {
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
-              <h3 className="font-semibold text-xs md:text-sm truncate">{item.title}</h3>
+              <h3 className="font-semibold text-xs md:text-sm leading-snug">{item.title}</h3>
               <span className="text-[9px] font-mono text-[var(--accent)] bg-[var(--accent)]/10 px-1.5 py-0.5 rounded whitespace-nowrap">
                 {item.period}
               </span>
