@@ -127,6 +127,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
               onClick={handleClose}
               disabled={status === "loading"}
               className="absolute top-3 right-3 p-1.5 rounded-lg text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)] transition-colors disabled:opacity-40"
+              aria-label={t("cv.close", "Fechar")}
             >
               <X size={18} />
             </button>
