@@ -6,10 +6,19 @@ on:
   pull_request:
     branches: [master]
   workflow_dispatch:
+    inputs:
+      update_snapshots:
+        description: 'Atualizar snapshots visuais (gera PNGs no ambiente do CI e commita)'
+        required: false
+        default: false
+        type: boolean
 
 jobs:
   test:
     runs-on: ubuntu-latest
+
+    permissions:
+      contents: write
 
     strategy:
       fail-fast: false
@@ -50,7 +59,29 @@ jobs:
           CI: true
 
       - name: Run Playwright tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
+        if: inputs.update_snapshots != true
         run: pnpm test:e2e -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
+        env:
+          CI: true
+
+      - name: Update visual snapshots (ambiente CI)
+        if: inputs.update_snapshots == true && matrix.shardIndex == 1
+        run: pnpm exec playwright test tests/visual.spec.ts --update-snapshots --project=chromium
+        env:
+          CI: true
+
+      - name: Commit updated snapshots
+        if: inputs.update_snapshots == true && matrix.shardIndex == 1
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add tests/visual.spec.ts-snapshots/
+          if git diff --cached --quiet; then
+            echo "Nenhuma mudanca nos snapshots"
+          else
+            git commit -m "test(e2e): atualiza snapshots visuais gerados no ambiente do CI"
+            git push
+          fi
         env:
           CI: true
 
