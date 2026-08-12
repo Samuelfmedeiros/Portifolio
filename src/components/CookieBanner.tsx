@@ -40,23 +40,13 @@ function getStoredConsent(): AnalyticsConsent {
 }
 
 export function CookieBannerProvider({ children }: { children: React.ReactNode }) {
-  const [consent, setConsent] = useState<AnalyticsConsent>(() => {
-    try {
-      if (typeof window !== "undefined") {
-        return getStoredConsent();
-      }
-    } catch {}
-    return null;
-  });
-  const [showBanner, setShowBanner] = useState(() => {
-    try {
-      if (typeof window !== "undefined") {
-        return getStoredConsent() === null;
-      }
-    } catch {}
-    return false;
-  });
-  const [mounted] = useState(() => typeof window !== "undefined");
+  // 🔴 12/08/2026: initializers NÃO-determinísticos (typeof window / localStorage)
+  // causavam React #418 — server renderiza SEM banner (mounted=false), client
+  // renderiza COM banner (mounted=true) → hydration mismatch. Padrão correto:
+  // estado inicial determinístico (idêntico ao server) + leitura real pós-mount.
+  const [consent, setConsent] = useState<AnalyticsConsent>(null);
+  const [showBanner, setShowBanner] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const [showAdsOptions, setShowAdsOptions] = useState(false);
   const { t } = useLanguage();
 
@@ -68,7 +58,13 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   // o Umami no boot, sem depender de clique. State é lazy-initialized para o
   // consent, mas loadUmamiScript() precisa ser chamado explicitamente no mount.
   useEffect(() => {
-    if (getStoredConsent() === "accepted") {
+    // Leitura real do consentimento SÓ pós-mount (server e 1º render client
+    // ficam idênticos → sem #418). O banner aparece após a hidratação.
+    const stored = getStoredConsent();
+    setConsent(stored);
+    setShowBanner(stored === null);
+    setMounted(true);
+    if (stored === "accepted") {
       loadUmamiScript();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
