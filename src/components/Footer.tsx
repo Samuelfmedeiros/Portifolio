@@ -361,7 +361,7 @@ export function Footer() {
                   href={BMC_CONFIG.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
+                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                   aria-label="Buy me a coffee"
                   onClick={() => track({ type: "external_link", url: "buymeacoffee", label: "Buy me a coffee" })}
                 >
@@ -374,7 +374,7 @@ export function Footer() {
                   href={GITHUB_SPONSORS_CONFIG.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)]/50 hover:text-[var(--accent)] transition-colors"
+                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                   aria-label="GitHub Sponsors"
                   onClick={() => track({ type: "external_link", url: "github-sponsors", label: "GitHub Sponsors" })}
                 >

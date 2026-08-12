@@ -32,7 +32,7 @@ const PROJECT_LABELS: Record<string, string> = {
   descobertas: "Descobertas",
 };
 
-const DEFAULT_ACCENT = "#00d4ff";
+const DEFAULT_ACCENT = "var(--accent)";
 
 function formatDate(iso: string | undefined): string {
   if (!iso) return "";

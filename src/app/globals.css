@@ -76,7 +76,7 @@ html {
    Overrides escurecem texto e borda do badge no light; dark theme mantém as -400 originais. */
 .theme-light .text-cyan-400 { color: #0e7490; }
 .theme-light .text-emerald-400 { color: #047857; }
-.theme-light .text-yellow-400 { color: #a16207; }
+.theme-light .text-yellow-400 { color: #854d0e; }
 .theme-light .text-purple-400 { color: #7e22ce; }
 .theme-light .text-orange-400 { color: #c2410c; }
 .theme-light .text-green-400 { color: #15803d; }

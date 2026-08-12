@@ -163,7 +163,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] mb-1.5"
                   >
                     <User size={12} />
-                    {t("cv.name")} <span className="text-[var(--text-secondary)]/50">{t("cv.name.optional")}</span>
+                    {t("cv.name")} <span className="text-[var(--text-secondary)]">{t("cv.name.optional")}</span>
                   </label>
                   <input
                     id="cv-name"
@@ -182,7 +182,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] mb-1.5"
                   >
                     <Mail size={12} />
-                    {t("cv.email")} <span className="text-[var(--text-secondary)]/50">{t("cv.name.optional")}</span>
+                    {t("cv.email")} <span className="text-[var(--text-secondary)]">{t("cv.name.optional")}</span>
                   </label>
                   <input
                     id="cv-email"
@@ -237,7 +237,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                   )}
                 </button>
 
-                <p className="text-[10px] text-center text-[var(--text-secondary)]/50 font-mono">
+                <p className="text-[10px] text-center text-[var(--text-secondary)] font-mono">
                   {t("cv.privacy.note")}
                 </p>
               </form>

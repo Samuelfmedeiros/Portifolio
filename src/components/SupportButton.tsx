@@ -154,7 +154,7 @@ export function SupportButton() {
                   </a>
                 )}
 
-                <p className="text-[9px] text-center text-[var(--text-secondary)]/50 pt-1">
+                <p className="text-[9px] text-center text-[var(--text-secondary)] pt-1">
                   {t("monetization.security", "Pagamento 100% seguro • Você escolhe o valor")}
                 </p>
               </div>
