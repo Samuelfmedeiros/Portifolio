@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { motion } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 
 interface TypeWriterProps {
   phrases: string[];
@@ -21,6 +21,9 @@ export function TypeWriter({
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
   const [currentText, setCurrentText] = useState("");
   const [isDeleting, setIsDeleting] = useState(false);
+  // Acessibilidade: usuário com prefers-reduced-motion não vê cursor piscando
+  // (também estabiliza o fullPage screenshot dos testes visuais)
+  const prefersReducedMotion = useReducedMotion();
 
   // Se as frases mudaram (ex: troca de locale PT/EN), reinicia a digitação
   // com as novas frases — senão continua mostrando o idioma antigo.
@@ -45,7 +48,20 @@ export function TypeWriter({
     }
   }, [currentPhraseIndex, currentText, isDeleting, phrases]);
 
+  // Acessibilidade (WCAG 2.3.3): prefers-reduced-motion → frase completa estática.
+  // O ciclo de digitação é animação não-essencial; mostrar o texto inteiro imediatamente
+  // também estabiliza o fullPage screenshot dos testes visuais.
   useEffect(() => {
+    if (prefersReducedMotion) {
+      setCurrentText(phrases[0]);
+      setIsDeleting(false);
+      setCurrentPhraseIndex(0);
+    }
+  }, [prefersReducedMotion, phrases]);
+
+  useEffect(() => {
+    if (prefersReducedMotion) return;
+
     const fullText = phrases[currentPhraseIndex];
 
     if (!isDeleting && currentText === fullText) {
@@ -73,7 +89,7 @@ export function TypeWriter({
     >
       {currentText}
       <motion.span
-        animate={{ opacity: [1, 0] }}
+        animate={prefersReducedMotion ? { opacity: 1 } : { opacity: [1, 0] }}
         transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
         className="inline-block w-[2px] h-[1em] bg-[var(--accent)] ml-0.5 align-middle"
       />

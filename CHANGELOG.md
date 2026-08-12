@@ -1,8 +1,23 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
-## [2026-08-11] — Bug Hunter findings versionados (dia leve)
-- `202863f`: versiona audits bug-hunter 2026-08-10/11 (114 linhas de findings)
-- 1 commit · push bare+origin OK · HEAD: `202863f`
+## [2026-08-11] — CV ATS 98.8/100 + hydration fix #418 + vulns 61→2
+
+### 🚀 Features
+- **CVs ATS-friendly PT/EN**: corrige cópia EN=PT literal, fontes de verdade md + gerador/validador; ats-score 96/100 (`118bd26`, `100b5d6`)
+- **CV+site alinhados**: links Site/GitHub + 5 keywords reais (98.8/100), profileData sincronizado (Supabase→PG/Stripe/Pages, Hitss, TRT, pós-graduação) (`896f629`)
+
+### 🔧 Fixes
+- **hydration #418**: LanguageProvider pt determinístico, locale real pós-mount (`a94ca22`) + baselines visuais atualizados (`20193c7`)
+- **Umami LGPD**: carrega no boot quando consentimento aceito (`6f59c6d`)
+- **vulns 61→2**: overrides pnpm (ajv, smol-toml, once, esbuild) (`327d326`)
+
+### 🧪 Testes
+- Anti-regressão PDFs PT/EN distintos + plano ATS documentado (`a01c22d`)
+
+### 🔒 Segurança
+- gitleaks+bandit+opengrep scan (`8cfa843`)
+
+14 commits · push bare+origin OK · HEAD: `20193c7`
 
 ## [2026-08-09] — RSS/LifeLog fixes + i18n audit + vulns
 

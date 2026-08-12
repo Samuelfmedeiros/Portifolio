@@ -12,10 +12,25 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 - **URL:** https://samuelmedeiros.vercel.app
 
 
-## Sessão 2026-08-11 — Bug Hunter findings versionados (dia leve)
-- `202863f`: versiona audits bug-hunter 2026-08-10 e 2026-08-11 (114 linhas de findings)
-- 1 commit no dia · push bare+origin OK
-- ⚠️ 4 arquivos `tmp-umami-e2e*.mjs` não rastreados (lixo de teste) — pendência de limpeza
+## Sessão 2026-08-11 — CV ATS 98.8/100 + hydration fix #418 + vulns 61→2 + baselines visuais
+
+### 🚀 Features
+- **feat(cv)**: CVs ATS-friendly PT/EN — corrige cópia EN=PT literal, fontes de verdade md + gerador/validador; ats-score (nota 96/100) (`118bd26`, `100b5d6`, `a01c22d`)
+- **feat(cv+site)**: links Site/GitHub + 5 keywords reais (98.8/100), alinha profileData com CV (Supabase→PG/Stripe/Pages, Hitss Azure/M365, TRT 2017-2020, pós Ciência de Dados e Big Data Analytics), metadata stack real (`896f629`)
+
+### 🔧 Fixes
+- **fix(react)**: hydration #418 — LanguageProvider inicia com pt determinístico, locale real detectado pós-mount (`a94ca22`)
+- **fix(tracking)**: carrega Umami no boot quando consentimento já foi aceito (LGPD) (`6f59c6d`)
+- **fix(security)**: reduz vulns 61→2 via overrides pnpm (ajv, smol-toml, once, esbuild) (`327d326`)
+
+### 🧪 Testes
+- **test(e2e)**: atualiza baselines visuais (home/projetos/games/contato) — desatualizados após hydration fix (`20193c7`)
+- **test(cv)**: anti-regressão PDFs PT/EN distintos + plano ATS documentado (`a01c22d`)
+
+### 🔒 Segurança
+- gitleaks+bandit+opengrep scan (`8cfa843`)
+
+- 14 commits no dia · push bare+origin OK · HEAD: `20193c7`
 
 ## Sessão 2026-08-07 — i18n 100% + CV locale-aware + auditoria CI
 - **i18n por origem**: locale detectado via navigator.language (pt-BR/pt-PT → PT, outro → EN); NÃO restaura último salvo — cada visita detecta a origem

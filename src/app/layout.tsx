@@ -16,6 +16,7 @@ import { JsonLd } from "@/components/JsonLd";
 import { BackToTop } from "@/components/BackToTop";
 import { CookieBannerProvider } from "@/components/CookieBanner";
 import { MonetizationProvider, AdSense } from "@/components/monetization";
+import { MotionConfig } from "framer-motion";
 import { ADSENSE_CONFIG } from "@/lib/monetization";
 import { SITE_URL } from "@/lib/types";
 import "./globals.css";
@@ -159,9 +160,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <ScrollRestoration />
         {/* Umami carregado dinamicamente pelo CookieBanner pós-consentimento */}
       </head>
-      <body className="relative min-h-screen antialiased" style={{ backgroundColor: '#020617', touchAction: 'manipulation' } as React.CSSProperties}>
+      <body className="relative min-h-screen antialiased" style={{ backgroundColor: 'var(--bg-primary, #020617)', touchAction: 'manipulation' } as React.CSSProperties}>
         <SkipLink />
         <ThemeProvider>
+          <MotionConfig reducedMotion="user">
           <LanguageProvider>
             <CookieBannerProvider>
             <MonetizationProvider>
@@ -184,6 +186,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             </MonetizationProvider>
           </CookieBannerProvider>
           </LanguageProvider>
+          </MotionConfig>
         </ThemeProvider>
         <JsonLd />
         <BackToTop />
