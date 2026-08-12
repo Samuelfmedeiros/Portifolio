@@ -17,7 +17,8 @@
 ### 🔒 Segurança
 - gitleaks+bandit+opengrep scan (`8cfa843`)
 
-14 commits · push bare+origin OK · HEAD: `20193c7`
+16 commits · push bare+origin OK · HEAD: `f058c95`
+- **fix(e2e)**: CI vermelho — snapshots + contraste a11y light + TypeWriter prefers-reduced-motion (`045d0bb`); ci(e2e) workflow_dispatch update_snapshots (`f058c95`)
 
 ## [2026-08-09] — RSS/LifeLog fixes + i18n audit + vulns
 

@@ -5,7 +5,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `202863f` — docs: versiona findings bug-hunter 2026-08-10/11
+- **Ãšltimo commit:** `f058c95` â€” ci(e2e): workflow_dispatch update_snapshots (baselines no CI)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
 - **Testes:** 239 passando
 - **Lint:** 0 errors, 0 warnings
