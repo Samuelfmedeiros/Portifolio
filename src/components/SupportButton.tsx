@@ -77,7 +77,7 @@ export function SupportButton() {
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-sm rounded-xl border border-[var(--accent)]/30 bg-[#0a0a0f] p-5 shadow-2xl shadow-[var(--accent)]/10"
+              className="relative w-full max-w-sm rounded-xl border border-[var(--accent)]/30 bg-[var(--bg-secondary)] p-5 shadow-2xl shadow-[var(--accent)]/10"
             >
               {/* Fechar */}
               <button

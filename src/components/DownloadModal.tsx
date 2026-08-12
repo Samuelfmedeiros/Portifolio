@@ -120,7 +120,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
             initial={{ opacity: 0, scale: 0.95, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            className="relative w-full max-w-md rounded-xl border border-[var(--accent)]/30 bg-[#0a0a0f] p-6 shadow-2xl shadow-[var(--accent)]/10"
+            className="relative w-full max-w-md rounded-xl border border-[var(--accent)]/30 bg-[var(--bg-secondary)] p-6 shadow-2xl shadow-[var(--accent)]/10"
           >
             {/* Close */}
             <button
@@ -170,7 +170,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     placeholder={t("cv.name.placeholder")}
-                    className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-slate-200 placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
                   />
                 </div>
 
@@ -189,7 +189,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     placeholder={t("cv.email.placeholder")}
-                    className="w-full px-3 py-2 rounded-lg bg-[#111118] border border-[var(--border)] text-sm text-slate-200 placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
+                    className="w-full px-3 py-2 rounded-lg bg-[var(--bg-card)] border border-[var(--border)] text-sm text-[var(--text-primary)] placeholder-[var(--text-secondary)]/40 focus:outline-none focus:border-[var(--accent)]/60 transition-colors font-mono"
                   />
                 </div>
 
@@ -200,7 +200,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-0.5 w-4 h-4 rounded border-[var(--border)] bg-[#111118] text-[var(--accent)] focus:ring-[var(--accent)]/30 accent-[var(--accent)]"
+                    className="mt-0.5 w-4 h-4 rounded border-[var(--border)] bg-[var(--bg-card)] text-[var(--accent)] focus:ring-[var(--accent)]/30 accent-[var(--accent)]"
                   />
                   <label htmlFor="cv-consent" className="text-[11px] text-[var(--text-secondary)] leading-snug cursor-pointer">
                     <span className="flex items-center gap-1 font-medium text-[var(--text-primary)] mb-0.5">
