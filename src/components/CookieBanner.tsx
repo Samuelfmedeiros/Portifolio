@@ -161,7 +161,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                       </button>
                       <button
                         onClick={() => setShowAdsOptions(true)}
-                        className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors shrink-0"
+                        className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
                       >
                         {t("cookie.banner.customize")}
                       </button>
@@ -194,7 +194,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                         </button>
                         <button
                           onClick={() => acceptWithAds("none")}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors text-left"
+                          className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-left"
                         >
                           <Cookie className="w-3.5 h-3.5 shrink-0" />
                           <div>
@@ -205,7 +205,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                       </div>
                       <button
                         onClick={() => setShowAdsOptions(false)}
-                        className="text-[10px] font-mono text-[var(--text-secondary)]/60 hover:text-[var(--text-secondary)] transition-colors mt-1"
+                        className="text-[10px] font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mt-1"
                       >
                         {t("cookie.banner.back")}
                       </button>

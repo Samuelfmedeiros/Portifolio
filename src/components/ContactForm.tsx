@@ -294,7 +294,7 @@ export function ContactForm() {
               />
               <label htmlFor="contact-lgpd-consent" className="text-[11px] font-mono text-[var(--text-secondary)] leading-snug cursor-pointer">
                 {t("contact.lgpd.text")}{" "}
-                <a href="#privacidade" className="text-[var(--accent)] hover:underline">
+                <a href="#privacidade" className="text-[var(--accent)] underline underline-offset-2 hover:brightness-110">
                   {t("cv.privacy.link")}
                 </a>{" "}
                 {t("contact.lgpd.suffix")}

@@ -308,7 +308,7 @@ export function Footer() {
                 href="https://seu.pet"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
                 onClick={() => track({ type: "external_link", url: "seu.pet", label: "DogWalk" })}
               >
                 DogWalk
@@ -317,7 +317,7 @@ export function Footer() {
                 href="https://arachne.seu.pet"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
                 onClick={() => track({ type: "external_link", url: "arachne", label: "Arachne" })}
               >
                 Arachne
@@ -326,7 +326,7 @@ export function Footer() {
                 href="https://lifelog-sepia.vercel.app"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
                 onClick={() => track({ type: "external_link", url: "lifelog", label: "LifeLog" })}
               >
                 LifeLog
@@ -335,7 +335,7 @@ export function Footer() {
                 href="https://github.com/Samuelfmedeiros"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
                 onClick={() => track({ type: "external_link", url: "github-projects", label: "GitHub" })}
               >
                 GitHub →
@@ -350,7 +350,7 @@ export function Footer() {
             </h3>
             <button
               onClick={() => { setShowDownloadModal(true); track({ type: "external_link", url: "cv-download", label: t("hero.btn.cv", "Baixar Currículo") }); }}
-              className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block"
+              className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors block py-1.5"
             >
               {t("footer.cv.download")}
             </button>
@@ -413,13 +413,13 @@ export function Footer() {
 
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-xs font-mono text-[var(--text-secondary)]/70">
+          <p className="text-xs font-mono text-[var(--text-secondary)]">
             © {new Date().getFullYear()} {t("footer.copyright")}
           </p>
-          <p className="text-[10px] font-mono text-[var(--text-secondary)]/60">
+          <p className="text-[10px] font-mono text-[var(--text-secondary)]">
             {t("footer.updated")}: {new Date().toLocaleDateString(dateLocale)}
           </p>
-          <p className="text-[10px] font-mono text-[var(--text-secondary)]/60">
+          <p className="text-[10px] font-mono text-[var(--text-secondary)]">
             {t("footer.version")}
           </p>
         </div>

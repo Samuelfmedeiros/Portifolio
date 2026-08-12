@@ -308,7 +308,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
           {/* Affiliate "powered by" links */}
           {getProjectAffiliates(repo.name).length > 0 && (
             <div className="flex flex-wrap gap-2 mt-2 pt-2 border-t border-[var(--border)]/20">
-              <span className="text-[8px] font-mono text-[var(--text-secondary)]/40 self-center">
+              <span className="text-[8px] font-mono text-[var(--text-secondary)] self-center">
                 {t("projects.powered_by")}
               </span>
               {getProjectAffiliates(repo.name).map((aff) => (
@@ -317,7 +317,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                   href={aff.url}
                   target="_blank"
                   rel="sponsored noopener noreferrer"
-                  className="text-[8px] font-mono text-[var(--text-secondary)]/40 hover:text-[var(--accent)] transition-colors flex items-center gap-0.5"
+                  className="text-[8px] font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors flex items-center gap-0.5"
                 >
                   <Zap className="w-2 h-2" />
                   {aff.name}

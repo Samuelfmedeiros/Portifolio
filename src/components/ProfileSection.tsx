@@ -348,7 +348,7 @@ function SkillsCompact() {
 
               {/* Description — textual content for SEO */}
               {'description' in skill && skill.description && (
-                <p className="text-[10px] text-[var(--text-secondary)]/70 leading-relaxed mt-2 line-clamp-2">
+                <p className="text-[10px] text-[var(--text-secondary)] leading-relaxed mt-2 line-clamp-2">
                   {skill.description}
                 </p>
               )}
@@ -356,7 +356,7 @@ function SkillsCompact() {
               {/* Level bar */}
               <div className="mt-3 pt-3 border-t border-[var(--border)]/30">
                 <div className="flex items-center justify-between mb-1.5">
-                  <span className="text-[10px] font-mono text-[var(--text-secondary)]/60 uppercase tracking-wider">
+                  <span className="text-[10px] font-mono text-[var(--text-secondary)] uppercase tracking-wider">
                     {t("profile.level", "Nível")}
                   </span>
                   <span className="text-[10px] font-mono font-semibold" style={{ color: `var(--proficiency-${skill.level.toLowerCase()}, var(--accent))` }}>

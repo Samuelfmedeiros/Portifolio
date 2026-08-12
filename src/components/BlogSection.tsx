@@ -102,7 +102,7 @@ function BlogCard({ post, index }: BlogCardProps) {
               {post.project ? projectLabel.toUpperCase() : "LIFELOG"}
             </span>
             {post.date && (
-              <span className="text-[var(--text-secondary)]/70">· {formatDate(post.date)}</span>
+              <span className="text-[var(--text-secondary)]">· {formatDate(post.date)}</span>
             )}
           </div>
 
