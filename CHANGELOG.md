@@ -1,5 +1,21 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-12] — Perf lazy-hydration + a11y AA round 2 + hydration fix
+
+### 🚀 Performance
+- **lazy-hydration** GameShowcase/ContactForm (next/dynamic + IntersectionObserver, TBT reduzido sem CLS)
+
+### ♿ Acessibilidade
+- Contraste AA (WhatsApp #0f766e, blog accent, badges, opacidades) + touch targets + link underline
+
+### 🔧 Fixes
+- Hydration mismatch React #418 (tema/CookieBanner/modais)
+
+### 🧪 Testes
+- Snapshots visuais CI + espera de hidratação lazy; 239+ testes
+
+15 commits · push bare+origin OK · HEAD: `2ec0cef`
+
 ## [2026-08-11] — CV ATS 98.8/100 + hydration fix #418 + vulns 61→2
 
 ### 🚀 Features
