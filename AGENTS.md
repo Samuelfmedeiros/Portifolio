@@ -5,7 +5,7 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Ãšltimo commit:** `f058c95` â€” ci(e2e): workflow_dispatch update_snapshots (baselines no CI)
+- **Último commit:** `2ec0cef` — test(e2e): snapshots visuais CI + lazy-hydration perf (12/08)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
 - **Testes:** 239 passando
 - **Lint:** 0 errors, 0 warnings
