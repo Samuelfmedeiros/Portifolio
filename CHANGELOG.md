@@ -1,5 +1,16 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-12] — Perf lazy-hydration + a11y contraste AA + snapshots CI
+
+### 🚀 Performance
+- lazy-hydration abaixo do fold (GameShowcase + ContactForm) via next/dynamic ssr:false + IntersectionObserver — reduz TBT/bootup sem CLS (`427413e`)
+
+### 🔧 Fixes
+- a11y contraste AA: WhatsApp light #128c7e→#0f766e (4.13→5.47), RSS accent + yellow-800 badge (`2b0985b`, `598f083`, `09836aa`)
+- e2e: snapshots visuais no CI + scroll progressivo/hidratação lazy antes do snapshot (`2ec0cef`, `d28e1e0`, `cadc2dc`)
+
+15 commits · push bare+origin OK · HEAD: `2ec0cef`
+
 ## [2026-08-12] — Perf lazy-hydration + a11y AA round 2 + hydration fix
 
 ### 🚀 Performance

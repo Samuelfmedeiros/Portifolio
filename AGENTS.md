@@ -12,6 +12,12 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 - **URL:** https://samuelmedeiros.vercel.app
 
 
+## Sessão 2026-08-12 — Perf lazy-hydration + a11y contraste AA + snapshots CI
+- **perf**: lazy-hydration abaixo do fold (GameShowcase + ContactForm) via next/dynamic ssr:false + IntersectionObserver — reduz TBT/bootup sem CLS (`427413e`)
+- **fix(a11y)**: contraste AA round 2 — botão WhatsApp light #128c7e→#0f766e (4.13→5.47), blog accent RSS via color-mix + yellow-800 badge via var(--accent) (`2b0985b`, `598f083`, `09836aa`)
+- **test(e2e)**: snapshots visuais gerados no ambiente do CI + scroll progressivo/hidratação lazy antes do snapshot (`2ec0cef`, `d28e1e0`, `cadc2dc`)
+- 15 commits no dia · push bare+origin OK · HEAD: `2ec0cef`
+
 ## Sessão 2026-08-11 — CV ATS 98.8/100 + hydration fix #418 + vulns 61→2 + baselines visuais
 
 ### 🚀 Features
