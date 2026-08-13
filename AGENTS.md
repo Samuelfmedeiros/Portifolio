@@ -5,9 +5,9 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `2ec0cef` — test(e2e): snapshots visuais CI + lazy-hydration perf (12/08)
+- **Último commit:** `aea6d7e` — docs: versiona findings bug-hunter (12-13/08) — test(e2e): snapshots visuais CI + lazy-hydration perf (12/08)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
-- **Testes:** 239 passando
+- **Testes:** 268 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
