@@ -29,6 +29,12 @@ export const Navbar = memo(function Navbar() {
   const rafRef = useRef<number | null>(null);
   const navigatingRef = useRef(false);
   const navTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  // Geração do clique: invalida settles de cliques anteriores (rapid clicks).
+  const navGenRef = useRef(0);
+  // Usuário tomou controle do scroll (wheel/touch/teclado) durante o pouso —
+  // o settle NÃO deve puxar o scroll de volta pro alvo.
+  const interruptedRef = useRef(false);
+  const targetTopRef = useRef(0);
 
   // Scroll detection — requestAnimationFrame throttle
   useEffect(() => {
@@ -43,6 +49,23 @@ export const Navbar = memo(function Navbar() {
     return () => {
       window.removeEventListener("scroll", onScroll);
       if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, []);
+
+  // Interrupção do usuário durante o pouso: wheel/touch/teclado = usuário
+  // tomou controle do scroll. O settle (correção de drift) NÃO deve lutar
+  // contra ele puxando o scroll de volta pro alvo.
+  useEffect(() => {
+    const onUserInterrupt = () => {
+      interruptedRef.current = true;
+    };
+    window.addEventListener("wheel", onUserInterrupt, { passive: true });
+    window.addEventListener("touchmove", onUserInterrupt, { passive: true });
+    window.addEventListener("keydown", onUserInterrupt);
+    return () => {
+      window.removeEventListener("wheel", onUserInterrupt);
+      window.removeEventListener("touchmove", onUserInterrupt);
+      window.removeEventListener("keydown", onUserInterrupt);
     };
   }, []);
 
@@ -119,6 +142,11 @@ export const Navbar = memo(function Navbar() {
   const handleNavClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
     e.preventDefault();
 
+    // Nova geração de clique — invalida settles/listeners pendentes de
+    // cliques anteriores (rapid clicks ou scrollend atrasado).
+    const gen = ++navGenRef.current;
+    interruptedRef.current = false;
+
     // Cancel any pending nav timeout from a previous rapid click
     if (navTimeoutRef.current !== null) {
       clearTimeout(navTimeoutRef.current);
@@ -146,20 +174,25 @@ export const Navbar = memo(function Navbar() {
         node = node.offsetParent as HTMLElement | null;
       }
       const top = Math.max(0, offsetTop - scrollPadding);
+      targetTopRef.current = top;
       setActiveSection(sectionId);
       navigatingRef.current = true;
       window.scrollTo({ top, behavior: "smooth" });
 
-      // Pause the observer long enough for the smooth scroll to finish,
-      // so rapid nav clicks don't get overwritten by intermediate sections.
       // Re-mede após o layout assentar (animações/imagens podem empurrar o alvo):
       // espera o evento scrollend (fim real do scroll suave) e corrige o desvio
-      // residual em até 3 tentativas.
+      // residual em até 3 tentativas. Guardas:
+      //  - gen: clique antigo (rapid clicks / scrollend atrasado) — ignora
+      //  - interruptedRef: usuário rolou/tocou/teclou durante o pouso — NÃO lutar
+      //  - distância: usuário está longe do alvo (navegou pra outro ponto) — não é drift
       const settle = (attempt: number) => {
+        if (navGenRef.current !== gen) return;
         navigatingRef.current = false;
         if (href === "#profile") return;
         const el = document.querySelector(href);
         if (!el) return;
+        if (interruptedRef.current) return;
+        if (Math.abs(window.scrollY - targetTopRef.current) > 120) return;
         const currentTop = el.getBoundingClientRect().top;
         const cs = getComputedStyle(document.documentElement).scrollPaddingTop;
         const sp = parseFloat(cs) || 80;
