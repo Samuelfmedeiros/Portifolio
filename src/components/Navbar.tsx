@@ -189,22 +189,15 @@ export const Navbar = memo(function Navbar() {
                   <motion.a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all block ${
+                    className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium border backdrop-blur-md transition-all ${
                       isActive
-                        ? "text-[var(--accent)] bg-[var(--accent)]/10"
-                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)]/20"
+                        ? "bg-[var(--accent)] text-[var(--bg-primary)] border-[var(--accent)] shadow-[0_0_18px_-4px_var(--accent)]"
+                        : "bg-[var(--glass-bg)] border-[var(--glass-border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent)]/5"
                     }`}
-                    whileHover={{ y: -1 }}
+                    whileHover={isActive ? undefined : { y: -1 }}
                     aria-current={isActive ? "true" : undefined}
                   >
                     {t(item.key)}
-                    {isActive && (
-                      <motion.div
-                        layoutId="navbar-indicator"
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--accent)] rounded-full"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
                   </motion.a>
                 </li>
               );
@@ -244,22 +237,16 @@ export const Navbar = memo(function Navbar() {
                 <motion.a
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap ${
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-medium border backdrop-blur-md transition-all whitespace-nowrap ${
                     isActive
-                      ? "text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent"
+                      ? "bg-[var(--accent)] text-[var(--bg-primary)] border-[var(--accent)]"
+                      : "bg-[var(--glass-bg)] border-[var(--glass-border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)]"
                   }`}
                   whileTap={{ scale: 0.95 }}
                   aria-current={isActive ? "true" : undefined}
                 >
                   <span className="text-xs">{item.icon}</span>
-                  <span className="sm:inline">{t(item.key)}</span>
-                  {isActive && (
-                    <motion.div
-                      className="w-1 h-1 rounded-full bg-[var(--accent)]"
-                      layoutId="mobile-active-dot"
-                    />
-                  )}
+                  <span>{t(item.key)}</span>
                 </motion.a>
               </li>
             );
