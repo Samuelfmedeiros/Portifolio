@@ -2,7 +2,7 @@
 
 import { useState, useEffect, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cookie, X, Eye, EyeOff } from "lucide-react";
+import { Cookie, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { loadUmamiScript } from "@/lib/umami";
 
@@ -47,7 +47,6 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   const [consent, setConsent] = useState<AnalyticsConsent>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const [showAdsOptions, setShowAdsOptions] = useState(false);
   const { t } = useLanguage();
 
   // We can't use useMonetizationConsent here because CookieBannerProvider
@@ -145,72 +144,20 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                     {t("cookie.banner.text")}
                   </p>
 
-                  {!showAdsOptions ? (
-                    <div className="flex items-center gap-2 flex-nowrap">
-                      <button
-                        onClick={() => acceptWithAds("non-personalized")}
-                        className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
-                      >
-                        {t("cookie.banner.accept_all")}
-                      </button>
-                      <button
-                        onClick={() => decline()}
-                        className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
-                      >
-                        {t("cookie.banner.decline")}
-                      </button>
-                      <button
-                        onClick={() => setShowAdsOptions(true)}
-                        className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
-                      >
-                        {t("cookie.banner.customize")}
-                      </button>
-                    </div>
-                  ) : (
-                    <div className="space-y-2">
-                      <p className="text-[10px] font-mono text-[var(--text-secondary)] mb-2">
-                        {t("cookie.banner.ads_choice")}
-                      </p>
-                      <div className="flex flex-col gap-2">
-                        <button
-                          onClick={() => acceptWithAds("personalized")}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs bg-[var(--accent)]/10 text-[var(--accent)] border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors text-left"
-                        >
-                          <Eye className="w-3.5 h-3.5 shrink-0" />
-                          <div>
-                            <span className="block">{t("cookie.banner.ads_personalized")}</span>
-                            <span className="block text-[9px] text-[var(--text-secondary)]">{t("cookie.banner.ads_personalized_hint")}</span>
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => acceptWithAds("non-personalized")}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)]/50 hover:bg-[var(--border)]/10 transition-colors text-left"
-                        >
-                          <EyeOff className="w-3.5 h-3.5 shrink-0" />
-                          <div>
-                            <span className="block">{t("cookie.banner.ads_nonpersonalized")}</span>
-                            <span className="block text-[9px] text-[var(--text-secondary)]">{t("cookie.banner.ads_nonpersonalized_hint")}</span>
-                          </div>
-                        </button>
-                        <button
-                          onClick={() => acceptWithAds("none")}
-                          className="flex items-center gap-2 px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors text-left"
-                        >
-                          <Cookie className="w-3.5 h-3.5 shrink-0" />
-                          <div>
-                            <span className="block">{t("cookie.banner.analytics_only")}</span>
-                            <span className="block text-[9px] text-[var(--text-secondary)]">{t("cookie.banner.analytics_only_hint")}</span>
-                          </div>
-                        </button>
-                      </div>
-                      <button
-                        onClick={() => setShowAdsOptions(false)}
-                        className="text-[10px] font-mono text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors mt-1"
-                      >
-                        {t("cookie.banner.back")}
-                      </button>
-                    </div>
-                  )}
+                  <div className="flex items-center gap-2 flex-nowrap">
+                    <button
+                      onClick={() => acceptWithAds("none")}
+                      className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
+                    >
+                      {t("cookie.banner.accept_all")}
+                    </button>
+                    <button
+                      onClick={() => decline()}
+                      className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
+                    >
+                      {t("cookie.banner.decline")}
+                    </button>
+                  </div>
                 </div>
                 <button
                   onClick={() => decline()}
