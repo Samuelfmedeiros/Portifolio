@@ -171,7 +171,7 @@ export const Navbar = memo(function Navbar() {
             settle(attempt + 1);
           };
           window.addEventListener("scrollend", onEnd);
-          window.setTimeout(() => {
+          setTimeout(() => {
             window.removeEventListener("scrollend", onEnd);
             settle(attempt + 1);
           }, 1200);
@@ -182,7 +182,7 @@ export const Navbar = memo(function Navbar() {
         settle(0);
       };
       window.addEventListener("scrollend", onFirstEnd);
-      navTimeoutRef.current = window.setTimeout(() => {
+      navTimeoutRef.current = setTimeout(() => {
         window.removeEventListener("scrollend", onFirstEnd);
         settle(0);
       }, 2500);
