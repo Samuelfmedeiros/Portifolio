@@ -5,12 +5,22 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `b375ccb` — chore: CI notificação Telegram com subject + arquivos alterados (13/08)
-- **Status:** ✅ Funcional — produção em Vercel + self-host :3001
+- **Último commit:** `148feb7` — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
+- **Status:** ✅ Funcional — produção em Vercel + self-host :3001 · CI 7/7 verde pós-merge
 - **Testes:** 268 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
+
+## Sessão 2026-08-14 (manhã) — Merge dos 3 PRs dependabot + README dual-língua
+- **chore(deps)**: merge dos 3 PRs dependabot (rebase local + force-push + squash via API):
+  - `#41` framer-motion `^12.43.0 → ^13.0.0` (`0d6e4c7`) — breaking só no peer opcional @emotion/is-prop-valid (não usado); MotionConfig reducedMotion continua igual
+  - `#42` eslint-config-next `16.2.10 → 16.3.0` (`8e43663`)
+  - `#43` netlify-cli `26.2.0 → 27.1.1` (`148feb7`)
+  - Rebase necessário: branches estavam na base de 10-11/08, master evoluiu (lazy-hydration, a11y, snapshots) → E2E falhava por branch desatualizado, não por bug
+  - CI nos 3 rebased: 8/8 success · HEAD pós-merge: 7/7 success
+- **docs**: README dual-língua EN+PT-BR + testes 219→268 (`b358868`); snapshots CI (`1d7ae05`); feat #31 Games última seção/Blog navbar/touch targets (`9d1dea90`); emojis→SVGs ProjectIcon/GameIcon (`5887a75b`)
+- HEAD: `148feb7` · deploy Vercel automático validado
 
 ## Sessão 2026-08-13 (fim de dia) — CI notificação Telegram com subject + docs semanais
 - **chore**: CI notificação Telegram agora manda subject + arquivos alterados (`b375ccb`)
@@ -75,9 +85,10 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 - Cookie Banner com consentimento LGPD + opções
 
 ## 🗺️ Próximos Passos
-- [ ] Deploy automático Vercel via CI (atualmente manual via CLI)
-- [ ] E2E Playwright em CI
-- [ ] Modo escuro toggle persistente
+- [x] Deploy automático Vercel via CI
+- [x] E2E Playwright em CI (3 shards + snapshots gerados no CI)
+- [x] Modo escuro toggle persistente
+- [ ] (opcional) Investigar branch `feat/navbar-redesign` não mergeada
 - [ ] SEO: mais meta tags + schema.org
 
 ## 📁 Estrutura
