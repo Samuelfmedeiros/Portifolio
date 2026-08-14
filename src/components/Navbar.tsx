@@ -136,7 +136,16 @@ export const Navbar = memo(function Navbar() {
     }
     if (target) {
       const sectionId = href.replace("#", "") as SectionName;
-      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      // offsetTop acumulado NÃO inclui transform (animação FadeInSection);
+      // scroll-padding lido do CSS = fonte única do offset (mobile 112px / desktop 80px)
+      const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 80;
+      let offsetTop = 0;
+      let node: HTMLElement | null = target as HTMLElement;
+      while (node) {
+        offsetTop += node.offsetTop;
+        node = node.offsetParent as HTMLElement | null;
+      }
+      const top = Math.max(0, offsetTop - scrollPadding);
       setActiveSection(sectionId);
       navigatingRef.current = true;
       window.scrollTo({ top, behavior: "smooth" });
