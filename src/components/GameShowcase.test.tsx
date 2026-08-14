@@ -46,7 +46,7 @@ describe("GameShowcase", () => {
       created_at: "2024-01-01",
       imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
       hasDemo: false,
-      icon: "🔲",
+      icon: "grid",
     },
     {
       id: 1002,
@@ -62,7 +62,7 @@ describe("GameShowcase", () => {
       created_at: "2024-01-01",
       imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
       hasDemo: false,
-      icon: "🧠",
+      icon: "memory",
     },
     {
       id: 1005,
@@ -78,7 +78,7 @@ describe("GameShowcase", () => {
       created_at: "2024-01-01",
       imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
       hasDemo: false,
-      icon: "🚀",
+      icon: "rocket",
     },
   ];
 
@@ -146,7 +146,7 @@ describe("GameShowcase", () => {
         topics: ["game"],
         pushed_at: "2024-01-01",
         created_at: "2024-01-01",
-        icon: "🎮",
+        icon: "gamepad",
       },
     ];
 
@@ -155,8 +155,8 @@ describe("GameShowcase", () => {
     const images = screen.queryAllByRole("img");
     const gameImgs = images.filter((img) => img.getAttribute("src")?.startsWith("/games/"));
     expect(gameImgs.length).toBe(0);
-    // Should show the icon emoji
-    expect(screen.getByText(/\uD83C\uDFAE/)).toBeInTheDocument();
+    // Should show the game icon (SVG gamepad)
+    expect(document.querySelector("svg[aria-hidden]")).toBeTruthy();
     // Should show the game name (there are 2 matches: card header + button label)
     expect(screen.getAllByText("custom-game").length).toBeGreaterThanOrEqual(1);
   });

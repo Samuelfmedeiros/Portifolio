@@ -70,7 +70,7 @@ export function ContactForm() {
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!emailRegex.test(email)) {
       setStatus("error");
-      setErrorMessage("⚠ Formato de email inválido.");
+      setErrorMessage(" Formato de email inválido.");
       return;
     }
 

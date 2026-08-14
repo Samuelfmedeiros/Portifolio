@@ -3,6 +3,7 @@
 import { useRef, useEffect, useCallback, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
+import GameIcon from "./MiniGames/GameIcon";
 import type { Repo } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
@@ -85,8 +86,10 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                       <img src={GAME_IMAGES[repo.name]} alt={repo.name} className="w-full h-full object-cover pointer-events-none" loading="lazy" draggable={false} />
                     ) : (
                       <div className="w-full h-full flex flex-col items-center justify-center gap-1 pointer-events-none">
-                        <span className="text-3xl drop-shadow-lg">{repo.icon || "🎮"}</span>
-                        <span className="text-[9px] font-mono text-white/70">{repo.name}</span>
+                      <span className="drop-shadow-lg">
+                        <GameIcon icon={repo.icon || "gamepad"} size={36} />
+                      </span>
+                      <span className="text-[9px] font-mono text-white/70">{repo.name}</span>
                       </div>
                     )}
                     <div className="absolute inset-x-0 bottom-0 p-2 bg-gradient-to-t from-black/60 to-transparent pointer-events-none">
@@ -124,7 +127,9 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
                 <span className="w-2 h-2 rounded-full bg-emerald-500" />
                 <span data-game-title className="text-xs font-mono text-[var(--accent)]" />
               </div>
-              <button onClick={closeGame} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]" aria-label={t("games.embed.close")}>✕</button>
+              <button onClick={closeGame} className="w-6 h-6 rounded flex items-center justify-center hover:bg-[var(--border)] transition-colors text-[var(--text-secondary)] hover:text-[var(--text-primary)]" aria-label={t("games.embed.close")}>
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" /></svg>
+              </button>
             </div>
             {loading && (
               <div className="flex items-center justify-center h-[450px] md:h-[550px] bg-[var(--bg-primary)]">

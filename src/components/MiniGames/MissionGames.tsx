@@ -7,6 +7,7 @@ import { MiniGame } from "./MiniGame";
 import { AsteroidDodge } from "./AsteroidDodge";
 import { CodeTyping } from "./CodeTyping";
 import { MemoryMatrix } from "./MemoryMatrix";
+import GameIcon from "./GameIcon";
 
 type GameTab = "simon" | "asteroid" | "typing" | "memory";
 
@@ -18,10 +19,10 @@ interface GameOption {
 }
 
 const GAMES: GameOption[] = [
-  { id: "simon", label: "Simon", icon: "🧠", component: <MiniGame /> },
-  { id: "asteroid", label: "Asteroids", icon: "🚀", component: <AsteroidDodge /> },
-  { id: "typing", label: "Code Type", icon: "⌨️", component: <CodeTyping /> },
-  { id: "memory", label: "Memory", icon: "🔲", component: <MemoryMatrix /> },
+  { id: "simon", label: "Simon", icon: "memory", component: <MiniGame /> },
+  { id: "asteroid", label: "Asteroids", icon: "rocket", component: <AsteroidDodge /> },
+  { id: "typing", label: "Code Type", icon: "keyboard", component: <CodeTyping /> },
+  { id: "memory", label: "Memory", icon: "grid", component: <MemoryMatrix /> },
 ];
 
 export function MissionGames() {
@@ -48,7 +49,9 @@ export function MissionGames() {
                 : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)]/30"
             }`}
           >
-            <span className="mr-1">{game.icon}</span>
+            <span className="mr-1 inline-flex items-center">
+    <GameIcon icon={game.icon} />
+  </span>
             <span className="inline sm:inline">{game.label}</span>
           </button>
         ))}

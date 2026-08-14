@@ -246,7 +246,7 @@ export function Footer() {
               <span>{copied ? t("footer.copied") : "samuelandrademedeiros@gmail.com"}</span>
               {/* Tooltip */}
               <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-[var(--bg-secondary)]/90 text-[var(--text-primary)] whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
-                {copied ? "✓ " + t("footer.copied") : t("footer.copy.tooltip")}
+                {copied ? " " + t("footer.copied") : t("footer.copy.tooltip")}
               </span>
             </button>
           </div>

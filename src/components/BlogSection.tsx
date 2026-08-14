@@ -5,19 +5,7 @@ import Image from "next/image";
 import { ArrowUpRight, PenLine } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import type { LifelogPost } from "@/lib/lifelogRss";
-
-// Mapa de ícones por projeto (espelha o projects.ts do LifeLog)
-const PROJECT_ICONS: Record<string, string> = {
-  arachne: "🕷️",
-  dogwalk: "🐶",
-  portfolio: "🚀",
-  capivara: "🐹",
-  tatuengine: "🌊",
-  seguranca: "🔒",
-  lifelog: "📖",
-  estudos: "📚",
-  descobertas: "💡",
-};
+import ProjectIcon from "./ProjectIcon";
 
 // Labels dos projetos (fallback pt)
 const PROJECT_LABELS: Record<string, string> = {
@@ -49,7 +37,7 @@ interface BlogCardProps {
 function BlogCard({ post, index }: BlogCardProps) {
   const accent = post.accent || DEFAULT_ACCENT;
   const projectLabel = post.project ? (PROJECT_LABELS[post.project] || post.project) : "LifeLog";
-  const projectIcon = post.project ? (PROJECT_ICONS[post.project] || "📝") : "📝";
+  const hasProject = Boolean(post.project && PROJECT_LABELS[post.project]);
 
   return (
     <motion.article
@@ -80,17 +68,22 @@ function BlogCard({ post, index }: BlogCardProps) {
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center">
-              <span className="text-3xl opacity-40" style={{ filter: `drop-shadow(0 0 20px var(--blog-accent))` }}>
-                {projectIcon}
+              <span className="opacity-40" style={{ filter: `drop-shadow(0 0 20px var(--blog-accent))` }}>
+                {hasProject ? (
+                  <ProjectIcon project={post.project!} size={40} />
+                ) : (
+                  <PenLine className="w-9 h-9" />
+                )}
               </span>
             </div>
           )}
           {/* Badge do projeto (igual LifeLog) */}
           <div
-            className="absolute bottom-2 left-2 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-black/60 backdrop-blur-md text-white border border-white/10"
+            className="absolute bottom-2 left-2 px-2.5 py-1 rounded-full text-[10px] font-semibold bg-black/60 backdrop-blur-md text-white border border-white/10 inline-flex items-center gap-1"
             style={{ boxShadow: `0 0 12px color-mix(in srgb, var(--blog-accent) 40%, transparent)` }}
           >
-            {projectIcon} {projectLabel}
+            {hasProject && <ProjectIcon project={post.project!} size={11} />}
+            {projectLabel}
           </div>
         </div>
 

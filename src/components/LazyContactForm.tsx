@@ -3,7 +3,7 @@
 import dynamic from "next/dynamic";
 import { LazySection } from "./LazySection";
 
-// 🔴 Bloco perf 12/08/2026 — ContactForm importa supabase client (~16KB+ de
+//  Bloco perf 12/08/2026 — ContactForm importa supabase client (~16KB+ de
 // deps): só carrega quando o usuário chega ao fim da página. ssr:false = fora
 // do bundle inicial. Fallback altura medida (mobile 760 / desktop 737) → CLS 0.
 const ContactForm = dynamic(
@@ -20,7 +20,7 @@ export function ContactFallback() {
       className="flex items-center justify-center text-sm text-[var(--text-secondary)]"
       style={{ minHeight: "737px" }}
     >
-      ✉️ Carregando formulário…
+       Carregando formulário…
     </div>
   );
 }

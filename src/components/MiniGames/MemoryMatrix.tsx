@@ -356,7 +356,7 @@ export function MemoryMatrix() {
           setPhase("result");
           const bonus = combo.maxCombo * 5;
           setMessage(
-            `🎯 NÍVEL COMPLETO! Streak: ${combo.maxCombo}x | Bônus: +${bonus}`
+            `NÍVEL COMPLETO! Streak: ${combo.maxCombo}x | Bônus: +${bonus}`
           );
           setScore((s) => s + 50 + bonus);
           setHighScore((h) => Math.max(h, score + 50 + bonus));
@@ -392,7 +392,7 @@ export function MemoryMatrix() {
 
         if (selectedCount - correctCount >= 2) {
           setPhase("result");
-          setMessage(`❌ GAME OVER! Score: ${score}`);
+          setMessage(`GAME OVER! Score: ${score}`);
           setCells((prev) =>
             prev.map((c) => ({
               ...c,
@@ -428,7 +428,7 @@ export function MemoryMatrix() {
     <div className="py-2 select-none touch-action-manipulation" style={{ WebkitTapHighlightColor: 'transparent' }}>
       {/* Header */}
       <h3 className="font-mono text-sm text-[var(--accent)] mb-4 text-center">
-        🧠 MEMORY MATRIX
+        MEMORY MATRIX
       </h3>
 
       {/* Info bar */}
@@ -474,7 +474,7 @@ export function MemoryMatrix() {
               className={`inline-block px-3 py-1 rounded-full font-mono text-sm
                 border ${comboColor} transition-colors duration-300`}
             >
-              🔥 Streak {combo.count}x
+              Streak {combo.count}x
               {combo.multiplier > 1 && (
                 <span className="ml-1">(×{combo.multiplier.toFixed(1)})</span>
               )}
@@ -567,7 +567,7 @@ export function MemoryMatrix() {
                       animate={{ scale: 1 }}
                       className="text-white text-sm font-bold"
                     >
-                      ✓
+                      
                     </motion.span>
                   )}
                   {cell.selected && cell.correct === false && (
@@ -576,7 +576,7 @@ export function MemoryMatrix() {
                       animate={{ scale: 1 }}
                       className="text-white text-sm font-bold"
                     >
-                      ✗
+                      
                     </motion.span>
                   )}
                 </motion.button>
@@ -593,7 +593,7 @@ export function MemoryMatrix() {
             onClick={startGame}
             className="px-6 py-2 rounded-lg font-mono text-sm text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors"
           >
-            {phase === "result" ? "🔄 REINICIAR" : "🚀 INICIAR"}
+            {phase === "result" ? "REINICIAR" : "INICIAR"}
           </button>
         )}
 
@@ -611,7 +611,7 @@ export function MemoryMatrix() {
           aria-label={soundEnabled ? "Desativar som" : "Ativar som"}
           title={soundEnabled ? "Som ativado" : "Som desativado"}
         >
-          {soundEnabled ? "🔊" : "🔇"}
+          {soundEnabled ? "" : ""}
         </button>
       </div>
     </div>

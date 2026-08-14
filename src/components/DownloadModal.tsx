@@ -151,7 +151,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                   <Download size={24} className="text-[var(--success)]" />
                 </div>
                 <p className="text-sm font-semibold text-[var(--success)] font-mono">
-                  {t("cv.success", "Download iniciado! 🚀")}
+                  {t("cv.success", "Download iniciado! ")}
                 </p>
               </div>
             ) : (

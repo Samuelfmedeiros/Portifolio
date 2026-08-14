@@ -71,9 +71,9 @@ export function MiniGame() {
     <div className="flex flex-col items-center gap-3 py-2">
       <p className="font-mono text-xs text-[var(--text-secondary)]">
         {phase === "idle" && "Clique em Iniciar para jogar!"}
-        {phase === "showing" && "👀 Observe a sequência..."}
-        {phase === "playing" && "🎯 Repita a sequência!"}
-        {phase === "gameover" && `💀 Game Over! Pontuação: ${score}`}
+        {phase === "showing" && "Observe a sequência..."}
+        {phase === "playing" && "Repita a sequência!"}
+        {phase === "gameover" && `Game Over! Pontuação: ${score}`}
       </p>
 
       <div className="grid grid-cols-2 gap-2 w-40 h-40">
@@ -100,7 +100,7 @@ export function MiniGame() {
           onClick={startGame}
           className="px-4 py-2 rounded-lg bg-[var(--accent)] text-white font-mono text-xs hover:brightness-110 transition-all"
         >
-          {phase === "gameover" ? "🔄 Tentar Novamente" : "▶ Iniciar Jogo"}
+          {phase === "gameover" ? "Tentar Novamente" : "Iniciar Jogo"}
         </button>
       ) : null}
     </div>

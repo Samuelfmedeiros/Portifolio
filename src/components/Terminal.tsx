@@ -11,7 +11,7 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 
 const BANNER = [
   " ╔══════════════════════════════════════╗",
-  " ║     🛰️  PORTIFOLIO  v2.0           ║",
+  " ║       PORTIFOLIO  v2.0           ║",
   " ║     Samuel Medeiros — Dev Full Stack║",
   " ╚══════════════════════════════════════╝",
   "",
@@ -199,7 +199,7 @@ export function Terminal() {
           "\"O sucesso é a soma de pequenos esforços repetidos dia após dia.\" — Robert Collier",
           "\"Se você pode medir, você pode gerenciar.\" — Peter Drucker",
         ];
-        output = `📜 ${quotes[Math.floor(Math.random() * quotes.length)]}`;
+        output = `Quote: ${quotes[Math.floor(Math.random() * quotes.length)]}`;
         break;
       }
 
@@ -218,7 +218,7 @@ Wireless LAN adapter Wi-Fi:
    Subnet Mask . . . . . . . . . . . : 255.0.0.0
    Default Gateway . . . . . . . . . : 10.0.0.1
 
-   🛰️ Portifolio Samuel Signal: ❚❚❚❚❚❚❚❚❚❚ 100%`;
+   Portifolio Samuel Signal: [==========] 100%`;
         break;
 
       case "exit":
@@ -229,11 +229,11 @@ Wireless LAN adapter Wi-Fi:
         output = `
 ╔══════════════════════════════════════════════════════╗
 ║                                                      ║
-║     ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆       ║
+║     *  *  *  *  *  *  *  *  *  *  *  *  *       ║
 ║                                                      ║
-║          🎯  S A M U E L  M E D E I R O S  🎯        ║
+║          **  S A M U E L  M E D E I R O S  **        ║
 ║                                                      ║
-║     ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆  ☆       ║
+║     *  *  *  *  *  *  *  *  *  *  *  *  *       ║
 ║                                                      ║
 ║     ${t("terminal.spotlight.role")}     ║
 ║     ${t("terminal.spotlight.tagline")}     ║

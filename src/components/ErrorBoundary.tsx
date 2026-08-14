@@ -49,7 +49,7 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
           <div className="glass p-8 rounded-xl max-w-md text-center border-[var(--border)]">
-            <h2 className="text-2xl font-mono text-red-400 mb-4">⚠ SISTEMA INSTÁVEL</h2>
+            <h2 className="text-2xl font-mono text-red-400 mb-4">SISTEMA INSTÁVEL</h2>
             <p className="text-sm font-mono text-[var(--text-secondary)] mb-2">
               Uma falha crítica foi detectada:
             </p>

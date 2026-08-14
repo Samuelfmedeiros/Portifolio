@@ -161,12 +161,12 @@ export function CodeTyping() {
   return (
     <div className="py-2">
       <h3 className="font-mono text-sm text-[var(--accent)] mb-4 text-center">
-        ⌨️ CODE TYPING CHALLENGE
+        CODE TYPING CHALLENGE
       </h3>
 
       {state.finished ? (
         <div className="text-center space-y-3 py-4">
-          <p className="font-mono text-lg text-[var(--accent)]">🏆 MISSÃO CUMPRIDA!</p>
+          <p className="font-mono text-lg text-[var(--accent)]">MISSÃO CUMPRIDA!</p>
           <div className="grid grid-cols-3 gap-4 font-mono text-xs">
             <div>
               <p className="text-[var(--text-secondary)]">WPM</p>
@@ -185,7 +185,7 @@ export function CodeTyping() {
             onClick={resetGame}
             className="px-6 py-2 rounded-lg font-mono text-sm text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors"
           >
-            🔄 JOGAR NOVAMENTE
+            JOGAR NOVAMENTE
           </button>
         </div>
       ) : (

@@ -68,10 +68,17 @@ describe('Navbar', () => {
     expect(hamburgerBtn).not.toBeInTheDocument()
   })
 
-  it('renders mobile nav with icon + label pairs', () => {
+  it('renders mobile nav with label pairs', () => {
     render(<Navbar />)
-    expect(screen.getByText('🚀')).toBeInTheDocument()
-    expect(screen.getByText('📂')).toBeInTheDocument()
-    expect(screen.getByText('📬')).toBeInTheDocument()
+    // mock i18n retorna a chave; verifica os links (href estável) do nav mobile
+    const links = screen.getAllByRole('link')
+    const hrefs = links.map(l => l.getAttribute('href'))
+    expect(hrefs).toContain('#profile')
+    expect(hrefs).toContain('#jornada')
+    expect(hrefs).toContain('#projects')
+    expect(hrefs).toContain('#games')
+    expect(hrefs).toContain('#contact')
+    // mobile nav existe (aria-label da chave)
+    expect(screen.getAllByText(/nav\./i).length).toBeGreaterThanOrEqual(5)
   })
 })

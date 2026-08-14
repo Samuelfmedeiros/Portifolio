@@ -113,7 +113,7 @@ export function PixDonate({ className = "" }: { className?: string }) {
                     </button>
                   </div>
                   <p className="text-[10px] text-[var(--text-secondary)] mt-2">
-                    Escaneie o QR Code ou copie a chave para fazer um Pix 💙
+                    Escaneie o QR Code ou copie a chave para fazer um Pix 
                   </p>
                 </div>
               </div>

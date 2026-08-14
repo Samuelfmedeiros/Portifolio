@@ -96,7 +96,7 @@ export function SupportButton() {
                   {t("monetization.support.title", "Apoie este projeto")}
                 </h2>
                 <p className="text-[11px] text-[var(--text-secondary)] mt-1">
-                  {t("monetization.support.subtitle", "Sua contribuição mantém o portfólio e os projetos open-source ativos 🚀")}
+                  {t("monetization.support.subtitle", "Sua contribuição mantém o portfólio e os projetos open-source ativos ")}
                 </p>
               </div>
 
@@ -129,7 +129,7 @@ export function SupportButton() {
                   </div>
 
                   <p className="text-[9px] text-[var(--text-secondary)] text-center">
-                    {t("monetization.pix.hint", "Escaneie o QR Code ou copie a chave e pague pelo app do seu banco 💙")}
+                    {t("monetization.pix.hint", "Escaneie o QR Code ou copie a chave e pague pelo app do seu banco ")}
                   </p>
                 </div>
 

@@ -76,7 +76,7 @@ interface Violation {
 /** Monta report legível agrupado por componente (pra falha de teste no CI/UI). */
 function buildReport(violations: Violation[]): string {
   if (violations.length === 0) {
-    return "i18n audit — zero strings PT hardcoded fora de t() ✅";
+    return "i18n audit — zero strings PT hardcoded fora de t() ";
   }
   const lines: string[] = [
     `i18n audit — ${violations.length} string(s) PT hardcoded fora de t()`,

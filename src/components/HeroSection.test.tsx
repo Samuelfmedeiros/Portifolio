@@ -24,10 +24,10 @@ function I18nWrapper({ children }: { children: ReactNode }) {
       "hero.tagline":
         "Next.js, React, Python, SQL e Machine Learning — transformando dados em decisões estratégicas.",
       "hero.typewriter.1": "Desenvolvedor Full Stack & Analista de Dados — Brasília/DF",
-      "hero.typewriter.2": "Transformando dados em decisões estratégicas 📊",
+      "hero.typewriter.2": "Transformando dados em decisões estratégicas ",
       "hero.typewriter.3": "Python • SQL • Power BI • Machine Learning",
       "hero.typewriter.4": "Next.js • React • TypeScript • Node.js",
-      "hero.typewriter.5": "4+ anos transformando negócios com dados 🚀",
+      "hero.typewriter.5": "4+ anos transformando negócios com dados ",
       "hero.btn.projects": "Ver Projetos",
       "hero.btn.cv": "Baixar Currículo",
       "hero.btn.cv.pdf": "PDF",

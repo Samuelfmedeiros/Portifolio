@@ -105,9 +105,12 @@ interface PowerUp {
 
 const POWER_UP_TYPES: PowerType[] = ["shield", "slowmo", "2x"];
 const POWER_UP_ICON: Record<PowerType, string> = {
-  shield: "🛡️",
-  slowmo: "⏱️",
-  "2x": "⭐",
+  shield:
+    '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l7 2.5v5.2c0 4.4-3 7.6-7 9.3-4-1.7-7-4.9-7-9.3V5.5L12 3z"/></svg>',
+  slowmo:
+    '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2h6"/></svg>',
+  "2x":
+    '<svg viewBox="0 0 24 24" width="100%" height="100%" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l2.4 4.9 5.4.8-3.9 3.8.9 5.4-4.8-2.5-4.8 2.5.9-5.4L4.2 8.7l5.4-.8L12 3z"/></svg>',
 };
 const POWER_UP_COLOR: Record<PowerType, string> = {
   shield: "var(--accent-alt)",
@@ -485,15 +488,15 @@ export function AsteroidDodge() {
 
   /* ── Power-up icons for status bar ────────────────────────────── */
   const activePowerUpIcons = [
-    shieldActive && "🛡️",
-    slowMoActive && "⏱️",
-    x2Active && "⭐",
+    shieldActive && POWER_UP_ICON.shield,
+    slowMoActive && POWER_UP_ICON.slowmo,
+    x2Active && POWER_UP_ICON["2x"],
   ].filter(Boolean);
 
   return (
     <div className="py-2">
       <h3 className="font-mono text-sm text-[var(--accent)] mb-4 text-center">
-        🚀 ASTEROID DODGE
+        ASTEROID DODGE
       </h3>
 
       {/* Status bar */}
@@ -513,7 +516,9 @@ export function AsteroidDodge() {
                 key={i}
                 className={i < lives ? "text-[var(--error)]" : "text-[var(--border)]"}
               >
-                ❤️
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="currentColor" aria-hidden="true" style={{ display: "block" }}>
+                  <path d="M12 21s-7.5-4.7-9.6-9.2C.9 8.6 2.6 5 6.2 5c2 0 3.6 1.2 4.3 2.7h3C14.2 6.2 15.8 5 17.8 5c3.6 0 5.3 3.6 3.8 6.8C19.5 16.3 12 21 12 21z" />
+                </svg>
               </span>
             ))}
           </span>
@@ -550,14 +555,14 @@ export function AsteroidDodge() {
         {/* SlowMo indicator */}
         {slowMoActive && (
           <div className="absolute top-2 left-1/2 -translate-x-1/2 font-mono text-[10px] text-[#60a5fa] animate-pulse">
-            ⏱ SLOW MODE
+            SLOW MODE
           </div>
         )}
 
         {/* 2X Score indicator */}
         {x2Active && (
           <div className="absolute top-2 right-2 font-mono text-[10px] text-[#fbbf24] animate-pulse">
-            ⭐ 2X SCORE
+            2X SCORE
           </div>
         )}
 
@@ -594,7 +599,10 @@ export function AsteroidDodge() {
           {shieldActive && (
             <div className="absolute inset-[-6px] rounded-full border-2 border-[var(--accent-alt)] animate-pulse opacity-60" />
           )}
-          🛸
+          <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true" style={{ display: "block" }}>
+            <path d="M12 2l2.6 6.6L21 11.2l-6.4 2.6L12 20l-2.6-6.2L3 11.2l6.4-2.6L12 2z" />
+            <path d="M19 17l1 3-3-1 2-2z" opacity="0.7" />
+          </svg>
         </motion.div>
 
         {/* Asteroids */}
@@ -613,7 +621,10 @@ export function AsteroidDodge() {
                 transform: "translate(-50%, -50%)",
               }}
             >
-              🪨
+              <svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true" style={{ display: "block" }}>
+                <path d="M7 3l7 1 5 6-2 8-9 2-4-7 3-10z" opacity="0.9" />
+                <path d="M7 3l2 5-1 5 3 3 4 1" fill="none" stroke="rgba(0,0,0,0.25)" strokeWidth="1" />
+              </svg>
             </motion.div>
           ))}
         </AnimatePresence>
@@ -644,7 +655,7 @@ export function AsteroidDodge() {
         {/* Combo display */}
         {comboCount >= 2 && !gameOver && started && (
           <div className="absolute top-8 left-1/2 -translate-x-1/2 font-mono text-[var(--accent)] text-sm animate-bounce pointer-events-none">
-            🔥 {comboCount}x COMBO
+            {comboCount}x COMBO
           </div>
         )}
 
@@ -678,10 +689,10 @@ export function AsteroidDodge() {
               {gameOver && (
                 <div className="mb-2">
                   <p className="font-mono text-sm text-[var(--error)] mb-1">
-                    💥 GAME OVER!
+                    GAME OVER!
                   </p>
                   <p className="font-mono text-xs text-[var(--text-secondary)]">
-                    Score: {score} {score >= highScore && score > 0 ? "🏆" : ""}
+                    Score: {score} {score >= highScore && score > 0 ? "(NEW HIGH!)" : ""}
                   </p>
                 </div>
               )}
@@ -693,14 +704,14 @@ export function AsteroidDodge() {
                 }}
                 className="px-6 py-2 rounded-lg font-mono text-sm text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30 hover:bg-[var(--accent)]/20 transition-colors"
               >
-                {started ? "🔄 REINICIAR" : "🚀 INICIAR"}
+                {started ? "REINICIAR" : "INICIAR"}
               </button>
               {!started && (
                 <div className="mt-3 font-mono text-[10px] text-[var(--text-secondary)] space-y-1">
-                  <p>🖱️ Clique/toque para mover a nave</p>
-                  <p>⌨️ ← → ou A/D para mover</p>
-                  <p>🛡️ Colete power-ups: 🛡️⏱️⭐</p>
-                  <p>🏆 High score salvo!</p>
+                  <p>Clique/toque para mover a nave</p>
+                  <p>Setas ou A/D para mover</p>
+                  <p>Power-ups: escudo, slow-motion, 2X</p>
+                  <p>High score salvo!</p>
                 </div>
               )}
             </div>

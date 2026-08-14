@@ -40,7 +40,7 @@ function getStoredConsent(): AnalyticsConsent {
 }
 
 export function CookieBannerProvider({ children }: { children: React.ReactNode }) {
-  // 🔴 12/08/2026: initializers NÃO-determinísticos (typeof window / localStorage)
+  //  12/08/2026: initializers NÃO-determinísticos (typeof window / localStorage)
   // causavam React #418 — server renderiza SEM banner (mounted=false), client
   // renderiza COM banner (mounted=true) → hydration mismatch. Padrão correto:
   // estado inicial determinístico (idêntico ao server) + leitura real pós-mount.

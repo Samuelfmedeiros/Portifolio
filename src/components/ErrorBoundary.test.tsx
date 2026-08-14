@@ -28,7 +28,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     )
 
-    expect(screen.getByText('⚠ SISTEMA INSTÁVEL')).toBeInTheDocument()
+    expect(screen.getByText('SISTEMA INSTÁVEL')).toBeInTheDocument()
     expect(screen.getByText(/Uma falha crítica foi detectada/)).toBeInTheDocument()
     expect(screen.getByText('Test error')).toBeInTheDocument()
   })
@@ -61,7 +61,7 @@ describe('ErrorBoundary', () => {
       </ErrorBoundary>
     )
 
-    expect(screen.getByText('⚠ SISTEMA INSTÁVEL')).toBeInTheDocument()
+    expect(screen.getByText('SISTEMA INSTÁVEL')).toBeInTheDocument()
 
     // Reset and change component behavior
     shouldThrow = false

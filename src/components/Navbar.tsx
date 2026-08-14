@@ -8,11 +8,11 @@ import { PalettePicker } from "./PalettePicker";
 import { useLanguage } from "@/lib/i18n";
 
 const NAV_ITEMS = [
-  { href: "#profile", key: "nav.home", icon: "🚀" },
-  { href: "#jornada", key: "nav.journey", icon: "📜" },
-  { href: "#projects", key: "nav.projects", icon: "📂" },
-  { href: "#games", key: "nav.games", icon: "🎮" },
-  { href: "#contact", key: "nav.contact", icon: "📬" },
+  { href: "#profile", key: "nav.home", icon: "" },
+  { href: "#jornada", key: "nav.journey", icon: "" },
+  { href: "#projects", key: "nav.projects", icon: "" },
+  { href: "#games", key: "nav.games", icon: "" },
+  { href: "#contact", key: "nav.contact", icon: "" },
 ];
 
 import { useAnalytics } from "@/hooks/useAnalytics";

@@ -43,7 +43,7 @@ async function HangarWithData() {
       <ProjectHangar repos={projects} />
       {games.length > 0 && (
         <section id="games" className="scroll-mt-20">
-          {/* 🔴 Bloco perf 12/08/2026 — lazy-hydration via LazyGameShowcase */}
+          {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyGameShowcase */}
           <LazyGameShowcase repos={games} />
         </section>
       )}
@@ -77,7 +77,7 @@ export default function Home() {
         </FadeInSection>
         <FadeInSection delay={0.3}>
           <section id="contact" className="scroll-mt-20">
-            {/* 🔴 Bloco perf 12/08/2026 — lazy-hydration via LazyContactForm */}
+            {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyContactForm */}
             <LazyContactForm />
           </section>
         </FadeInSection>
