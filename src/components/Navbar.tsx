@@ -152,8 +152,9 @@ export const Navbar = memo(function Navbar() {
 
       // Pause the observer long enough for the smooth scroll to finish,
       // so rapid nav clicks don't get overwritten by intermediate sections.
-      // Re-mede após o layout assentar (animações/imagens podem empurrar o alvo)
-      // e corrige o desvio residual em até 2 tentativas.
+      // Re-mede após o layout assentar (animações/imagens podem empurrar o alvo):
+      // espera o evento scrollend (fim real do scroll suave) e corrige o desvio
+      // residual em até 3 tentativas.
       const settle = (attempt: number) => {
         navigatingRef.current = false;
         if (href === "#profile") return;
@@ -163,12 +164,28 @@ export const Navbar = memo(function Navbar() {
         const cs = getComputedStyle(document.documentElement).scrollPaddingTop;
         const sp = parseFloat(cs) || 80;
         const drift = currentTop - sp;
-        if (Math.abs(drift) > 20 && attempt < 2) {
+        if (Math.abs(drift) > 20 && attempt < 3) {
           window.scrollTo({ top: window.scrollY + drift, behavior: "smooth" });
-          navTimeoutRef.current = setTimeout(() => settle(attempt + 1), 900);
+          const onEnd = () => {
+            window.removeEventListener("scrollend", onEnd);
+            settle(attempt + 1);
+          };
+          window.addEventListener("scrollend", onEnd);
+          window.setTimeout(() => {
+            window.removeEventListener("scrollend", onEnd);
+            settle(attempt + 1);
+          }, 1200);
         }
       };
-      navTimeoutRef.current = setTimeout(() => settle(0), 900);
+      const onFirstEnd = () => {
+        window.removeEventListener("scrollend", onFirstEnd);
+        settle(0);
+      };
+      window.addEventListener("scrollend", onFirstEnd);
+      navTimeoutRef.current = window.setTimeout(() => {
+        window.removeEventListener("scrollend", onFirstEnd);
+        settle(0);
+      }, 2500);
 
       track({ type: "nav_click" as const, section: sectionId });
     }
