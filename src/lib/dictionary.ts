@@ -240,7 +240,7 @@ export const dict = {
     "monetization.security": "Pagamento 100% seguro • Você escolhe o valor",
 
     // ── Misc ──
-    "cookie.banner.text": "Utilizamos analytics para melhorar sua experiência. E anúncios para sustentar o site. Aceita?",
+    "cookie.banner.text": "Utilizamos analytics para melhorar sua experiência. Aceita?",
     "cookie.banner.accept": "Aceitar",
     "cookie.banner.decline": "Recusar",
     "cookie.banner.accept_all": "Aceitar tudo",
@@ -552,7 +552,7 @@ export const dict = {
     "monetization.security": "100% secure payment • You choose the amount",
 
     // ── Misc ──
-    "cookie.banner.text": "We use analytics to improve your experience. And ads to support the site. Accept?",
+    "cookie.banner.text": "We use analytics to improve your experience. Accept?",
     "cookie.banner.accept": "Accept",
     "cookie.banner.decline": "Decline",
     "cookie.banner.accept_all": "Accept all",
