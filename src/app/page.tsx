@@ -51,7 +51,7 @@ async function GamesWithData() {
   const { games } = await getProjectData();
   if (games.length === 0) return null;
   return (
-    <section id="games" className="scroll-mt-20">
+    <section id="games" className="">
       {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyGameShowcase */}
       <LazyGameShowcase repos={games} />
     </section>
@@ -69,21 +69,21 @@ export default function Home() {
       <div className="section-wrapper">
         <ProfileSection />
         <FadeInSection delay={0.1}>
-          <section id="projects" className="scroll-mt-20">
+          <section id="projects" className="">
             <Suspense fallback={<HangarSkeleton />}>
               <HangarWithData />
             </Suspense>
           </section>
         </FadeInSection>
         <FadeInSection delay={0.2}>
-          <section id="blog" className="scroll-mt-20">
+          <section id="blog" className="">
             <Suspense fallback={null}>
               <BlogWithData />
             </Suspense>
           </section>
         </FadeInSection>
         <FadeInSection delay={0.3}>
-          <section id="contact" className="scroll-mt-20">
+          <section id="contact" className="">
             {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyContactForm */}
             <LazyContactForm />
           </section>
