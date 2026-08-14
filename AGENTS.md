@@ -5,12 +5,18 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `aea6d7e` — docs: versiona findings bug-hunter (12-13/08) — test(e2e): snapshots visuais CI + lazy-hydration perf (12/08)
+- **Último commit:** `b375ccb` — chore: CI notificação Telegram com subject + arquivos alterados (13/08)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001
 - **Testes:** 268 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
+
+## Sessão 2026-08-13 (fim de dia) — CI notificação Telegram com subject + docs semanais
+- **chore**: CI notificação Telegram agora manda subject + arquivos alterados (`b375ccb`)
+- **docs**: auto-update semanal (`d8b22ad`) · versiona findings bug-hunter 12-13/08 (`aea6d7e`) · estado atual HEAD 12/08 (`72ff9f0`)
+- 4 commits no dia · push bare+origin OK · HEAD: `b375ccb`
+- ⚠️ **Pendência**: working tree com refactor emojis→SVGs (`ProjectIcon.tsx`/`GameIcon.tsx` novos, ~200 linhas reais) + diff CRLF em 30 arquivos — NÃO commitado no fim de dia (aguarda revisão)
 
 ## Sessão 2026-08-12 — Perf lazy-hydration + a11y contraste AA + snapshots CI
 - **perf**: lazy-hydration abaixo do fold (GameShowcase + ContactForm) via next/dynamic ssr:false + IntersectionObserver — reduz TBT/bootup sem CLS (`427413e`)

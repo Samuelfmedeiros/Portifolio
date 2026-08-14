@@ -1,5 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-13] — CI notificação Telegram com subject + docs semanais
+
+- **chore**: notificação de CI/deploy no Telegram agora inclui subject do commit + arquivos alterados (`b375ccb`)
+- **docs**: auto-update semanal (`d8b22ad`) · findings bug-hunter 12-13/08 versionados (`aea6d7e`) · estado atual HEAD 12/08 (`72ff9f0`)
+- 4 commits · push bare+origin OK · HEAD: `b375ccb`
+
 ## [2026-08-12] — Perf lazy-hydration + a11y contraste AA + snapshots CI
 
 ### 🚀 Performance
