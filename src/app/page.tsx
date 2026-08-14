@@ -14,7 +14,7 @@ import { getLatestLifelogPosts } from "@/lib/lifelogRss";
 // apareçam na seção Blog sem precisar de novo deploy (Samuel 09/08/2026).
 export const revalidate = 1800;
 
-async function HangarWithData() {
+async function getProjectData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter(
     (r) => r.name !== "SamuelFmedeiros" && r.name !== "arachne-mcp" && r.name !== "Arachne_Os_Crawl"
@@ -38,16 +38,23 @@ async function HangarWithData() {
   games.sort((a, b) => GAME_PROJECTS.indexOf(a.name) - GAME_PROJECTS.indexOf(b.name));
   const projects = allProjects.filter((r) => !GAME_PROJECTS.includes(r.name));
 
+  return { projects, games };
+}
+
+async function HangarWithData() {
+  const { projects } = await getProjectData();
+  return <ProjectHangar repos={projects} />;
+}
+
+// #31 (14/08/2026): Games como ÚLTIMA seção da página (Samuel, PDF 12/08)
+async function GamesWithData() {
+  const { games } = await getProjectData();
+  if (games.length === 0) return null;
   return (
-    <>
-      <ProjectHangar repos={projects} />
-      {games.length > 0 && (
-        <section id="games" className="scroll-mt-20">
-          {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyGameShowcase */}
-          <LazyGameShowcase repos={games} />
-        </section>
-      )}
-    </>
+    <section id="games" className="scroll-mt-20">
+      {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyGameShowcase */}
+      <LazyGameShowcase repos={games} />
+    </section>
   );
 }
 
@@ -80,6 +87,12 @@ export default function Home() {
             {/*  Bloco perf 12/08/2026 — lazy-hydration via LazyContactForm */}
             <LazyContactForm />
           </section>
+        </FadeInSection>
+        {/* #31 (14/08/2026): Games no FINAL da página (Samuel, PDF 12/08) */}
+        <FadeInSection delay={0.4}>
+          <Suspense fallback={null}>
+            <GamesWithData />
+          </Suspense>
         </FadeInSection>
       </div>
     </>

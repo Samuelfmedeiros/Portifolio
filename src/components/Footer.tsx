@@ -235,7 +235,7 @@ export function Footer() {
             </p>
             <button
               onClick={handleCopyEmail}
-              className="relative group flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+              className="relative group flex items-center gap-1.5 py-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
               aria-label={t("footer.copy.email")}
             >
               {copied ? (
@@ -361,7 +361,7 @@ export function Footer() {
                   href={BMC_CONFIG.url}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="group flex items-center gap-1 text-[10px] font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                  className="group flex items-center gap-1 py-1 text-[10px] font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                   aria-label="Buy me a coffee"
                   onClick={() => track({ type: "external_link", url: "buymeacoffee", label: "Buy me a coffee" })}
                 >
@@ -403,7 +403,7 @@ export function Footer() {
                   setActiveTab('privacy');
                   track({ type: "external_link", url: "privacy", label: "Política de Privacidade" });
                 }}
-                className="mt-2 text-[11px] font-mono text-[var(--accent)] hover:underline transition-colors"
+                className="mt-2 py-1.5 inline-block text-[11px] font-mono text-[var(--accent)] hover:underline transition-colors"
               >
                 {t("footer.lgpd.link")}
               </button>

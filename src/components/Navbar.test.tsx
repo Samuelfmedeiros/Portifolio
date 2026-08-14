@@ -26,7 +26,7 @@ describe('Navbar', () => {
 
   it('renders all navigation items on desktop', () => {
     render(<Navbar />)
-    const navItems = ['nav.home', 'nav.projects', 'nav.games', 'nav.contact']
+    const navItems = ['nav.home', 'nav.projects', 'nav.blog', 'nav.contact', 'nav.games']
     for (const item of navItems) {
       expect(screen.getAllByText(item).length).toBeGreaterThanOrEqual(1)
     }
