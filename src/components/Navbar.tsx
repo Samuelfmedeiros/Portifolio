@@ -136,16 +136,56 @@ export const Navbar = memo(function Navbar() {
     }
     if (target) {
       const sectionId = href.replace("#", "") as SectionName;
-      const top = target.getBoundingClientRect().top + window.scrollY - 80;
+      // offsetTop acumulado NÃO inclui transform (animação FadeInSection);
+      // scroll-padding lido do CSS = fonte única do offset (mobile 112px / desktop 80px)
+      const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 80;
+      let offsetTop = 0;
+      let node: HTMLElement | null = target as HTMLElement;
+      while (node) {
+        offsetTop += node.offsetTop;
+        node = node.offsetParent as HTMLElement | null;
+      }
+      const top = Math.max(0, offsetTop - scrollPadding);
       setActiveSection(sectionId);
       navigatingRef.current = true;
       window.scrollTo({ top, behavior: "smooth" });
 
       // Pause the observer long enough for the smooth scroll to finish,
       // so rapid nav clicks don't get overwritten by intermediate sections.
-      navTimeoutRef.current = setTimeout(() => {
+      // Re-mede após o layout assentar (animações/imagens podem empurrar o alvo):
+      // espera o evento scrollend (fim real do scroll suave) e corrige o desvio
+      // residual em até 3 tentativas.
+      const settle = (attempt: number) => {
         navigatingRef.current = false;
-      }, 600);
+        if (href === "#profile") return;
+        const el = document.querySelector(href);
+        if (!el) return;
+        const currentTop = el.getBoundingClientRect().top;
+        const cs = getComputedStyle(document.documentElement).scrollPaddingTop;
+        const sp = parseFloat(cs) || 80;
+        const drift = currentTop - sp;
+        if (Math.abs(drift) > 20 && attempt < 3) {
+          window.scrollTo({ top: window.scrollY + drift, behavior: "smooth" });
+          const onEnd = () => {
+            window.removeEventListener("scrollend", onEnd);
+            settle(attempt + 1);
+          };
+          window.addEventListener("scrollend", onEnd);
+          setTimeout(() => {
+            window.removeEventListener("scrollend", onEnd);
+            settle(attempt + 1);
+          }, 1200);
+        }
+      };
+      const onFirstEnd = () => {
+        window.removeEventListener("scrollend", onFirstEnd);
+        settle(0);
+      };
+      window.addEventListener("scrollend", onFirstEnd);
+      navTimeoutRef.current = setTimeout(() => {
+        window.removeEventListener("scrollend", onFirstEnd);
+        settle(0);
+      }, 2500);
 
       track({ type: "nav_click" as const, section: sectionId });
     }
@@ -189,22 +229,15 @@ export const Navbar = memo(function Navbar() {
                   <motion.a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
-                    className={`relative px-3 py-2 text-sm font-medium rounded-lg transition-all block ${
+                    className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium border backdrop-blur-md transition-all ${
                       isActive
-                        ? "text-[var(--accent)] bg-[var(--accent)]/10"
-                        : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:bg-[var(--border)]/20"
+                        ? "bg-[var(--accent)] text-[var(--bg-primary)] border-[var(--accent)] shadow-[0_0_18px_-4px_var(--accent)]"
+                        : "bg-[var(--glass-bg)] border-[var(--glass-border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)] hover:bg-[var(--accent)]/5"
                     }`}
-                    whileHover={{ y: -1 }}
+                    whileHover={isActive ? undefined : { y: -1 }}
                     aria-current={isActive ? "true" : undefined}
                   >
                     {t(item.key)}
-                    {isActive && (
-                      <motion.div
-                        layoutId="navbar-indicator"
-                        className="absolute bottom-0 left-1/2 -translate-x-1/2 w-6 h-0.5 bg-[var(--accent)] rounded-full"
-                        transition={{ type: "spring", stiffness: 500, damping: 30 }}
-                      />
-                    )}
                   </motion.a>
                 </li>
               );
@@ -244,22 +277,16 @@ export const Navbar = memo(function Navbar() {
                 <motion.a
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
-                  className={`flex items-center gap-1 px-2 py-1.5 rounded-lg text-[11px] font-medium transition-all whitespace-nowrap ${
+                  className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-medium border backdrop-blur-md transition-all whitespace-nowrap ${
                     isActive
-                      ? "text-[var(--accent)] bg-[var(--accent)]/10 border border-[var(--accent)]/30"
-                      : "text-[var(--text-secondary)] hover:text-[var(--text-primary)] border border-transparent"
+                      ? "bg-[var(--accent)] text-[var(--bg-primary)] border-[var(--accent)]"
+                      : "bg-[var(--glass-bg)] border-[var(--glass-border)] text-[var(--text-secondary)] hover:text-[var(--text-primary)] hover:border-[var(--accent)]"
                   }`}
                   whileTap={{ scale: 0.95 }}
                   aria-current={isActive ? "true" : undefined}
                 >
                   <span className="text-xs">{item.icon}</span>
-                  <span className="sm:inline">{t(item.key)}</span>
-                  {isActive && (
-                    <motion.div
-                      className="w-1 h-1 rounded-full bg-[var(--accent)]"
-                      layoutId="mobile-active-dot"
-                    />
-                  )}
+                  <span>{t(item.key)}</span>
                 </motion.a>
               </li>
             );

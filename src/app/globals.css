@@ -7,7 +7,8 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 60px;
+  /* navbar mobile: logo (64px) + linha de nav (~40px) -> 112px */
+  scroll-padding-top: 7rem;
 }
 
 @media (min-width: 768px) {
