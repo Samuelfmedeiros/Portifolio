@@ -152,9 +152,23 @@ export const Navbar = memo(function Navbar() {
 
       // Pause the observer long enough for the smooth scroll to finish,
       // so rapid nav clicks don't get overwritten by intermediate sections.
-      navTimeoutRef.current = setTimeout(() => {
+      // Re-mede após o layout assentar (animações/imagens podem empurrar o alvo)
+      // e corrige o desvio residual em até 2 tentativas.
+      const settle = (attempt: number) => {
         navigatingRef.current = false;
-      }, 600);
+        if (href === "#profile") return;
+        const el = document.querySelector(href);
+        if (!el) return;
+        const currentTop = el.getBoundingClientRect().top;
+        const cs = getComputedStyle(document.documentElement).scrollPaddingTop;
+        const sp = parseFloat(cs) || 80;
+        const drift = currentTop - sp;
+        if (Math.abs(drift) > 20 && attempt < 2) {
+          window.scrollTo({ top: window.scrollY + drift, behavior: "smooth" });
+          navTimeoutRef.current = setTimeout(() => settle(attempt + 1), 900);
+        }
+      };
+      navTimeoutRef.current = setTimeout(() => settle(0), 900);
 
       track({ type: "nav_click" as const, section: sectionId });
     }
