@@ -876,7 +876,7 @@ export function ProfileSection() {
         <SkillsCompact />
 
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
-        <div id="jornada" className="scroll-mt-20 pb-16 md:pb-20">
+        <div id="jornada" className="pb-16 md:pb-20">
           <motion.h2
             initial={{ opacity: 0, y: 10 }}
             whileInView={{ opacity: 1, y: 0 }}
