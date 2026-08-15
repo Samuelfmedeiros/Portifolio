@@ -730,7 +730,7 @@ export function ProfileSection() {
         >
           <motion.h1
             id="profile-heading"
-            initial={{ opacity: 0, y: 12 }}
+            initial={mounted ? { opacity: 0, y: 12 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-[var(--text-primary)] mb-3"
@@ -738,7 +738,7 @@ export function ProfileSection() {
             Samuel{" "}
             <motion.span
               className="text-[var(--accent)] inline"
-              initial={{ opacity: 0, y: 12 }}
+              initial={mounted ? { opacity: 0, y: 12 } : false}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.15, ease: [0.4, 0, 0.2, 1] }}
             >
@@ -747,14 +747,14 @@ export function ProfileSection() {
           </motion.h1>
 
           <motion.div
-            initial={{ opacity: 0 }}
+            initial={mounted ? { opacity: 0 } : false}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.4, delay: 0.2 }}
             className="h-px w-24 md:w-32 mx-auto bg-[var(--accent)] mb-4"
           />
 
           <motion.p
-            initial={{ opacity: 0, y: 10 }}
+            initial={mounted ? { opacity: 0, y: 10 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.25, ease: [0.4, 0, 0.2, 1] }}
             className="text-sm md:text-base lg:text-lg text-[var(--text-secondary)] mb-6 h-7"
@@ -774,7 +774,7 @@ export function ProfileSection() {
           </motion.p>
 
           <motion.div
-            initial={{ opacity: 0, y: 10 }}
+            initial={mounted ? { opacity: 0, y: 10 } : false}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: 0.4, ease: [0.4, 0, 0.2, 1] }}
             className="flex flex-col sm:flex-row gap-3 justify-center"
@@ -820,7 +820,11 @@ export function ProfileSection() {
 
       {/* Bio — conteúdo textual rico, expansível */}
       <motion.div
-        initial={{ opacity: 0, y: 20 }}
+        // FIX 14/08: initial gated por mounted — framer-motion serializava
+        // opacity:0 no SSR e o botão SOBRE ficava invisível até a hidratação
+        // (10s+ em rede lenta; para sempre se JS falhar). Agora nasce visível
+        // no HTML servido e a animação só roda no cliente após hidratar.
+        initial={mounted ? { opacity: 0, y: 20 } : false}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay: 0.2 }}
         className="relative z-10 max-w-3xl mx-auto px-4 mt-8 mb-12"
