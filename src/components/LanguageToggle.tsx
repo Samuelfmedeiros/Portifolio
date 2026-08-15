@@ -8,6 +8,8 @@ export const LanguageToggle = memo(function LanguageToggle() {
   const { locale, toggle } = useLanguage();
   const { t } = useLanguage();
   const [hover, setHover] = useState(false);
+  // Mostra o idioma de DESTINO (a outra língua) — assim o usuário sabe
+  // que o site tem PT e EN. O idioma atual é evidente pelo texto da página.
   const next = locale === "pt" ? "EN" : "PT";
 
   return (
@@ -19,7 +21,7 @@ export const LanguageToggle = memo(function LanguageToggle() {
           exit={{ opacity: 0, y: 4 }}
           className="absolute -bottom-7 left-1/2 -translate-x-1/2 text-[10px] whitespace-nowrap text-[var(--accent)]/70"
         >
-          {next}
+          {locale === "pt" ? t("lang.toggle.en", "English") : t("lang.toggle.pt", "Português")}
         </motion.span>
       )}
 
@@ -34,14 +36,14 @@ export const LanguageToggle = memo(function LanguageToggle() {
       >
         <AnimatePresence mode="wait">
           <motion.span
-            key={locale}
-            initial={{ opacity: 0, scale: 0.5, y: locale === "pt" ? -10 : 10 }}
+            key={next}
+            initial={{ opacity: 0, scale: 0.5, y: next === "EN" ? -10 : 10 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.5, y: locale === "pt" ? 10 : -10 }}
+            exit={{ opacity: 0, scale: 0.5, y: next === "EN" ? 10 : -10 }}
             transition={{ duration: 0.2 }}
             className="text-[11px] font-bold font-mono text-[var(--accent)] tabular-nums tracking-wider"
           >
-            {locale === "pt" ? "PT" : "EN"}
+            {next}
           </motion.span>
         </AnimatePresence>
       </motion.button>

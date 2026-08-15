@@ -81,6 +81,20 @@ describe('parseRssItems', () => {
     expect(posts[0]?.accent).toBe('#14b8a6')
   })
 
+  it('mantém posts PT e EN no parse (BlogSection filtra por locale)', () => {
+    const rss = `<rss><channel>
+      <item><title>Post PT</title><link>https://lifelog-sepia.vercel.app/post/meu-post/</link></item>
+      <item><title>Post EN</title><link>https://lifelog-sepia.vercel.app/post/en/meu-post/</link></item>
+    </channel></rss>`
+    const posts = parseRssItems(rss)
+    expect(posts).toHaveLength(2)
+    const enPosts = posts.filter((p) => p.url.includes('/en/'))
+    const ptPosts = posts.filter((p) => !p.url.includes('/en/'))
+    expect(enPosts).toHaveLength(1)
+    expect(ptPosts).toHaveLength(1)
+    expect(enPosts[0]?.title).toBe('Post EN')
+  })
+
   it('remove DOCTYPE (proteção XXE) e descarta itens com entidades', () => {
     const posts = parseRssItems(XXE_RSS)
     expect(posts).toHaveLength(0)
