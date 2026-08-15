@@ -833,7 +833,7 @@ export function ProfileSection() {
             aria-label={t("profile.about.aria", "Sobre mim")}
           >
             <div className="flex items-center justify-center gap-3">
-              <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "▸ SOBRE")}</h2>
+              <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "SOBRE")}</h2>
               <motion.span
                 animate={{ rotate: showBio ? 180 : 0 }}
                 transition={{ duration: 0.3, ease: "easeInOut" }}
