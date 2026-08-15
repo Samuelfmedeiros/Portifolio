@@ -249,8 +249,7 @@ export const Navbar = memo(function Navbar() {
             className="font-mono text-xs sm:text-sm md:text-base tracking-wider text-[var(--accent)] hover:text-[var(--text-primary)] transition-colors shrink-0"
             whileHover={{ scale: 1.02 }}
           >
-            <span className="hidden sm:inline">Samuel Medeiros</span>
-            <span className="sm:hidden">SM</span>
+            <span>Samuel Medeiros</span>
           </motion.a>
 
           {/* Desktop Nav — horizontal with glass effect */}

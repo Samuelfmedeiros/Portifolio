@@ -19,9 +19,10 @@ describe('Navbar', () => {
     } as unknown as typeof IntersectionObserver
   })
 
-  it('renders logo with name', () => {
+  it('renders logo with full name (desktop and mobile)', () => {
     render(<Navbar />)
-    expect(screen.getByText('SM')).toBeInTheDocument()
+    expect(screen.getAllByText('Samuel Medeiros').length).toBeGreaterThanOrEqual(1)
+    expect(screen.queryByText('SM')).not.toBeInTheDocument()
   })
 
   it('renders all navigation items on desktop', () => {
