@@ -5,9 +5,9 @@ Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel d
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `148feb7` — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
+- **Último commit:** `9c02897` — Merge pull request #51 from Samuelfmedeiros/feat/portifolio-perf-1508 — Merge pull request #50 from Samuelfmedeiros/feat/portifolio-fixes-1508 — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001 · CI 7/7 verde pós-merge
-- **Testes:** 268 passando
+- **Testes:** 269 passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 

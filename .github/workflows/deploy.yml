@@ -168,14 +168,23 @@ jobs:
     - name: Notify Telegram Failure
       if: github.ref_name == 'master' && github.event_name != 'pull_request' && failure()
       run: |
-        COMMIT_SUBJECT=$(git log -1 --pretty=%s)
+        COMMIT_SHA=$(git rev-parse --short HEAD)
+        COMMIT_SUBJECT=$(git log -1 --pretty=%s | sed 's/[*_`]/\\&/g')
+        FILE_COUNT=$(git diff-tree --no-commit-id --name-only -r HEAD | wc -l)
+        CHANGED=$(git diff-tree --no-commit-id --name-status -r HEAD | head -15 | sed 's/^/• /' | tr '\t' ' ' | sed 's/[*_`]/\\&/g')
         ROLLBACK_MSG=""
         if [ "${{ steps.rollback.outputs.rollback_ok }}" = "true" ]; then
           ROLLBACK_MSG="%0A🔄 *Rollback:* ✅ Rollback automático para \`${{ steps.prev_deploy.outputs.deploy_id }}\""
         elif [ "${{ steps.rollback.outputs.rollback_ok }}" = "degraded" ]; then
           ROLLBACK_MSG="%0A🔄 *Rollback:* ⚠️ Executado mas requer verificação manual"
         fi
+        TEXT="❌ *Portifólio CI Falhou*
+
+        📝 *Commit:* \`$COMMIT_SHA\` — $COMMIT_SUBJECT
+        📄 *Alterações ($FILE_COUNT arquivos):*
+        $CHANGED
+        🔍 *Log:* ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}${ROLLBACK_MSG}"
         curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
-          -d "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
-          -d "text=❌ *Portifólio CI Falhou*%0A%0A📝 *Commit:* \`$(git rev-parse --short HEAD)\` — $COMMIT_SUBJECT%0A🔍 *Log:* ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}${ROLLBACK_MSG}" \
-          -d "parse_mode=Markdown"
+          --data-urlencode "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          --data-urlencode "text=$TEXT" \
+          --data-urlencode "parse_mode=Markdown"
