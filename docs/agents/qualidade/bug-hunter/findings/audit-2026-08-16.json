@@ -1,0 +1,60 @@
+{
+  "timestamp": "2026-08-16T21:02:06.068Z",
+  "url": "https://samuelmedeiros.vercel.app",
+  "duration": "11.4",
+  "routes": {
+    "/": {
+      "url": "https://samuelmedeiros.vercel.app/",
+      "title": "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
+      "contentSize": 217493,
+      "servesHtml": {
+        "ok": true,
+        "detail": "content-type=text/html; charset=utf-8 status=200"
+      },
+      "renderChecks": [
+        {
+          "id": "root-mounted",
+          "desc": "Next.js renderizou",
+          "ok": true,
+          "detail": "root len=217451"
+        },
+        {
+          "id": "content-presente",
+          "desc": "Conteúdo principal carregou",
+          "ok": true,
+          "detail": "body 9089 chars"
+        },
+        {
+          "id": "secao-profile",
+          "desc": "Seção Profile presente",
+          "ok": true,
+          "detail": "profile OK"
+        },
+        {
+          "id": "secao-projects",
+          "desc": "Seção Projects presente",
+          "ok": true,
+          "detail": "projects OK"
+        },
+        {
+          "id": "secao-contact",
+          "desc": "Seção Contact presente",
+          "ok": true,
+          "detail": "contact OK"
+        },
+        {
+          "id": "temas-presentes",
+          "desc": "Temas/Paletas carregaram",
+          "ok": true,
+          "detail": "2 elementos de tema"
+        }
+      ]
+    }
+  },
+  "consoleErrors": [],
+  "networkErrors": [],
+  "navigationFailures": [],
+  "passed": 1,
+  "failed": 0,
+  "loginOk": true
+}
