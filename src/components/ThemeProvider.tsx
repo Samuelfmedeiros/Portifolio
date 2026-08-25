@@ -1,6 +1,7 @@
 "use client";
 
 import { createContext, useContext, useState, useLayoutEffect, useCallback, useEffect, ReactNode } from "react";
+import { flushSync } from "react-dom";
 import type { Theme } from "@/lib/types";
 import { PALETTES, DEFAULT_PALETTE, STORAGE_PALETTE_KEY } from "@/lib/palettes";
 
@@ -113,7 +114,12 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       // Restaurada 25/08/2026 com guarda de prefers-reduced-motion (a11y WCAG 2.3.3)
       // + fallback pra troca direta em browsers sem suporte.
       const apply = () => {
-        setTheme(next);
+        // flushSync: o snapshot "novo" do ViewTransition so e capturado
+        // DEPOIS do React commitar o tema. Sem isso o circulo revela o
+        // tema antigo (animacao "sem o site no fundo").
+        flushSync(() => {
+          setTheme(next);
+        });
         if (typeof window !== "undefined" && window.umami?.track) {
           window.umami.track("theme_toggle", { theme: next });
         }
@@ -128,9 +134,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
         document.startViewTransition &&
         !reducedMotion
       ) {
-        const x = e?.clientX ?? window.innerWidth / 2;
-        const y = e?.clientY ?? window.innerHeight / 2;
+        // clientX=0 => clique via teclado/sintetico (el.click) — usa centro.
+        // Clique real de mouse/pointer tem coords validas (>=1).
+        const x = e?.clientX || window.innerWidth / 2;
+        const y = e?.clientY || window.innerHeight / 2;
         const t = document.startViewTransition(apply);
+        t.finished.catch(() => {
+          // transicao abortada (ex: nova VT durante a atual) — tema ja aplicado
+        });
         t.ready.then(() => {
           const r = Math.hypot(
             Math.max(x, window.innerWidth - x),
