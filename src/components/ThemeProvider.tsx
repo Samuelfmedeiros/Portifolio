@@ -109,17 +109,64 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     (e?: { clientX?: number; clientY?: number }) => {
       const next = theme === "dark" ? "light" : "dark";
 
-      // Troca direta de tema — transição suave via CSS (globals.css).
-      // (Animação circular View Transition removida — era cópia indevida do LifeLog,
-      // que tem bug de travamento em GPU low-end; ver posts do LifeLog 22-24/07/2026.)
-      void e;
-      setTheme(next);
-      if (typeof window !== "undefined" && window.umami?.track) {
-        window.umami.track("theme_toggle", { theme: next });
+      // View Transition API — clip-path circular a partir do clique (GPU compositor).
+      // Restaurada 25/08/2026 com guarda de prefers-reduced-motion (a11y WCAG 2.3.3)
+      // + fallback pra troca direta em browsers sem suporte.
+      const apply = () => {
+        setTheme(next);
+        if (typeof window !== "undefined" && window.umami?.track) {
+          window.umami.track("theme_toggle", { theme: next });
+        }
+      };
+
+      const reducedMotion =
+        typeof window !== "undefined" &&
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+      if (
+        typeof document !== "undefined" &&
+        document.startViewTransition &&
+        !reducedMotion
+      ) {
+        const x = e?.clientX ?? window.innerWidth / 2;
+        const y = e?.clientY ?? window.innerHeight / 2;
+        const t = document.startViewTransition(apply);
+        t.ready.then(() => {
+          const r = Math.hypot(
+            Math.max(x, window.innerWidth - x),
+            Math.max(y, window.innerHeight - y)
+          );
+          document.documentElement.animate(
+            {
+              clipPath: [
+                `circle(0px at ${x}px ${y}px)`,
+                `circle(${r}px at ${x}px ${y}px)`,
+              ],
+            },
+            {
+              // 400ms — rápida mas fluida. < 400ms fica seco, > 600ms arrasta.
+              duration: 400,
+              easing: "cubic-bezier(0.65, 0, 0.35, 1)",
+              pseudoElement: "::view-transition-new(root)",
+            }
+          );
+        });
+      } else {
+        apply();
       }
     },
     [theme, setTheme]
   );
+
+  // Test hook: E2Es podem disparar a troca sem depender de hidratação.
+  useEffect(() => {
+    (window as unknown as { __pfThemeToggle?: typeof toggle }).__pfThemeToggle =
+      toggle;
+    return () => {
+      delete (window as unknown as { __pfThemeToggle?: typeof toggle })
+        .__pfThemeToggle;
+    };
+  }, [toggle]);
 
   const setPalette = useCallback((id: string) => {
     setPaletteState(id);

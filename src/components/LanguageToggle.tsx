@@ -31,7 +31,7 @@ export const LanguageToggle = memo(function LanguageToggle() {
         onHoverEnd={() => setHover(false)}
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
-        className="glass p-2 rounded-full min-w-[36px] flex items-center justify-center"
+        className="p-2 rounded-full min-w-[36px] flex items-center justify-center"
         aria-label={locale === "pt" ? t("aria.language.toggle") : "Mudar para português"}
       >
         <AnimatePresence mode="wait">

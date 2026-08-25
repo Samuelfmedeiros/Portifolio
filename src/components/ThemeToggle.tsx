@@ -32,7 +32,8 @@ export const ThemeToggle = memo(function ThemeToggle() {
         whileTap={{ scale: 0.95 }}
         animate={{ rotate: theme === "dark" ? 0 : 180 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
-        className="glass p-2 rounded-full"
+        className="p-2 rounded-full"
+        data-testid="theme-toggle"
         aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
       >
         <AnimatePresence mode="wait">

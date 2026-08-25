@@ -97,7 +97,7 @@ describe("ThemeToggle", () => {
     expect(localStorage.getItem("mc-theme")).toBeTruthy();
   });
 
-  it("has glass and rounded classes", () => {
+  it("has no background (icon only) and rounded classes", () => {
     render(
       <ThemeProvider>
         <ThemeToggle />
@@ -105,7 +105,7 @@ describe("ThemeToggle", () => {
     );
 
     const button = screen.getByRole("button");
-    expect(button).toHaveClass("glass");
+    expect(button).not.toHaveClass("glass");
     expect(button).toHaveClass("rounded-full");
   });
 
