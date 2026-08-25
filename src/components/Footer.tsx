@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Mail, Copy, Check, Shield, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
@@ -207,6 +207,13 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
 
 export function Footer() {
   const [copied, setCopied] = useState(false);
+  // Hydration-safe (#418): datas direto no JSX divergem entre server (UTC) e
+  // client (fuso local) → React error #418 no carregamento. null no 1º paint =
+  // render idêntico; valores reais entram pós-hidratação.
+  const [now, setNow] = useState<Date | null>(null);
+  useEffect(() => {
+    setNow(new Date());
+  }, []);
   const [privacyOpen, setPrivacyOpen] = useState(false);
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
   const { track } = useAnalytics();
@@ -414,10 +421,10 @@ export function Footer() {
         {/* Bottom bar */}
         <div className="pt-8 border-t border-[var(--border)] flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-xs font-mono text-[var(--text-secondary)]">
-            © {new Date().getFullYear()} {t("footer.copyright")}
+            © {now ? now.getFullYear() : 2026} {t("footer.copyright")}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]">
-            {t("footer.updated")}: {new Date().toLocaleDateString(dateLocale)}
+            {t("footer.updated")}: {now ? now.toLocaleDateString(dateLocale) : "—"}
           </p>
           <p className="text-[10px] font-mono text-[var(--text-secondary)]">
             {t("footer.version")}
