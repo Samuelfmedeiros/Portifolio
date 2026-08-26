@@ -4,13 +4,19 @@
 Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel de controle interativo com animações cinematográficas e 5 mini-games
 
 ## 📍 Estado Atual
-- **Branch:** `master`
-- **Último commit:** `148feb7` — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
+- **Branch:** `feat/theme-vt-icon-only`
+- **Último commit:** `58ba720` — fix(theme): flushSync no startViewTransition + origem do circulo no clique — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001 · CI 7/7 verde pós-merge
-- **Testes:** 268 passando
+- **Testes:** ? passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
+
+## Sessão 2026-08-25 (fim de dia) — View Transition circular restaurada
+- **feat(theme)**: restaura View Transition circular no toggle de tema + botoes icon-only (`91dd9c5`)
+- **fix(theme)**: flushSync no startViewTransition + origem do circulo no clique (`58ba720`)
+- 2 commits no dia · push bare+origin OK · HEAD: `58ba720`
+- ⚠️ **Pendência**: working tree sujo — AGENTS.md/HISTORY.md, playwright-report, snapshots PNG, findings bug-hunter 17-25/08, scripts prod-*.mjs (31 arquivos) — commitados no fim de dia
 
 ## Sessão 2026-08-14 (manhã) — Merge dos 3 PRs dependabot + README dual-língua
 - **chore(deps)**: merge dos 3 PRs dependabot (rebase local + force-push + squash via API):

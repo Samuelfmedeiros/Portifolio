@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+
+## [2026-08-25] — View Transition circular restaurada
+
+- **feat(theme)**: restaura View Transition circular no toggle de tema + botoes icon-only (`91dd9c5`)
+- **fix(theme)**: flushSync no startViewTransition + origem do circulo no clique (`58ba720`)
+
+2 commits · push bare+origin OK · HEAD: `58ba720`
 ## [2026-08-13] — CI notificação Telegram com subject + docs semanais
 
 - **chore**: notificação de CI/deploy no Telegram agora inclui subject do commit + arquivos alterados (`b375ccb`)
