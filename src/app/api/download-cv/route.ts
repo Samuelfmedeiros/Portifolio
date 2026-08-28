@@ -4,6 +4,30 @@ import path from "path";
 
 const CAPIVARA_API = "https://capivara.seu.pet/api/portifolio/public";
 
+// Simple in-memory rate limiter (mesmo padrão do contact-notify)
+const rateLimit = new Map<string, { count: number; resetAt: number }>();
+const RATE_LIMIT_WINDOW = 60_000; // 1 minute
+const RATE_LIMIT_MAX = 5; // max requests per window
+
+function checkRateLimit(ip: string): boolean {
+  const now = Date.now();
+  const entry = rateLimit.get(ip);
+  if (!entry || now > entry.resetAt) {
+    rateLimit.set(ip, { count: 1, resetAt: now + RATE_LIMIT_WINDOW });
+    return true;
+  }
+  entry.count++;
+  return entry.count <= RATE_LIMIT_MAX;
+}
+
+// Cleanup stale entries every 5 minutes
+setInterval(() => {
+  const now = Date.now();
+  rateLimit.forEach((val, key) => {
+    if (now > val.resetAt) rateLimit.delete(key);
+  });
+}, 300_000);
+
 interface DownloadLog {
   timestamp: string;
   ip: string;
@@ -26,6 +50,14 @@ export async function POST(req: NextRequest) {
     const body = await req.json().catch(() => ({}));
     const { name, email, consent, locale } = body;
     const isEn = locale === "en";
+
+    // Rate limit por IP (anti-spam de notificações)
+    if (!checkRateLimit(getClientIp(req))) {
+      return NextResponse.json(
+        { error: "Muitas requisições. Aguarde um minuto." },
+        { status: 429 }
+      );
+    }
 
     if (!consent) {
       return NextResponse.json(
