@@ -1,0 +1,5 @@
+Contact: mailto:samuelandrademedeiros@gmail.com
+Expires: 2027-08-28T00:00:00.000Z
+Preferred-Languages: pt, en
+Canonical: https://samuelmedeiros.vercel.app/.well-known/security.txt
+Policy: https://samuelmedeiros.vercel.app/termos
