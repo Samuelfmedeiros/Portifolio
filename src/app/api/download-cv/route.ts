@@ -28,6 +28,16 @@ setInterval(() => {
   });
 }, 300_000);
 
+// Escapa HTML para uso seguro em templates de email
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 interface DownloadLog {
   timestamp: string;
   ip: string;
@@ -177,19 +187,19 @@ export async function POST(req: NextRequest) {
                     <div style="background:#111118;border:1px solid #00e5ff44;border-radius:8px;padding:16px;margin-bottom:16px">
                       <div style="margin-bottom:12px">
                         <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Nome</span>
-                        <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${nome}</div>
+                        <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${escapeHtml(nome)}</div>
                       </div>
                       <div style="margin-bottom:12px">
                         <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Email</span>
-                        <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${email}</div>
+                        <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${escapeHtml(email)}</div>
                       </div>
                       <div style="margin-bottom:12px">
                         <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> IP</span>
-                        <div style="color:#e0e0e0;font-size:14px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${ip}</div>
+                        <div style="color:#e0e0e0;font-size:14px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${escapeHtml(ip)}</div>
                       </div>
                       <div>
                         <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Referrer</span>
-                        <div style="color:#e0e0e0;font-size:14px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${ref}</div>
+                        <div style="color:#e0e0e0;font-size:14px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${escapeHtml(ref)}</div>
                       </div>
                     </div>
                     <div style="text-align:center;padding:8px;border-top:1px solid #222;margin-top:16px">

@@ -5,6 +5,16 @@ const rateLimit = new Map<string, { count: number; resetAt: number }>();
 const RATE_LIMIT_WINDOW = 60_000; // 1 minute
 const RATE_LIMIT_MAX = 5; // max requests per window
 
+// Escapa HTML para uso seguro em templates de email
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#39;");
+}
+
 function getClientIp(req: NextRequest): string {
   const forwarded = req.headers.get("x-forwarded-for");
   if (forwarded) return forwarded.split(",")[0].trim();
@@ -87,15 +97,15 @@ export async function POST(req: NextRequest) {
                 <div style="background:#111118;border:1px solid #00e5ff44;border-radius:8px;padding:16px;margin-bottom:16px">
                   <div style="margin-bottom:12px">
                     <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Nome</span>
-                    <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${name}</div>
+                    <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${escapeHtml(name)}</div>
                   </div>
                   <div style="margin-bottom:12px">
                     <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Email</span>
-                    <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${email}</div>
+                    <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px">${escapeHtml(email)}</div>
                   </div>
                   <div>
                     <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Mensagem</span>
-                    <div style="color:#e0e0e0;font-size:15px;margin-top:2px;padding:12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px;line-height:1.5;white-space:pre-wrap">${content}</div>
+                    <div style="color:#e0e0e0;font-size:15px;margin-top:2px;padding:12px;background:#0a0a0f;border-left:3px solid #00e5ff;border-radius:4px;line-height:1.5;white-space:pre-wrap">${escapeHtml(content)}</div>
                   </div>
                 </div>
                 <div style="text-align:center;padding:8px;border-top:1px solid #222;margin-top:16px">
