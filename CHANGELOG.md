@@ -1,5 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-28] — Capas PIL dos projetos + security emails
+- **feat(projects)**: capas PIL 1280×720 para DogWalk/Arachne/Portifólio/LifeLog (`ec33a5e`) — fix `seu.pet.gif` quebrado → `seu.pet.webp`
+- **security**: escape HTML nos emails contact-notify + download-cv (`d0eb5b0`); rate limit no download-cv + security.txt (`2049a51`)
+- **docs**: capas PIL + pipeline 3 posts lifelog (`8862c5e`)
+- 4 commits · push bare+origin OK · HEAD: `8862c5e`
+
 ## [2026-08-13] — CI notificação Telegram com subject + docs semanais
 
 - **chore**: notificação de CI/deploy no Telegram agora inclui subject do commit + arquivos alterados (`b375ccb`)
