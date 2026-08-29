@@ -3,14 +3,44 @@
 ## 🎯 Identidade
 Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel de controle interativo com animações cinematográficas e 5 mini-games
 
+## 🔴 TEST-LOOP OBRIGATÓRIO ANTES DE QUALQUER ENTREGA (18/08 + v2 25/08/2026 — Samuel, GLOBAL)
+
+Regra permanente em TODOS os projetos. Antes de declarar pronta/fazer deploy de QUALQUER
+entrega (código, UI, pipeline, feature, fix), rodar SEMPRE o loop de testes com IA
+(skill `ai-test-loop`):
+
+1. **Builder = opencode CLI** (corrige gaps; NUNCA avalia o próprio trabalho — v2 25/08)
+2. **Testes reais** — unit + e2e + VRT do projeto (build, vitest, playwright, lint)
+3. **Critic determinístico separado** — nota 0-100 com evidência real, contexto fresco
+4. **Reviewer opencode** — CONCORDO|DISCORDO (DISCORDO = reabrir loop) + nota revisor no PDF
+5. **Evidência visual** — screenshots DESKTOP + MOBILE (Playwright/VLM), obrigatória para mudanças de visual
+6. **Vídeo de aprovação** = entregue ao FINAL (mensagem única no grupo), nunca no meio
+7. **Gate:** nota >= threshold (UI=100, código=85); nota < threshold → reavaliar e corrigir (máx 8 rodadas)
+8. **PDF relatório** SEMPRE anexado via MEDIA:<caminho> (ou sendDocument + message_id confirmado)
+
+**ADICIONAR TESTES DE COMPLEMENTO** — se dá pra cobrir área nova/regressão antes de entregar, cobrir.
+
+Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega completa.
+
 ## 📍 Estado Atual
-- **Branch:** `master`
-- **Último commit:** `148feb7` — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
+- **Branch:** `feat/theme-vt-icon-only`
+- **Último commit:** `55af9d7` — docs: versiona findings bug-hunter 17-25/08 + HISTORY — fix(theme): flushSync no startViewTransition + origem do circulo no clique — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001 · CI 7/7 verde pós-merge
-- **Testes:** 268 passando
+- **Testes:** ? passando
 - **Lint:** 0 errors, 0 warnings
 - **URL:** https://samuelmedeiros.vercel.app
 
+
+## Sessão 2026-08-28 — Capas PIL dos projetos
+
+- **feat(projects)**: capas PIL 1280×720 para DogWalk/Arachne/Portifólio/LifeLog — gradientes + padrões geométricos (círculos/hex/grade) + glows (`ec33a5e` na master)
+- **fix**: DogWalk usava `seu.pet.gif` quebrado (800×600) → `seu.pet.webp` (1280×720); GIF removido
+
+## Sessão 2026-08-25 (fim de dia) — View Transition circular restaurada
+- **feat(theme)**: restaura View Transition circular no toggle de tema + botoes icon-only (`91dd9c5`)
+- **fix(theme)**: flushSync no startViewTransition + origem do circulo no clique (`58ba720`)
+- 2 commits no dia · push bare+origin OK · HEAD: `58ba720`
+- ⚠️ **Pendência**: working tree sujo — AGENTS.md/HISTORY.md, playwright-report, snapshots PNG, findings bug-hunter 17-25/08, scripts prod-*.mjs (31 arquivos) — commitados no fim de dia
 
 ## Sessão 2026-08-14 (manhã) — Merge dos 3 PRs dependabot + README dual-língua
 - **chore(deps)**: merge dos 3 PRs dependabot (rebase local + force-push + squash via API):
