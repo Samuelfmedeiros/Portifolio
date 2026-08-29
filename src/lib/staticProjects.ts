@@ -17,6 +17,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
     hasDemo: true,
     imageUrl: "/projects/seu.pet.webp",
+    videoUrl: "/projects/seu.pet-scroll.mp4",
   },
 
   {

@@ -22,6 +22,8 @@ export interface Repo {
   hasDemo?: boolean;
   /** URL for project thumbnail/screenshot */
   imageUrl?: string;
+  /** URL for an animated demo (mp4/gif) shown instead of a static image */
+  videoUrl?: string;
   /** Project emoji/icon for visual identity */
   icon?: string;
 }

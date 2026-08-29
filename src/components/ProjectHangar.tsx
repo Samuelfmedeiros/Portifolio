@@ -167,14 +167,25 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
               }}
             />
             {repo.imageUrl ? (
-              <Image
-                src={repo.imageUrl}
-                alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
-                fill
-                className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/image:scale-110"
-                unoptimized
-                loading="lazy"
-              />
+              repo.videoUrl ? (
+                <video
+                  src={repo.videoUrl}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/image:scale-110"
+                />
+              ) : (
+                <Image
+                  src={repo.imageUrl}
+                  alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/image:scale-110"
+                  unoptimized
+                  loading="lazy"
+                />
+              )
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
             ) : (
@@ -205,14 +216,25 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
               }}
             />
             {repo.imageUrl ? (
-              <Image
-                src={repo.imageUrl}
-                alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
-                fill
-                className="absolute inset-0 w-full h-full object-cover object-top"
-                unoptimized
-                loading="lazy"
-              />
+              repo.videoUrl ? (
+                <video
+                  src={repo.videoUrl}
+                  autoPlay
+                  muted
+                  loop
+                  playsInline
+                  className="absolute inset-0 w-full h-full object-cover object-top"
+                />
+              ) : (
+                <Image
+                  src={repo.imageUrl}
+                  alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
+                  fill
+                  className="absolute inset-0 w-full h-full object-cover object-top"
+                  unoptimized
+                  loading="lazy"
+                />
+              )
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
             ) : (
