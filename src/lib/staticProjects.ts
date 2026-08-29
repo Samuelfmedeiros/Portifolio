@@ -16,7 +16,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
     hasDemo: true,
-    imageUrl: "/projects/seu.pet.gif",
+    imageUrl: "/projects/seu.pet.webp",
   },
 
   {
