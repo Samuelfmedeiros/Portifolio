@@ -36,6 +36,17 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **feat(projects)**: capas PIL 1280×720 para DogWalk/Arachne/Portifólio/LifeLog — gradientes + padrões geométricos (círculos/hex/grade) + glows (`ec33a5e` na master)
 - **fix**: DogWalk usava `seu.pet.gif` quebrado (800×600) → `seu.pet.webp` (1280×720); GIF removido
 
+## Sessão 2026-08-29 — Capas AI padrão LifeLog (APROVADAS por Samuel)
+
+- **feat(projects)**: capas AI no **padrão LifeLog** (Worker Cloudflare FLUX.1 Schnell) para Arachne/Portifólio/LifeLog — aprovadas visualmente por Samuel em 29/08, commit `d151456` na master
+  - **Arachne** `arachne.webp` — teias vermelhas neon (nova marca `#ff3b3b`; NUNCA roxo)
+  - **Portifólio** `portifolio.webp` — holograma neon (opção B: interface holográfica azul/roxa flutuante, sem texto)
+  - **LifeLog** `lifelog.webp` — livro azul (não rosa/magenta)
+  - **Dogwalk** NÃO tem capa AI — card usa GIF scroll real (`seu-pet-scroll.mp4`)
+- **Workflow**: prompts na skill `portfolio-covers-ai` (estrutura `Digital artwork. <tema>. Wide cinematic shot. Mood. Color palette. No text/watermark`) → Worker FLUX (JPEG 1024x1024) → crop centro 16:9 → resize 1280x720 → WebP q90 → preview PNG no Telegram → aprovação Samuel → commit cirúrgico + push → validar 200 no ar
+- **Fórmula reutilizável**: skill `portfolio-covers-ai` (categoria frontend) — usar ao regenerar capas
+- Iterações rejeitadas por Samuel: v3 clara (Péssimo), v4/v5 dark, v6 NIM, página com textos, wireframe, site flutuante claro, laptop — o que ele quer é cena CONCRETA/holograma
+
 ## Sessão 2026-08-25 (fim de dia) — View Transition circular restaurada
 - **feat(theme)**: restaura View Transition circular no toggle de tema + botoes icon-only (`91dd9c5`)
 - **fix(theme)**: flushSync no startViewTransition + origem do circulo no clique (`58ba720`)
