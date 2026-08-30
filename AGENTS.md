@@ -24,10 +24,12 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `98dd619` — fix(ui): nome do projeto maior, bold, cor accent + imagens same-origin
-- **Status:** ✅ Funcional — produção em Vercel + self-host :3001 · CI 7/7 verde pós-merge
-- **Testes:** em validação (test-loop portifolio 30/08 — i18n fixes + bug-hunter v3)
+- **Último commit:** `215acd5` — chore(csp): remove dead code img.seu.pet do img-src (same-origin consolidado) — **pusheado 30/08, produção validada**
+- **Status:** ✅ Funcional — produção em Vercel · CI deploy success (215acd52) · Playwright VRT success (2ª rodada)
+- **Testes:** 269/269 passando (validado 30/08 12:47 WSL pnpm test:run)
 - **Lint:** 0 errors, 0 warnings
+- **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
+- **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
 
 ### Sessão 30/08 — i18n audit + bug-hunter v3 (Fase 1) + UI nome/imagens
 - Nome do card: `text-base md:text-lg` + `font-bold` + `var(--accent)` (aprovado Samuel, commit `98dd619`)
