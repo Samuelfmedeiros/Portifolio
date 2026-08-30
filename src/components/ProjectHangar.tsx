@@ -181,7 +181,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                   src={repo.imageUrl}
                   alt={repo.description ? `${repo.name} — ${(localizedDescription || "").slice(0, 80)}` : repo.name}
                   fill
-                  className="absolute inset-0 w-full h-full object-cover object-top transition-transform duration-500 group-hover/image:scale-110"
+                  className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover/image:scale-110"
                   unoptimized
                   loading="lazy"
                 />
