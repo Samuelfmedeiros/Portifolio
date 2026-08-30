@@ -1,0 +1,108 @@
+{
+  "timestamp": "2026-08-30T04:34:58.622Z",
+  "filesScanned": 98,
+  "summary": [
+    {
+      "type": "hardcoded-jsx",
+      "count": 9,
+      "items": [
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\app\\api\\contact-notify\\route.ts",
+          "line": 94,
+          "type": "hardcoded-jsx",
+          "text": "NOVA MENSAGEM"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\app\\api\\contact-notify\\route.ts",
+          "line": 95,
+          "type": "hardcoded-jsx",
+          "text": "Portifolio Samuel — Contato Recebido"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\app\\api\\contact-notify\\route.ts",
+          "line": 112,
+          "type": "hardcoded-jsx",
+          "text": "Enviado via samuelmedeiros.vercel.app"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\app\\api\\download-cv\\route.ts",
+          "line": 184,
+          "type": "hardcoded-jsx",
+          "text": "CURRÍCULO BAIXADO"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\app\\api\\download-cv\\route.ts",
+          "line": 206,
+          "type": "hardcoded-jsx",
+          "text": "Enviado via samuelmedeiros.vercel.app"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\MiniGames\\CodeTyping.tsx",
+          "line": 169,
+          "type": "hardcoded-jsx",
+          "text": "MISSÃO CUMPRIDA!"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\MiniGames\\CodeTyping.tsx",
+          "line": 176,
+          "type": "hardcoded-jsx",
+          "text": "Precisão"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\MiniGames\\AsteroidDodge.tsx",
+          "line": 711,
+          "type": "hardcoded-jsx",
+          "text": "Clique/toque para mover a nave"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\MiniGames\\AsteroidDodge.tsx",
+          "line": 712,
+          "type": "hardcoded-jsx",
+          "text": "Setas ou A/D para mover"
+        }
+      ]
+    },
+    {
+      "type": "raw-description",
+      "count": 4,
+      "items": [
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\ProfileSection.tsx",
+          "line": 453,
+          "type": "raw-description",
+          "text": "{item.description}"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\ProfileSection.tsx",
+          "line": 552,
+          "type": "raw-description",
+          "text": "{item.description}"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\GameShowcase.tsx",
+          "line": 102,
+          "type": "raw-description",
+          "text": "{repo.description}"
+        },
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\UnifiedProfile.tsx",
+          "line": 160,
+          "type": "raw-description",
+          "text": "{item.description}"
+        }
+      ]
+    },
+    {
+      "type": "attr-aria-label",
+      "count": 1,
+      "items": [
+        {
+          "file": "\\\\wsl.localhost\\kali-linux\\home\\samuel\\projetos\\portifolio\\src\\components\\monetization\\AdSense.tsx",
+          "line": 83,
+          "type": "attr-aria-label",
+          "text": "Anúncio"
+        }
+      ]
+    }
+  ]
+}
