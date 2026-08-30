@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import { LazySection } from "./LazySection";
+import { useLanguage } from "@/lib/i18n";
 
 //  Bloco perf 12/08/2026 — ContactForm importa supabase client (~16KB+ de
 // deps): só carrega quando o usuário chega ao fim da página. ssr:false = fora
@@ -15,12 +16,13 @@ const ContactForm = dynamic(
 );
 
 export function ContactFallback() {
+  const { t } = useLanguage();
   return (
     <div
       className="flex items-center justify-center text-sm text-[var(--text-secondary)]"
       style={{ minHeight: "737px" }}
     >
-       Carregando formulário…
+      {t("contact.form.loading")}
     </div>
   );
 }

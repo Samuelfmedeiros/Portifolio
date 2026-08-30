@@ -209,7 +209,7 @@ export function ContactForm() {
             </button>
           </motion.div>
         ) : (
-          <form onSubmit={handleSubmit} className="space-y-4" aria-label="Formulário de contato">
+          <form onSubmit={handleSubmit} className="space-y-4" aria-label={t("contact.form.aria")}>
             <div>
               <label htmlFor="contact-name" className="block font-mono text-xs text-[var(--text-secondary)] mb-1">
                 {t("contact.form.name")}
@@ -241,7 +241,7 @@ export function ContactForm() {
                 placeholder={t("contact.form.email.placeholder")}
                 aria-describedby="contact-email-desc"
               />
-              <span id="contact-email-desc" className="sr-only">Formato esperado: seu@email.com</span>
+              <span id="contact-email-desc" className="sr-only">{t("contact.form.email.format")}</span>
             </div>
 
             <div>

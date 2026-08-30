@@ -3,7 +3,7 @@ import { Inter, JetBrains_Mono } from "next/font/google";
 import { ThemeProvider } from "@/components/ThemeProvider";
 import { LanguageProvider } from "@/components/LanguageProvider";
 import { CockpitBackground } from "@/components/CockpitBackground";
-import { ErrorBoundary } from "@/components/ErrorBoundary";
+import { ErrorBoundaryWithI18n } from "@/components/ErrorBoundary";
 import { Navbar } from "@/components/Navbar";
 import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
 import { Footer } from "@/components/Footer";
@@ -172,7 +172,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <ScrollProgress />
                 <Navbar />
                 <main id="main-content" tabIndex={-1} className="pt-20 md:pt-24">
-                  <ErrorBoundary>{children}</ErrorBoundary>
+                  <ErrorBoundaryWithI18n>{children}</ErrorBoundaryWithI18n>
                 </main>
                 {/* AdSense banner — só aparece quando configurado no .env local */}
                 <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">

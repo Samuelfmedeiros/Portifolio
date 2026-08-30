@@ -67,15 +67,18 @@ async function run() {
   const page = await browser.newPage();
   const results = {
     timestamp: new Date().toISOString(), url: PREVIEW, duration: 0,
-    routes: {}, consoleErrors: [], networkErrors: [], navigationFailures: [],
+    routes: {}, consoleErrors: [], pageErrors: [], requestFailed: [],
+    networkErrors: [], navigationFailures: [], brokenImages: [],
     passed: 0, failed: 0, loginOk: true,
   };
   page.on('console', msg => {
     if (msg.type() === 'error') results.consoleErrors.push({ text: msg.text().substring(0, 200) });
   });
+  page.on('pageerror', err => results.pageErrors.push({ text: err.message?.substring(0, 200) }));
   page.on('response', res => {
     if (res.status() >= 400) results.networkErrors.push({ url: res.url().substring(0, 200), status: res.status() });
   });
+  page.on('requestfailed', req => results.requestFailed.push({ url: req.url().substring(0, 200), error: (req.failure()?.errorText || '').substring(0, 100) }));
   const startTime = Date.now();
 
   try {
@@ -102,6 +105,16 @@ async function run() {
           }
         }
         if (!rr.servesHtml.ok) { results.failed++; results.navigationFailures.push({ route, error: `[html] ${rr.servesHtml.detail}` }); }
+        // Check de imagens quebradas (naturalWidth=0)
+        const broken = await page.evaluate(() => {
+          return [...document.querySelectorAll('img')]
+            .filter(img => img.complete && img.naturalWidth === 0)
+            .map(img => ({ src: (img.currentSrc || img.src || '').substring(0, 150), alt: (img.alt || '').substring(0, 60) }));
+        });
+        if (broken.length > 0) {
+          results.brokenImages.push(...broken);
+          results.failed++;
+        }
         results.passed++;
         results.routes[route] = rr;
         console.log(`  ${route}: ✅ (${rr.contentSize}b)`);

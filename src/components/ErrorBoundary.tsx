@@ -1,9 +1,18 @@
 "use client";
 
 import { Component, type ReactNode } from "react";
+import { useLanguage } from "@/lib/i18n";
 
 interface Props {
   children: ReactNode;
+  /** Fallback title (default: "SISTEMA INSTÁVEL") */
+  title?: string;
+  /** Fallback message (default: "Uma falha crítica foi detectada:") */
+  message?: string;
+  /** Unknown error fallback (default: "Erro desconhecido") */
+  unknownError?: string;
+  /** Reset button label (default: "REINICIAR SISTEMA") */
+  resetLabel?: string;
 }
 
 interface State {
@@ -49,18 +58,18 @@ export class ErrorBoundary extends Component<Props, State> {
       return (
         <div className="min-h-screen flex items-center justify-center bg-[var(--bg-primary)]">
           <div className="glass p-8 rounded-xl max-w-md text-center border-[var(--border)]">
-            <h2 className="text-2xl font-mono text-red-400 mb-4">SISTEMA INSTÁVEL</h2>
+            <h2 className="text-2xl font-mono text-red-400 mb-4">{this.props.title || "SISTEMA INSTÁVEL"}</h2>
             <p className="text-sm font-mono text-[var(--text-secondary)] mb-2">
-              Uma falha crítica foi detectada:
+              {this.props.message || "Uma falha crítica foi detectada:"}
             </p>
             <pre className="text-xs font-mono text-red-400/70 bg-black/30 rounded p-3 mb-6 max-h-32 overflow-auto">
-              {this.state.error?.message || "Erro desconhecido"}
+              {this.state.error?.message || this.props.unknownError || "Erro desconhecido"}
             </pre>
             <button
               onClick={this.handleReset}
               className="glass px-6 py-2 rounded-lg font-mono text-sm text-[var(--accent)] hover:bg-[var(--accent)]/10 border-[var(--border)] transition-colors"
             >
-              REINICIAR SISTEMA
+              {this.props.resetLabel || "REINICIAR SISTEMA"}
             </button>
           </div>
         </div>
@@ -69,4 +78,23 @@ export class ErrorBoundary extends Component<Props, State> {
 
     return this.props.children;
   }
+}
+
+/**
+ * ErrorBoundary com i18n — passa strings traduzidas do hook useLanguage
+ * para o ErrorBoundary class component (que não pode usar hooks).
+ * Use este export no lugar do ErrorBoundary direto em layout.tsx/pages.
+ */
+export function ErrorBoundaryWithI18n({ children }: { children: ReactNode }) {
+  const { t } = useLanguage();
+  return (
+    <ErrorBoundary
+      title={t("error.boundary.title")}
+      message={t("error.boundary.message")}
+      unknownError={t("error.boundary.unknown")}
+      resetLabel={t("error.boundary.reset")}
+    >
+      {children}
+    </ErrorBoundary>
+  );
 }

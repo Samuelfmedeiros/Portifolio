@@ -61,6 +61,7 @@ describe('ContactForm', () => {
   it('has accessible form labels', () => {
     render(<ContactForm />)
     const form = screen.getByRole('form')
-    expect(form).toHaveAttribute('aria-label', 'Formulário de contato')
+    // aria-label agora vem do dicionário via t() (mock retorna a chave)
+    expect(form).toHaveAttribute('aria-label', 'contact.form.aria')
   })
 })

@@ -1,7 +1,8 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { CreditCard, ArrowRight, QrCode, Barcode } from "lucide-react";
+import { ArrowRight, QrCode, Barcode, CreditCard } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 import { MP_CONSULTING_CONFIG } from "@/lib/mercadopago-consulting";
 
 /**
@@ -11,6 +12,7 @@ import { MP_CONSULTING_CONFIG } from "@/lib/mercadopago-consulting";
  * Tracks clicks via Umami data attribute.
  */
 export function MpConsultingCTA({ className = "" }: { className?: string }) {
+  const { t } = useLanguage();
   if (!MP_CONSULTING_CONFIG.enabled) return null;
 
   return (
@@ -19,7 +21,7 @@ export function MpConsultingCTA({ className = "" }: { className?: string }) {
       target="_blank"
       rel="noopener noreferrer"
       data-umami-event="click-consulting-mp"
-      aria-label="Solicitar orçamento de consultoria via Mercado Pago"
+      aria-label={t("consulting.mp.aria")}
       className={`group relative inline-flex items-center gap-3 px-6 py-3 rounded-xl font-sans text-sm font-semibold
         bg-gradient-to-r from-[#00B5E2]/20 to-[#009EE3]/5
         border border-[#00B5E2]/40 hover:border-[#00B5E2]/70
@@ -40,7 +42,7 @@ export function MpConsultingCTA({ className = "" }: { className?: string }) {
       </span>
       <span className="relative z-10">Mercado Pago</span>
       <span className="relative z-10 text-[#00B5E2]/60 group-hover:text-white/70 text-xs hidden sm:inline">
-        — Pix, Boleto, Cartão
+        — {t("consulting.mp.budget")}
       </span>
       <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
 

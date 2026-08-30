@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Coffee } from "lucide-react";
 import { BMC_CONFIG } from "@/lib/monetization";
+import { useLanguage } from "@/lib/i18n";
 
 /**
  * Buy Me a Coffee — apoio voluntário.
@@ -11,6 +12,7 @@ import { BMC_CONFIG } from "@/lib/monetization";
  * Sempre visível (não requer consentimento de anúncios).
  */
 export function BuyMeACoffee({ className = "" }: { className?: string }) {
+  const { t } = useLanguage();
   if (!BMC_CONFIG.enabled) return null;
 
   return (
@@ -18,7 +20,7 @@ export function BuyMeACoffee({ className = "" }: { className?: string }) {
       href={BMC_CONFIG.url}
       target="_blank"
       rel="noopener noreferrer"
-      aria-label="Apoie meu trabalho no Buy Me a Coffee"
+      aria-label={t("monetization.buycoffee.aria")}
       className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-xl font-sans text-sm
         border border-[var(--border)]/60
         bg-gradient-to-r from-[var(--bg-primary)]/80 to-[var(--bg-secondary)]/80
@@ -30,7 +32,7 @@ export function BuyMeACoffee({ className = "" }: { className?: string }) {
       whileTap={{ scale: 0.97 }}
     >
       <Coffee className="w-5 h-5 text-amber-500/70 group-hover:text-amber-400 transition-colors" />
-      <span className="font-medium">Apoie meu trabalho</span>
+      <span className="font-medium">{t("monetization.buycoffee.title")}</span>
       <span className="text-[var(--text-muted)] text-xs hidden sm:inline">
         — Buy Me a Coffee
       </span>

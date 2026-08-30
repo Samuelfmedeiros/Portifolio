@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Briefcase, ArrowRight } from "lucide-react";
+import { useLanguage } from "@/lib/i18n";
 import { STRIPE_CONSULTING_CONFIG } from "@/lib/stripe-consulting";
 
 /**
@@ -11,6 +12,7 @@ import { STRIPE_CONSULTING_CONFIG } from "@/lib/stripe-consulting";
  * Tracks clicks via Umami data attribute.
  */
 export function StripeConsultingCTA({ className = "" }: { className?: string }) {
+  const { t } = useLanguage();
   if (!STRIPE_CONSULTING_CONFIG.enabled) return null;
 
   return (
@@ -19,7 +21,7 @@ export function StripeConsultingCTA({ className = "" }: { className?: string }) 
       target="_blank"
       rel="noopener noreferrer"
       data-umami-event="click-consulting-cta"
-      aria-label="Solicitar orçamento de consultoria"
+      aria-label={t("consulting.stripe.aria")}
       className={`group relative inline-flex items-center gap-3 px-6 py-3 rounded-xl font-sans text-sm font-semibold
         bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
         border border-[var(--accent)]/40 hover:border-[var(--accent)]/70
@@ -33,9 +35,9 @@ export function StripeConsultingCTA({ className = "" }: { className?: string }) 
       <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
 
       <Briefcase className="w-5 h-5 relative z-10" />
-      <span className="relative z-10">Me contrate</span>
+      <span className="relative z-10">{t("consulting.stripe.cta")}</span>
       <span className="relative z-10 text-[var(--accent)]/60 group-hover:text-white/70 text-xs hidden sm:inline">
-        — Solicitar orçamento
+        — {t("consulting.stripe.budget")}
       </span>
       <ArrowRight className="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform" />
 

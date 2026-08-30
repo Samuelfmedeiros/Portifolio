@@ -23,11 +23,19 @@ entrega (código, UI, pipeline, feature, fix), rodar SEMPRE o loop de testes com
 Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega completa.
 
 ## 📍 Estado Atual
-- **Branch:** `feat/theme-vt-icon-only`
-- **Último commit:** `55af9d7` — docs: versiona findings bug-hunter 17-25/08 + HISTORY — fix(theme): flushSync no startViewTransition + origem do circulo no clique — chore(deps): merge dependabot netlify-cli 27.1.1 (14/08)
+- **Branch:** `master`
+- **Último commit:** `98dd619` — fix(ui): nome do projeto maior, bold, cor accent + imagens same-origin
 - **Status:** ✅ Funcional — produção em Vercel + self-host :3001 · CI 7/7 verde pós-merge
-- **Testes:** ? passando
+- **Testes:** em validação (test-loop portifolio 30/08 — i18n fixes + bug-hunter v3)
 - **Lint:** 0 errors, 0 warnings
+
+### Sessão 30/08 — i18n audit + bug-hunter v3 (Fase 1) + UI nome/imagens
+- Nome do card: `text-base md:text-lg` + `font-bold` + `var(--accent)` (aprovado Samuel, commit `98dd619`)
+- Imagens: revert CDN `img.seu.pet` → same-origin (causava cards vazios no navegador real por bloqueio de rastreamento)
+- **`scripts/i18n-audit.mjs` (NOVO):** scanner estático de strings hardcoded (98 arquivos, 3 categorias: hardcoded-jsx, raw-description, attr-aria-label). Relatório em `docs/agents/qualidade/bug-hunter/findings/i18n-audit-*.json`. Uso: `node scripts/i18n-audit.mjs`
+- **`scripts/bug-hunter.mjs` ampliado:** escuta `pageerror` (hydration #418), `requestfailed`, e check de `brokenImages` (naturalWidth=0)
+- i18n localizados (PT/EN): ContactForm, LazyContactForm, BuyMeACoffee, ErrorBoundary (`ErrorBoundaryWithI18n` wrapper), termos/privacidade h1, ConsultingButton, StripeConsulting, MpConsultingButton, MissionClock
+- **Intencional PT-only (NÃO localizar):** MiniGames, API routes (emails), AdSense "Anúncio" (label anúncio obrigatório), `item.description` de dados (ProfileSection/GameShowcase)
 - **URL:** https://samuelmedeiros.vercel.app
 
 

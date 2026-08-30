@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { Briefcase, ExternalLink } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useLanguage } from "@/lib/i18n";
 import { STRIPE_CONSULTING_CONFIG } from "@/lib/stripe-consulting";
 import { MP_CONSULTING_CONFIG } from "@/lib/mercadopago-consulting";
 
@@ -17,6 +18,7 @@ import { MP_CONSULTING_CONFIG } from "@/lib/mercadopago-consulting";
  */
 export function ConsultingButton() {
   const { track } = useAnalytics();
+  const { t } = useLanguage();
   const stripeEnabled = STRIPE_CONSULTING_CONFIG.enabled;
   const mpEnabled = MP_CONSULTING_CONFIG.enabled;
 
@@ -42,7 +44,7 @@ export function ConsultingButton() {
       >
         <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <Briefcase className="w-4 h-4 relative z-10" />
-        <span className="relative z-10">Consultoria Técnica</span>
+        <span className="relative z-10">{t("consulting.title")}</span>
         <ExternalLink className="w-3 h-3 relative z-10 text-[var(--text-secondary)] group-hover:text-[var(--accent)]" />
       </motion.a>
     );
@@ -67,9 +69,9 @@ export function ConsultingButton() {
       >
         <span className="absolute inset-0 bg-gradient-to-r from-[#00B5E2]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <Briefcase className="w-4 h-4 relative z-10" />
-        <span className="relative z-10">Consultoria Técnica</span>
+        <span className="relative z-10">{t("consulting.title")}</span>
         <span className="text-[10px] px-1.5 py-0.5 rounded bg-[#00B5E2]/15 text-[#00B5E2] relative z-10">
-          Pix, Boleto, Cartão
+          {t("consulting.mp.label")}
         </span>
         <ExternalLink className="w-3 h-3 relative z-10 text-[var(--text-secondary)] group-hover:text-[#00B5E2]" />
       </motion.a>
@@ -96,7 +98,7 @@ export function ConsultingButton() {
       >
         <span className="absolute inset-0 bg-gradient-to-r from-[var(--accent)]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <Briefcase className="w-4 h-4 relative z-10" />
-        <span className="relative z-10">Cartão (Internacional)</span>
+        <span className="relative z-10">{t("consulting.stripe.label")}</span>
       </motion.a>
 
       {/* Mercado Pago */}
@@ -116,7 +118,7 @@ export function ConsultingButton() {
       >
         <span className="absolute inset-0 bg-gradient-to-r from-[#00B5E2]/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
         <Briefcase className="w-4 h-4 relative z-10" />
-        <span className="relative z-10">Pix, Boleto, Cartão</span>
+        <span className="relative z-10">{t("consulting.mp.label")}</span>
       </motion.a>
     </div>
   );
