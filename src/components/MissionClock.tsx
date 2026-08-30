@@ -2,16 +2,20 @@
 
 import { useEffect, useState, memo } from "react";
 import { useLanguage } from "@/lib/i18n";
+import { useReducedMotion } from "framer-motion";
 
 export const MissionClock = memo(function MissionClock() {
   const [time, setTime] = useState(new Date());
   const { t, locale } = useLanguage();
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
+  const reducedMotion = useReducedMotion();
 
   useEffect(() => {
+    // Se reduced motion, relógio estático (não trava fullPage screenshot)
+    if (reducedMotion) return;
     const tick = setInterval(() => setTime(new Date()), 1000);
     return () => clearInterval(tick);
-  }, []);
+  }, [reducedMotion]);
 
   const missionStart = new Date("2026-05-06T21:51:43Z");
   const elapsed = Math.floor((time.getTime() - missionStart.getTime()) / 1000);
