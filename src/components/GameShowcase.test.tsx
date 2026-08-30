@@ -111,9 +111,9 @@ describe("GameShowcase", () => {
     expect(images.length).toBeGreaterThanOrEqual(3);
 
     const srcs = images.map((img) => img.getAttribute("src"));
-    expect(srcs).toContain("https://img.seu.pet/games/memory-matrix.webp");
-    expect(srcs).toContain("https://img.seu.pet/games/simon-game.webp");
-    expect(srcs).toContain("https://img.seu.pet/games/asteroid-dodge.webp");
+    expect(srcs).toContain("/games/memory-matrix.webp");
+    expect(srcs).toContain("/games/simon-game.webp");
+    expect(srcs).toContain("/games/asteroid-dodge.webp");
   });
 
   it("renders game cover images with lazy loading", () => {
