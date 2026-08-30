@@ -200,6 +200,19 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
               </span>
             </div>
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
+            {/* Project name overlay — top center, blends with bg */}
+            <div className="absolute inset-x-0 top-0 z-10 pointer-events-none">
+              <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
+              <span
+                className="relative block text-center pt-2.5 px-3 font-mono font-bold tracking-[0.18em] text-sm md:text-base uppercase"
+                style={{
+                  color: "var(--accent)",
+                  textShadow: "0 0 14px color-mix(in srgb, var(--accent) 70%, transparent), 0 1px 3px rgba(0,0,0,0.85)",
+                }}
+              >
+                {repo.name}
+              </span>
+            </div>
           </a>
         ) : (
           <div
@@ -243,6 +256,19 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
               </span>
             )}
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
+            {/* Project name overlay — top center, blends with bg */}
+            <div className="absolute inset-x-0 top-0 z-10 pointer-events-none">
+              <div className="absolute inset-x-0 top-0 h-14 bg-gradient-to-b from-black/60 via-black/25 to-transparent" />
+              <span
+                className="relative block text-center pt-2.5 px-3 font-mono font-bold tracking-[0.18em] text-sm md:text-base uppercase"
+                style={{
+                  color: "var(--accent)",
+                  textShadow: "0 0 14px color-mix(in srgb, var(--accent) 70%, transparent), 0 1px 3px rgba(0,0,0,0.85)",
+                }}
+              >
+                {repo.name}
+              </span>
+            </div>
           </div>
         )}
 
