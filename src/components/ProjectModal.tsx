@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { X } from "lucide-react";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useLanguage } from "@/lib/i18n";
+import { getProjectI18n } from "@/lib/profileData";
 import type { Repo } from "@/lib/types";
 
 interface ProjectModalProps {
@@ -57,7 +58,12 @@ const getTagStyle = (tech: string) => {
 };
 
 export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
-  const { t } = useLanguage();
+  const { t, locale } = useLanguage();
+
+  // Locale-aware project description (same as ProjectHangar)
+  const projI18n = getProjectI18n(locale || "pt", repo.name);
+  const localizedDescription = projI18n?.description || repo.description;
+  const localizedTopics = projI18n?.topics || repo.topics;
   const modalRef = useRef<HTMLDivElement>(null);
   useFocusTrap(modalRef, open, onClose);
 
@@ -74,7 +80,7 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
     : "var(--accent)";
 
   // Tech tags from topics
-  const techTags = (repo.topics || [])
+  const techTags = (localizedTopics || [])
     .filter((t) => t !== "featured")
     .slice(0, 8);
 
@@ -93,7 +99,7 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
           onClick={onClose}
           role="dialog"
           aria-modal="true"
-          aria-label={`Detalhes: ${repo.name}`}
+          aria-label={t("modal.details").replace("{name}", repo.name)}
         >
           <motion.div
             initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -139,9 +145,9 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
               </div>
 
               {/* Description */}
-              {repo.description && (
+              {localizedDescription && (
                 <p className="text-xs md:text-sm text-[var(--text-primary)] leading-relaxed mb-4">
-                  {repo.description}
+                  {localizedDescription}
                 </p>
               )}
 
@@ -149,7 +155,7 @@ export function ProjectModal({ repo, open, onClose }: ProjectModalProps) {
               {techTags.length > 0 && (
                 <div>
                   <h4 className="text-[10px] font-mono text-[var(--text-muted)] uppercase tracking-wider mb-2">
-                    Tecnologias
+                    {t("projects.technologies")}
                   </h4>
                   <div className="flex flex-wrap gap-1.5">
                     {techTags.map((tag) => (

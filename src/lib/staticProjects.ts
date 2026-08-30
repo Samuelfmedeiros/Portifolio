@@ -1,4 +1,5 @@
 import type { Repo } from "./types";
+import { img } from "./images";
 
 export const STATIC_PROJECTS: Repo[] = [
   {
@@ -16,7 +17,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #f093fb 0%, #f5576c 100%)",
     hasDemo: true,
-    imageUrl: "/projects/seu.pet.webp",
+    imageUrl: img("/projects/seu.pet.webp"),
     videoUrl: "/projects/seu-pet-scroll.mp4",
   },
 
@@ -35,7 +36,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: "2026-08-11T22:06:39Z",
     imageGradient: "linear-gradient(135deg, #0d1117 0%, #1a1a2e 50%, #16213e 100%)",
     hasDemo: true,
-    imageUrl: "/projects/arachne.webp",
+    imageUrl: img("/projects/arachne.webp"),
   },
 
   {
@@ -53,7 +54,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
     hasDemo: true,
-    imageUrl: "/projects/portifolio.webp",
+    imageUrl: img("/projects/portifolio.webp"),
   },
   {
     id: 999004,
@@ -70,7 +71,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0d1117 0%, #1a1a2e 50%, #16213e 100%)",
     hasDemo: true,
-    imageUrl: "/projects/lifelog.webp",
+    imageUrl: img("/projects/lifelog.webp"),
   },
   // Games — ordem definida pelo Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge
   {
@@ -88,7 +89,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0d1117 0%, #161b22 50%, #21262d 100%)",
     hasDemo: false,
-    imageUrl: "/projects/memory-matrix.webp",
+    imageUrl: img("/projects/memory-matrix.webp"),
   },
   {
     id: 1002,
@@ -105,7 +106,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
     hasDemo: false,
-    imageUrl: "/projects/simon-game.webp",
+    imageUrl: img("/projects/simon-game.webp"),
   },
   {
     id: 1003,
@@ -122,7 +123,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)",
     hasDemo: false,
-    imageUrl: "/projects/code-typing.webp",
+    imageUrl: img("/projects/code-typing.webp"),
   },
   {
     id: 1004,
@@ -139,7 +140,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0a0a0a 0%, #1a1a2e 50%, #16213e 100%)",
     hasDemo: false,
-    imageUrl: "/projects/terminal.webp",
+    imageUrl: img("/projects/terminal.webp"),
   },
   {
     id: 1005,
@@ -156,7 +157,7 @@ export const STATIC_PROJECTS: Repo[] = [
     created_at: new Date().toISOString(),
     imageGradient: "linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%)",
     hasDemo: false,
-    imageUrl: "/projects/asteroid-dodge.webp",
+    imageUrl: img("/projects/asteroid-dodge.webp"),
   },
 ];
 

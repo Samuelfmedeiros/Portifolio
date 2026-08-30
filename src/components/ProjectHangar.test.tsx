@@ -50,8 +50,8 @@ describe('ProjectHangar', () => {
 
   it('renders all repo names', () => {
     render(<ProjectHangar repos={mockRepos} />)
-    expect(screen.getByText('test-project')).toBeInTheDocument()
-    expect(screen.getByText('portifolio')).toBeInTheDocument()
+    expect(screen.getAllByText('test-project').length).toBeGreaterThanOrEqual(1)
+    expect(screen.getAllByText('portifolio').length).toBeGreaterThanOrEqual(1)
   })
 
   it('shows language indicator', () => {

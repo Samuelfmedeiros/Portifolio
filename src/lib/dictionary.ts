@@ -102,6 +102,7 @@ export const dict = {
     "projects.empty": "Nenhum projeto encontrado",
     "projects.visit": "Visitar",
     "projects.source": "Código Fonte",
+    "projects.technologies": "Tecnologias",
 
     // ── Blog ──
     "blog.section.title": "▸ BLOG",
@@ -167,6 +168,7 @@ export const dict = {
     // ── Privacy Modal ──
     "modal.privacy.title": "Política de Privacidade",
     "modal.terms.title": "Termos de Uso",
+    "modal.details": "Detalhes: {name}",
     "modal.close": "Fechar modal",
     "modal.tab.privacy": "Política de Privacidade",
     "modal.tab.terms": "Termos de Uso",
@@ -416,6 +418,7 @@ export const dict = {
     "projects.empty": "No projects found",
     "projects.visit": "Visit",
     "projects.source": "Source Code",
+    "projects.technologies": "Technologies",
 
     // ── Blog ──
     "blog.section.title": "▸ BLOG",
@@ -481,6 +484,7 @@ export const dict = {
     // ── Privacy Modal ──
     "modal.privacy.title": "Privacy Policy",
     "modal.terms.title": "Terms of Use",
+    "modal.details": "Details: {name}",
     "modal.close": "Close modal",
     "modal.tab.privacy": "Privacy Policy",
     "modal.tab.terms": "Terms of Use",

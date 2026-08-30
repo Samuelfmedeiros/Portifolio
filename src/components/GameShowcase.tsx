@@ -7,13 +7,14 @@ import GameIcon from "./MiniGames/GameIcon";
 import type { Repo } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
+import { img } from "@/lib/images";
 
 const GAME_IMAGES: Record<string, string> = {
-  "simon-game": "/games/simon-game.webp",
-  "asteroid-dodge": "/games/asteroid-dodge.webp",
-  "code-typing": "/games/code-typing.webp",
-  "memory-matrix": "/games/memory-matrix.webp",
-  "terminal": "/games/terminal.webp",
+  "simon-game": img("/games/simon-game.webp"),
+  "asteroid-dodge": img("/games/asteroid-dodge.webp"),
+  "code-typing": img("/games/code-typing.webp"),
+  "memory-matrix": img("/games/memory-matrix.webp"),
+  "terminal": img("/games/terminal.webp"),
 };
 
 export function GameShowcase({ repos }: { repos: Repo[] }) {
