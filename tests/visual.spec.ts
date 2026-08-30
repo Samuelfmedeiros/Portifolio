@@ -56,6 +56,12 @@ for (const r of ROTAS) {
     await page.waitForTimeout(500);
     await page.evaluate(() => window.scrollTo({ top: 0, behavior: 'instant' }));
     await page.waitForTimeout(300);
+    // 🎬 30/08: vídeo seu-pet-scroll.mp4 (card DogWalk) em autoplay+loop
+    // NUNCA estabiliza o fullPage — animations:'disabled' congela CSS
+    // animations mas NÃO pausa <video>. Pausa explícita antes do screenshot.
+    await page.evaluate(() => {
+      document.querySelectorAll('video').forEach((v) => v.pause());
+    });
     await expect(page).toHaveScreenshot(`${r.nome}.png`, {
       fullPage: true,
       maxDiffPixelRatio: 0.05,
