@@ -248,7 +248,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 
         <div className="relative p-1 flex flex-col flex-1">
           {/* Name (always visible now) */}
-          <p className="text-sm md:text-base font-mono font-semibold text-[var(--text-primary)] mb-1 truncate">
+          <p className="text-base md:text-lg font-mono font-bold text-[var(--accent)] mb-1 truncate">
                       {repo.icon ? `${repo.icon} ${repo.name}` : repo.name}
                     </p>
 
