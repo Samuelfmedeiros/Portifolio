@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-08-30] — i18n parity + VRT estabilizado + same-origin + mission-clock reducedMotion
+- **fix(i18n)**: localiza todos componentes visíveis PT/EN + testes paridade + scanner estático i18n-audit (`2efd21f`, `5f2e1cd`)
+- **fix(ui)**: nome do projeto maior, bold, cor accent + imagens same-origin (`98dd619`); CSP permite img.seu.pet em img-src (`665eebb`); same-origin images após revert CDN + teste (`02465ec`); remove dead code img.seu.pet do img-src (same-origin consolidado) (`215acd5`)
+- **fix(vrt)**: MissionClock reducedMotion desliga setInterval (fullPage timeout) (`60e3b18`); pausa vídeo DogWalk antes do fullPage (`1eba20f`); regenera snapshots contra build atual (`5e9d626`, `0b531ef`, `cd8c9f3`)
+- **chore(qa)**: audit findings 30/08 (i18n parity + VRT + same-origin validated) (`815389c`) · docs(agents) estado atual pós-push (`ccbcbc4`)
+- 13 commits · push origin OK (bare ⚠️ 3 unresolved deltas) · HEAD: `ccbcbc4`
+
 ## [2026-08-28] — Capas PIL dos projetos + security emails
 - **feat(projects)**: capas PIL 1280×720 para DogWalk/Arachne/Portifólio/LifeLog (`ec33a5e`) — fix `seu.pet.gif` quebrado → `seu.pet.webp`
 - **security**: escape HTML nos emails contact-notify + download-cv (`d0eb5b0`); rate limit no download-cv + security.txt (`2049a51`)
