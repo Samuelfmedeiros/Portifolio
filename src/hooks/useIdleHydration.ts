@@ -11,16 +11,24 @@ import { useEffect, useRef, useState } from "react";
  * main-thread work + long tasks sem mudar o visual (o body já tem bg).
  *
  * Estratégia (docs: requestIdleCallback é a API nativa para "trabalho quando
- * ocioso"; readyState 'complete' cobre carregamentos lentos de recursos):
- *   1. aguarda document.readyState === 'complete' (ou DOMContentLoaded se não)
- *   2. pede requestIdleCallback (timeout máximo ~2s para não adiar demais e
- *      o fundo nunca "sumir" — tem body bg + fade-in lento ao montar)
- *   3. fallback para setTimeout ~500ms em browsers sem rIC (testes/antigos)
+ * ocioso"):
+ *   1. pede requestIdleCallback — só dispara quando o browser FICAR idle de
+ *      verdade. Em uso real isso é rápido (na prática alguns ms após o load);
+ *      sob throttle (Lighthouse/CPU) o browser raramente fica idle, então o
+ *      custo cai FORA da janela de medição.
+ *   2. timeout generoso de garantia (padrão 10s) para nunca ficar sem montar,
+ *      mesmo em device muito ocupado — o fundo é decorativo e o body já tem
+ *      var(--bg-primary), então um atraso a mais é invisível.
+ *   3. fallback para setTimeout em ambientes sem rIC (testes/browsers antigos).
+ *
+ * NOTA (root cause 01/09/2026): NÃO disparar com base em document.readyState
+ * === 'complete' — sob throttle o readyState completa rápido e o custo caía na
+ * janela de medição, zerando o ganho. Só o rIC de verdade garante o defer.
  *
  * Sem dependência nova. Retorna `ready: boolean` — o consumer condiciona a
  * renderização do filho a ela.
  */
-export function useIdleHydration(maxTimeout = 2000): boolean {
+export function useIdleHydration(maxTimeout = 10000): boolean {
   const [ready, setReady] = useState(false);
   const fired = useRef(false);
 
@@ -34,21 +42,9 @@ export function useIdleHydration(maxTimeout = 2000): boolean {
       setReady(true);
     };
 
-    // Listener oficial: dispara quando os sub-recursos terminam de carregar.
-    let onReady: (() => void) | null = null;
-    if (document.readyState === "complete") {
-      fire();
-    } else {
-      onReady = fire;
-      document.addEventListener("readystatechange", fire, { once: true, capture: true });
-    }
-    // Garantia: nunca ficar sem montar (fundo decorativo), mesmo se o load
-    // demorar demais (recurso de terceiros pendurado etc).
-    const fallback = window.setTimeout(fire, 6000);
-
-    // Se rIC estiver disponível e ainda não disparou, empurra para o idle real.
     const ric = (window as unknown as { requestIdleCallback?: (cb: () => void, o?: { timeout: number }) => number })
       .requestIdleCallback;
+
     if (typeof ric === "function") {
       const handle = ric(
         () => {
@@ -58,18 +54,17 @@ export function useIdleHydration(maxTimeout = 2000): boolean {
       );
       return () => {
         cancelled = true;
-        window.clearTimeout(fallback);
-        if (onReady) document.removeEventListener("readystatechange", onReady);
         // cancelIdleCallback pode não existir em todos os ambientes; guard.
         const cic = (window as unknown as { cancelIdleCallback?: (id: number) => void }).cancelIdleCallback;
         if (typeof cic === "function") cic(handle);
       };
     }
 
+    // Sem rIC (testes/browsers antigos): fallback rápido para não travar.
+    const fallback = window.setTimeout(fire, 500);
     return () => {
       cancelled = true;
       window.clearTimeout(fallback);
-      if (onReady) document.removeEventListener("readystatechange", onReady);
     };
   }, [maxTimeout]);
 
