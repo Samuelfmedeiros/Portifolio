@@ -1,8 +1,7 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { motion, useReducedMotion } from "framer-motion";
-import { useIdleHydration } from "@/hooks/useIdleHydration";
 
 interface TypeWriterProps {
   phrases: string[];
@@ -25,16 +24,6 @@ export function TypeWriter({
   // Acessibilidade: usuário com prefers-reduced-motion não vê cursor piscando
   // (também estabiliza o fullPage screenshot dos testes visuais)
   const prefersReducedMotion = useReducedMotion();
-  const animReady = useIdleHydration();
-  const animStarted = useRef(false);
-  useEffect(() => {
-    if (animReady && !animStarted.current) {
-      animStarted.current = true;
-      setCurrentText("");
-      setIsDeleting(false);
-      setCurrentPhraseIndex(0);
-    }
-  }, [animReady]);
 
   // Se as frases mudaram (ex: troca de locale PT/EN), reinicia a digitação
   // com as novas frases — senão continua mostrando o idioma antigo.
@@ -71,7 +60,7 @@ export function TypeWriter({
   }, [prefersReducedMotion, phrases]);
 
   useEffect(() => {
-    if (prefersReducedMotion || !animReady) return;
+    if (prefersReducedMotion) return;
 
     const fullText = phrases[currentPhraseIndex];
 
