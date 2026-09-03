@@ -125,6 +125,7 @@ async function callOpenRouter(prompt: string, model: string, maxTokens: number):
       temperature: 0.3,
       max_tokens: maxTokens,
     }),
+    signal: AbortSignal.timeout(LLM_TIMEOUT_MS),
   });
 
   if (!res.ok) {
@@ -136,14 +137,18 @@ async function callOpenRouter(prompt: string, model: string, maxTokens: number):
   return data.choices?.[0]?.message?.content ?? "";
 }
 
-// Cadeia de fallback multi-modelo: FREE primeiro (evita 402 por saldo),
-// depois pago com max_tokens dentro do limite da conta (~2214).
+// Timeout por chamada: um modelo free congestionado nao pode pendurar a fila.
+const LLM_TIMEOUT_MS = 20_000;
+
+// FREE em corrida paralela (Promise.any — o primeiro que responder vence);
+// o pago (gpt-4o-mini) so entra se TODOS os frees falharem (protege o saldo
+// contra 402 no caminho normal). max_tokens do pago dentro do limite (~2214).
 const LLM_MODELS: { model: string; maxTokens: number }[] = [
   { model: "minimax/minimax-m3:free", maxTokens: 2200 },
-  { model: "openai/gpt-4o-mini", maxTokens: 1600 },
   { model: "nvidia/nemotron-3.5-lightning:free", maxTokens: 2200 },
   { model: "cohere/north-mini-code:free", maxTokens: 2200 },
 ];
+const LLM_PAID = { model: "openai/gpt-4o-mini", maxTokens: 1600 };
 
 async function callArachne(prompt: string): Promise<string> {
   const key = process.env.ARACHNE_API_KEY;
@@ -158,6 +163,7 @@ async function callArachne(prompt: string): Promise<string> {
     body: JSON.stringify({
       message: prompt,
     }),
+    signal: AbortSignal.timeout(30_000),
   });
 
   if (!res.ok) {
@@ -172,18 +178,45 @@ async function callArachne(prompt: string): Promise<string> {
 
 // ─── Try providers in order ──────────────────────────────────────
 async function tryProviders(prompt: string, locale: string): Promise<string> {
-  for (const cfg of LLM_MODELS) {
-    try {
-      console.log(`[resume-tailor] Trying ${cfg.model}...`);
-      const result = await callOpenRouter(prompt, cfg.model, cfg.maxTokens);
-      if (result) return result;
-      console.warn(`[resume-tailor] ${cfg.model} returned empty response`);
-    } catch (err) {
-      console.warn(`[resume-tailor] ${cfg.model} failed:`, err instanceof Error ? err.message : err);
-    }
+  // Corrida paralela entre os frees: o primeiro que responder com conteudo
+  // vence. Timeout individual de 20s por modelo (AbortSignal) — um modelo
+  // travado nao segura mais a fila inteira.
+  console.log(`[resume-tailor] Racing ${LLM_MODELS.length} free models...`);
+  const raceStart = Date.now();
+  try {
+    const winner = await Promise.any(
+      LLM_MODELS.map(async (cfg) => {
+        const t0 = Date.now();
+        const result = await callOpenRouter(prompt, cfg.model, cfg.maxTokens);
+        const dt = ((Date.now() - t0) / 1000).toFixed(1);
+        if (!result) throw new Error(`${cfg.model} returned empty response`);
+        console.log(`[resume-tailor] WINNER ${cfg.model} in ${dt}s`);
+        return result;
+      }),
+    );
+    console.log(`[resume-tailor] Race finished in ${((Date.now() - raceStart) / 1000).toFixed(1)}s`);
+    return winner;
+  } catch (agg: unknown) {
+    const errs = (agg as { errors?: unknown[] })?.errors;
+    const msgs = Array.isArray(errs)
+      ? errs.map((e) => (e instanceof Error ? e.message : String(e))).join(" | ")
+      : agg instanceof Error
+        ? agg.message
+        : String(agg);
+    console.warn("[resume-tailor] All free models failed:", msgs);
   }
 
-  // Último recurso: Arachne (chat genérico — pode não gerar JSON ATS válido)
+  // Fallback pago — so se todos os frees falharam (protege saldo no caminho normal)
+  try {
+    console.log(`[resume-tailor] Falling back to paid ${LLM_PAID.model}...`);
+    const paid = await callOpenRouter(prompt, LLM_PAID.model, LLM_PAID.maxTokens);
+    if (paid) return paid;
+    console.warn(`[resume-tailor] ${LLM_PAID.model} returned empty response`);
+  } catch (err) {
+    console.warn(`[resume-tailor] ${LLM_PAID.model} failed:`, err instanceof Error ? err.message : err);
+  }
+
+  // Ultimo recurso: Arachne (chat generico — pode nao gerar JSON ATS valido)
   try {
     console.log("[resume-tailor] Falling back to Arachne...");
     return await callArachne(prompt);
