@@ -110,3 +110,7 @@
 - **CV fix**: endereço completo e CEP removidos — fica apenas "Brasília-DF" (regenerado do DOCX fonte em F:\)
 
 **4 commits · HEAD: `1aa9c44` ✅ push bare+origin**
+## [2026-09-03] — Recuperação de documentação 31/08–02/09
+- **docs**: AGENTS.md — sessão Resume Tailor AI (31/08, commit `5bdf3d0`, critic 100/100) + regra ROGER + REGISTRO IMEDIATO (02/09, global) — estavam prontas mas não commitadas
+- **chore**: perf resume-tailor corrida paralela modelos free (`3c1572a`) + redesign PDF v4 (`c118f6c`) + typewriter LCP fix (`520270c`) ficaram sem entrada de changelog — registrados agora
+- contexto: cron fim-de-dia recriado (job `5682dd26368e`, 23:00) — recuperação pontual do gap de documentação
