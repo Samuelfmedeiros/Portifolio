@@ -55,9 +55,9 @@ export const dict = {
 
     // ── Resume Tailor AI ──
     "resume.tailor.title": "Baixar Currículo Personalizado",
-    "resume.tailor.subtitle": "Descreva a vaga, empresa ou cargo para gerar um currículo sob medida com IA",
+    "resume.tailor.subtitle": "Descreva a vaga, empresa ou cargo para gerar um currículo sob medida",
     "resume.tailor.label": "Vaga, empresa ou área",
-    "resume.tailor.placeholder": "Ex: Vaga de Analista de Dados Pleno no Google",
+    "resume.tailor.placeholder": "Descreva a vaga, empresa ou cargo para gerar um currículo sob medida",
     "resume.tailor.btn": "Gerar e Baixar",
     "resume.tailor.btn.loading": "Gerando currículo...",
     "resume.tailor.success": "Currículo gerado!",
@@ -404,7 +404,7 @@ export const dict = {
 
     // ── Resume Tailor AI ──
     "resume.tailor.title": "Download Customized Resume",
-    "resume.tailor.subtitle": "Describe the job, company or role to generate a tailored resume with AI",
+    "resume.tailor.subtitle": "Describe the job, company or role to generate a tailored resume",
     "resume.tailor.label": "Job, company or area",
     "resume.tailor.placeholder": "E.g.: Data Analyst position at Google",
     "resume.tailor.btn": "Generate and Download",

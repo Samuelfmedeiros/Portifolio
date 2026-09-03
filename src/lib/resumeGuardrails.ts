@@ -193,6 +193,31 @@ export function validateResumeOutput(json: unknown, base: ResumeData): ValidateR
   return { ok: true, reasons: [], resume };
 }
 
+
+// Sanitização suave: remove highlights que não casam com o CV real.
+// Chips são cosméticos — melhor entregar sem o chip inventado do que
+// falhar a geração inteira. Outras violações (empresa/formação) seguem 422.
+export function sanitizeResumeSoft(json: unknown, base: ResumeData): unknown {
+  if (!json || typeof json !== "object") return json;
+  const r = json as Record<string, unknown>;
+  if (Array.isArray(r.highlights)) {
+    const knownTerms = [
+      ...base.skills.map(normalizeStr),
+      ...base.experiences.flatMap((e) => e.bullets).map(normalizeStr),
+    ].filter(Boolean);
+    r.highlights = (r.highlights as unknown[])
+      .filter((h): h is string => typeof h === "string" && h.trim().length > 0)
+      .filter((h) => {
+        const nh = normalizeStr(h);
+        if (nh.split(/\s+/).length > 4) return false;
+        return knownTerms.some((t) => t.includes(nh) || nh.includes(t));
+      })
+      .slice(0, 5);
+    if ((r.highlights as string[]).length === 0) delete r.highlights;
+  }
+  return r;
+}
+
 // ─── Parse robusto do JSON do LLM ────────────────────────────────────
 export function parseLLMJson(content: string): unknown {
   const cleaned = content.replace(/```json\n?/g, "").replace(/```\n?/g, "").trim();

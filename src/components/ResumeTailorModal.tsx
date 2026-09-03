@@ -70,7 +70,7 @@ export function ResumeTailorModal({ open, onClose }: ResumeTailorModalProps) {
 
       // Gera o PDF do currículo a partir do JSON (ATS-friendly).
       // Se a API detectou a marca (ex: Google), aplica o tema de cores dela.
-      const pdfBlob = generateResumePdf(resume, locale, brand);
+      const pdfBlob = generateResumePdf({ ...resume, jobRef: data.jobRef }, locale, brand);
       downloadBlob(pdfBlob, locale === "en" ? "Samuel_Andrade_Resume_Tailored.pdf" : "Samuel_Andrade_Curriculo_Personalizado.pdf");
 
       setStatus("success");

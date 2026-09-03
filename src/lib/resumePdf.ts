@@ -32,6 +32,7 @@ export interface ResumePDFData {
   skills?: string[];
   /** Competências-chave mapeadas da descrição da vaga (chips no header). */
   highlights?: string[];
+  jobRef?: string;
 }
 
 // Tokens de layout
@@ -199,7 +200,11 @@ export function generateResumePdf(
       doc.setFont("helvetica", "normal");
       doc.setFontSize(9.5);
       doc.setTextColor(...th.headerSub);
-      doc.text(r.role, CONTENT_X, ny);
+      const roleLines = doc.splitTextToSize(r.role, 100) as string[];
+      for (const rl of roleLines.slice(0, 2)) {
+        doc.text(rl, CONTENT_X, ny);
+        ny += 4.4;
+      }
     }
 
     // Contato à direita (coluna compacta)
@@ -229,7 +234,7 @@ export function generateResumePdf(
     }
 
     // Chips de highlights (na base do header, lado esquerdo)
-    const hs = (r.highlights || []).slice(0, 4);
+    const hs = (r.highlights || []).slice(0, 3);
     if (hs.length) {
       doc.setFont("helvetica", "bold");
       doc.setFontSize(8.4);
@@ -295,7 +300,7 @@ export function generateResumePdf(
     doc.setDrawColor(...mix(th.accentSoft, WHITE, 0.4));
     doc.setLineWidth(0.25);
     doc.line(CONTENT_X, y + 0.9, PAGE_W - FRAME - MARGIN, y + 0.9);
-    y += BASE * 1.6;
+    y += BASE * 3.2; // folga: regua cortava ascent/acentos da 1a linha
   };
 
   const bulletGlyph = "\u2022"; // • (WinAnsi-safe, NUNCA ▪)
@@ -338,6 +343,7 @@ export function generateResumePdf(
       padTop +
       titleLines.length * titleLH +
       bulletLines.reduce((acc, bl) => acc + bl.length * 3.6, 0) +
+      (period ? 0.9 : 0) +
       padBottom;
 
     if (y + contentH > PAGE_H - FRAME - MARGIN && titleLines.length > 0) {
@@ -371,12 +377,13 @@ export function generateResumePdf(
       doc.setDrawColor(...mix(th.accentSoft, WHITE, 0.35));
       doc.setLineWidth(0.3);
       doc.setFillColor(...WHITE);
-      doc.roundedRect(bx - 1.5, by - 2.5, pw + 3, 4.2, 2.1, 2.1, "FD");
+      doc.roundedRect(bx - 1.5, by - 2.2, pw + 3, 3.6, 2.1, 2.1, "FD");
       doc.setFont("helvetica", "bold");
       doc.setFontSize(7.6);
       doc.setTextColor(...INK_SOFT);
       doc.text(period, bx, by);
     }
+    if (period) y += 0.9; // folga p/ a pílula do período não raspar a 1ª bullet
     for (const bl of bulletLines) drawBulletLines(bl);
     y += padBottom;
   };
@@ -429,6 +436,27 @@ export function generateResumePdf(
 
   // ── Conteúdo ─────────────────────────────────────────────────────────
   if (r.objective) {
+  // Banda "Personalizado para <vaga>" — referencia a vaga real
+  if (r.jobRef) {
+    ensure(12);
+    doc.setFillColor(...th.accentTint);
+    doc.roundedRect(CONTENT_X, y, CONTENT_W, 6.6, 1.6, 1.6, "F");
+    doc.setFillColor(...th.accent);
+    doc.rect(CONTENT_X, y, 1.4, 6.6, "F");
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(7.8);
+    doc.setTextColor(...INK_SOFT);
+    const lbl = en ? "Custom-built for:" : "Personalizado para:";
+    doc.text(lbl, CONTENT_X + 3.4, y + 4.4);
+    const lblW = doc.getTextWidth(lbl) + 2.4;
+    doc.setFont("helvetica", "normal");
+    doc.setFontSize(8.4);
+    doc.setTextColor(...INK);
+    const ref = (doc.splitTextToSize(r.jobRef, CONTENT_W - lblW - 8) as string[])[0];
+    doc.text(`"${ref}"`, CONTENT_X + 3.4 + lblW, y + 4.4);
+    y += 6.6 + 3.2;
+  }
+
     sectionTitle(L.objective);
     drawText(wrap(r.objective, { size: 8.8, style: "normal" }), { size: 8.8, style: "normal" });
   }
@@ -447,6 +475,21 @@ export function generateResumePdf(
   if (r.skills?.length) {
     sectionTitle(L.skills);
     drawBadges(r.skills.slice(0, 16), { size: 7.6 });
+  }
+
+  // Rodape — agradecimento + vaga (ultima pagina)
+  if (r.jobRef) {
+    doc.setPage(doc.getNumberOfPages());
+    doc.setDrawColor(...th.accentSoft);
+    doc.setLineWidth(0.3);
+    doc.line(CONTENT_X, PAGE_H - FRAME - 7.4, PAGE_W - FRAME - MARGIN, PAGE_H - FRAME - 7.4);
+    doc.setFont("helvetica", "italic");
+    doc.setFontSize(7.2);
+    doc.setTextColor(...INK_SOFT);
+    const thanks = en
+      ? `Thanks for generating this custom resume for "${r.jobRef.slice(0, 60)}" — real profile data only.`
+      : `Obrigado por gerar este curriculo personalizado para "${r.jobRef.slice(0, 60)}" — so com dados reais do perfil.`;
+    doc.text(thanks, PAGE_W / 2, PAGE_H - FRAME - 4.2, { align: "center" });
   }
 
   return doc.output("blob");

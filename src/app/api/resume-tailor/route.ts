@@ -4,6 +4,7 @@ import { detectBrand, type BrandTheme } from "@/lib/brandColors";
 import {
   looksLikeInjection,
   validateResumeOutput,
+  sanitizeResumeSoft,
   parseLLMJson,
   looksLikeJobRequest,
   detectInputLocale,
@@ -51,8 +52,8 @@ function buildSystemPrompt(data: ResumeData, userInput: string): string {
 4. APENAS re-enquadre a linguagem, destaque competências relevantes para a vaga, e adote o tom adequado.
 5. SEMPRE mantenha os dados imutáveis: nome, contato, experiências (empresas, cargos, períodos), formação acadêmica. Estes campos DEVEM ser idênticos ao CV base.
 6. Os bullet points das experiências podem ser reescritos para focar nas competências mais relevantes para a vaga, desde que NÃO inventem fatos. MÁXIMO 3-4 bullets por experiência (priorize os mais relevantes à vaga).
-7. A seção "Objetivo" pode ser ajustada para refletir o direcionamento da vaga (1 linha, concisa).
-8. O RESUMO PROFISSIONAL pode ser reescrito para destacar as competências mais relevantes para a vaga (2-3 frases, máximo).
+7. A seção "Objetivo" DEVE citar explicitamente a vaga/empresa descrita no <input> quando o input os mencionar (1 linha, concisa).
+8. O RESUMO PROFISSIONAL DEVE conectar o perfil à vaga/empresa do <input>, citando-a explicitamente (2-3 frases, máximo).
 9. Gere o campo "highlights": uma lista de 3-5 termos-chave (strings curtas) extraídos da descrição da vaga que correspondam a COMPETÊNCIAS REAIS do currículo. Exemplos: "Power BI", "SQL", "React", "Stripe", "RAG", "Docker". NUNCA invente competências que não existam nas skills ou experiências do currículo.
 10. Responda APENAS com o JSON no formato especificado. Nenhum texto fora do JSON.
 
@@ -300,6 +301,14 @@ export async function POST(req: NextRequest) {
       if (attempt === 0) {
         content = await tryProviders(prompt + "\n\n" + CORRECTION_PROMPT(validation.reasons), locale);
       } else {
+        // 2ª falha: tenta sanear highlights (falha mais comum de modelos free)
+        // antes de devolver 422 — chips são cosméticos.
+        const soft = validateResumeOutput(sanitizeResumeSoft(json, data), data);
+        if (soft.ok) {
+          console.warn("[resume-tailor] Highlights sanitizados; gerando mesmo assim:", validation.reasons);
+          resume = soft.resume;
+          break;
+        }
         console.warn("[resume-tailor] Validation failed twice:", validation.reasons);
         return NextResponse.json(
           {
@@ -326,7 +335,9 @@ export async function POST(req: NextRequest) {
     // 🔴 Detecta a marca/cores para o tema do PDF (determinístico, não usa LLM)
     const brand: BrandTheme | null = detectBrand(input);
 
-    return NextResponse.json({ resume, brand });
+    // jobRef: eco sanitizado do input p/ o PDF citar a vaga (banda + rodape)
+    const jobRef = input.replace(/[\r\n\t`"]+/g, " ").replace(/\s{2,}/g, " ").trim().slice(0, 80);
+    return NextResponse.json({ resume, brand, jobRef });
   } catch (err) {
     console.error("[resume-tailor] Fatal:", err);
     return NextResponse.json(
