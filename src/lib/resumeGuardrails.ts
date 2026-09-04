@@ -200,11 +200,30 @@ export function validateResumeOutput(json: unknown, base: ResumeData): ValidateR
     education: needStrArray(r.education) ? r.education : base.education,
     skills: needStrArray(r.skills) ? r.skills : base.skills,
     highlights: needStrArray(r.highlights) ? r.highlights : undefined,
+    jobMatch: cleanJobMatch(r.jobMatch),
   };
 
   return { ok: true, reasons: [], resume };
 }
 
+
+// ─── jobMatch (V5): bullets "Match com a vaga" ───────────────────────
+// Campo cosmético — nunca gera violação/422: itens inválidos são
+// descartados silenciosamente (melhor entregar sem o bullet do que
+// falhar a geração inteira por causa de um enfeite).
+const JOB_MATCH_MAX = 4;
+const JOB_MATCH_MAX_LEN = 240;
+
+function cleanJobMatch(items: unknown): string[] | undefined {
+  if (!Array.isArray(items)) return undefined;
+  const cleaned = items
+    .filter((x): x is string => typeof x === "string")
+    .map((s) => s.trim())
+    .filter((s) => s.length > 0 && s.length <= JOB_MATCH_MAX_LEN)
+    .filter((s) => !/(https?:\/\/|\.com|\.br|\.org)/i.test(s))
+    .slice(0, JOB_MATCH_MAX);
+  return cleaned.length > 0 ? cleaned : undefined;
+}
 
 // Sanitização suave: remove highlights que não casam com o CV real.
 // Chips são cosméticos — melhor entregar sem o chip inventado do que
@@ -280,6 +299,7 @@ export function sanitizeResumeHard(json: unknown, base: ResumeData): ResumeData 
     highlights: Array.isArray(r.highlights)
       ? (r.highlights as unknown[]).filter((h): h is string => typeof h === "string" && h.trim().length > 0).slice(0, 5)
       : undefined,
+    jobMatch: cleanJobMatch(r.jobMatch),
   };
 }
 

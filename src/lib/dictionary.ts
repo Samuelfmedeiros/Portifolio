@@ -64,6 +64,12 @@ export const dict = {
     "resume.tailor.error.generic": "Erro ao gerar currículo. Tente novamente.",
     "resume.tailor.error.rate": "Muitas requisições. Aguarde um minuto.",
     "resume.tailor.notice": "IA reescreve para a vaga baseada no CV real. Nada é inventado.",
+    "resume.tailor.diff.title": "O que a IA mudou",
+    "resume.tailor.diff.skills": "Skills priorizadas para a vaga",
+    "resume.tailor.diff.highlights": "Palavras-chave da vaga",
+    "resume.tailor.diff.match": "Match com a vaga",
+    "resume.tailor.diff.bullets": "bullets de experiência reescritos para a vaga",
+    "resume.tailor.btn.again": "Baixar novamente",
 
     // ── Profile Section ──
     "profile.section.title": "▸ PERFIL",
@@ -413,6 +419,12 @@ export const dict = {
     "resume.tailor.error.generic": "Error generating resume. Try again.",
     "resume.tailor.error.rate": "Too many requests. Please wait a minute.",
     "resume.tailor.notice": "AI rewrites for the job based on the real CV. Nothing is invented.",
+    "resume.tailor.diff.title": "What the AI changed",
+    "resume.tailor.diff.skills": "Skills prioritized for the job",
+    "resume.tailor.diff.highlights": "Keywords from the job",
+    "resume.tailor.diff.match": "Job match",
+    "resume.tailor.diff.bullets": "experience bullets rewritten for the job",
+    "resume.tailor.btn.again": "Download again",
 
     // ── Profile Section ──
     "profile.section.title": "▸ PROFILE",

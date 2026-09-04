@@ -28,6 +28,12 @@ export interface ResumeData {
   skills: string[];
   /** Competências-chave mapeadas da vaga (chips no header do PDF). Opcional. */
   highlights?: string[];
+  /**
+   * Bullets "Match com a vaga" (V5) — narrativa de por que o CV bate com a
+   * vaga, gerada pela IA a partir de evidências REAIS do CV. Opcional e
+   * cosmético: nunca derruba a geração (sanitize descarta itens inválidos).
+   */
+  jobMatch?: string[];
 }
 
 const PT: ResumeData = {

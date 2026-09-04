@@ -2,11 +2,21 @@
 
 import { useState, useRef, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Sparkles, X, FileText, Loader2, Shield, AlertCircle } from "lucide-react";
+import {
+  Sparkles,
+  X,
+  FileText,
+  Loader2,
+  Shield,
+  AlertCircle,
+  ListChecks,
+  Download,
+} from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { generateResumePdf, type ResumePDFData } from "@/lib/resumePdf";
+import { getResumeData } from "@/lib/resumeData";
 import type { BrandTheme } from "@/lib/brandColors";
 
 interface ResumeTailorModalProps {
@@ -14,10 +24,55 @@ interface ResumeTailorModalProps {
   onClose: () => void;
 }
 
+/** Painel "o que a IA mudou" (V5) — diff base × tailored calculado no client. */
+interface ResumeDiff {
+  fields: { label: string; before: string; after: string }[];
+  skillsAfter: string[];
+  highlights: string[];
+  jobMatch: string[];
+  bulletsChanged: number;
+}
+
+function buildDiff(resume: ResumePDFData, locale: "pt" | "en"): ResumeDiff {
+  const base = getResumeData(locale);
+  const en = locale === "en";
+  const L = {
+    role: en ? "Role" : "Cargo",
+    objective: en ? "Objective" : "Objetivo",
+    summary: en ? "Summary" : "Resumo",
+  };
+  const fields: ResumeDiff["fields"] = [];
+  if (resume.role && resume.role !== base.role) {
+    fields.push({ label: L.role, before: base.role, after: resume.role });
+  }
+  if (resume.objective && resume.objective !== base.objective) {
+    fields.push({ label: L.objective, before: base.objective, after: resume.objective });
+  }
+  if (resume.summary && resume.summary !== base.summary) {
+    fields.push({ label: L.summary, before: base.summary, after: resume.summary });
+  }
+
+  const baseBullets = new Set(
+    base.experiences.flatMap((e) => e.bullets).map((b) => b.trim()),
+  );
+  const newBullets = (resume.experiences ?? []).flatMap((e) => e.bullets ?? []);
+  const bulletsChanged = newBullets.filter((b) => !baseBullets.has(b.trim())).length;
+
+  return {
+    fields,
+    skillsAfter: resume.skills ?? base.skills,
+    highlights: resume.highlights ?? [],
+    jobMatch: resume.jobMatch ?? [],
+    bulletsChanged,
+  };
+}
+
 export function ResumeTailorModal({ open, onClose }: ResumeTailorModalProps) {
   const [input, setInput] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
+  const [diff, setDiff] = useState<ResumeDiff | null>(null);
+  const [lastDownload, setLastDownload] = useState<{ blob: Blob; filename: string } | null>(null);
   const runningRef = useRef(false);
   const { t, locale } = useLanguage();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -71,14 +126,13 @@ export function ResumeTailorModal({ open, onClose }: ResumeTailorModalProps) {
       // Gera o PDF do currículo a partir do JSON (ATS-friendly).
       // Se a API detectou a marca (ex: Google), aplica o tema de cores dela.
       const pdfBlob = generateResumePdf({ ...resume, jobRef: data.jobRef }, locale, brand);
-      downloadBlob(pdfBlob, locale === "en" ? "Samuel_Andrade_Resume_Tailored.pdf" : "Samuel_Andrade_Curriculo_Personalizado.pdf");
+      const filename = locale === "en" ? "Samuel_Andrade_Resume_Tailored.pdf" : "Samuel_Andrade_Curriculo_Personalizado.pdf";
+      downloadBlob(pdfBlob, filename);
 
+      // V5: mantém o modal aberto e mostra o painel "o que a IA mudou".
+      setLastDownload({ blob: pdfBlob, filename });
+      setDiff(buildDiff(resume, locale));
       setStatus("success");
-      setTimeout(() => {
-        onClose();
-        setStatus("idle");
-        setInput("");
-      }, 1500);
     } catch (err) {
       setStatus("error");
       setErrorMsg(err instanceof Error ? err.message : t("resume.tailor.error.generic"));
@@ -87,10 +141,19 @@ export function ResumeTailorModal({ open, onClose }: ResumeTailorModalProps) {
     }
   }
 
+  function handleDownloadAgain() {
+    if (!lastDownload) return;
+    downloadBlob(lastDownload.blob, lastDownload.filename);
+  }
+
   function handleClose() {
     if (status === "loading") return;
     onClose();
-    setTimeout(() => setStatus("idle"), 200);
+    setTimeout(() => {
+      setStatus("idle");
+      setDiff(null);
+      setLastDownload(null);
+    }, 200);
   }
 
   return (
@@ -133,13 +196,120 @@ export function ResumeTailorModal({ open, onClose }: ResumeTailorModalProps) {
             </div>
 
             {status === "success" ? (
-              <div className="text-center py-8">
-                <div className="w-14 h-14 mx-auto mb-3 rounded-full bg-[var(--success)]/10 flex items-center justify-center">
-                  <FileText size={24} className="text-[var(--success)]" />
+              <div className="space-y-3" aria-live="polite">
+                <div className="flex items-center gap-2 justify-center">
+                  <div className="w-9 h-9 rounded-full bg-[var(--success)]/10 flex items-center justify-center shrink-0">
+                    <FileText size={18} className="text-[var(--success)]" />
+                  </div>
+                  <p className="text-sm font-semibold text-[var(--success)] font-mono">
+                    {t("resume.tailor.success", "Currículo gerado!")}
+                  </p>
                 </div>
-                <p className="text-sm font-semibold text-[var(--success)] font-mono">
-                  {t("resume.tailor.success", "Currículo gerado!")}
-                </p>
+
+                {diff && (
+                  <div className="rounded-lg border border-[var(--accent)]/20 bg-[var(--bg-card)]">
+                    <div className="flex items-center gap-1.5 px-3 py-2 border-b border-[var(--border)]">
+                      <ListChecks size={13} className="text-[var(--accent)]" />
+                      <p className="text-[11px] font-semibold font-mono text-[var(--text-primary)]">
+                        {t("resume.tailor.diff.title", "O que a IA mudou")}
+                      </p>
+                    </div>
+
+                    <div className="max-h-64 overflow-y-auto px-3 py-2 space-y-3">
+                      {/* Campos de texto reescritos (antes → depois) */}
+                      {diff.fields.map((f) => (
+                        <div key={f.label}>
+                          <p className="text-[10px] uppercase tracking-wide font-mono text-[var(--text-secondary)] mb-0.5">
+                            {f.label}
+                          </p>
+                          <p className="text-[11px] leading-snug text-[var(--text-secondary)] line-through decoration-red-400/50">
+                            {f.before}
+                          </p>
+                          <p className="text-[11px] leading-snug text-[var(--text-primary)]">
+                            {f.after}
+                          </p>
+                        </div>
+                      ))}
+
+                      {/* Skills reordenadas/enquadradas */}
+                      <div>
+                        <p className="text-[10px] uppercase tracking-wide font-mono text-[var(--text-secondary)] mb-1">
+                          {t("resume.tailor.diff.skills", "Skills priorizadas para a vaga")}
+                        </p>
+                        <div className="flex flex-wrap gap-1">
+                          {diff.skillsAfter.map((s) => {
+                            const short = s.split(":")[0].slice(0, 34);
+                            return (
+                              <span
+                                key={s}
+                                className="text-[10px] px-1.5 py-0.5 rounded border border-[var(--accent)]/40 bg-[var(--accent)]/10 text-[var(--text-primary)]"
+                              >
+                                {short}
+                              </span>
+                            );
+                          })}
+                        </div>
+                      </div>
+
+                      {/* Palavras-chave da vaga (chips do PDF) */}
+                      {diff.highlights.length > 0 && (
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wide font-mono text-[var(--text-secondary)] mb-1">
+                            {t("resume.tailor.diff.highlights", "Palavras-chave da vaga")}
+                          </p>
+                          <div className="flex flex-wrap gap-1">
+                            {diff.highlights.map((h) => (
+                              <span
+                                key={h}
+                                className="text-[10px] px-1.5 py-0.5 rounded-full bg-[var(--accent)] text-[var(--bg-primary)] font-semibold"
+                              >
+                                {h}
+                              </span>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Match com a vaga (bullets novos no PDF) */}
+                      {diff.jobMatch.length > 0 && (
+                        <div>
+                          <p className="text-[10px] uppercase tracking-wide font-mono text-[var(--text-secondary)] mb-1">
+                            {t("resume.tailor.diff.match", "Match com a vaga")}
+                          </p>
+                          <ul className="space-y-1">
+                            {diff.jobMatch.map((m) => (
+                              <li key={m} className="text-[11px] leading-snug text-[var(--text-primary)] flex gap-1.5">
+                                <span className="text-[var(--accent)] shrink-0">▸</span>
+                                <span>{m}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      )}
+
+                      {/* Bullets reescritos */}
+                      {diff.bulletsChanged > 0 && (
+                        <p className="text-[10px] font-mono text-[var(--text-secondary)]">
+                          +{" "}
+                          {t(
+                            "resume.tailor.diff.bullets",
+                            "bullets de experiência reescritos para a vaga",
+                          )}
+                          : <span className="text-[var(--accent)] font-semibold">{diff.bulletsChanged}</span>
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <button
+                  type="button"
+                  onClick={handleDownloadAgain}
+                  className="w-full py-2.5 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 transition-all flex items-center justify-center gap-2"
+                >
+                  <Download size={16} />
+                  {t("resume.tailor.btn.again", "Baixar novamente")}
+                </button>
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">

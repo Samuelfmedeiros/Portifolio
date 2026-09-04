@@ -32,6 +32,8 @@ export interface ResumePDFData {
   skills?: string[];
   /** Competências-chave mapeadas da descrição da vaga (chips no header). */
   highlights?: string[];
+  /** Bullets "Match com a vaga" (V5) — requisito da vaga → evidência real do CV. */
+  jobMatch?: string[];
   jobRef?: string;
 }
 
@@ -130,6 +132,7 @@ export function generateResumePdf(
     experience: en ? "Professional Experience" : "Experiências Profissionais",
     education: en ? "Education" : "Formação Acadêmica",
     skills: en ? "Technical Skills" : "Competências Técnicas",
+    match: en ? "Job Match" : "Match com a Vaga",
   };
 
   // ── Núcleo de medição/desenho ───────────────────────────────────────
@@ -434,6 +437,92 @@ export function generateResumePdf(
     y += BASE * 1.0;
   };
 
+  // ── Card "Match com a vaga" (V5) ─────────────────────────────────────
+  // Bullets requisito → evidência com check desenhado (2 segmentos —
+  // NUNCA glifo fora do WinAnsi). Regra de ouro: o CV é 1 página — se o
+  // card não couber no restante da página 1, ele é pulado inteiro.
+  const drawMatchCard = () => {
+    const items = (r.jobMatch || []).slice(0, 4);
+    if (!items.length) return;
+
+    const padTop = 2.2;
+    const padBottom = 2.2;
+    const labelH = 4.4;
+    const itemIndent = 5.4;
+    const itemLH = 3.4;
+    const itemGap = 1.0;
+    const wrapped = items.map((b) => wrap(b, { size: 8.3, style: "normal" }, itemIndent));
+    const cardH =
+      padTop +
+      labelH +
+      wrapped.reduce((acc, w) => acc + w.length * itemLH, 0) +
+      (wrapped.length - 1) * itemGap +
+      padBottom;
+
+    // Não coube na página 1 → pula o card (nunca estoura pra 2ª página).
+    if (y + cardH > PAGE_H - FRAME - MARGIN) return;
+
+    const top = y - 0.6;
+    doc.setFillColor(...th.accentTint);
+    doc.roundedRect(CONTENT_X, top, CONTENT_W, cardH, 1.8, 1.8, "F");
+    doc.setFillColor(...th.accent);
+    doc.rect(CONTENT_X, top, 1.4, cardH, "F");
+
+    // Label do card
+    doc.setFont("helvetica", "bold");
+    doc.setFontSize(8.2);
+    doc.setTextColor(...INK);
+    doc.text(L.match.toUpperCase(), CONTENT_X + 3.6, top + padTop + labelH - 1.4);
+
+    let iy = top + padTop + labelH + 1.2;
+    for (const lines of wrapped) {
+      const cx = CONTENT_X + 2.6;
+      const cy = iy - 1.0;
+      doc.setDrawColor(...th.accentSoft);
+      doc.setLineWidth(0.6);
+      doc.line(cx, cy + 0.5, cx + 1.1, cy + 1.3);
+      doc.line(cx + 1.1, cy + 1.3, cx + 2.7, cy - 0.6);
+
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(8.3);
+      doc.setTextColor(...INK);
+      for (const ln of lines) {
+        doc.text(ln, CONTENT_X + itemIndent, iy);
+        iy += itemLH;
+      }
+      iy += itemGap;
+    }
+    y = top + cardH + 2.8;
+  };
+
+  // ── Skills agrupadas por categoria (V5) ──────────────────────────────
+  // Strings "Categoria: item, item" (formato do CV base, reforçado no
+  // prompt) viram blocos: label bold + itens em texto corrido. Sem o
+  // prefixo na maioria das skills → fallback nos badges originais.
+  const drawSkillsGrouped = (skills: string[]) => {
+    const parsed = skills.map((s) => {
+      const m = /^(.{3,60}):\s+(.+)$/.exec(s);
+      return m ? { cat: m[1], rest: m[2] } : null;
+    });
+    const groupedCount = parsed.filter(Boolean).length;
+    if (groupedCount < Math.max(2, Math.ceil(skills.length / 2))) {
+      drawBadges(skills.slice(0, 16), { size: 7.6 });
+      return;
+    }
+    for (const p of parsed) {
+      if (!p) continue;
+      ensure(3.8);
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8.0);
+      doc.setTextColor(...INK_SOFT);
+      doc.text(p.cat.toUpperCase(), CONTENT_X, y);
+      y += BASE * 2.1;
+      const lines = wrap(p.rest, { size: 8.4, style: "normal" }, 2.4);
+      drawText(lines, { size: 8.4, style: "normal" }, 2.4);
+      y += BASE * 0.8; // respiro entre categorias
+    }
+  };
+
   // ── Conteúdo ─────────────────────────────────────────────────────────
   if (r.objective) {
   // Banda "Personalizado para <vaga>" — referencia a vaga real
@@ -457,6 +546,9 @@ export function generateResumePdf(
     y += 6.6 + 3.2;
   }
 
+  // V5: card "Match com a vaga" — logo após a banda da vaga, antes do objetivo.
+  drawMatchCard();
+
     sectionTitle(L.objective);
     drawText(wrap(r.objective, { size: 8.8, style: "normal" }), { size: 8.8, style: "normal" });
   }
@@ -474,7 +566,7 @@ export function generateResumePdf(
   }
   if (r.skills?.length) {
     sectionTitle(L.skills);
-    drawBadges(r.skills.slice(0, 16), { size: 7.6 });
+    drawSkillsGrouped(r.skills);
   }
 
   // Rodape — agradecimento + vaga (ultima pagina)
