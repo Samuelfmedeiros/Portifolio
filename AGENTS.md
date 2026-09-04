@@ -283,3 +283,9 @@ NESTE projeto DEVE ser registrada no MESMO MOMENTO em que é criada — neste AG
 (arquivos, rotas, commands, endpoints novos), em skill (`skill_manage`) se repetível,
 e em memory se infra/pitfall. "Feito" sem registro no ato = INCOMPLETO.
 
+
+## Sessão 2026-09-03 — Fim de dia (docs)
+- **Resume Tailor AI (feat/perf-bundle):** V4 completo — redesign PDF (1 página, moldura de marca, highlights), integração do modal no Footer, perf corrida paralela entre modelos free (latência 28s→18s, `3c1572a`), fix anti-422 normalizeStr (travessões/URL) + sanitizeResumeHard merge CV (`8339399`), fix build brandColors/jspdf (`07821c5`).
+- **Estado:** 332/332 testes, modal E2E desktop+mobile 0 pageerrors, deploy Vercel Ready (`8339399`). Gate: aguardando aprovação visual do Samuel p/ merge+deploy.
+- **#418 timezone:** fuso triplo identificado (Footer/BlogSection/ProjectHangar) — prova Playwright UTC+14, fix timezone UTC + null-state gerado (patch pendente de aplicação).
+- **Docs:** esta seção + CHANGELOG [2026-09-03].
