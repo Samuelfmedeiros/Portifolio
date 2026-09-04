@@ -7,13 +7,6 @@
 - 8 commits · push bare+origin OK · HEAD: `8339399`
 
 
-## [2026-09-03] — Resume Tailor v4: modal integrado + PDF redesign + anti-422 + perf
-- **feat(resume-tailor)**: modal V4 integrado ao Footer — botão + wiring + dicionário + testes (`4950b5c`)
-- **fix(resume-tailor)**: PDF layout + tailoring da vaga + placeholder (`409f3ff`); anti-422 — `normalizeStr` (travessões/URL) + `sanitizeResumeHard` no merge de CV (`8339399`)
-- **fix(build)**: `brandColors.ts` + `jspdf` ausentes no estado commitado — corrige preview Vercel `cd87600` (`07821c5`)
-- **perf(resume-tailor)**: corrida paralela entre modelos free + timeout 20s/chamada — latência 28s→18s (`3c1572a`)
-- **docs**: fim de dia 31/08-02/09 (recuperação) (`b0aab6d`) · 8 commits no dia · push bare+origin OK · HEAD: `8339399`
-
 ## [2026-08-30] — i18n parity + VRT estabilizado + same-origin + mission-clock reducedMotion
 - **fix(i18n)**: localiza todos componentes visíveis PT/EN + testes paridade + scanner estático i18n-audit (`2efd21f`, `5f2e1cd`)
 - **fix(ui)**: nome do projeto maior, bold, cor accent + imagens same-origin (`98dd619`); CSP permite img.seu.pet em img-src (`665eebb`); same-origin images após revert CDN + teste (`02465ec`); remove dead code img.seu.pet do img-src (same-origin consolidado) (`215acd5`)
