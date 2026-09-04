@@ -99,7 +99,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
   const techTags = extractTechTags({ ...repo, description: localizedDescription, topics: localizedTopics });
   const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
   const updated = repo.pushed_at
-    ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit" })
+    ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit", timeZone: "UTC" })
     : null;
   const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
   const { track } = useAnalytics();
