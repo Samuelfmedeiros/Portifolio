@@ -24,12 +24,19 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `215acd5` — chore(csp): remove dead code img.seu.pet do img-src (same-origin consolidado) — **pusheado 30/08, produção validada**
-- **Status:** ✅ Funcional — produção em Vercel · CI deploy success (215acd52) · Playwright VRT success (2ª rodada)
+- **Último commit:** `8339399` — fix(resume-tailor): anti-422 (normalizeStr + sanitizeResumeHard) — **03/09**
+- **Status:** ✅ Funcional — Vercel · sessão 03/09: Resume Tailor v4 integrado (ver `### Sessão 03/09`)
 - **Testes:** 269/269 passando (validado 30/08 12:47 WSL pnpm test:run)
 - **Lint:** 0 errors, 0 warnings
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
 - **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
+
+### Sessão 03/09 — Resume Tailor v4 (modal + PDF + anti-422)
+- **feat**: modal V4 integrado ao Footer — botão, wiring, dicionário i18n, testes (`4950b5c`)
+- **fix**: PDF layout + tailoring da vaga + placeholder (`409f3ff`); anti-422 — normalizeStr (travessões/URL) + sanitizeResumeHard no merge de CV (`8339399`)
+- **fix(build)**: brandColors.ts + jspdf ausentes no estado commitado (corrige preview Vercel `cd87600`) (`07821c5`)
+- **perf**: corrida paralela entre modelos free + timeout 20s/chamada — latência 28s->18s (`3c1572a`)
+- 8 commits no dia · push bare+origin OK · HEAD: `8339399`
 
 ### Sessão 30/08 — i18n audit + bug-hunter v3 (Fase 1) + UI nome/imagens
 - Nome do card: `text-base md:text-lg` + `font-bold` + `var(--accent)` (aprovado Samuel, commit `98dd619`)
@@ -150,6 +157,21 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - `src/test/` — Vitest setup + mocks
 - `src/components/MiniGames/` — Código dos 5 jogos (React)
 
+### Resume Tailor AI (31/08/2026 — commitado, push aprovado)
+- **NOTA:** critic 100/100, security 100/100, painel travou por 9Router (UnknownError upstream)
+- **Commit:** `5bdf3d0` — 19 arquivos, 2342 inserções
+- **Status:** ✅ master deployado
+Feature "Baixar Currículo Personalizado" — IA reescreve o CV pra vaga → PDF com cores da marca.
+- `src/app/api/resume-tailor/route.ts` — API `POST /api/resume-tailor` (OpenRouter + fallback Arachne; rate limit 3/min; guardrails)
+- `src/lib/resumeData.ts` — CV estruturado PT/EN (dados imutáveis)
+- `src/lib/resumePdf.ts` — gerador PDF jsPDF ATS-friendly (`generateResumePdf(r, locale, theme?)`)
+- `src/lib/brandColors.ts` — detecção determinística de marca → cores do PDF (mapa curado ~45 marcas; LLM NUNCA escolhe cor)
+- `src/lib/resumeGuardrails.ts` — `looksLikeInjection()` (blocklist), `validateResumeOutput()` (dados imutáveis), `parseLLMJson()`
+- `src/components/ResumeTailorModal.tsx` — modal textarea → gera → baixa PDF
+- Testes: `resumeGuardrails.test.ts` (26), `brandColors.test.ts` (9), `resumePdf.test.ts` (5), `ResumeTailorModal.test.tsx` (5)
+- **PITFALL:** testes rodam DENTRO do WSL (`wsl -e bash -lc 'cd ~/projetos/portifolio && pnpm vitest run ...'`) — node_modules é Linux; vitest pelo Windows falha (rolldown WASI binding).
+- Detalhes: `docs/plans/2026-08-30-resume-tailor-ai.md`
+
 **Experiência do usuário:** Parallax scene integrada — grid + cockpit SVG + HUD panels + partículas formam a entrada. Scroll suave com parallax layers (L0-L3). Navegação por scroll + keyboard shortcuts (desktop). Tema escuro ciano+preto com consistência visual cinematográfica.
 
 **URL:** https://samuelmedeiros.vercel.app
@@ -246,3 +268,24 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Referências:** OWASP Top 10:2025, HttpArmor, OWASP Web Checklist
 - **Cron:** `Portfolio Security Watchdog` (diário, 24h, silent unless issues)
 - **Doc completo:** `docs/SEGURANCA.md`
+
+---
+
+## 🔴 ROGER + REGISTRO IMEDIATO (02/09/2026 — Samuel, GLOBAL)
+
+**ROGER:** antes de declarar pronta/fazer deploy de QUALQUER entrega neste projeto, rodar o
+test-loop obrigatório — skill `roger-test-loop` / `ai-test-loop` (orquestrador
+`loop_orchestrator_unified.py`). Sem evidência real (testes + nota + PDF) NÃO é entrega.
+Gate: UI=100, código=85. PDF relatório SEMPRE via MEDIA:.
+
+**REGISTRO IMEDIATO:** toda alteração/coisa nova/caminho novo/mudança de workflow criada
+NESTE projeto DEVE ser registrada no MESMO MOMENTO em que é criada — neste AGENTS.md
+(arquivos, rotas, commands, endpoints novos), em skill (`skill_manage`) se repetível,
+e em memory se infra/pitfall. "Feito" sem registro no ato = INCOMPLETO.
+
+
+## Sessão 2026-09-03 — Fim de dia (docs)
+- **Resume Tailor AI (feat/perf-bundle):** V4 completo — redesign PDF (1 página, moldura de marca, highlights), integração do modal no Footer, perf corrida paralela entre modelos free (latência 28s→18s, `3c1572a`), fix anti-422 normalizeStr (travessões/URL) + sanitizeResumeHard merge CV (`8339399`), fix build brandColors/jspdf (`07821c5`).
+- **Estado:** 332/332 testes, modal E2E desktop+mobile 0 pageerrors, deploy Vercel Ready (`8339399`). Gate: aguardando aprovação visual do Samuel p/ merge+deploy.
+- **#418 timezone:** fuso triplo identificado (Footer/BlogSection/ProjectHangar) — prova Playwright UTC+14, fix timezone UTC + null-state gerado (patch pendente de aplicação).
+- **Docs:** esta seção + CHANGELOG [2026-09-03].

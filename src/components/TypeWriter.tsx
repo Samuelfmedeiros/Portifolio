@@ -19,7 +19,7 @@ export function TypeWriter({
   pauseDuration = 2000,
 }: TypeWriterProps) {
   const [currentPhraseIndex, setCurrentPhraseIndex] = useState(0);
-  const [currentText, setCurrentText] = useState("");
+  const [currentText, setCurrentText] = useState(() => phrases[0] ?? "");
   const [isDeleting, setIsDeleting] = useState(false);
   // Acessibilidade: usuário com prefers-reduced-motion não vê cursor piscando
   // (também estabiliza o fullPage screenshot dos testes visuais)

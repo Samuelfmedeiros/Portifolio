@@ -53,6 +53,24 @@ export const dict = {
     "cv.error.generic": "Erro ao baixar currículo",
     "cv.privacy.note": "Seus dados não serão compartilhados com terceiros",
 
+    // ── Resume Tailor AI ──
+    "resume.tailor.title": "Baixar Currículo Personalizado",
+    "resume.tailor.subtitle": "Descreva a vaga, empresa ou cargo para gerar um currículo sob medida",
+    "resume.tailor.label": "Vaga, empresa ou área",
+    "resume.tailor.placeholder": "Descreva a vaga, empresa ou cargo para gerar um currículo sob medida",
+    "resume.tailor.btn": "Gerar e Baixar",
+    "resume.tailor.btn.loading": "Gerando currículo...",
+    "resume.tailor.success": "Currículo gerado!",
+    "resume.tailor.error.generic": "Erro ao gerar currículo. Tente novamente.",
+    "resume.tailor.error.rate": "Muitas requisições. Aguarde um minuto.",
+    "resume.tailor.notice": "IA reescreve para a vaga baseada no CV real. Nada é inventado.",
+    "resume.tailor.diff.title": "O que a IA mudou",
+    "resume.tailor.diff.skills": "Skills priorizadas para a vaga",
+    "resume.tailor.diff.highlights": "Palavras-chave da vaga",
+    "resume.tailor.diff.match": "Match com a vaga",
+    "resume.tailor.diff.bullets": "bullets de experiência reescritos para a vaga",
+    "resume.tailor.btn.again": "Baixar novamente",
+
     // ── Profile Section ──
     "profile.section.title": "▸ PERFIL",
     "profile.title": "Samuel Medeiros",
@@ -389,6 +407,24 @@ export const dict = {
     "cv.success": "Download started! ",
     "cv.error.generic": "Error downloading CV",
     "cv.privacy.note": "Your data will not be shared with third parties",
+
+    // ── Resume Tailor AI ──
+    "resume.tailor.title": "Download Customized Resume",
+    "resume.tailor.subtitle": "Describe the job, company or role to generate a tailored resume",
+    "resume.tailor.label": "Job, company or area",
+    "resume.tailor.placeholder": "E.g.: Data Analyst position at Google",
+    "resume.tailor.btn": "Generate and Download",
+    "resume.tailor.btn.loading": "Generating resume...",
+    "resume.tailor.success": "Resume generated!",
+    "resume.tailor.error.generic": "Error generating resume. Try again.",
+    "resume.tailor.error.rate": "Too many requests. Please wait a minute.",
+    "resume.tailor.notice": "AI rewrites for the job based on the real CV. Nothing is invented.",
+    "resume.tailor.diff.title": "What the AI changed",
+    "resume.tailor.diff.skills": "Skills prioritized for the job",
+    "resume.tailor.diff.highlights": "Keywords from the job",
+    "resume.tailor.diff.match": "Job match",
+    "resume.tailor.diff.bullets": "experience bullets rewritten for the job",
+    "resume.tailor.btn.again": "Download again",
 
     // ── Profile Section ──
     "profile.section.title": "▸ PROFILE",

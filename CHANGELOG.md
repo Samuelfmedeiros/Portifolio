@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-03] — Resume Tailor V4 (perf-bundle) + timezone #418
+- **fix(resume-tailor)**: anti-422 — normalizeStr (travessões/URL) + sanitizeResumeHard merge CV imutável (`8339399`); PDF layout 1 página + tailoring da vaga + placeholder (`409f3ff`); modal V4 integrado ao Footer (`4950b5c`); fix build brandColors.ts/jspdf (`07821c5`); perf corrida paralela modelos free, latência 28s→18s (`3c1572a`)
+- **qa**: 332/332 testes, E2E desktop+mobile 0 pageerrors, deploy Vercel Ready — aguardando aprovação visual p/ merge
+- **bug(#418)**: timezone triplo em Footer/BlogSection/ProjectHangar — fix gerado (Playwright UTC+14), pendente de aplicação no repo
+- 8 commits · push bare+origin OK · HEAD: `8339399`
+
+
 ## [2026-08-30] — i18n parity + VRT estabilizado + same-origin + mission-clock reducedMotion
 - **fix(i18n)**: localiza todos componentes visíveis PT/EN + testes paridade + scanner estático i18n-audit (`2efd21f`, `5f2e1cd`)
 - **fix(ui)**: nome do projeto maior, bold, cor accent + imagens same-origin (`98dd619`); CSP permite img.seu.pet em img-src (`665eebb`); same-origin images após revert CDN + teste (`02465ec`); remove dead code img.seu.pet do img-src (same-origin consolidado) (`215acd5`)
@@ -110,3 +117,8 @@
 - **CV fix**: endereço completo e CEP removidos — fica apenas "Brasília-DF" (regenerado do DOCX fonte em F:\)
 
 **4 commits · HEAD: `1aa9c44` ✅ push bare+origin**
+## [2026-09-03] — Recuperação de documentação 31/08–02/09
+- **docs**: AGENTS.md — sessão Resume Tailor AI (31/08, commit `5bdf3d0`, critic 100/100) + regra ROGER + REGISTRO IMEDIATO (02/09, global) — estavam prontas mas não commitadas
+- **chore**: perf resume-tailor corrida paralela modelos free (`3c1572a`) + redesign PDF v4 (`c118f6c`) + typewriter LCP fix (`520270c`) ficaram sem entrada de changelog — registrados agora
+- contexto: cron fim-de-dia recriado (job `5682dd26368e`, 23:00) — recuperação pontual do gap de documentação
+
