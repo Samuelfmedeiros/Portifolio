@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-03] — Resume Tailor v4: modal integrado + PDF redesign + anti-422 + perf
+- **feat(resume-tailor)**: modal V4 integrado ao Footer — botão + wiring + dicionário + testes (`4950b5c`)
+- **fix(resume-tailor)**: PDF layout + tailoring da vaga + placeholder (`409f3ff`); anti-422 — `normalizeStr` (travessões/URL) + `sanitizeResumeHard` no merge de CV (`8339399`)
+- **fix(build)**: `brandColors.ts` + `jspdf` ausentes no estado commitado — corrige preview Vercel `cd87600` (`07821c5`)
+- **perf(resume-tailor)**: corrida paralela entre modelos free + timeout 20s/chamada — latência 28s→18s (`3c1572a`)
+- **docs**: fim de dia 31/08-02/09 (recuperação) (`b0aab6d`) · 8 commits no dia · push bare+origin OK · HEAD: `8339399`
+
 ## [2026-08-30] — i18n parity + VRT estabilizado + same-origin + mission-clock reducedMotion
 - **fix(i18n)**: localiza todos componentes visíveis PT/EN + testes paridade + scanner estático i18n-audit (`2efd21f`, `5f2e1cd`)
 - **fix(ui)**: nome do projeto maior, bold, cor accent + imagens same-origin (`98dd619`); CSP permite img.seu.pet em img-src (`665eebb`); same-origin images após revert CDN + teste (`02465ec`); remove dead code img.seu.pet do img-src (same-origin consolidado) (`215acd5`)
@@ -114,3 +121,4 @@
 - **docs**: AGENTS.md — sessão Resume Tailor AI (31/08, commit `5bdf3d0`, critic 100/100) + regra ROGER + REGISTRO IMEDIATO (02/09, global) — estavam prontas mas não commitadas
 - **chore**: perf resume-tailor corrida paralela modelos free (`3c1572a`) + redesign PDF v4 (`c118f6c`) + typewriter LCP fix (`520270c`) ficaram sem entrada de changelog — registrados agora
 - contexto: cron fim-de-dia recriado (job `5682dd26368e`, 23:00) — recuperação pontual do gap de documentação
+

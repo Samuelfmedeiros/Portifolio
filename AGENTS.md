@@ -24,12 +24,19 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `215acd5` — chore(csp): remove dead code img.seu.pet do img-src (same-origin consolidado) — **pusheado 30/08, produção validada**
-- **Status:** ✅ Funcional — produção em Vercel · CI deploy success (215acd52) · Playwright VRT success (2ª rodada)
+- **Último commit:** `8339399` — fix(resume-tailor): anti-422 (normalizeStr + sanitizeResumeHard) — **03/09**
+- **Status:** ✅ Funcional — Vercel · sessão 03/09: Resume Tailor v4 integrado (ver `### Sessão 03/09`)
 - **Testes:** 269/269 passando (validado 30/08 12:47 WSL pnpm test:run)
 - **Lint:** 0 errors, 0 warnings
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
 - **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
+
+### Sessão 03/09 — Resume Tailor v4 (modal + PDF + anti-422)
+- **feat**: modal V4 integrado ao Footer — botão, wiring, dicionário i18n, testes (`4950b5c`)
+- **fix**: PDF layout + tailoring da vaga + placeholder (`409f3ff`); anti-422 — normalizeStr (travessões/URL) + sanitizeResumeHard no merge de CV (`8339399`)
+- **fix(build)**: brandColors.ts + jspdf ausentes no estado commitado (corrige preview Vercel `cd87600`) (`07821c5`)
+- **perf**: corrida paralela entre modelos free + timeout 20s/chamada — latência 28s->18s (`3c1572a`)
+- 8 commits no dia · push bare+origin OK · HEAD: `8339399`
 
 ### Sessão 30/08 — i18n audit + bug-hunter v3 (Fase 1) + UI nome/imagens
 - Nome do card: `text-base md:text-lg` + `font-bold` + `var(--accent)` (aprovado Samuel, commit `98dd619`)
