@@ -5,6 +5,7 @@ import {
   looksLikeInjection,
   validateResumeOutput,
   sanitizeResumeSoft,
+  sanitizeResumeHard,
   parseLLMJson,
   looksLikeJobRequest,
   detectInputLocale,
@@ -307,6 +308,15 @@ export async function POST(req: NextRequest) {
         if (soft.ok) {
           console.warn("[resume-tailor] Highlights sanitizados; gerando mesmo assim:", validation.reasons);
           resume = soft.resume;
+          break;
+        }
+        // Último degrau: merge duro — campos imutáveis vêm SEMPRE do CV
+        // real, LLM só mantém o texto tailored. A violação nunca chega ao
+        // PDF, então gerar é sempre seguro aqui.
+        const hard = validateResumeOutput(sanitizeResumeHard(json, data), data);
+        if (hard.ok) {
+          console.warn("[resume-tailor] Dados imutáveis restaurados do CV; gerando mesmo assim:", validation.reasons);
+          resume = hard.resume;
           break;
         }
         console.warn("[resume-tailor] Validation failed twice:", validation.reasons);

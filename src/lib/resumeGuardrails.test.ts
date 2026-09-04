@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { looksLikeInjection, validateResumeOutput, parseLLMJson, looksLikeJobRequest, detectInputLocale } from "./resumeGuardrails";
+import { looksLikeInjection, validateResumeOutput, parseLLMJson, looksLikeJobRequest, detectInputLocale, sanitizeResumeHard } from "./resumeGuardrails";
 
 const base = {
   name: "Samuel Andrade Fonseca de Medeiros",
@@ -242,5 +242,55 @@ describe("detectInputLocale", () => {
   });
   it("default pt para vazio", () => {
     expect(detectInputLocale("")).toBe("pt");
+  });
+});
+
+describe("sanitizeResumeHard (merge imutavel do CV + tailored do LLM)", () => {
+  it("restaura nome/contato/empresa/periodo/educacao do CV real", () => {
+    const inventado = {
+      name: "Outro Nome",
+      role: "Dev Sênior",
+      contact: { email: "fake@fake.com", linkedin: "https://linkedin.com/in/fake" },
+      objective: "Objetivo tailored p/ Google Ads",
+      summary: "Resumo tailored",
+      experiences: [
+        { title: "Dev Full Stack", company: "Google Inventada", period: "2099 - 2100", bullets: ["Nova bullet tailored"] },
+      ],
+      education: ["PhD Inventado"],
+      skills: ["React", "SQL"],
+    };
+    const merged = sanitizeResumeHard(inventado, base);
+    expect(merged.name).toBe(base.name);
+    expect(merged.contact.email).toBe(base.contact.email);
+    expect(merged.experiences[0].company).toBe(base.experiences[0].company);
+    expect(merged.experiences[0].period).toBe(base.experiences[0].period);
+    expect(merged.experiences[0].bullets).toEqual(["Nova bullet tailored"]);
+    expect(merged.education).toEqual(base.education);
+    expect(merged.objective).toBe("Objetivo tailored p/ Google Ads");
+    expect(validateResumeOutput(merged, base).ok).toBe(true);
+  });
+
+  it("periodo com hífen simples (LLM) agora casa com – do CV (normalizeStr)", () => {
+    const llm = {
+      name: base.name,
+      role: base.role,
+      contact: { ...base.contact },
+      experiences: [
+        { title: base.experiences[0].title, company: base.experiences[0].company, period: "2025 - Atual", bullets: ["x"] },
+        { title: base.experiences[1].title, company: base.experiences[1].company, period: "2025", bullets: ["y"] },
+        { title: base.experiences[2].title, company: base.experiences[2].company, period: "2024 - 2025", bullets: ["z"] },
+      ],
+    };
+    expect(validateResumeOutput(llm, base).ok).toBe(true);
+  });
+
+  it("contato sem www/protocolo casa (normalizeStr de URL)", () => {
+    const llm = {
+      name: base.name,
+      role: base.role,
+      contact: { ...base.contact, linkedin: "linkedin.com/in/samuelandrademedeiros" },
+      experiences: base.experiences,
+    };
+    expect(validateResumeOutput(llm, base).ok).toBe(true);
   });
 });

@@ -42,7 +42,19 @@ export interface ValidateResult {
 const IMMUTABLE_CONTACT_KEYS = ["email", "linkedin", "site", "github"] as const;
 
 function normalizeStr(s: string): string {
-  return s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+  return s
+    .toLowerCase()
+    .normalize("NFD")
+    .replace(/[\u0300-\u036f]/g, "")
+    // Variantes de travessão/hífen do LLM (–, —, −, ‒, ―) viram hífen simples:
+    // LLM escreve "2025 - Atual" e o CV tem "2025 — Atual" → match.
+    .replace(/[\u2010-\u2015\u2212]/g, "-")
+    // Variante de URL (www., protocolo, barra final) some → match:
+    // "linkedin.com/in/x" casa com "https://www.linkedin.com/in/x".
+    .replace(/^https?:\/\//, "")
+    .replace(/^www\./, "")
+    .replace(/\/$/, "")
+    .trim();
 }
 
 export function validateResumeOutput(json: unknown, base: ResumeData): ValidateResult {
@@ -216,6 +228,59 @@ export function sanitizeResumeSoft(json: unknown, base: ResumeData): unknown {
     if ((r.highlights as string[]).length === 0) delete r.highlights;
   }
   return r;
+}
+
+// Sanitização dura: último degrau antes do 422. Reescreve TODOS os
+// campos imutáveis com os dados reais do CV (nome, contato, empresa,
+// cargo, período, formação) e mantém do LLM apenas o que é tailored
+// (objetivo, resumo, bullets, skills, highlights). Assim a violação
+// nunca chega ao PDF — a IA não consegue inventar dado imutável.
+export function sanitizeResumeHard(json: unknown, base: ResumeData): ResumeData {
+  const r = (json && typeof json === "object" ? json : {}) as Record<string, unknown>;
+  const contact = (r.contact ?? {}) as Record<string, unknown>;
+  const str = (v: unknown): string => (typeof v === "string" ? v : "");
+
+  const baseExp = Array.isArray(r.experiences) ? (r.experiences as unknown[]) : [];
+  // Cada experiência do LLM herda empresa/período REAIS por posição;
+  // título e bullets ficam do LLM (podem ser reordenados/parafraseados,
+  // mas sem inventar vínculo empregatício novo).
+  const experiences = baseExp.length > 0
+    ? baseExp.slice(0, base.experiences.length).map((e, i) => {
+        const x = (e && typeof e === "object" ? e : {}) as Record<string, unknown>;
+        const bullets = Array.isArray(x.bullets)
+          ? (x.bullets as unknown[]).filter((b): b is string => typeof b === "string" && b.trim().length > 0)
+          : [];
+        return {
+          title: str(x.title) || base.experiences[i].title,
+          company: base.experiences[i].company,
+          period: base.experiences[i].period,
+          bullets: bullets.length > 0 ? bullets : base.experiences[i].bullets,
+        };
+      })
+    : base.experiences;
+
+  return {
+    name: base.name,
+    role: str(r.role) || base.role,
+    contact: {
+      location: base.contact.location,
+      phone: base.contact.phone,
+      email: base.contact.email,
+      linkedin: base.contact.linkedin,
+      site: base.contact.site,
+      github: base.contact.github,
+    },
+    objective: str(r.objective) || base.objective,
+    summary: str(r.summary) || base.summary,
+    experiences,
+    education: base.education,
+    skills: Array.isArray(r.skills)
+      ? (r.skills as unknown[]).filter((s): s is string => typeof s === "string" && s.trim().length > 0).slice(0, 12)
+      : base.skills,
+    highlights: Array.isArray(r.highlights)
+      ? (r.highlights as unknown[]).filter((h): h is string => typeof h === "string" && h.trim().length > 0).slice(0, 5)
+      : undefined,
+  };
 }
 
 // ─── Parse robusto do JSON do LLM ────────────────────────────────────
