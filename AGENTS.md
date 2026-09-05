@@ -24,8 +24,8 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `8339399` — fix(resume-tailor): anti-422 (normalizeStr + sanitizeResumeHard) — **03/09**
-- **Status:** ✅ Funcional — Vercel · sessão 03/09: Resume Tailor v4 integrado (ver `### Sessão 03/09`)
+- **Último commit:** `506d9d4` — Merge PR #72 (perf/resume-tailor V5) — **04/09**
+- **Status:** ✅ Funcional — Vercel · V5 + fix #418 merged em produção via PRs #71/#72 (ver `### Sessão 04/09`)
 - **Testes:** 269/269 passando (validado 30/08 12:47 WSL pnpm test:run)
 - **Lint:** 0 errors, 0 warnings
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
@@ -37,7 +37,7 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **fix(hydration) #418** (commit 5c1b754): remover new Date() do JSX (Footer) + pinar timeZone UTC (BlogSection/ProjectHangar) — CI 9/9 + Roger 90
 - **Merge**: PR #71 merged 18h26 + PR #72 merged 18h55 (merge 506d9d4) — V5 EM PRODUCAO (vercel /api/resume-tailor 400 = rota viva, site 200); branches apagadas, worktree p418 removido
 - Pendencia restante: post C Dogwalk oculto aguarda release explicita
-- 4 commits no dia · push bare+origin OK · HEAD: 506d9d4
+- 4 commits no dia · push bare+origin OK · HEAD: `506d9d4`
 
 ### Sessão 03/09 — Resume Tailor v4 (modal + PDF + anti-422)
 - **feat**: modal V4 integrado ao Footer — botão, wiring, dicionário i18n, testes (`4950b5c`)
