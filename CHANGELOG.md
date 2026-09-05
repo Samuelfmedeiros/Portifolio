@@ -1,5 +1,13 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-04] — V5 + #418 merged em produção (PRs #71/#72)
+- **perf(resume-tailor) V5**: match card no PDF, skills agrupadas, painel de diff, ajv pin (bc010fc) — 344/344 testes + E2E desktop/mobile com API real · Roger 100
+- **fix(hydration) #418**: new Date() fora do JSX + timeZone UTC pinado (5c1b754) — CI 9/9 · Roger 90
+- **merge**: PR #71 (18h26) + PR #72 (18h55) (506d9d4) — V5 em produção no Vercel; branches apagadas
+- 4 commits · push bare+origin OK · HEAD: 506d9d4
+
+
+
 ## [2026-09-03] — Resume Tailor V4 (perf-bundle) + timezone #418
 - **fix(resume-tailor)**: anti-422 — normalizeStr (travessões/URL) + sanitizeResumeHard merge CV imutável (`8339399`); PDF layout 1 página + tailoring da vaga + placeholder (`409f3ff`); modal V4 integrado ao Footer (`4950b5c`); fix build brandColors.ts/jspdf (`07821c5`); perf corrida paralela modelos free, latência 28s→18s (`3c1572a`)
 - **qa**: 332/332 testes, E2E desktop+mobile 0 pageerrors, deploy Vercel Ready — aguardando aprovação visual p/ merge

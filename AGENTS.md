@@ -31,6 +31,14 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
 - **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
 
+
+### Sessão 04/09 — V5 + #418 merged em produção (PRs #71/#72)
+- **perf(resume-tailor) V5** (commit bc010fc): match card no PDF, skills agrupadas, painel de diff, ajv pin 6.12.6 — 344/344 testes WSL + E2E PASS desktop/mobile com API real (evidencias output/resume-tailor-shots/2026-09-04-v5/) · Roger R1 nota 100
+- **fix(hydration) #418** (commit 5c1b754): remover new Date() do JSX (Footer) + pinar timeZone UTC (BlogSection/ProjectHangar) — CI 9/9 + Roger 90
+- **Merge**: PR #71 merged 18h26 + PR #72 merged 18h55 (merge 506d9d4) — V5 EM PRODUCAO (vercel /api/resume-tailor 400 = rota viva, site 200); branches apagadas, worktree p418 removido
+- Pendencia restante: post C Dogwalk oculto aguarda release explicita
+- 4 commits no dia · push bare+origin OK · HEAD: 506d9d4
+
 ### Sessão 03/09 — Resume Tailor v4 (modal + PDF + anti-422)
 - **feat**: modal V4 integrado ao Footer — botão, wiring, dicionário i18n, testes (`4950b5c`)
 - **fix**: PDF layout + tailoring da vaga + placeholder (`409f3ff`); anti-422 — normalizeStr (travessões/URL) + sanitizeResumeHard no merge de CV (`8339399`)
