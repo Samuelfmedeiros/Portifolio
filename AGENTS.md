@@ -150,6 +150,20 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - `src/test/` — Vitest setup + mocks
 - `src/components/MiniGames/` — Código dos 5 jogos (React)
 
+### Resume Tailor AI (31/08/2026 — commitado, push pendente de aprovação visual)
+- **NOTA:** critic 100/100, security 100/100, painel travou por 9Router (UnknownError upstream)
+- **PR:** em breve
+Feature "Baixar Currículo Personalizado" — IA reescreve o CV pra vaga → PDF com cores da marca.
+- `src/app/api/resume-tailor/route.ts` — API `POST /api/resume-tailor` (OpenRouter + fallback Arachne; rate limit 3/min; guardrails)
+- `src/lib/resumeData.ts` — CV estruturado PT/EN (dados imutáveis)
+- `src/lib/resumePdf.ts` — gerador PDF jsPDF ATS-friendly (`generateResumePdf(r, locale, theme?)`)
+- `src/lib/brandColors.ts` — detecção determinística de marca → cores do PDF (mapa curado ~45 marcas; LLM NUNCA escolhe cor)
+- `src/lib/resumeGuardrails.ts` — `looksLikeInjection()` (blocklist), `validateResumeOutput()` (dados imutáveis), `parseLLMJson()`
+- `src/components/ResumeTailorModal.tsx` — modal textarea → gera → baixa PDF
+- Testes: `resumeGuardrails.test.ts` (26), `brandColors.test.ts` (9), `resumePdf.test.ts` (5), `ResumeTailorModal.test.tsx` (5)
+- **PITFALL:** testes rodam DENTRO do WSL (`wsl -e bash -lc 'cd ~/projetos/portifolio && pnpm vitest run ...'`) — node_modules é Linux; vitest pelo Windows falha (rolldown WASI binding).
+- Detalhes: `docs/plans/2026-08-30-resume-tailor-ai.md`
+
 **Experiência do usuário:** Parallax scene integrada — grid + cockpit SVG + HUD panels + partículas formam a entrada. Scroll suave com parallax layers (L0-L3). Navegação por scroll + keyboard shortcuts (desktop). Tema escuro ciano+preto com consistência visual cinematográfica.
 
 **URL:** https://samuelmedeiros.vercel.app
