@@ -182,7 +182,7 @@ export const dict = {
     "footer.copy.email": "Copiar email",
     "footer.copy.tooltip": "Clique para copiar",
     "footer.copied": "Copiado!",
-    "footer.copyright": "© Samuel Medeiros",
+    "footer.copyright": "Samuel Medeiros",
     "footer.updated": "Última atualização",
     "footer.version": "Portifolio Samuel v2.0",
 
@@ -519,7 +519,7 @@ export const dict = {
     "footer.copy.email": "Copy email",
     "footer.copy.tooltip": "Click to copy",
     "footer.copied": "Copied!",
-    "footer.copyright": "© Samuel Medeiros",
+    "footer.copyright": "Samuel Medeiros",
     "footer.updated": "Last updated",
     "footer.version": "Portifolio Samuel v2.0",
 
