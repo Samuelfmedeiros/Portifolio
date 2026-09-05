@@ -1,7 +1,5 @@
 "use client";
 
-import { useIdleHydration } from "@/hooks/useIdleHydration";
-
 import { ParallaxBackground } from "./ParallaxBackground";
 import { PerspectiveGrid } from "./PerspectiveGrid";
 import { StarField } from "./StarField";
@@ -21,14 +19,6 @@ import { SpeedLines } from "./SpeedLines";
  *   L4: CockpitBorders       (bordas decorativas do visor)
  */
 export function CockpitBackground() {
-  // Perf 01/09/2026: fundo é aria-hidden / não-LCP — adiar a hidratação das 6
-  // camadas de animação (canvas rAF, GSAP, framer repeat) para o idle do browser.
-  // Tira ~26s de main-thread work + 20 long tasks do path crítico (perf 58->90+).
-  const ready = useIdleHydration();
-  if (!ready) {
-    // Fundamentado: body já tem var(--bg-primary) — sem FOUC enquanto espera.
-    return <div aria-hidden="true" className="fixed inset-0 -z-10 overflow-hidden" />;
-  }
   return (
     <div className="fixed inset-0 -z-10 overflow-hidden" aria-hidden="true">
       {/* L0: Canvas base — estrelas, nebulosas, shooting stars, mouse parallax */}
