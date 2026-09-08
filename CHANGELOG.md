@@ -2,6 +2,16 @@
 
 
 
+# 📋 CHANGELOG — Portifolio Samuel
+
+
+## [2026-09-07] — CV security: bloqueio de PDFs diretos + rule propagation
+- **security(cv)** (`f7ecbbf`): proxy.ts (Next 16) 404 nos PDFs diretos do CV — download só via /api/download-cv (consent + rate limit + log LGPD)
+- **security** (`92ed8cd`): regra opengrep cv-file-serve-route (scanner semanal cobre runtime)
+- 2 commits no dia · push bare OK · HEAD: `92ed8cd`
+
+## [2026-09-05] — Revert V5 (resume-tailor) via merge + fix copyright footer
+
 ## [2026-09-05] — Revert V5 (resume-tailor) via merge + fix copyright footer
 - **merge**: Revert "Merge PR #72" commitado 03:55 na outra maquina (4dd1a99) — V5 resume-tailor desfeito (route/components/lib removidos); merge local sem conflitos
 - **fix(ui)** (`ec2fc76`): copyright duplicado no footer — dicionario ja tem © via JSX Footer (feat #31)

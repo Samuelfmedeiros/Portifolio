@@ -198,6 +198,30 @@ Next.js 16 · Turbopack · React 19 · Tailwind 4 · Framer Motion · Playwright
 - `NEXT_PUBLIC_ENABLE_SPLASH` — ~~obsoleto, splash removido 14/06/2026~~. Mantido para compatibilidade.
 - ProfileSection: L0 (grid) e L1 (cockpit) com `initial/animate` para fade-in de entrada
 
+## 🔒 CV Downloads — proxy 404 (07/09/2026)
+
+Os PDFs do CV em `public/` eram baixáveis por URL direta **sem modal, sem log,
+sem consentimento LGPD** (HTTP 200). Fix A do caso CV 07/09:
+
+- `src/proxy.ts` (**Next 16 renomeou `middleware.ts` → `proxy.ts`**; o proxy intercepta
+  assets de `public/`) → **404 antes do file system** nos 2 paths de PDF.
+- PDFs permanecem em `public/` (a API os lê via `fs`); **único caminho de download:
+  `DownloadModal` → `POST /api/download-cv`** (consent + rate limit 5/min + log PG + Telegram).
+- Commit `f7ecbbf`; teste `src/test/proxy.test.ts` (5 casos). E2E produção: PDF PT/EN 404,
+  site 200, API sem consent 400.
+- ⚠️ Links externos para os PDFs diretos quebraram por design (era o objetivo).
+- Padrão A+B+C anti-probe replicado: Capivara `a6cb680` (UA guard nos endpoints públicos,
+  escape `X-Site-Auth`); Ronda com regra de higiene (smoke que insere em produção apaga
+  na mesma rodada). Detalhes: skill `portfolio-code` → `references/cv-download-security.md`.
+
+
+## Sessão 2026-09-07 (fim de dia) — CV security: bloqueio de PDFs diretos + rule propagation
+
+- **security(cv)**: PDFs do currículo (`/Samuel_Andrade_2026.pdf`, `/Samuel_Andrade_Resume_2026.pdf`) respondiam 200 direto da Vercel sem modal/log/consent LGPD — `src/proxy.ts` (Next 16, ex-middleware) intercepta os 2 paths e devolve 404 antes do file system; download legítimo só via `POST /api/download-cv` (consent + rate limit + log) (`f7ecbbf`).
+- **security**: regra opengrep `cv-file-serve-route` (`.security/opengrep-rules.yml`) — padrão do caso propagado; scanner semanal cobre runtime (`92ed8cd`).
+- Limpeza Vercel (32 deploys órfãos) + cron de storage dia 8 já documentados no plano `2026-09-07-cv-download-seguranca`.
+- 2 commits no dia · push bare OK · HEAD: `92ed8cd`
+
 ## CI/CD
 GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel manual via CLI (`vercel --token "$VERCEL_TOKEN" --prod`). Automático ainda não configurado. Produção local :3001 + staging :3000.
 
