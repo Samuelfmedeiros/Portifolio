@@ -10,6 +10,11 @@
 - **security** (`92ed8cd`): regra opengrep cv-file-serve-route (scanner semanal cobre runtime)
 - 2 commits no dia · push bare OK · HEAD: `92ed8cd`
 
+## [2026-09-08] — dia leve (sem commits)
+- 0 commits de código hoje (último: `1a0a14a` 05/09); rotina fim-de-dia docs
+- working tree dirty de outros agentes não commitada de propósito (findings, artifacts test-loop, plans resume-tailor, brandColors.test.ts, output/, playwright-report)
+- push bare+origin OK
+
 ## [2026-09-05] — Revert V5 (resume-tailor) via merge + fix copyright footer
 
 ## [2026-09-05] — Revert V5 (resume-tailor) via merge + fix copyright footer

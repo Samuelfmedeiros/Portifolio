@@ -22,6 +22,14 @@ entrega (código, UI, pipeline, feature, fix), rodar SEMPRE o loop de testes com
 
 Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega completa.
 
+
+## Sessão 2026-09-08 (fim de dia) — dia leve (sem commits; rotina fim-de-dia)
+
+- 0 commits de código hoje (último: `1a0a14a` 05/09). Rotina fim-de-dia: seção de sessão + CHANGELOG.
+- Working tree dirty de outros agentes NÃO commitada de propósito (padrão): findings bug-hunter 31/08, artifacts do test-loop (.loop-*, debug-*.mjs, approval_video.js), docs/plans/2026-08-30-resume-tailor-ai.md, src/lib/brandColors.test.ts, output/, playwright-report
+- push bare+origin OK (já executado pela rotina do dia)
+
+
 ## 📍 Estado Atual
 - **Branch:** `master`
 - **Último commit:** `215acd5` — chore(csp): remove dead code img.seu.pet do img-src (same-origin consolidado) — **pusheado 30/08, produção validada**
