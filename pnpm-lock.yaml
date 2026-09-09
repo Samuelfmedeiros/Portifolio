@@ -31,8 +31,8 @@ importers:
         specifier: ^1.31.0
         version: 1.31.0(react@19.2.7)
       mercadopago:
-        specifier: ^3.3.0
-        version: 3.3.0
+        specifier: ^3.6.0
+        version: 3.6.0
       next:
         specifier: ^16.3.0
         version: 16.3.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -5145,8 +5145,8 @@ packages:
   memoize-one@6.0.0:
     resolution: {integrity: sha512-rkpe71W0N0c0Xz6QD0eJETuWAJGnJ9afsl1srmwPrI+yBCkge5EycXXbYRyvL29zZVUWQCY7InPRCv3GDXuZNw==}
 
-  mercadopago@3.3.0:
-    resolution: {integrity: sha512-TVtMopL6+CQOzU9hIVGVYxTO1DwOL9x3OmSdh7Qi/tawoLMSooQM0m/ttCC67vYsje+rjgZqNPoT9ItDQPm6Pg==}
+  mercadopago@3.6.0:
+    resolution: {integrity: sha512-Dk47c/bgRPdbMPcRvopitgZq4jOujMfeMf/msWNr942QQ4p+CDBhhov+059UWhsoyGjdizzJaZeyveApoEgDBg==}
     engines: {node: '>=18'}
 
   merge-descriptors@2.0.0:
@@ -12392,7 +12392,7 @@ snapshots:
 
   memoize-one@6.0.0: {}
 
-  mercadopago@3.3.0: {}
+  mercadopago@3.6.0: {}
 
   merge-descriptors@2.0.0: {}
 
