@@ -41,7 +41,7 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 ### Sessão 09/09 — dependabot deps-dev integrado (PRs #74-#82)
 - **deps-dev** (dependabot): 9 PRs integrados — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, @testing-library/user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, @testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
-- merge local ao master (934584e) + merges dos PRs no GitHub (#75/#77/#78) puxados via pull --ff-only · HEAD: `8e2367e`
+- merge local ao master (934584e) + merges dos PRs no GitHub (#75/#77/#78) puxados via pull --ff-only; local realinhado ao origin por FF (PRs #55/#61/#75/#77/#78 + #74-#82) · HEAD: `8e2367e`
 
 ### Sessão 05/09 — Revert V5 (aplicado via merge) + fix copyright footer
 - **merge** do remote: Revert "Merge PR #72" (4dd1a99, 03:55 outra máquina) — V5 resume-tailor desfeito; fix copyright (ec2fc76) preservado no auto-merge, sem conflitos
@@ -233,10 +233,6 @@ sem consentimento LGPD** (HTTP 200). Fix A do caso CV 07/09:
 - **security**: regra opengrep `cv-file-serve-route` (`.security/opengrep-rules.yml`) — padrão do caso propagado; scanner semanal cobre runtime (`92ed8cd`).
 - Limpeza Vercel (32 deploys órfãos) + cron de storage dia 8 já documentados no plano `2026-09-07-cv-download-seguranca`.
 - 2 commits no dia · push bare OK · HEAD: `92ed8cd`
-
-## Sessão 2026-09-09 (fim de dia) — dependabot deps-dev PRs #74-#82
-- **deps-dev**: 9 bumps integrados via dependabot — framer-motion 13.2, vitest 5.0.0, mercadopago 3.6.0, vercel 59.11.7, eslint-config-next 16.3.4, netlify-cli 27.4.3, user-event 14.6.7, jest-dom 7.0.1, setup-python 7 — merge 934584e.
-- Local realinhado ao origin por FF (11 commits: PRs #55/#61/#75/#77/#78 + #74-#82); push origin OK. 12 commits no dia · HEAD: `8e2367e`.
 
 ## CI/CD
 GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel manual via CLI (`vercel --token "$VERCEL_TOKEN" --prod`). Automático ainda não configurado. Produção local :3001 + staging :3000.
