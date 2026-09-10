@@ -12,7 +12,14 @@
  * mesmo sem ter clicado "aceitar" no banner. Aumenta cobertura de coleta.
  */
 
-const UMAMI_SCRIPT_SRC = "https://capivara.seu.pet/api/umami/script.js";
+/**
+ * ?v=2 (10/09): cache-bust do edge. O Cloudflare guardou por ate 24h uma copia
+ * ENVENENADA do script.js (CORP: same-origin, pre-fix 42e5a8b do Capivara) na URL
+ * exata; com COEP require-corp da propria pagina, o browser baixava mas nao
+ * executava (ERR_BLOCKED_BY_RESPONSE). URL nova = cache key nova = origin fresco
+ * com CORP cross-origin. Nao remover sem motivo documentado (TRAP #10).
+ */
+const UMAMI_SCRIPT_SRC = "https://capivara.seu.pet/api/umami/script.js?v=2";
 const UMAMI_WEBSITE_ID = "39676cee-8416-4a33-ba06-cbc7af177c27";
 
 /** Injeta o script do Umami dinamicamente (idempotente — não duplica). */
