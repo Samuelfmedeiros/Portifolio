@@ -32,12 +32,16 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 ## 📍 Estado Atual
 - **Branch:** `master`
-- **Último commit:** `215acd5` — chore(csp): remove dead code img.seu.pet do img-src (same-origin consolidado) — **pusheado 30/08, produção validada**
+- **Último commit:** `8e2367e` — merge dependabot deps-dev PRs #74-#82 (09/09, push bare+origin)
 - **Status:** ✅ Funcional — produção em Vercel · CI deploy success (215acd52) · Playwright VRT success (2ª rodada)
 - **Testes:** 269/269 passando (validado 30/08 12:47 WSL pnpm test:run)
 - **Lint:** 0 errors, 0 warnings
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
 - **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
+
+### Sessão 09/09 — dependabot deps-dev integrado (PRs #74-#82)
+- **deps-dev** (dependabot): 9 PRs integrados — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, @testing-library/user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, @testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
+- merge local ao master (934584e) + merges dos PRs no GitHub (#75/#77/#78) puxados via pull --ff-only · HEAD: `8e2367e`
 
 ### Sessão 05/09 — Revert V5 (aplicado via merge) + fix copyright footer
 - **merge** do remote: Revert "Merge PR #72" (4dd1a99, 03:55 outra máquina) — V5 resume-tailor desfeito; fix copyright (ec2fc76) preservado no auto-merge, sem conflitos
