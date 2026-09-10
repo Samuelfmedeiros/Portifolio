@@ -5,6 +5,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
 
+## [2026-09-09] — dependabot deps-dev PRs #74-#82
+- **deps-dev**: 9 bumps (framer-motion 13.2, vitest 5.0.0, mercadopago 3.6.0, vercel 59.11.7, eslint-config-next 16.3.4, netlify-cli 27.4.3, user-event 14.6.7, jest-dom 7.0.1, setup-python 7) — merge 934584e
+- 12 commits no dia · push bare+origin OK · HEAD: `8e2367e`
+
 ## [2026-09-07] — CV security: bloqueio de PDFs diretos + rule propagation
 - **security(cv)** (`f7ecbbf`): proxy.ts (Next 16) 404 nos PDFs diretos do CV — download só via /api/download-cv (consent + rate limit + log LGPD)
 - **security** (`92ed8cd`): regra opengrep cv-file-serve-route (scanner semanal cobre runtime)

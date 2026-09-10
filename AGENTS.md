@@ -230,6 +230,10 @@ sem consentimento LGPD** (HTTP 200). Fix A do caso CV 07/09:
 - Limpeza Vercel (32 deploys órfãos) + cron de storage dia 8 já documentados no plano `2026-09-07-cv-download-seguranca`.
 - 2 commits no dia · push bare OK · HEAD: `92ed8cd`
 
+## Sessão 2026-09-09 (fim de dia) — dependabot deps-dev PRs #74-#82
+- **deps-dev**: 9 bumps integrados via dependabot — framer-motion 13.2, vitest 5.0.0, mercadopago 3.6.0, vercel 59.11.7, eslint-config-next 16.3.4, netlify-cli 27.4.3, user-event 14.6.7, jest-dom 7.0.1, setup-python 7 — merge 934584e.
+- Local realinhado ao origin por FF (11 commits: PRs #55/#61/#75/#77/#78 + #74-#82); push origin OK. 12 commits no dia · HEAD: `8e2367e`.
+
 ## CI/CD
 GitHub Actions → lint → test (vitest --run) → build. Deploy Vercel manual via CLI (`vercel --token "$VERCEL_TOKEN" --prod`). Automático ainda não configurado. Produção local :3001 + staging :3000.
 
