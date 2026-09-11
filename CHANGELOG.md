@@ -1,5 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-10] — fix cache-bust do tracker Umami
+- **fix(umami)** (`a07a6e9`): cache-bust `?v=2` no URL do script.js do tracker — script.js immutable servia versão velha
+- 1 commit no dia · HEAD: `a07a6e9`
+
+
 
 ## [2026-09-09] — dependabot deps-dev integrado (PRs #74-#82)
 - **deps-dev** (dependabot): 9 PRs — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
