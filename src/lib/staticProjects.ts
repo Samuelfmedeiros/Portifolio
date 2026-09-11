@@ -73,6 +73,23 @@ export const STATIC_PROJECTS: Repo[] = [
     hasDemo: true,
     imageUrl: img("/projects/lifelog.webp"),
   },
+  {
+    id: 999010,
+    name: "storydesk",
+    description:
+      "Storydesk — sua mesa de histórias: daylog -> rascunho -> capa AI -> publicação com aprovação humana (o motor editorial do LifeLog).",
+    html_url: "https://github.com/Samuelfmedeiros/storydesk",
+    homepage: "",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "Python",
+    topics: ["featured", "python", "cli", "automation"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #1e1b4b 0%, #4c1d95 50%, #0f172a 100%)",
+    hasDemo: false,
+    imageUrl: img("/projects/storydesk.webp"),
+  },
   // Games — ordem definida pelo Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge
   {
     id: 1001,
