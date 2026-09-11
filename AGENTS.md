@@ -289,3 +289,9 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Referências:** OWASP Top 10:2025, HttpArmor, OWASP Web Checklist
 - **Cron:** `Portfolio Security Watchdog` (diário, 24h, silent unless issues)
 - **Doc completo:** `docs/SEGURANCA.md`
+
+## 11/09 — Card storydesk com capa + pitfall PostCard/tags do LifeLog
+
+- **Storydesk na seção Projetos:** repo público entra sozinho no site (merge `getRepos()` da API GitHub com STATIC_PROJECTS, ISR 30min) — não foi deploy sem aprovação. Card sem capa = sem entrada estática. Fix: `public/projects/storydesk.webp` (FLUX Schnell do worker LifeLog, abstrata, 1280×720, 48KB, gate VLM ok) + entrada em `staticProjects.ts` — commit `4121e55` na master, CI verde (gitleaks/security/e2e), deploy no ar.
+- **Posts sem capa nas tags do LifeLog:** `tag/[slug].astro` e `en/tag/[slug].astro` não passavam `cover`/`icon` pro PostCard (placeholder silencioso). Fix `05c596a` (repo lifelog) — 42 capas servindo em `/tag/arachne/`.
+- **Pitfall staging alheio:** commitar com `git add -A` em repo compartilhado puxa mudanças staged de outra sessão — commitar por PATH explícito e verificar `git show --stat` do HEAD logo após.
