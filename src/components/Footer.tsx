@@ -8,6 +8,7 @@ import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
 import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { DownloadModal } from "./DownloadModal";
+import { ResumeTailorModal } from "./ResumeTailorModal";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 
@@ -218,6 +219,7 @@ export function Footer() {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
   const { track } = useAnalytics();
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  const [showTailorModal, setShowTailorModal] = useState(false);
   const { t, locale } = useLanguage();
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
 
@@ -361,6 +363,12 @@ export function Footer() {
             >
               {t("footer.cv.download")}
             </button>
+            <button
+              onClick={() => { setShowTailorModal(true); track({ type: "external_link", url: "cv-tailor", label: t("resume.tailor.title") }); }}
+              className="text-xs font-mono text-[var(--accent)] hover:opacity-80 transition-opacity block py-1.5"
+            >
+              ✦ {t("resume.tailor.title")}
+            </button>
             {/* Support buttons — discreet, no consent needed */}
             <div className="flex items-center gap-3 mt-3">
               {BMC_CONFIG.enabled && (
@@ -437,6 +445,10 @@ export function Footer() {
       <DownloadModal
         open={showDownloadModal}
         onClose={() => setShowDownloadModal(false)}
+      />
+      <ResumeTailorModal
+        open={showTailorModal}
+        onClose={() => setShowTailorModal(false)}
       />
     </footer>
   );
