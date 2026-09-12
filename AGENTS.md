@@ -39,6 +39,13 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
 - **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
 
+### Sessão 11/09 — CI hardening (autonomia, cron Portifólio)
+- **chore(ci)**: branch `chore/dependabot-cooldown-pin-actions` (commit `eb02ada`, LOCAL — aguarda OK pra abrir PR/merge) — resolve issues #52/#53 (opengrep, 16/08):
+  - `.github/dependabot.yml`: `cooldown: { default-days: 7 }` nos 2 ecossistemas (npm, github-actions) — suportado desde 14/07/2026
+  - 4 workflows (deploy, gitleaks, security-scan, playwright): 12 `uses:` pinados por SHA de commit (tag v* mantida em comentário); SHAs via API tags c/ deref de tag anotada, 5/6 confirmados por ls-remote
+  - YAML validado (pyyaml) nos 5 arquivos; diff cirúrgico (14+/12-); critic build/vitest N/A (mudança só de CI-config)
+- Sites 200 (portifolio.seu.pet + vercel.app; 000 inicial = DNS local flaky, não queda); CI master verde; higiene cv_downloads: POST vazio → 403 UA guard, count 40 estável, nada inserido
+
 ### Sessão 09/09 — dependabot deps-dev integrado (PRs #74-#82)
 - **deps-dev** (dependabot): 9 PRs integrados — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, @testing-library/user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, @testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
 - merge local ao master (934584e) + merges dos PRs no GitHub (#75/#77/#78) puxados via pull --ff-only; local realinhado ao origin por FF (PRs #55/#61/#75/#77/#78 + #74-#82) · HEAD: `8e2367e`
@@ -289,3 +296,9 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Referências:** OWASP Top 10:2025, HttpArmor, OWASP Web Checklist
 - **Cron:** `Portfolio Security Watchdog` (diário, 24h, silent unless issues)
 - **Doc completo:** `docs/SEGURANCA.md`
+
+## 11/09 — Card storydesk com capa + pitfall PostCard/tags do LifeLog
+
+- **Storydesk na seção Projetos:** repo público entra sozinho no site (merge `getRepos()` da API GitHub com STATIC_PROJECTS, ISR 30min) — não foi deploy sem aprovação. Card sem capa = sem entrada estática. Fix: `public/projects/storydesk.webp` (FLUX Schnell do worker LifeLog, abstrata, 1280×720, 48KB, gate VLM ok) + entrada em `staticProjects.ts` — commit `4121e55` na master, CI verde (gitleaks/security/e2e), deploy no ar.
+- **Posts sem capa nas tags do LifeLog:** `tag/[slug].astro` e `en/tag/[slug].astro` não passavam `cover`/`icon` pro PostCard (placeholder silencioso). Fix `05c596a` (repo lifelog) — 42 capas servindo em `/tag/arachne/`.
+- **Pitfall staging alheio:** commitar com `git add -A` em repo compartilhado puxa mudanças staged de outra sessão — commitar por PATH explícito e verificar `git show --stat` do HEAD logo após.
