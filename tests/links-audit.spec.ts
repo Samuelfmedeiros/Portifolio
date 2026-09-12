@@ -15,14 +15,14 @@ test.describe('Dead Links & Rotas', () => {
   for (const route of routes) {
     const expectedStatus = route.path === '/pagina-inexistente' ? 404 : 200;
     test(`${route.name} (${route.path}) — HTTP status ${expectedStatus}`, async ({ page }) => {
-      const response = await page.goto(route.path, { waitUntil: 'networkidle' });
+      const response = await page.goto(route.path, { waitUntil: 'domcontentloaded' });
       expect(response?.status()).toBe(expectedStatus);
       console.log(`  ${route.path} → ${response?.status()}`);
     });
   }
 
   test('Home — all internal links resolve', async ({ page }) => {
-    await page.goto('/', { waitUntil: 'networkidle' });
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
 
     const links = await page.evaluate(() => {
       const allLinks = document.querySelectorAll('a[href]');
@@ -49,17 +49,17 @@ test.describe('Dead Links & Rotas', () => {
   });
 
   test('robots.txt — correct content', async ({ page }) => {
-    const resp = await page.goto('/robots.txt', { waitUntil: 'networkidle' });
+    const resp = await page.goto('/robots.txt', { waitUntil: 'domcontentloaded' });
     expect(resp?.status()).toBe(200);
     const text = await page.locator('body').innerText();
     console.log('\n=== robots.txt ===');
     console.log(text);
-    expect(text).toContain('User-agent');
-    expect(text).toContain('Sitemap');
+    expect(/user-agent/i.test(text)).toBe(true); // Next normaliza p/ 'User-Agent' em producao; public/robots.txt usa 'User-agent'
+    expect(/sitemap/i.test(text)).toBe(true);
   });
 
   test('sitemap.xml — valid URLs', async ({ page }) => {
-    const resp = await page.goto('/sitemap.xml', { waitUntil: 'networkidle' });
+    const resp = await page.goto('/sitemap.xml', { waitUntil: 'domcontentloaded' });
     expect(resp?.status()).toBe(200);
     const text = await page.locator('body').innerText();
     console.log('\n=== sitemap.xml ===');

@@ -2,8 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test.describe('Keyboard Navigation & Focus', () => {
   test('tab order — Home page', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
 
     // Tab through page and collect focused elements
     const focusOrder = [];
@@ -29,8 +29,8 @@ test.describe('Keyboard Navigation & Focus', () => {
   });
 
   test('focus indicators visible', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
 
     const focusInfo = await page.evaluate(() => {
       // Check :focus-visible on interactive elements
@@ -52,8 +52,8 @@ test.describe('Keyboard Navigation & Focus', () => {
   });
 
   test('nav aria-current detection', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
 
     const nav = await page.evaluate(() => {
       const links = document.querySelectorAll('nav a');

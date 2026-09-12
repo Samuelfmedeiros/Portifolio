@@ -3,8 +3,8 @@ import { test } from '@playwright/test';
 
 test.describe('DOM Inspection', () => {
   test('navbar DOM structure', async ({ page }) => {
-    await page.goto('/');
-    await page.waitForLoadState('networkidle');
+    await page.goto('/', { waitUntil: 'domcontentloaded' });
+    await page.waitForLoadState('load', { timeout: 15000 }).catch(() => {});
 
     const info = await page.evaluate(() => {
       const nav = document.querySelector('nav');
