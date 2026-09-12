@@ -35,7 +35,7 @@ importers:
         version: 3.6.0
       next:
         specifier: ^16.3.0
-        version: 16.3.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
+        version: 16.3.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@26.4.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
       react:
         specifier: 19.2.7
         version: 19.2.7
@@ -44,7 +44,7 @@ importers:
         version: 19.2.7(react@19.2.7)
       stripe:
         specifier: ^22.4.0
-        version: 22.4.0(@types/node@26.2.0)
+        version: 22.4.0(@types/node@26.4.1)
     devDependencies:
       '@axe-core/playwright':
         specifier: ^4.12.1
@@ -60,7 +60,7 @@ importers:
         version: 10.4.1
       '@testing-library/jest-dom':
         specifier: ^7.0.1
-        version: 7.0.1(@testing-library/dom@10.4.1)(vitest@5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)))
+        version: 7.0.1(@testing-library/dom@10.4.1)(vitest@5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)))
       '@testing-library/react':
         specifier: ^16.3.3
         version: 16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)
@@ -68,8 +68,8 @@ importers:
         specifier: ^14.6.7
         version: 14.6.7(@testing-library/dom@10.4.1)
       '@types/node':
-        specifier: ^26.2.0
-        version: 26.2.0
+        specifier: ^26.4.1
+        version: 26.4.1
       '@types/react':
         specifier: ^19.2.18
         version: 19.2.18
@@ -78,7 +78,7 @@ importers:
         version: 19.2.4(@types/react@19.2.18)
       '@vitejs/plugin-react':
         specifier: ^6.1.1
-        version: 6.1.1(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
+        version: 6.1.1(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
       eslint:
         specifier: ^9.39.5
         version: 9.39.5(jiti@2.7.0)
@@ -90,7 +90,7 @@ importers:
         version: 29.1.1
       netlify-cli:
         specifier: ^27.5.0
-        version: 27.5.0(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(picomatch@4.0.7)(srvx@0.11.16)
+        version: 27.5.0(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(picomatch@4.0.7)(srvx@0.11.16)
       playwright:
         specifier: ^1.62.1
         version: 1.62.1
@@ -105,7 +105,7 @@ importers:
         version: 59.11.7(@emnapi/core@1.11.1)(@emnapi/runtime@1.11.3)
       vitest:
         specifier: ^5.0.0
-        version: 5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
+        version: 5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
 
 packages:
 
@@ -2250,8 +2250,8 @@ packages:
   '@types/node@20.11.0':
     resolution: {integrity: sha512-o9bjXmDNcF7GbM4CNQpmi+TutCgap/K3w1JyKgxAjqx41zp9qlIAVFi0IhCNsJcXolEqLWhbFbEeL0PvYm4pcQ==}
 
-  '@types/node@26.2.0':
-    resolution: {integrity: sha512-5IviulTZeRNp2vAJ514cc/HUlY5nZ9fCbq9DMyC52BrhFZACo3nI0R7qBxhQmo/d27NFe96ur/b7Wwxklda+kg==}
+  '@types/node@26.4.1':
+    resolution: {integrity: sha512-k97ENvZWtvA6yqz5/FS6a7duDgOPEeOQOc2iKS/nY6mX6qJUKtLnWzQS+Xj6tXweyj6ZcTAK2Qecetnvi9nCLA==}
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
@@ -7834,12 +7834,12 @@ snapshots:
 
   '@import-maps/resolve@2.0.0': {}
 
-  '@inquirer/external-editor@1.0.3(@types/node@26.2.0)':
+  '@inquirer/external-editor@1.0.3(@types/node@26.4.1)':
     dependencies:
       chardet: 2.2.0
       iconv-lite: 0.7.3
     optionalDependencies:
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
 
   '@isaacs/fs-minipass@4.0.1':
     dependencies:
@@ -7989,7 +7989,7 @@ snapshots:
       yaml: 2.9.0
       yargs: 17.7.3
 
-  '@netlify/build@36.4.6(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(picomatch@4.0.7)':
+  '@netlify/build@36.4.6(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(picomatch@4.0.7)':
     dependencies:
       '@bugsnag/js': 8.10.0
       '@netlify/blobs': 11.0.3(supports-color@11.0.0)
@@ -8029,7 +8029,7 @@ snapshots:
       semver: 7.8.5
       supports-color: 11.0.0
       terminal-link: 4.0.0
-      ts-node: 10.9.2(@types/node@26.2.0)(typescript@5.9.3)
+      ts-node: 10.9.2(@types/node@26.4.1)(typescript@5.9.3)
       typescript: 5.9.3
       yaml: 2.9.0
       yargs: 17.7.3
@@ -8100,7 +8100,7 @@ snapshots:
       parse-gitignore: 2.0.0
       semver: 7.8.5
 
-  '@netlify/dev@5.0.5(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16)':
+  '@netlify/dev@5.0.5(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16)':
     dependencies:
       '@netlify/ai': 1.0.1
       '@netlify/blobs': 11.0.3(supports-color@11.0.0)
@@ -8110,7 +8110,7 @@ snapshots:
       '@netlify/edge-functions-dev': 2.0.1
       '@netlify/functions-dev': 2.0.5
       '@netlify/headers': 3.0.1
-      '@netlify/images': 2.0.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16)
+      '@netlify/images': 2.0.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16)
       '@netlify/redirects': 4.0.2
       '@netlify/runtime': 5.0.3
       '@netlify/static': 4.0.0
@@ -8235,9 +8235,9 @@ snapshots:
     dependencies:
       '@netlify/headers-parser': 10.1.1
 
-  '@netlify/images@2.0.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16)':
+  '@netlify/images@2.0.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16)':
     dependencies:
-      ipx: 3.1.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16)
+      ipx: 3.1.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16)
     transitivePeerDependencies:
       - '@azure/app-configuration'
       - '@azure/cosmos'
@@ -9028,7 +9028,7 @@ snapshots:
       picocolors: 1.1.1
       pretty-format: 27.5.1
 
-  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.1)(vitest@5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)))':
+  '@testing-library/jest-dom@7.0.1(@testing-library/dom@10.4.1)(vitest@5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)))':
     dependencies:
       '@adobe/css-tools': 4.5.0
       '@testing-library/dom': 10.4.1
@@ -9038,7 +9038,7 @@ snapshots:
       picocolors: 1.1.1
       redent: 3.0.0
     optionalDependencies:
-      vitest: 5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
+      vitest: 5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
 
   '@testing-library/react@16.3.3(@testing-library/dom@10.4.1)(@types/react-dom@19.2.4(@types/react@19.2.18))(@types/react@19.2.18)(react-dom@19.2.7(react@19.2.7))(react@19.2.7)':
     dependencies:
@@ -9089,7 +9089,7 @@ snapshots:
 
   '@types/http-proxy@1.17.17':
     dependencies:
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
 
   '@types/json-schema@7.0.15': {}
 
@@ -9099,7 +9099,7 @@ snapshots:
     dependencies:
       undici-types: 5.26.5
 
-  '@types/node@26.2.0':
+  '@types/node@26.4.1':
     dependencies:
       undici-types: 8.3.0
 
@@ -9690,19 +9690,19 @@ snapshots:
   '@vercel/vc-native-linux-x64@59.11.7':
     optional: true
 
-  '@vitejs/plugin-react@6.1.1(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))':
+  '@vitejs/plugin-react@6.1.1(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
+      vite: 8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
 
-  '@vitest/mocker@5.0.0(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))':
+  '@vitest/mocker@5.0.0(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))':
     dependencies:
       '@jridgewell/trace-mapping': 0.3.31
       '@vitest/spy': 5.0.0
       estree-walker: 3.0.3
       magic-string: 1.2.3
     optionalDependencies:
-      vite: 8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
+      vite: 8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
 
   '@vitest/spy@5.0.0': {}
 
@@ -11634,18 +11634,18 @@ snapshots:
 
   ini@4.1.1: {}
 
-  inquirer-autocomplete-prompt@1.4.0(inquirer@8.2.7(@types/node@26.2.0)):
+  inquirer-autocomplete-prompt@1.4.0(inquirer@8.2.7(@types/node@26.4.1)):
     dependencies:
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       figures: 3.2.0
-      inquirer: 8.2.7(@types/node@26.2.0)
+      inquirer: 8.2.7(@types/node@26.4.1)
       run-async: 2.4.1
       rxjs: 6.6.7
 
-  inquirer@8.2.7(@types/node@26.2.0):
+  inquirer@8.2.7(@types/node@26.4.1):
     dependencies:
-      '@inquirer/external-editor': 1.0.3(@types/node@26.2.0)
+      '@inquirer/external-editor': 1.0.3(@types/node@26.4.1)
       ansi-escapes: 4.3.2
       chalk: 4.1.2
       cli-cursor: 3.1.0
@@ -11673,7 +11673,7 @@ snapshots:
 
   ipaddr.js@2.5.0: {}
 
-  ipx@3.1.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16):
+  ipx@3.1.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16):
     dependencies:
       '@fastify/accept-negotiator': 2.1.0
       citty: 0.1.6
@@ -11686,7 +11686,7 @@ snapshots:
       listhen: 1.10.1(@parcel/watcher@2.5.6)(srvx@0.11.16)
       ofetch: 1.5.1
       pathe: 2.0.3
-      sharp: 0.35.4(@types/node@26.2.0)
+      sharp: 0.35.4(@types/node@26.4.1)
       svgo: 4.1.0
       ufo: 1.6.4
       unstorage: 1.17.5(@netlify/blobs@11.0.3)(@vercel/blob@2.8.0)
@@ -12438,22 +12438,22 @@ snapshots:
     dependencies:
       content-type: 2.1.0
 
-  netlify-cli@27.5.0(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(picomatch@4.0.7)(srvx@0.11.16):
+  netlify-cli@27.5.0(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(picomatch@4.0.7)(srvx@0.11.16):
     dependencies:
       '@fastify/static': 10.1.3
       '@netlify/ai': 1.0.1
       '@netlify/api': 15.1.2
       '@netlify/blobs': 11.0.3(supports-color@11.0.0)
-      '@netlify/build': 36.4.6(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(picomatch@4.0.7)
+      '@netlify/build': 36.4.6(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(picomatch@4.0.7)
       '@netlify/build-info': 11.3.0
       '@netlify/config': 25.2.3
-      '@netlify/dev': 5.0.5(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16)
+      '@netlify/dev': 5.0.5(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16)
       '@netlify/dev-utils': 6.0.1
       '@netlify/edge-bundler': 16.0.4
       '@netlify/edge-functions': 4.0.0
       '@netlify/edge-functions-bootstrap': 3.2.0
       '@netlify/headers-parser': 10.1.1
-      '@netlify/images': 2.0.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.2.0)(@vercel/blob@2.8.0)(srvx@0.11.16)
+      '@netlify/images': 2.0.1(@netlify/blobs@11.0.3)(@parcel/watcher@2.5.6)(@types/node@26.4.1)(@vercel/blob@2.8.0)(srvx@0.11.16)
       '@netlify/local-functions-proxy': 2.0.3
       '@netlify/redirect-parser': 16.1.1
       '@netlify/zip-it-and-ship-it': 15.5.0(supports-color@11.0.0)
@@ -12495,8 +12495,8 @@ snapshots:
       http-proxy: 1.18.1(debug@4.4.3)
       http-proxy-middleware: 3.0.7
       https-proxy-agent: 8.0.0
-      inquirer: 8.2.7(@types/node@26.2.0)
-      inquirer-autocomplete-prompt: 1.4.0(inquirer@8.2.7(@types/node@26.2.0))
+      inquirer: 8.2.7(@types/node@26.4.1)
+      inquirer-autocomplete-prompt: 1.4.0(inquirer@8.2.7(@types/node@26.4.1))
       is-docker: 4.0.0
       is-stream: 4.0.1
       is-wsl: 3.1.1
@@ -12574,7 +12574,7 @@ snapshots:
 
   netlify-redirector@0.5.0: {}
 
-  next@16.3.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@26.2.0)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
+  next@16.3.0(@babel/core@7.29.7)(@opentelemetry/api@1.9.1)(@playwright/test@1.62.1)(@types/node@26.4.1)(react-dom@19.2.7(react@19.2.7))(react@19.2.7):
     dependencies:
       '@next/env': 16.3.0
       '@swc/helpers': 0.5.15
@@ -12595,7 +12595,7 @@ snapshots:
       '@next/swc-win32-x64-msvc': 16.3.0
       '@opentelemetry/api': 1.9.1
       '@playwright/test': 1.62.1
-      sharp: 0.35.3(@types/node@26.2.0)
+      sharp: 0.35.3(@types/node@26.4.1)
     transitivePeerDependencies:
       - '@babel/core'
       - '@types/node'
@@ -13582,7 +13582,7 @@ snapshots:
 
   setprototypeof@1.2.0: {}
 
-  sharp@0.35.3(@types/node@26.2.0):
+  sharp@0.35.3(@types/node@26.4.1):
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
@@ -13613,10 +13613,10 @@ snapshots:
       '@img/sharp-win32-arm64': 0.35.3
       '@img/sharp-win32-ia32': 0.35.3
       '@img/sharp-win32-x64': 0.35.3
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
     optional: true
 
-  sharp@0.35.4(@types/node@26.2.0):
+  sharp@0.35.4(@types/node@26.4.1):
     dependencies:
       '@img/colour': 1.1.0
       detect-libc: 2.1.2
@@ -13647,7 +13647,7 @@ snapshots:
       '@img/sharp-win32-arm64': 0.35.4
       '@img/sharp-win32-ia32': 0.35.4
       '@img/sharp-win32-x64': 0.35.4
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
 
   shebang-command@2.0.0:
     dependencies:
@@ -13879,9 +13879,9 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  stripe@22.4.0(@types/node@26.2.0):
+  stripe@22.4.0(@types/node@26.4.1):
     optionalDependencies:
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
 
   stubborn-fs@2.0.0:
     dependencies:
@@ -14068,14 +14068,14 @@ snapshots:
       '@ts-morph/common': 0.11.1
       code-block-writer: 10.1.1
 
-  ts-node@10.9.2(@types/node@26.2.0)(typescript@5.9.3):
+  ts-node@10.9.2(@types/node@26.4.1)(typescript@5.9.3):
     dependencies:
       '@cspotcode/source-map-support': 0.8.1
       '@tsconfig/node10': 1.0.13
       '@tsconfig/node12': 1.0.11
       '@tsconfig/node14': 1.0.3
       '@tsconfig/node16': 1.0.4
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
       acorn: 8.18.0
       acorn-walk: 8.3.5
       arg: 4.1.3
@@ -14359,7 +14359,7 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0):
+  vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -14367,17 +14367,17 @@ snapshots:
       rolldown: 1.1.5
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
       esbuild: 0.28.2
       fsevents: 2.3.3
       jiti: 2.7.0
       tsx: 4.21.0
       yaml: 2.9.0
 
-  vitest@5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.2.0)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)):
+  vitest@5.0.0(@edge-runtime/vm@3.2.0)(@opentelemetry/api@1.9.1)(@types/node@26.4.1)(jsdom@29.1.1)(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)):
     dependencies:
       '@types/chai': 5.2.3
-      '@vitest/mocker': 5.0.0(vite@8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
+      '@vitest/mocker': 5.0.0(vite@8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0))
       chai: 6.2.2
       es-module-lexer: 2.3.2
       expect-type: 1.4.0
@@ -14388,12 +14388,12 @@ snapshots:
       tinybench: 6.1.4
       tinyexec: 1.3.0
       tinyglobby: 0.2.17
-      vite: 8.1.3(@types/node@26.2.0)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
+      vite: 8.1.3(@types/node@26.4.1)(esbuild@0.28.2)(jiti@2.7.0)(tsx@4.21.0)(yaml@2.9.0)
       why-is-node-running: 2.3.0
     optionalDependencies:
       '@edge-runtime/vm': 3.2.0
       '@opentelemetry/api': 1.9.1
-      '@types/node': 26.2.0
+      '@types/node': 26.4.1
       jsdom: 29.1.1
     transitivePeerDependencies:
       - msw
