@@ -38,6 +38,15 @@ describe('ContactForm', () => {
     expect(whatsappLink).toHaveAttribute('href', expect.stringContaining('wa.me'))
   })
 
+  // a11y 12/09 — texto do botão WhatsApp usa token de contraste AA, nunca branco cru.
+  // Branco sobre #25d366 dava 1.98:1 (axe serious). Regression guard.
+  it('WhatsApp CTA uses AA contrast token, not raw text-white', () => {
+    render(<ContactForm />)
+    const whatsappLink = screen.getByRole('link', { name: /contact.whatsapp.cta/i })
+    expect(whatsappLink).toHaveClass('text-[var(--whatsapp-contrast)]')
+    expect(whatsappLink.className).not.toMatch(/\btext-white\b/)
+  })
+
   it('renders social media links', () => {
     render(<ContactForm />)
     expect(screen.getByRole('link', { name: 'LinkedIn' })).toBeInTheDocument()
