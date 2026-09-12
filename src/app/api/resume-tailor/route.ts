@@ -189,6 +189,101 @@ async function callArachneLLM(prompt: string): Promise<string> {
   return content;
 }
 
+// O 9router responde SSE (data: {...}) mesmo com stream:false, e alguns
+// modelos devolvem JSON com lixo/objetos concatenados depois do primeiro
+// objeto — JSON.parse cru falha nesses casos (causa real do "conteúdo vazio"
+// que gerava PDF placeholder). Extrai o primeiro objeto JSON balanceado e,
+// se for o caso, percorre os frames SSE acumulando o content.
+function extractFirstJson(text: string): Record<string, unknown> | null {
+  const start = text.indexOf("{");
+  if (start === -1) return null;
+  let depth = 0;
+  let inStr = false;
+  let esc = false;
+  for (let i = start; i < text.length; i++) {
+    const c = text[i];
+    if (inStr) {
+      if (esc) esc = false;
+      else if (c === "\\") esc = true;
+      else if (c === '"') inStr = false;
+      continue;
+    }
+    if (c === '"') inStr = true;
+    else if (c === "{") depth++;
+    else if (c === "}") {
+      depth--;
+      if (depth === 0) {
+        try {
+          return JSON.parse(text.slice(start, i + 1)) as Record<string, unknown>;
+        } catch {
+          return null;
+        }
+      }
+    }
+  }
+  return null;
+}
+
+function contentOf(obj: Record<string, unknown> | null): string {
+  if (!obj) return "";
+  const choices = obj.choices as Array<{ message?: { content?: unknown } }> | undefined;
+  const fromChoices = choices?.[0]?.message?.content;
+  if (typeof fromChoices === "string" && fromChoices.trim()) return fromChoices;
+  const direct = obj.content;
+  return typeof direct === "string" ? direct : "";
+}
+
+function* iterJsonObjects(text: string): Generator<Record<string, unknown>> {
+  let i = 0;
+  while (i < text.length) {
+    const start = text.indexOf("{", i);
+    if (start === -1) return;
+    let depth = 0;
+    let inStr = false;
+    let esc = false;
+    let end = -1;
+    for (let j = start; j < text.length; j++) {
+      const c = text[j];
+      if (inStr) {
+        if (esc) esc = false;
+        else if (c === "\\") esc = true;
+        else if (c === '"') inStr = false;
+        continue;
+      }
+      if (c === '"') inStr = true;
+      else if (c === "{") depth++;
+      else if (c === "}") {
+        depth--;
+        if (depth === 0) {
+          end = j;
+          break;
+        }
+      }
+    }
+    if (end === -1) return;
+    try {
+      const obj = JSON.parse(text.slice(start, end + 1));
+      if (obj && typeof obj === "object") yield obj as Record<string, unknown>;
+    } catch {
+      /* objeto inválido — segue para o próximo */
+    }
+    i = end + 1;
+  }
+}
+
+// O 9router devolve {json}data: [DONE] na MESMA linha (e frames colados no
+// modo stream), então nenhum parse por linha funciona. Iteramos todos os
+// objetos JSON balanceados do corpo e ficamos com o último que trouxer
+// conteúdo — foi exatamente isso que fazia o PDF sair placeholder.
+function extractContentFromLLM(raw: string): string {
+  let content = "";
+  for (const obj of iterJsonObjects(raw)) {
+    const piece = contentOf(obj);
+    if (piece.trim()) content = piece;
+  }
+  return content;
+}
+
 async function callDirectLLM(prompt: string): Promise<string> {
   const url = process.env.RESUME_LLM_URL;
   if (!url) throw new LLMUnavailableError("RESUME_LLM_URL não configurada");
@@ -219,23 +314,7 @@ async function callDirectLLM(prompt: string): Promise<string> {
   }
 
   const raw = await res.text();
-  let content = "";
-  try {
-    const parsed = JSON.parse(raw);
-    content = parsed?.choices?.[0]?.message?.content ?? parsed?.content ?? "";
-  } catch {
-    // corpo SSE (o 9router responde SSE mesmo sem stream:true)
-    for (const line of raw.split("\n")) {
-      const chunk = line.trim().replace(/^data:\s*/, "");
-      if (!chunk || chunk === "[DONE]") continue;
-      try {
-        const obj = JSON.parse(chunk);
-        content = obj?.choices?.[0]?.message?.content ?? content;
-      } catch {
-        /* chunk parcial */
-      }
-    }
-  }
+  const content = extractContentFromLLM(raw);
   if (!content.trim()) {
     throw new LLMUnavailableError("9router devolveu conteúdo vazio");
   }
