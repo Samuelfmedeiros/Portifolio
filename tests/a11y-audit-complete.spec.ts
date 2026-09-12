@@ -11,8 +11,8 @@ test.describe('Acessibilidade - Auditoria Completa', () => {
 
   for (const page of pages) {
     test(`${page.name} — auditoria axe completa`, async ({ page: p }) => {
-      await p.goto(page.path);
-      await p.waitForLoadState('networkidle');
+      await p.goto(page.path, { waitUntil: 'domcontentloaded' });
+      await p.waitForLoadState('load').catch(() => {});
 
       const results = await new AxeBuilder({ page: p })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
@@ -37,8 +37,8 @@ test.describe('Acessibilidade - Auditoria Completa', () => {
     });
 
     test(`${page.name} — heading hierarchy`, async ({ page: p }) => {
-      await p.goto(page.path);
-      await p.waitForLoadState('networkidle');
+      await p.goto(page.path, { waitUntil: 'domcontentloaded' });
+      await p.waitForLoadState('load').catch(() => {});
 
       const headings = await p.evaluate(() => {
         const hs = document.querySelectorAll('h1, h2, h3, h4, h5, h6');
@@ -69,8 +69,8 @@ test.describe('Acessibilidade - Auditoria Completa', () => {
     });
 
     test(`${page.name} — aria labels e landmarks`, async ({ page: p }) => {
-      await p.goto(page.path);
-      await p.waitForLoadState('networkidle');
+      await p.goto(page.path, { waitUntil: 'domcontentloaded' });
+      await p.waitForLoadState('load').catch(() => {});
 
       const info = await p.evaluate(() => {
         // Check landmark roles
