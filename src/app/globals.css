@@ -42,6 +42,10 @@ html {
   --success: #34d399;
   --error: #f87171;
   --whatsapp: #25d366;
+  /* Contraste AA do texto sobre o verde WhatsApp (axe 12/09/2026): branco dava 1.98:1 */
+  --whatsapp-contrast: #0a0a12;
+  /* --accent-alt cru em texto 9px dava 4.41:1 no cyan dark -> mistura 65% com o tema */
+  --alt-readable: color-mix(in srgb, var(--accent-alt) 65%, #ffffff);
   /* Proficiency colors - dark */
   --proficiency-expert: #34d399;
   --proficiency-advanced: #60a5fa;
@@ -66,6 +70,9 @@ html {
   --success: #16a34a;
   --error: #dc2626;
   --whatsapp: #0f766e;
+  /* light: branco sobre #0f766e ja passa (5.47:1) */
+  --whatsapp-contrast: #ffffff;
+  --alt-readable: color-mix(in srgb, var(--accent-alt) 65%, #1e293b);
   /* Proficiency colors - light */
   --proficiency-expert: #16a34a;
   --proficiency-advanced: #2563eb;
@@ -95,6 +102,12 @@ html {
    color-mix escurece mantendo o matiz; dark mantém a cor original viva. */
 .theme-light .blog-accent-text { color: color-mix(in srgb, var(--blog-accent) 45%, #1e293b) !important; }
 .theme-light .blog-accent-hover:hover { color: color-mix(in srgb, var(--blog-accent) 45%, #1e293b) !important; }
+
+/* ===== Leitura de --accent-alt em texto pequeno (axe AA, 12/09/2026) ===== */
+/* Valor cru da paleta ciano (#6366f1) no dark dava 4.41:1 em fonte 9px -> reprovava AA.
+   --alt-readable mistura 65% com o fundo do tema preservando o matiz: >= 5.5:1 nas 6 paletas.
+   Fonte da medicao: axe-core 4.10.2 na home em producao (12/09/2026). */
+.alt-readable { color: var(--alt-readable); }
 
 body {
   background-color: var(--bg-primary);

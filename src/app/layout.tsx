@@ -174,13 +174,16 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 <main id="main-content" tabIndex={-1} className="pt-20 md:pt-24">
                   <ErrorBoundaryWithI18n>{children}</ErrorBoundaryWithI18n>
                 </main>
-                {/* AdSense banner — só aparece quando configurado no .env local */}
-                <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
-                  <AdSense slot={ADSENSE_CONFIG.footerSlot || "footer"} format="horizontal" className="min-h-[90px]" />
-                </div>
-                <div className="flex flex-wrap justify-center gap-4 px-4 pb-6">
-                  <SupportButton />
-                  <ConsultingButton />
+                {/* Landmark (axe rule 'region', 12/09/2026): conteúdo do layout fora do <main> */}
+                <div role="region" aria-label="Apoio e consultoria">
+                  {/* AdSense banner — só aparece quando configurado no .env local */}
+                  <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
+                    <AdSense slot={ADSENSE_CONFIG.footerSlot || "footer"} format="horizontal" className="min-h-[90px]" />
+                  </div>
+                  <div className="flex flex-wrap justify-center gap-4 px-4 pb-6">
+                    <SupportButton />
+                    <ConsultingButton />
+                  </div>
                 </div>
                 <Footer />
             </MonetizationProvider>
