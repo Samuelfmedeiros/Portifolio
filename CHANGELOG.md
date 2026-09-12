@@ -1,4 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
+## [2026-09-12] - resume-tailor V5: SSE colado do 9router + E2E com IP por tentativa
+- **fix(resume-tailor)** (`4e12e77`): `src/app/api/resume-tailor/route.ts` - `extractContentFromLLM` itera objetos JSON balanceados do corpo (o 9router devolve `{json}data: [DONE]` na MESMA linha) - causa raiz do PDF placeholder
+- **test(e2e)** (`4e12e77`): `e2e-resume-v5.mjs` com `x-forwarded-for` distinto por tentativa/device (rate limit 3 req/min por IP fazia o 4o POST virar 429) - E2E pos-fix DESKTOP PASS (50KB) + MOBILE PASS (39KB)
+- 1 commit no dia - branch `feat/resume-tailor-v5-9router` - push bare+origin OK - HEAD: `4e12e77`
+
+
 
 ## [2026-09-10] — fix cache-bust do tracker Umami
 - **fix(umami)** (`a07a6e9`): cache-bust `?v=2` no URL do script.js do tracker — script.js immutable servia versão velha

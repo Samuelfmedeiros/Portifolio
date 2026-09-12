@@ -31,8 +31,8 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 
 ## 📍 Estado Atual
-- **Branch:** `master`
-- **Último commit:** `8e2367e` — merge dependabot deps-dev PRs #74-#82 (09/09, push bare+origin)
+- **Branch:** `feat/resume-tailor-v5-9router` (trabalho em andamento)
+- **Último commit:** `4e12e77` — fix(resume-tailor): SSE colado do 9router + E2E com IP por tentativa (12/09)
 - **Status:** ✅ Funcional — produção em Vercel · CI deploy success (215acd52) · Playwright VRT success (2ª rodada)
 - **Testes:** 269/269 passando (validado 30/08 12:47 WSL pnpm test:run)
 - **Lint:** 0 errors, 0 warnings
@@ -45,6 +45,11 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
   - 4 workflows (deploy, gitleaks, security-scan, playwright): 12 `uses:` pinados por SHA de commit (tag v* mantida em comentário); SHAs via API tags c/ deref de tag anotada, 5/6 confirmados por ls-remote
   - YAML validado (pyyaml) nos 5 arquivos; diff cirúrgico (14+/12-); critic build/vitest N/A (mudança só de CI-config)
 - Sites 200 (portifolio.seu.pet + vercel.app; 000 inicial = DNS local flaky, não queda); CI master verde; higiene cv_downloads: POST vazio → 403 UA guard, count 40 estável, nada inserido
+
+### Sessao 12/09 (fim de dia) - resume-tailor V5: SSE colado do 9router + E2E com IP por tentativa
+- **fix(resume-tailor)** (`4e12e77`): `src/app/api/resume-tailor/route.ts` - `extractContentFromLLM` itera objetos JSON balanceados do corpo (o 9router devolve `{json}data: [DONE]` na MESMA linha) - era a causa raiz do PDF placeholder
+- **test(e2e)** (`4e12e77`): `e2e-resume-v5.mjs` envia `x-forwarded-for` distinto por tentativa/device - rate limit da rota = 3 req/min por IP, sem header o 4o POST vira 429; prova 200,200,200,429,429 sem header vs 200 com IPs distintos; E2E pos-fix DESKTOP PASS (50KB) + MOBILE PASS (39KB) com conteudo real
+- 1 commit no dia - branch `feat/resume-tailor-v5-9router` - push bare+origin OK
 
 ### Sessão 09/09 — dependabot deps-dev integrado (PRs #74-#82)
 - **deps-dev** (dependabot): 9 PRs integrados — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, @testing-library/user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, @testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
@@ -302,3 +307,7 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Storydesk na seção Projetos:** repo público entra sozinho no site (merge `getRepos()` da API GitHub com STATIC_PROJECTS, ISR 30min) — não foi deploy sem aprovação. Card sem capa = sem entrada estática. Fix: `public/projects/storydesk.webp` (FLUX Schnell do worker LifeLog, abstrata, 1280×720, 48KB, gate VLM ok) + entrada em `staticProjects.ts` — commit `4121e55` na master, CI verde (gitleaks/security/e2e), deploy no ar.
 - **Posts sem capa nas tags do LifeLog:** `tag/[slug].astro` e `en/tag/[slug].astro` não passavam `cover`/`icon` pro PostCard (placeholder silencioso). Fix `05c596a` (repo lifelog) — 42 capas servindo em `/tag/arachne/`.
 - **Pitfall staging alheio:** commitar com `git add -A` em repo compartilhado puxa mudanças staged de outra sessão — commitar por PATH explícito e verificar `git show --stat` do HEAD logo após.
+
+## 11/09 — feat resume-tailor V5 reintroduzido com cadeia LLM 9router
+- **feat(resume-tailor)** (`d247a55`): V5 reintroduzido com cadeia LLM no 9router (via Arachne) e falha alta.
+- Push bare OK. Push origin: divergencia resolvida com merge de origin/master. Branch feat/resume-tailor-v5-9router.
