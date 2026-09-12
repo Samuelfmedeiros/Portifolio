@@ -42,6 +42,10 @@ html {
   --success: #34d399;
   --error: #f87171;
   --whatsapp: #25d366;
+  /* Contraste AA do texto sobre o verde WhatsApp (axe 12/09/2026): branco dava 1.98:1 */
+  --whatsapp-contrast: #0a0a12;
+  /* --accent-alt cru em texto 9px dava 4.41:1 no cyan dark -> mistura 65% com o tema */
+  --alt-readable: color-mix(in srgb, var(--accent-alt) 65%, #ffffff);
   /* Proficiency colors - dark */
   --proficiency-expert: #34d399;
   --proficiency-advanced: #60a5fa;
@@ -66,6 +70,9 @@ html {
   --success: #16a34a;
   --error: #dc2626;
   --whatsapp: #0f766e;
+  /* light: branco sobre #0f766e ja passa (5.47:1) */
+  --whatsapp-contrast: #ffffff;
+  --alt-readable: color-mix(in srgb, var(--accent-alt) 65%, #1e293b);
   /* Proficiency colors - light */
   --proficiency-expert: #16a34a;
   --proficiency-advanced: #2563eb;
@@ -90,11 +97,24 @@ html {
 .theme-light .border-green-500\/30 { border-color: rgba(21, 128, 61, 0.35); }
 .theme-light .border-blue-500\/30 { border-color: rgba(29, 78, 216, 0.35); }
 
-/* ===== Blog accents (cores do RSS LifeLog) — escurecidos no light p/ AA (12/08/2026) ===== */
+/* ===== Blog accents (cores do RSS LifeLog) — legiveis nos 2 temas (AA) ===== */
+/* A cor vem do RSS e e aplicada via inline style; sem regra dedicada o valor cru
+   ficaria como cor de TEXTO. Medido em 12/09/2026 (axe-core, producao): o accent
+   #7c3aed do projeto portfolio dava 3.36:1 no dark (fonte 12px) -> reprovava AA.
+   Mix de 65% com o branco preserva o matiz e passa nas 9 cores do RSS. */
+.theme-dark .blog-accent-text { color: color-mix(in srgb, var(--blog-accent) 65%, #ffffff) !important; }
+.theme-dark .blog-accent-hover:hover { color: color-mix(in srgb, var(--blog-accent) 65%, #ffffff) !important; }
+
 /* O RSS manda cores claras (#00d4ff, #22c55e, #38bdf8...) que falham 4.5:1 no light.
    color-mix escurece mantendo o matiz; dark mantém a cor original viva. */
 .theme-light .blog-accent-text { color: color-mix(in srgb, var(--blog-accent) 45%, #1e293b) !important; }
 .theme-light .blog-accent-hover:hover { color: color-mix(in srgb, var(--blog-accent) 45%, #1e293b) !important; }
+
+/* ===== Leitura de --accent-alt em texto pequeno (axe AA, 12/09/2026) ===== */
+/* Valor cru da paleta ciano (#6366f1) no dark dava 4.41:1 em fonte 9px -> reprovava AA.
+   --alt-readable mistura 65% com o fundo do tema preservando o matiz: >= 5.5:1 nas 6 paletas.
+   Fonte da medicao: axe-core 4.10.2 na home em producao (12/09/2026). */
+.alt-readable { color: var(--alt-readable); }
 
 body {
   background-color: var(--bg-primary);

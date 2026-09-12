@@ -302,3 +302,38 @@ Portifolio tem staging em **capivara.seu.pet** via proxy reverso do Capivara:
 - **Storydesk na seção Projetos:** repo público entra sozinho no site (merge `getRepos()` da API GitHub com STATIC_PROJECTS, ISR 30min) — não foi deploy sem aprovação. Card sem capa = sem entrada estática. Fix: `public/projects/storydesk.webp` (FLUX Schnell do worker LifeLog, abstrata, 1280×720, 48KB, gate VLM ok) + entrada em `staticProjects.ts` — commit `4121e55` na master, CI verde (gitleaks/security/e2e), deploy no ar.
 - **Posts sem capa nas tags do LifeLog:** `tag/[slug].astro` e `en/tag/[slug].astro` não passavam `cover`/`icon` pro PostCard (placeholder silencioso). Fix `05c596a` (repo lifelog) — 42 capas servindo em `/tag/arachne/`.
 - **Pitfall staging alheio:** commitar com `git add -A` em repo compartilhado puxa mudanças staged de outra sessão — commitar por PATH explícito e verificar `git show --stat` do HEAD logo após.
+
+## 12/09 — Ronda Autonomia: 3 violações axe reais corrigidas na home (contraste + landmark)
+
+Auditoria axe-core 4.10.2 na home em produção (`samuelmedeiros.vercel.app`, desktop 1280 + mobile 390, temas dark/light) achou 3 falhas reais — nenhuma delas era coberta pelo CI (as specs `tests/axe-audit.spec.ts` e `tests/a11y-audit-complete.spec.ts` só LOGRAM, não assertam).
+
+| Achado | Medida (axe) | Correção |
+|---|---|---|
+| Botão WhatsApp (ContactForm) | `color-contrast` serious 1.98:1 — texto branco `#fff` sobre `var(--whatsapp)` `#25d366`, em TODOS os temas | novo token `--whatsapp-contrast` (`#0a0a12` dark = 9.94:1, `#ffffff` light = 5.47:1); classe trocada de `text-white` para `text-[var(--whatsapp-contrast)]` |
+| Link `repo` dos mini-games (GameShowcase) | `color-contrast` serious 4.41:1 — `var(--accent-alt)` `#6366f1` cru em 9px sobre o dark, 5 cards | token `--alt-readable` = `color-mix(in srgb, var(--accent-alt) 65%, #ffffff)` no dark (`65%, #1e293b` no light) + classe utilitária `.alt-readable`; pior caso passa a 7.30:1 (cyan) nas 6 paletas |
+| Linha Apoiar/Consultoria fora de landmark (layout.tsx) | `region` moderate em light e dark | wrapper `role="region" aria-label="Apoio e consultoria"` em volta do AdSense + SupportButton/ConsultingButton (conteúdo em `page.tsx` já está dentro de `<main id="main-content">`) |
+
+- **Prevenção (política pós-correção):** nova spec `tests/a11y-contrast-region.spec.ts` — roda `color-contrast` + `region` nos 2 temas, com scroll progressivo (seções lazy) e roteamento que bloqueia rede externa (RSS/AdSense) pra não flakar. **Controle negativo validado:** a spec FALHA contra produção pré-fix (dark: 2 violações, light: 1) e PASSA no build local pós-fix (0/0 nos 2 temas) — RED→GREEN provado, não é teste decorativo.
+- **Verificação:** `pnpm test:run` 274/274 · `pnpm build` ok · E2E a11y 2/2 local. NÃO pushado (deploy exige OK do Samuel) — branch `feat/a11y-contrast-region`.
+- **Pitfall reconfirmado:** `next start` lançado por `wsl.exe` em background morre junto com o processo pai — subir servidor + rodar Playwright no MESMO comando `wsl -e bash -c`; e `pnpm start -- --port N` é repassado errado (trata `--port` como diretório) → usar `npx next start -p N`.
+
+## 12/09 — Ronda Autonomia (2a passada): flake de 30s curado + critic corrigido
+
+**Achado (flake real, nao regressao):** a suite completa falhava 1 spec de forma
+intermitente — `a11y-audit-complete` > "aria labels e landmarks" com
+`TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded`. Causa:
+`waitForLoadState('networkidle')` trava quando beacons/analytics seguram a rede.
+Nao tinha relacao com o codigo do fix. **Fix:** `domcontentloaded` + `load` com
+`.catch()` nas 5 ocorrencias (axe-audit 2, a11y-audit-complete 3) — axe analisa o
+DOM SSR, nao precisa de rede ociosa. **Prova:** 15/15 em 2 runs consecutivos;
+suite completa 47/47 passed (antes 46 + 1 flake). Commit `4d5edd4`.
+
+**Lacuna estrutural descoberta:** `tests/axe-audit.spec.ts` e
+`tests/a11y-audit-complete.spec.ts` apenas IMPRIMEM as violacoes e terminam
+verdes — o CI ficava 100% verde com violacoes AA reais em producao. A spec nova
+`tests/a11y-contrast-region.spec.ts` ASSERE (`expect(failing).toEqual([])`) e roda
+por `TEST_BASE_URL` (local OU producao) com controle negativo provado (RED->GREEN).
+
+**critic_check_portifolio.py corrigido:** declarava "sem testes novos" quando a
+spec de prevencao ficava em `HEAD~2` (fix commitado DEPOIS da entrega). Agora
+varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.

@@ -10,8 +10,8 @@ test.describe('Acessibilidade — axe-core audit', () => {
 
   for (const page of pages) {
     test(`${page.name} — sem violações críticas/sérias`, async ({ page: p }) => {
-      await p.goto(page.path);
-      await p.waitForLoadState('networkidle');
+      await p.goto(page.path, { waitUntil: 'domcontentloaded' });
+      await p.waitForLoadState('load').catch(() => {});
 
       const results = await new AxeBuilder({ page: p })
         .withTags(['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa', 'best-practice'])
@@ -48,8 +48,8 @@ test.describe('Acessibilidade — axe-core audit', () => {
   }
 
   test('Home — contraste de cores (apenas documentação)', async ({ page: p }) => {
-    await p.goto('/');
-    await p.waitForLoadState('networkidle');
+    await p.goto('/', { waitUntil: 'domcontentloaded' });
+    await p.waitForLoadState('load').catch(() => {});
 
     const results = await new AxeBuilder({ page: p })
       .withTags(['cat.color'])
