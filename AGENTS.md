@@ -39,6 +39,13 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **i18n EN em produção (30/08):** Hero, Contato, ConsultingButton, MissionClock (dict), Termos/Privacidade ✅ E2E real
 - **CDN imagens:** same-origin (Vercel) — img.seu.pet removido do CSP (dead code)
 
+### Sessão 11/09 — CI hardening (autonomia, cron Portifólio)
+- **chore(ci)**: branch `chore/dependabot-cooldown-pin-actions` (commit `eb02ada`, LOCAL — aguarda OK pra abrir PR/merge) — resolve issues #52/#53 (opengrep, 16/08):
+  - `.github/dependabot.yml`: `cooldown: { default-days: 7 }` nos 2 ecossistemas (npm, github-actions) — suportado desde 14/07/2026
+  - 4 workflows (deploy, gitleaks, security-scan, playwright): 12 `uses:` pinados por SHA de commit (tag v* mantida em comentário); SHAs via API tags c/ deref de tag anotada, 5/6 confirmados por ls-remote
+  - YAML validado (pyyaml) nos 5 arquivos; diff cirúrgico (14+/12-); critic build/vitest N/A (mudança só de CI-config)
+- Sites 200 (portifolio.seu.pet + vercel.app; 000 inicial = DNS local flaky, não queda); CI master verde; higiene cv_downloads: POST vazio → 403 UA guard, count 40 estável, nada inserido
+
 ### Sessão 09/09 — dependabot deps-dev integrado (PRs #74-#82)
 - **deps-dev** (dependabot): 9 PRs integrados — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, @testing-library/user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, @testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
 - merge local ao master (934584e) + merges dos PRs no GitHub (#75/#77/#78) puxados via pull --ff-only; local realinhado ao origin por FF (PRs #55/#61/#75/#77/#78 + #74-#82) · HEAD: `8e2367e`
