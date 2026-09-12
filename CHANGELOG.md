@@ -1,4 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
+
+## [2026-09-11] — feat resume-tailor V5 reintroduzido + dependabot
+- **feat(resume-tailor)** (`d247a55`): V5 reintroduzido com cadeia LLM no 9router (via Arachne) e falha alta — branch feat/resume-tailor-v5-9router
+- **merge master** (`5a14c16`..`eb02ada`): dependabot cooldown 7d + pin Actions por SHA, card storydesk (`4121e55`, `527cd49`), CI hardening (`e4886b8`)
+- 6 commits no dia (1 feat + 5 merges) · push bare OK · push origin/master pendente (divergência) · HEAD feat: `d247a55` → `d462577` (12/09)
+
+
 ## [2026-09-12] - resume-tailor V5: SSE colado do 9router + E2E com IP por tentativa
 - **fix(resume-tailor)** (`4e12e77`): `src/app/api/resume-tailor/route.ts` - `extractContentFromLLM` itera objetos JSON balanceados do corpo (o 9router devolve `{json}data: [DONE]` na MESMA linha) - causa raiz do PDF placeholder
 - **test(e2e)** (`4e12e77`): `e2e-resume-v5.mjs` com `x-forwarded-for` distinto por tentativa/device (rate limit 3 req/min por IP fazia o 4o POST virar 429) - E2E pos-fix DESKTOP PASS (50KB) + MOBILE PASS (39KB)
