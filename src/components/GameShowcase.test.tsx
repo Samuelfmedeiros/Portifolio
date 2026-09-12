@@ -296,6 +296,18 @@ describe("GameShowcase", () => {
     });
   });
 
+  // a11y 12/09 — link "repo" dos games usa a classe .alt-readable (--accent-alt
+  // cru dava 4.41:1 em 9px, axe serious). Regression guard por classe, sem servidor.
+  it("repo link uses AA .alt-readable class, not raw accent-alt", () => {
+    renderWithI18n(<GameShowcase repos={gameRepos} />);
+    const links = screen.getAllByText("repo").map((el) => el.closest("a"));
+    expect(links.length).toBe(3);
+    links.forEach((a) => {
+      expect(a).toHaveClass("alt-readable");
+      expect(a!.className).not.toMatch(/\[var\(--accent-alt\)\]/);
+    });
+  });
+
   it("all 5 game images exist in GAME_IMAGES map in production", () => {
     const expectedGames = [
       "simon-game",

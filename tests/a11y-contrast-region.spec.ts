@@ -36,6 +36,20 @@ test.describe('a11y — contraste e landmarks (regressão)', () => {
       await page.goto('/', { waitUntil: 'domcontentloaded', timeout: 60000 });
       await page.waitForTimeout(3000);
 
+      // Guard de identidade: a porta baseURL pode ser reaproveitada por outro app
+      // (reuseExistingServer fora do CI) — nesse caso o axe mediria contraste de um
+      // site ESTRANGEIRO e reportaria violações falsas. Falha cedo, com causa clara.
+      const isPortifolio =
+        (await page.locator('main#main-content').count()) > 0 &&
+        (await page.getByRole('link', { name: /^pular para/i }).first().count()) > 0;
+      if (!isPortifolio) {
+        throw new Error(
+          `[a11y ${theme.name}] baseURL não serve o Portifolio — abortando para não auditar app estrangeiro. ` +
+            `Espera <main id="main-content"> + skip-link "Pular para…". Título: "${await page.title()}". ` +
+            `Suba o app correto em ${baseHost} ou exporte TEST_BASE_URL.`,
+        );
+      }
+
       // Seções lazy (contato/games) só montam perto da viewport — scroll progressivo.
       const height = await page.evaluate(() => document.body.scrollHeight);
       for (let y = 0; y < height; y += 400) {
