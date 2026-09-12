@@ -316,3 +316,24 @@ Auditoria axe-core 4.10.2 na home em produção (`samuelmedeiros.vercel.app`, de
 - **Prevenção (política pós-correção):** nova spec `tests/a11y-contrast-region.spec.ts` — roda `color-contrast` + `region` nos 2 temas, com scroll progressivo (seções lazy) e roteamento que bloqueia rede externa (RSS/AdSense) pra não flakar. **Controle negativo validado:** a spec FALHA contra produção pré-fix (dark: 2 violações, light: 1) e PASSA no build local pós-fix (0/0 nos 2 temas) — RED→GREEN provado, não é teste decorativo.
 - **Verificação:** `pnpm test:run` 274/274 · `pnpm build` ok · E2E a11y 2/2 local. NÃO pushado (deploy exige OK do Samuel) — branch `feat/a11y-contrast-region`.
 - **Pitfall reconfirmado:** `next start` lançado por `wsl.exe` em background morre junto com o processo pai — subir servidor + rodar Playwright no MESMO comando `wsl -e bash -c`; e `pnpm start -- --port N` é repassado errado (trata `--port` como diretório) → usar `npx next start -p N`.
+
+## 12/09 — Ronda Autonomia (2a passada): flake de 30s curado + critic corrigido
+
+**Achado (flake real, nao regressao):** a suite completa falhava 1 spec de forma
+intermitente — `a11y-audit-complete` > "aria labels e landmarks" com
+`TimeoutError: page.waitForLoadState: Timeout 30000ms exceeded`. Causa:
+`waitForLoadState('networkidle')` trava quando beacons/analytics seguram a rede.
+Nao tinha relacao com o codigo do fix. **Fix:** `domcontentloaded` + `load` com
+`.catch()` nas 5 ocorrencias (axe-audit 2, a11y-audit-complete 3) — axe analisa o
+DOM SSR, nao precisa de rede ociosa. **Prova:** 15/15 em 2 runs consecutivos;
+suite completa 47/47 passed (antes 46 + 1 flake). Commit `4d5edd4`.
+
+**Lacuna estrutural descoberta:** `tests/axe-audit.spec.ts` e
+`tests/a11y-audit-complete.spec.ts` apenas IMPRIMEM as violacoes e terminam
+verdes — o CI ficava 100% verde com violacoes AA reais em producao. A spec nova
+`tests/a11y-contrast-region.spec.ts` ASSERE (`expect(failing).toEqual([])`) e roda
+por `TEST_BASE_URL` (local OU producao) com controle negativo provado (RED->GREEN).
+
+**critic_check_portifolio.py corrigido:** declarava "sem testes novos" quando a
+spec de prevencao ficava em `HEAD~2` (fix commitado DEPOIS da entrega). Agora
+varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.
