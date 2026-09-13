@@ -23,6 +23,11 @@ entrega (código, UI, pipeline, feature, fix), rodar SEMPRE o loop de testes com
 Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega completa.
 
 
+## Sessao 2026-09-12 (fim de dia) — consolidacao na master
+
+- Rotina fim-de-dia: entrada propria de 12/09 no CHANGELOG (ate entao o dia vivia so nas secoes de ronda). Master local estava 16 atras do origin (merges de outra sessao) — FF aplicado, origin+bare realinhados.
+- Resume Tailor V5 segue na branch feat/resume-tailor-v5-9router (docs ja na branch); merge/deploy so com autorizacao explicita do Samuel.
+
 ## Sessão 2026-09-08 (fim de dia) — dia leve (sem commits; rotina fim-de-dia)
 
 - 0 commits de código hoje (último: `1a0a14a` 05/09). Rotina fim-de-dia: seção de sessão + CHANGELOG.
