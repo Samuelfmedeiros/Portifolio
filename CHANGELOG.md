@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-12] — Dependabot zerada (squash via SSH) + a11y AA + Playwright 1.63
+- **chore(deps)** (`182dbf1` #85, `180c688` #86, `413bde6` #87, `4d33a02` #88): actions bump — merges via **squash com SSH** porque o token OAuth do gh nao tem escopo `workflow` (403 em PR que toca `.github/`). Fila Dependabot ZERADA.
+- **feat(a11y)** (`aa17075` PR #95): contraste AA (botao WhatsApp, link de repo dos games, accent do RSS no dark 3.36:1 -> AA) + landmark do layout; specs axe sem `networkidle` (flake de 30s sob carga). Secoes "12/09 — Ronda Autonomia" no AGENTS.md.
+- **test(deps)** (`d6bbc63` PR #97): Playwright alinhado em 1.63 (substitui #90/#93); headless_shell 1243.
+- **feat(resume-tailor) V5** (`4e12e77`, na branch `feat/resume-tailor-v5-9router`): SSE colado do 9router + E2E com IP por tentativa; docs da sessao na propria branch (`d462577`, `3a957d2`). Merge/deploy = decisao do Samuel.
+- 16 commits na master hoje · master local realinhada por FF · push origin+bare OK · HEAD master: `d6bbc63`
+
 ## [2026-09-10] — fix cache-bust do tracker Umami
 - **fix(umami)** (`a07a6e9`): cache-bust `?v=2` no URL do script.js do tracker — script.js immutable servia versão velha
 - 1 commit no dia · HEAD: `a07a6e9`
