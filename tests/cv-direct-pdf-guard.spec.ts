@@ -26,7 +26,12 @@ import { test, expect } from "@playwright/test";
  * RUN_CV_WRITE_TEST=1 estiver setado (ver testes de higiene de dados no cron).
  */
 
-const BASE = process.env.TEST_BASE_URL || "https://samuelmedeiros.vercel.app";
+// 🔴 13/09: o default era a PRODUÇÃO — e o CI não seta TEST_BASE_URL, então os
+// shards batiam no site pré-fix (ainda vazando) em vez do webServer da branch
+// (localhost:3000, ver playwright.config.ts). Default correto = o servidor que
+// o próprio playwright levanta. Produção é alvo SOMENTE com TEST_BASE_URL
+// explícito, que é o controle negativo RED->GREEN documentado acima.
+const BASE = process.env.TEST_BASE_URL || "http://localhost:3000";
 
 // Vetores codificados: cada um é o MESMO arquivo que /Samuel_Andrade_2026.pdf
 // via um encoding diferente. Eram 200 na produção antes do fix de 13/09.
