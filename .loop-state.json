@@ -1,0 +1,110 @@
+{
+  "round": 1,
+  "scores": [
+    {
+      "round": 1,
+      "score": 100,
+      "gaps": [],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": null,
+          "gaps": [],
+          "low_files": [],
+          "error": "pytest rc=-1 (sem cobertura)"
+        }
+      },
+      "ts": "2026-09-12T18:34:04.411417+00:00"
+    }
+  ],
+  "started_at": "2026-09-12T18:30:26.917482+00:00",
+  "campaign": "3a957d2",
+  "v3_heal": {
+    "wsl_ok": true,
+    "vmmem": {
+      "used_gb": 15.1,
+      "limit_gb": 18.0,
+      "pct": 83.9
+    },
+    "actions": []
+  },
+  "v2_kb": "# Roger — Base de Conhecimento Global\n\nLições aprendidas durante runs do test-loop, compiladas em 02/09/2026.\nUse no worker/reviewer/redator para evitar repetir erros passados.\n\n## Pitfalls Conhecidos\n\n- SECURITY GATE universal: executar critic_security.py (gitleaks+trufflehog+bandit+opengrep) DEPOIS de cada critic. Se falhar, desconta 20pts.\n- SECURITY BATCH (30/08): todas as vulns do security reviewer entram nos gaps de uma vez — worker resolve todas na mesma rodada.\n- Painel A+B+C (30/08): especialistas com seleção hierárquica + debate com tiebreaker. BLOQUEIA sempre que security DISCORDO.\n- Zona cinzenta (28/08): nota 85-90 → 2o reviewer adversarial audita antes de entregar.\n- Debate 2-visões (28/08): 1 DISCORDO → reabre com gaps combinados. Ambos DISCORDAM → prioridade alta.\n- SECURITY_ISSUE (ou inconclusivo) → reabre com gap(s) de segurança.\n- Workers especializados (30/08): cada gap roteado pro worker certo (test/lint/security/ui).\n- Painel falhou → seguir com ENTREGA (não bloquear por falha de reviewer).\n- 2o reviewer falhou → seguir (não reabrir).\n- Security reviewer FALHOU → SECURITY_ISSUE (fail-closed: trata como vulnerabilidade).\n- Yurumi checkpoint apenas se cfg[\"yurumi_checkpoint\"] ativo.\n- HTML via gen_loop_report_html.py (stdlib, <1s). PDF via gen_loop_report_dense.py é fallback.\n- Pós-convergência: melhorias propostas (Roger v2) não bloqueiam entrega, entram no relatório.\n- Regressões (Roger v2): gaps fechados que reaparecem em rodada posterior → prefixo REGRESSÃO:.\n\n## Padrões de Projeto\n\n- `_quarantine_untrusted()`: envolve texto em barreira de segurança (não permitir prompt injection de output de ferramentas).\n- `run_builder()`: executa opencode CLI com prompt em arquivo temporário. Usar `.loop-*-prompt.md` no path do projeto.\n- `_git()`: wrapper que executa git no path do projeto e retorna stdout limpo.\n- `CONFIG_DIR`: `~/.hermes/config/test-loop/` — configurações por projeto (JSON) e KB.\n\n## Lições v3.3 (07/09 — backlog miner, revisadas)\n\n- Banner '🔒 jail ativo' do ai-jail pode contaminar GAPS no quality.db (não só stdout de wsl.exe) — gap que só diz 'jail ativo/comandos sandboxados' é ruído do sandbox, não falha do projeto.\n- Gap 'sem testes novos nesta rodada' repetiu 2x (portifolio) — worker de testes deve ADICIONAR testes novos, não só consertar os existentes.\n- Improvements do propositor chegam limpos desde v3.3 (_clean_improvements_text); ANSI no texto de melhorias = state legado — re-minerar, não propagar.\n\n## KB dinâmica (Roger v3 — gaps fechados automaticamente)\n\n(gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n- `2026-09-08 08:44` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 55.51s\u001b[2m (transform 13.51s, setup 24.25s, import 29.74s, tests 45.47s, envir**\n- `2026-09-08 08:50` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 49.71s\u001b[2m (transform 8.32s, setup 20.87s, import 21.49s, tests 32.21s, enviro**\n- `2026-09-08 08:56` (nota 40) **build falhou:  ELIFECYCLE  Command failed with exit code 1.**\n- `2026-09-08 08:56` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 37.67s\u001b[2m (transform 5.32s, setup 17.94s, import 15.60s, tests 26.99s, enviro**\n- `2026-09-08 09:03` (nota 40) **build falhou: \u0000**\n- `2026-09-08 09:03` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 34.64s\u001b[2m (transform 8.85s, setup 18.68s, import 17.03s, tests 27.33s, enviro**\n- `2026-09-08 09:10` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 30.55s\u001b[2m (transform 10.06s, setup 13.30s, import 20.37s, tests 22.28s, envir**\n- `2026-09-08 09:17` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 51.36s\u001b[2m (transform 10.14s, setup 26.85s, import 23.74s, tests 33.72s, envir**\n- `2026-09-08 09:24` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-08 16:15` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-08 16:31` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-08 17:45` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)",
+  "v2_gh": {
+    "remote": "git@github.com:Samuelfmedeiros/Portifolio.git",
+    "owner": "Samuelfmedeiros",
+    "repo": "Portifolio",
+    "commits": [
+      {
+        "sha": "3a957d2",
+        "msg": "docs: fim de dia 2026-09-11 — AGENTS + CHANGELOG (auto)"
+      },
+      {
+        "sha": "d462577",
+        "msg": "docs: fim de dia 2026-09-12"
+      },
+      {
+        "sha": "4e8a2de",
+        "msg": "Merge remote-tracking branch 'origin/master' into feat/resume-tailor-v5-9router"
+      },
+      {
+        "sha": "4e12e77",
+        "msg": "fix(resume-tailor): extrai content de SSE colado do 9router + E2E V5 com IP por "
+      },
+      {
+        "sha": "5a14c16",
+        "msg": "Merge pull request #84 from Samuelfmedeiros/chore/dependabot-cooldown-pin-action"
+      }
+    ],
+    "open_prs": [],
+    "latest_release": "",
+    "default_branch": "master",
+    "pushed_at": "2026-09-12T16:06:22Z",
+    "error": ""
+  },
+  "campaign_branch": "roger/portifolio-20260912-153031",
+  "campaign_base_ref": "3a957d2",
+  "campaign_orig_branch": "feat/resume-tailor-v5-9router",
+  "tokens_since": "2026-09-12T18:30:31.408409+00:00",
+  "tokens_recorded_round": 1,
+  "debate": {
+    "votos": [
+      {
+        "perfil": "qualidade",
+        "parecer": "CONCORDO",
+        "nota": 100,
+        "gaps": [],
+        "texto": "Sem diff ou mudanças apresentadas e sem evidências de problemas reais de qualidade no escopo auditado. Não há lacunas concretas de coesão, duplicação, testes, tratamento de erro ou legibilidade para apontar.",
+        "impacto": "",
+        "infra": false
+      },
+      {
+        "perfil": "seguranca",
+        "parecer": "CONCORDO",
+        "nota": 100,
+        "gaps": [],
+        "texto": "Sem evidências reais de problemas de segurança no escopo auditado (OWASP Agentic Top 10, prompt injection, SSRF, auth, secrets vazados ou path traversal) com base nas informações fornecidas. Não foram apontados gaps pelo critic e não há diff/resumo de mudanças que indique risco concreto. Para evitar inventar achados, a conclusão é de conformidade no foco de segurança.",
+        "impacto": "",
+        "infra": false
+      }
+    ],
+    "veredito": "ENTREGA",
+    "gaps": [],
+    "pareceres": {
+      "qualidade": "CONCORDO",
+      "seguranca": "CONCORDO"
+    }
+  },
+  "done": true,
+  "finished_at": "2026-09-12T18:34:10.862558+00:00",
+  "campaign_merged": false,
+  "campaign_finish_msg": "Campanha em branch: roger/portifolio-20260912-153031 (base 3a957d2) — 0 arquivo(s) alterado(s); merge pendente de revisão humana",
+  "improvements": {
+    "rc": 0,
+    "texto": "1. Extrair parse SSE/JSON do 9router (`iterJsonObjects`/`extractContentFromLLM`/`contentOf`) para `src/lib/llmSse.ts` + testes unitários Vitest com fixtures reais do 9router (`{json}data: [DONE]`, frames colados, content vazio) — a causa raiz do bug do PDF placeholder só tem cobertura no script externo `e2e-resume-v5.mjs`, que não roda no CI (impacto alto, esforço ~1h)\n2. Remover código morto em `route.ts`: `callOpenRouter` (route.ts:113, órfão após migração 9router) e `extractFirstJson` (route.ts:197, substituído por `iterJsonObjects`) — reduz superfície de manutenção e confusão sobre providers ativos (impacto baixo, esforço ~10min)\n3. Rate limit `3/min` é trivialmente bypassável por spoof de `x-forwarded-for` (o próprio E2E usa IPs distintos por tentativa para driblá-lo) e o Map in-memory + `setInterval` (route.ts:16-35) não sobrevive entre instâncias serverless na Vercel — usar `x-real-ip`/`x-vercel-forwarded-for` como chave primária e sweep lazy dentro de `checkRateLimit` (sem setInterval); ideal: Upstash Ratelimit (impacto alto — proteção de custo/abuso da cadeia LLM, esforço ~2h)\n4. Não vazar `_reasons` (validações internas) e `_raw` (500 chars da resposta LLM) ao cliente nos 422 (route.ts:470,481) — mover para log do servidor; resposta pública só com mensagem i18n (impacto médio — informação sensível/revelação de prompt, esforço ~15min)\n5. Portar `e2e-resume-v5.mjs` para suíte Playwright oficial do repo (specs `e2e/`) com mock de provider LLM (fetch stub) para rodar em CI sem custo de API — hoje a regressão V5 depende de script manual com rate-limit real (impacto médio, esforço ~1.5h)\n/usr/bin/bash: line 1: warning: command substitution: ignored null byte in input"
+  }
+}
