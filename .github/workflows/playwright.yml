@@ -58,6 +58,12 @@ jobs:
         env:
           CI: true
 
+      - name: Guard - spec nao pode ter default de base URL apontando pra producao
+        # 13/09/2026 (PR #98): o CI nao seta TEST_BASE_URL; se uma spec nascer com
+        # default de producao, os shards batem no site ao vivo em vez do webServer
+        # da branch. Este gate falha o CI na hora se a classe do bug voltar.
+        run: node scripts/check-spec-base-url.mjs tests
+
       - name: Run Playwright tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
         if: inputs.update_snapshots != true
         run: pnpm test:e2e -- --shard=${{ matrix.shardIndex }}/${{ matrix.shardTotal }}
