@@ -132,9 +132,14 @@ export function BlogSection({ posts }: BlogSectionProps) {
   // Filtra por locale: PT mostra posts sem /en/, EN mostra posts EN.
   // O RSS traz versões duplicadas (PT/EN do mesmo post).
   const isEn = locale === "en";
-  const filtered = posts
-    .filter((p) => (isEn ? p.url.includes("/en/") : !p.url.includes("/en/")))
-    .slice(0, 3);
+  const own = posts.filter((p) => (isEn ? p.url.includes("/en/") : !p.url.includes("/en/")));
+  const other = posts.filter((p) => (isEn ? !p.url.includes("/en/") : p.url.includes("/en/")));
+  // 🔴 14/09/2026: se o idioma ativo nao tem NENHUM post (feed EN fora do ar,
+  // mudanca de slug, build sem rede), NAO esconder a secao — cair no outro idioma.
+  // Sumir a secao custa 476px de layout + conteudo indexavel, e foi exatamente o
+  // que derrubou os 4 baselines visuais do CI (6908 -> 6432px).
+  // Preferencia mantida: nunca misturar idiomas quando o proprio tem posts.
+  const filtered = (own.length > 0 ? own : other).slice(0, 3);
 
   if (filtered.length === 0) return null;
 
