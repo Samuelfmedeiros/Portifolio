@@ -5,10 +5,18 @@
 // parser restrito (sem XXE), links http(s) validados, accent #hex.
 // ═══════════════════════════════════════════════════════════════
 
-const LIFELOG_RSS_URL = "https://lifelog-sepia.vercel.app/rss.xml";
+// 🔴 14/09/2026: o LifeLog passou a ter feeds SEPARADOS por idioma
+// (/rss.xml = PT-only, /en/rss.xml = EN). Ler só o PT fazia a secao DO BLOG
+// sumir em modo EN (476px a menos, 0 posts) — bug que derrubou os baselines
+// visuais do CI e escondeu a secao de todo visitante em ingles.
+const LIFELOG_RSS_URLS = {
+  pt: "https://lifelog-sepia.vercel.app/rss.xml",
+  en: "https://lifelog-sepia.vercel.app/en/rss.xml",
+} as const;
+export type LifelogLang = keyof typeof LIFELOG_RSS_URLS;
 const FETCH_TIMEOUT_MS = 5000;
 export const LIFELOG_CACHE_TTL = 1800; // 30min ISR — alinhado com revalidate da página (Samuel 09/08/2026)
-export const MAX_POSTS = 30; // pega bastante; parse mantém PT+EN e o BlogSection filtra por locale (garante 3 por idioma)
+export const MAX_POSTS = 12; // por feed; com PT+EN = ate 24 na fila antes do filtro por locale
 
 export interface LifelogPost {
   title: string;
@@ -86,13 +94,13 @@ export function parseRssItems(xml: string, max: number = MAX_POSTS): LifelogPost
   return posts;
 }
 
-/** Busca os últimos posts do blog. Retorna [] (fallback) em qualquer falha. */
-export async function getLatestLifelogPosts(): Promise<LifelogPost[]> {
+/** Busca UM feed (PT ou EN). Em qualquer falha retorna [] (nao derruba o outro). */
+async function fetchFeed(lang: LifelogLang): Promise<LifelogPost[]> {
   try {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), FETCH_TIMEOUT_MS);
 
-    const res = await fetch(LIFELOG_RSS_URL, {
+    const res = await fetch(LIFELOG_RSS_URLS[lang], {
       next: { revalidate: LIFELOG_CACHE_TTL },
       signal: controller.signal,
       headers: { Accept: "application/rss+xml, application/xml, text/xml" },
@@ -103,13 +111,43 @@ export async function getLatestLifelogPosts(): Promise<LifelogPost[]> {
     clearTimeout(timer);
 
     if (!res.ok) {
-      console.warn(`[lifelogRss] HTTP ${res.status} — fallback`);
+      console.warn(`[lifelogRss] ${lang} HTTP ${res.status} — fallback`);
       return [];
     }
     const xml = await res.text();
     return parseRssItems(xml);
   } catch (err) {
-    console.warn(`[lifelogRss] fetch failed — fallback: ${err instanceof Error ? err.message : String(err)}`);
+    console.warn(
+      `[lifelogRss] ${lang} fetch failed — fallback: ${err instanceof Error ? err.message : String(err)}`,
+    );
     return [];
   }
+}
+
+/**
+ * Busca os últimos posts do blog nos DOIS feeds (PT + EN) em paralelo.
+ * Dedupe por URL (protege se o LifeLog voltar a misturar os idiomas) e
+ * ordena por data desc com tiebreak determinístico em título.
+ * Os links EN já vêm com "/en/" — é assim que o BlogSection filtra por locale.
+ */
+export async function getLatestLifelogPosts(): Promise<LifelogPost[]> {
+  const [pt, en] = await Promise.all([fetchFeed("pt"), fetchFeed("en")]);
+  if (pt.length === 0 && en.length === 0) return [];
+
+  const seen = new Set<string>();
+  const merged: LifelogPost[] = [];
+  for (const p of [...pt, ...en]) {
+    if (seen.has(p.url)) continue;
+    seen.add(p.url);
+    merged.push(p);
+  }
+
+  merged.sort((a, b) => {
+    const da = Date.parse(a.date || "");
+    const db = Date.parse(b.date || "");
+    if (!Number.isNaN(da) && !Number.isNaN(db) && da !== db) return db - da;
+    return a.title.localeCompare(b.title);
+  });
+
+  return merged.slice(0, MAX_POSTS * 2);
 }

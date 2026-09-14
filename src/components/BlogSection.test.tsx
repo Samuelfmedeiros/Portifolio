@@ -78,6 +78,16 @@ describe('BlogSection', () => {
     expect(screen.queryByText('O dashboard que encolheu 74%')).not.toBeInTheDocument()
   })
 
+  // 🔴 14/09/2026 — o bug: feed PT-only + locale en => filtered vazio => secao
+  // sumia (476px a menos; quebrou os baselines do CI e escondeu o conteudo de
+  // todo visitante em ingles). Agora cai no outro idioma em vez de sumir.
+  it('locale EN sem posts EN ainda renderiza a secao (fallback PT)', () => {
+    const onlyPt = posts.filter((p) => !p.url.includes('/en/'))
+    renderWithI18n(<BlogSection posts={onlyPt} />, "en")
+    expect(screen.getByText(/DO BLOG/)).toBeInTheDocument()
+    expect(screen.getByText('O dashboard que encolheu 74%')).toBeInTheDocument()
+  })
+
   it('shows project badge with label', () => {
     renderWithI18n(<BlogSection posts={posts} />)
     expect(screen.getAllByText(/Capivara/).length).toBeGreaterThanOrEqual(1)

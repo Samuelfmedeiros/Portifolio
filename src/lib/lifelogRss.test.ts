@@ -143,6 +143,43 @@ describe('getLatestLifelogPosts', () => {
     vi.unstubAllGlobals()
   })
 
+  // 🔴 14/09/2026 — regressao do feed EN: o LifeLog virou PT-only no /rss.xml e
+  // o BlogSection sumia em modo EN. O fetch agora le os DOIS feeds.
+  it('busca os dois feeds (PT + EN) e mescla com dedupe por URL', async () => {
+    const PT_RSS = `<rss><channel>
+      <item><title>Post PT</title><link>https://lifelog-sepia.vercel.app/post/pt/</link><pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate></item>
+      <item><title>Duplicado</title><link>https://lifelog-sepia.vercel.app/post/dup/</link><pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate></item>
+    </channel></rss>`
+    const EN_RSS = `<rss><channel>
+      <item><title>Post EN</title><link>https://lifelog-sepia.vercel.app/en/post/pt/</link><pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate></item>
+      <item><title>Duplicado</title><link>https://lifelog-sepia.vercel.app/post/dup/</link><pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate></item>
+    </channel></rss>`
+    vi.stubGlobal('fetch', vi.fn(async (url: unknown) => ({
+      ok: true,
+      text: async () => (String(url).includes('/en/rss.xml') ? EN_RSS : PT_RSS),
+    })))
+    const posts = await getLatestLifelogPosts()
+    // 3 URLs unicas (a duplicada aparece nos dois feeds)
+    expect(posts).toHaveLength(3)
+    expect(posts.filter((p) => p.url.includes('/en/'))).toHaveLength(1)
+    expect(posts.some((p) => p.url === 'https://lifelog-sepia.vercel.app/en/post/pt/')).toBe(true)
+    // ordenado por data desc -> o mais velho (dup) cai por ultimo
+    expect(posts[posts.length - 1]?.url).toBe('https://lifelog-sepia.vercel.app/post/dup/')
+    vi.unstubAllGlobals()
+  })
+
+  it('um feed fora do ar nao derruba o outro', async () => {
+    const PT_RSS = `<rss><channel><item><title>Só PT</title><link>https://lifelog-sepia.vercel.app/post/so-pt/</link></item></channel></rss>`
+    vi.stubGlobal('fetch', vi.fn(async (url: unknown) => {
+      if (String(url).includes('/en/rss.xml')) throw new Error('feed EN caiu')
+      return { ok: true, text: async () => PT_RSS }
+    }))
+    const posts = await getLatestLifelogPosts()
+    expect(posts).toHaveLength(1)
+    expect(posts[0]?.title).toBe('Só PT')
+    vi.unstubAllGlobals()
+  })
+
   it('retorna [] em erro HTTP', async () => {
     vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 500 }))
     const posts = await getLatestLifelogPosts()
