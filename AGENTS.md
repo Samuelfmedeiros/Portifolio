@@ -28,6 +28,14 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - Rotina fim-de-dia: entrada propria de 12/09 no CHANGELOG (ate entao o dia vivia so nas secoes de ronda). Master local estava 16 atras do origin (merges de outra sessao) — FF aplicado, origin+bare realinhados.
 - Resume Tailor V5 segue na branch feat/resume-tailor-v5-9router (docs ja na branch); merge/deploy so com autorizacao explicita do Samuel.
 
+## Sessao 2026-09-13 (fim de dia) - gates de CI + fix LGPD do CV no master
+
+- **master (5 commits, HEAD `a57e416`, ja em origin+GitHub+bare):** `527f4c6` fecha o bypass do guard de PDFs diretos do CV (LGPD); `305b405` (PR #98, merge `f67bfca`) spec anti-bypass usa o webServer da branch, nao a producao; `350f5ff` (PR #99, merge `a57e416`) gate de CI que impede spec com default de base URL apontando pra producao.
+- **Branch `feat/resume-tailor-v5-9router`** (`b51589a`): roger, trabalho residual da campanha - push origin+bare OK.
+- **Branch `fix/cookiebanner-a11y`** (`6982063`, 23:08): cookie banner fora de landmark + CTA ilegivel para visitante novo.
+- **Working tree:** 2 artefatos de loop de OUTRA sessao (`.loop-state.json`, `.loop-redator-prompt.md`) - nao commitados aqui.
+- Nota de estado: master local estava 5 commits atras de `origin/master` antes do doc; o commit de fim de dia foi feito direto sobre `origin/master`.
+
 ## Sessão 2026-09-08 (fim de dia) — dia leve (sem commits; rotina fim-de-dia)
 
 - 0 commits de código hoje (último: `1a0a14a` 05/09). Rotina fim-de-dia: seção de sessão + CHANGELOG.

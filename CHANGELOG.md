@@ -1,5 +1,13 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-13] - gates de CI no master + fix LGPD do CV
+- **fix(security)** (`527f4c6`): fecha o bypass do guard de PDFs diretos do CV - download so via `/api/download-cv` (consent + rate limit + log LGPD).
+- **ci(e2e)** (`350f5ff`, PR #99, merge `a57e416`): gate impede spec com default de base URL apontando pra producao.
+- **test(e2e)** (`305b405`, PR #98 merge `f67bfca`): spec anti-bypass usa o webServer da branch, nao a producao.
+- **fix(a11y)** (`6982063`): cookie banner fora de landmark + CTA ilegivel (visitante novo) - branch `fix/cookiebanner-a11y`.
+- **chore(roger)** (`b51589a`): residual da campanha na `feat/resume-tailor-v5-9router`.
+- 8 commits no dia - push origin+bare OK - HEAD master: `a57e416` (antes do doc).
+
 ## [2026-09-12] — Dependabot zerada (squash via SSH) + a11y AA + Playwright 1.63
 - **chore(deps)** (`182dbf1` #85, `180c688` #86, `413bde6` #87, `4d33a02` #88): actions bump — merges via **squash com SSH** porque o token OAuth do gh nao tem escopo `workflow` (403 em PR que toca `.github/`). Fila Dependabot ZERADA.
 - **feat(a11y)** (`aa17075` PR #95): contraste AA (botao WhatsApp, link de repo dos games, accent do RSS no dark 3.36:1 -> AA) + landmark do layout; specs axe sem `networkidle` (flake de 30s sob carga). Secoes "12/09 — Ronda Autonomia" no AGENTS.md.
