@@ -3,7 +3,15 @@
  * Also triggers email + Telegram notification via the existing API route.
  */
 
-const CAPIVARA_API = "https://capivara.seu.pet/api/portifolio/public";
+/**
+ * Rota same-origin (/api/pf/portifolio/public) -> src/app/api/pf/[...path]/route.ts
+ *
+ * Antes era "https://capivara.seu.pet/api/portifolio/public" direto: funcionava no
+ * dominio da Vercel (que esta na allowlist de CORS do Capivara) e QUEBRAVA no
+ * dominio custom portifolio.seu.pet, que nao esta — preflight OPTIONS 400 e
+ * "Failed to fetch" no browser (medido 14/09/2026).
+ */
+const CAPIVARA_API = "/api/pf/portifolio/public";
 
 export async function submitContactForm(data: {
   name: string;
