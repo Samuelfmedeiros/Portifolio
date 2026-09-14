@@ -19,16 +19,24 @@
  * executava (ERR_BLOCKED_BY_RESPONSE). URL nova = cache key nova = origin fresco
  * com CORP cross-origin. Nao remover sem motivo documentado (TRAP #10).
  */
-const UMAMI_SCRIPT_SRC = "https://capivara.seu.pet/api/umami/script.js?v=2";
+const UMAMI_SCRIPT_SRC = "/api/pf/umami/script.js?v=2";
 const UMAMI_WEBSITE_ID = "39676cee-8416-4a33-ba06-cbc7af177c27";
 
 /** Injeta o script do Umami dinamicamente (idempotente — não duplica). */
 export function loadUmamiScript(): void {
   if (typeof window === "undefined") return;
-  if (document.querySelector(`script[src*="capivara.seu.pet/api/umami/script.js"]`)) return;
+  if (document.querySelector(`script[src*="/api/pf/umami/script.js"]`)) return;
   const script = document.createElement("script");
   script.async = true;
   script.src = UMAMI_SCRIPT_SRC;
   script.setAttribute("data-website-id", UMAMI_WEBSITE_ID);
+  // O tracker posta em `${host-url}/api/send`. Apontando para o proxy same-origin
+  // (/api/pf/umami) o beacon vai para /api/pf/umami/api/send no MESMO host do site:
+  // sem preflight e sem depender do CORS do Capivara. Antes, no dominio custom,
+  // o POST cruzava origem e morria bloqueado (zero dados de tracking).
+  script.setAttribute("data-host-url", "/api/pf/umami");
+  // O /public do site tambem passa a servir o script (rota /api/pf/umami/script.js):
+  // mesma origem => sem CORP/COEP cross-origin (o COEP require-corp do site
+  // ja bloqueou o tracker uma vez por cache envenenado no edge) e sem preflight.
   document.head.appendChild(script);
 }
