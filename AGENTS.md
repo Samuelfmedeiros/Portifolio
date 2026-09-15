@@ -350,3 +350,10 @@ por `TEST_BASE_URL` (local OU producao) com controle negativo provado (RED->GREE
 **critic_check_portifolio.py corrigido:** declarava "sem testes novos" quando a
 spec de prevencao ficava em `HEAD~2` (fix commitado DEPOIS da entrega). Agora
 varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.
+
+## Sessao 2026-09-14 (fim de dia) - CORS same-origin no dominio custom (PR #104) + cura do feed EN (PR #103)
+
+- **fix(cors)** (`0b9f0a5`, PR #104 merge `b1af93c`): proxy same-origin `/api/pf/*` + rewrite do tracker Umami — os POSTs de contato/CV/tracking em portifolio.seu.pet morriam em `TypeError: Failed to fetch` (allow_origins literal nao tinha o dominio). Allowlist fechada + `decodeURIComponent` em loop (segmento cru deixava `../admin` passar no startsWith = proxy aberto).
+- **fix(rss)** (`8fc03a4`, PR #103 merge `98688f1`): build deterministico do feed EN (cura iniciada pela ronda de autonomia das 10:31).
+- **Pendente**: `fix/cf-beacon-csp` (`7382fb2`, CSP autorizando o beacon do Cloudflare Web Analytics) e `roger/portifolio-a11y` (`7f20096`) sem merge. Deploy de producao continua esperando ordem explicita.
+

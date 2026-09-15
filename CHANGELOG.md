@@ -1,5 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-14] - CORS same-origin no dominio custom (PR #104) + feed EN deterministico (PR #103)
+- **fix(cors)** (`0b9f0a5`, PR #104 merge `b1af93c`): rotas same-origin pra API do portifolio e pro tracker do Umami — conserta contato/CV/tracking em portifolio.seu.pet (allow_origins literal nao cobria o dominio; proxy com allowlist fechada e decode em loop anti-`../`).
+- **wip(ronda)** (`8fc03a4`, PR #103 merge `98688f1`): cura do feed EN + build deterministico do RSS.
+- 4 commits no dia (2 merges de PR) · push origin+bare OK · HEAD master: `b1af93c`.
+
 ## [2026-09-13] - gates de CI no master + fix LGPD do CV
 - **fix(security)** (`527f4c6`): fecha o bypass do guard de PDFs diretos do CV - download so via `/api/download-cv` (consent + rate limit + log LGPD).
 - **ci(e2e)** (`350f5ff`, PR #99, merge `a57e416`): gate impede spec com default de base URL apontando pra producao.
