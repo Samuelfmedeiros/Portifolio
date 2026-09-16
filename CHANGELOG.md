@@ -1,5 +1,9 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-15] - excecao CSP unsafe-inline documentada (Cerberus 15/09) — branch pendente de merge
+- **docs(csp)** (`0cab79d`, branch `docs/csp-exception-adr`): excecao `unsafe-inline` justificada no ADR + `script-src` igual ao vercel.json (sem `unsafe-eval`).
+- 0 commits no master · push origin+bare OK (master inalterado em `0366c75`).
+
 ## [2026-09-14] - CORS same-origin no dominio custom (PR #104) + feed EN deterministico (PR #103)
 - **fix(cors)** (`0b9f0a5`, PR #104 merge `b1af93c`): rotas same-origin pra API do portifolio e pro tracker do Umami — conserta contato/CV/tracking em portifolio.seu.pet (allow_origins literal nao cobria o dominio; proxy com allowlist fechada e decode em loop anti-`../`).
 - **wip(ronda)** (`8fc03a4`, PR #103 merge `98688f1`): cura do feed EN + build deterministico do RSS.
