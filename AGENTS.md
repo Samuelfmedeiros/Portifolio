@@ -351,6 +351,11 @@ por `TEST_BASE_URL` (local OU producao) com controle negativo provado (RED->GREE
 spec de prevencao ficava em `HEAD~2` (fix commitado DEPOIS da entrega). Agora
 varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.
 
+## Sessao 2026-09-15 (fim de dia) - dia sem merge no master; excecao CSP do Cerberus documentada em branch pendente
+
+- **master sem commits hoje** (HEAD `0366c75` = doc do 14/09). Unica entrega do dia esta em `docs/csp-exception-adr` (`0cab79d`): excecao `unsafe-inline` documentada (achado Cerberus 15/09) + `script-src` alinhado ao vercel.json sem `unsafe-eval`.
+- **Pendente**: merge do `docs/csp-exception-adr` + `fix/cookiebanner-a11y` (14/09) — ordem explicita do Samuel. Working tree do checkout tem 40 entradas de OUTRA sessao — nada commitado nem descartado daqui.
+
 ## Sessao 2026-09-14 (fim de dia) - CORS same-origin no dominio custom (PR #104) + cura do feed EN (PR #103)
 
 - **fix(cors)** (`0b9f0a5`, PR #104 merge `b1af93c`): proxy same-origin `/api/pf/*` + rewrite do tracker Umami — os POSTs de contato/CV/tracking em portifolio.seu.pet morriam em `TypeError: Failed to fetch` (allow_origins literal nao tinha o dominio). Allowlist fechada + `decodeURIComponent` em loop (segmento cru deixava `../admin` passar no startsWith = proxy aberto).
