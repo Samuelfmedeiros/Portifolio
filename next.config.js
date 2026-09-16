@@ -27,9 +27,16 @@ const nextConfig = {
           { key: 'Permissions-Policy', value: 'camera=(), microphone=(), geolocation=(), payment=(), usb=()' },
           {
             key: 'Content-Security-Policy',
+            // FONTE ÚNICA da CSP em produção é vercel.json (ela sobrescreve este bloco
+            // no Vercel). Este array existe só para dev/`next start` baterem com ela.
+            // 'unsafe-inline' em script-src/style-src é EXCEÇÃO DOCUMENTADA — see
+            // docs/adr/ADR-004-csp-unsafe-inline-excecao.md (Next 16 flight payloads +
+            // 263 style attrs; nonce/hash mataria cache edge + ISR).
+            // 15/09: removido 'unsafe-eval' (divergia do header servido; nada no build
+            // Turbopack de produção depende dele).
             value: [
               "default-src 'self'",
-              "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://ep2.adtrafficquality.google https://*.adtrafficquality.google https://capivara.seu.pet https://unpkg.com https://static.cloudflareinsights.com",
+              "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://ep2.adtrafficquality.google https://*.adtrafficquality.google https://capivara.seu.pet https://unpkg.com https://static.cloudflareinsights.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
               "img-src 'self' data: blob: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://avatars.githubusercontent.com https://*.googleusercontent.com https://api.qrserver.com https://lifelog-sepia.vercel.app",
               "font-src 'self' https://fonts.gstatic.com",
