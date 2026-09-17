@@ -107,7 +107,10 @@ def main():
 
 def hashlib_md5(p):
     import hashlib
-    return hashlib.md5(p.read_bytes()).hexdigest()[:8]
+
+    # Non-cryptographic: content fingerprint to compare the PT/EN CVs.
+    # usedforsecurity=False is what bandit B324 asks for.
+    return hashlib.md5(p.read_bytes(), usedforsecurity=False).hexdigest()[:8]
 
 
 if __name__ == "__main__":
