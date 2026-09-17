@@ -1,5 +1,20 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## 2026-09-16 — Capas: fallback + geracao automatica + watchdog
+
+- **Fallback de capa no card** (`src/lib/coverFallback.ts` + `ProjectCoverFallback.tsx`):
+  projeto sem `imageUrl` deixa de cair em gradiente com nome em texto puro e passa
+  a renderizar capa real (monograma + aneis neon) derivada do nome — hash FNV-1a,
+  estavel entre renders, accent extraido do gradiente do card.
+- **Geracao automatica** (`scripts/portfolio-covers-autogen.py`, cron 6h): repo novo
+  sem capa ganha capa (Worker FLUX, 1280x720, arte abstrata dark+neon sem texto) e PR.
+- **Watchdog** (`scripts/portfolio-covers-watchdog.py`, cron 30min): confere as capas
+  em producao (200 + content-type de imagem + corpo > 5KB, pega o "200 com 0 byte") e
+  avisa nos grupos Notificacoes e Portifolio; silencioso quando tudo ok.
+- **Guard e2e** (`scripts/portfolio-covers-guard.py`): falha se algum card ficar pelado.
+- Testes: 12 unit + 5 de componente; suite 375/375; build ok.
+
+
 ## [2026-09-16] — capas dos cards roger-mlops/roger-loop (PR #109) + guarda CSP do beacon
 - **feat(projects)** (`7bbb48b`): `roger-mlops` e `roger-loop` entravam pela API do GitHub sem `imageUrl` e caiam no fallback gradiente+nome (card sem capa em producao). Capas 1280x720 WEBP no padrao da serie viva (FLUX Worker, dark+neon, sem wordmark queimado) + catalogo estatico id 999011/999012 + i18n PT/EN. Guarda de regressao cobre capa em disco, magic bytes WEBP e i18n nos 2 idiomas.
 - **test(csp)** (`abad4a4`): `csp-cloudflare-beacon.test.ts` lia o COMENTARIO da CSP em vez da diretiva e falhava no master desde o PR #106; agora filtra comentarios e assere que a linha e a diretiva.

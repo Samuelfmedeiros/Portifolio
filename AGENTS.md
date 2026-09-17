@@ -397,3 +397,33 @@ desktop+mobile com os 2 cards carregando `/projects/roger-*.webp`.
 **Pitfall operacional (worktree):** `node_modules` NAO pode ser symlink no worktree — o Turbopack
 falha com `Symlink [project]/node_modules is invalid, it points out of the filesystem root`.
 Usar `cp -al` (hardlinks) do `node_modules` do repo principal.
+
+## Sessao 16/09/2026 — Capas dos projetos (fallback + autogen + watchdog)
+
+**Pedido (Samuel):** projeto novo entrou sem capa; proximas vezes deve JA entrar com
+capa, com fallback e aviso nos grupos Notificacoes E Portifolio quando faltar.
+
+### Camadas
+| Camada | Arquivo | O que faz |
+|---|---|---|
+| L1 autogen | `scripts/portfolio-covers-autogen.py` (cron 6h) | repo publico sem capa -> gera capa (Worker FLUX 1280x720) + abre PR |
+| L2 fallback | `src/lib/coverFallback.ts` + `src/components/ProjectCoverFallback.tsx` | card sem imageUrl renderiza capa real (monograma + aneis) em vez de texto pelado |
+| L3 watchdog | `scripts/portfolio-covers-watchdog.py` (cron 30min) | mede as capas em producao e alerta nos DOIS grupos |
+
+### Pitfalls descobertos
+- **CRLF do ProjectHangar.tsx:** escrever o arquivo via `wsl.exe` pipe converte EOL e
+  infla o diff (814 linhas para 6 de mudanca). Patcher tem que rodar DENTRO do WSL
+  (`base64 -d > /tmp/x.py && python3 /tmp/x.py`), nunca atravessando o pipe.
+- **UNC em worktree WSL:** `\\wsl.localhost\...` e' read-only para escrita — usar a
+  ponte local -> `wsl cp`.
+- **node_modules no worktree:** `rm -rf node_modules` antes do commit derruba build e
+  vitest do critic (SCORE 20). Recolocar (`cp -al` da working tree) antes de rodar o Roger.
+- **`git fetch origin master` antes de conferir capas:** branch local atrasada dava falso
+  positivo "sem capa" para projeto que ja estava no ar.
+- **`--check` do autogen le de `origin/master`**, nao da working tree.
+
+### Estrutura real do card (para guard/medicao)
+O header do card no HTML e' o bloco com `h-[160px] md:h-[200px]`; dentro dele vive a
+capa (`<img>`/`<video>`), o icone ou o fallback (`<svg data-cover-name=...>`).
+O guard e o watchdog medem por esse marcador — nao por `<article>`.
+
