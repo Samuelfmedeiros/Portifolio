@@ -59,6 +59,26 @@ jobs:
     - name: Build project
       run: pnpm build
 
+    # ── Gate de capas (antes do deploy) ────────────────────────
+    - name: Gate - nenhum card vai ao ar sem capa real
+      # 17/09/2026: projeto novo entrava pela API do GitHub sem imageUrl, caia no
+      # fallback e o aviso so vinha do watchdog 30min DEPOIS de estar no ar. Este
+      # gate roda sobre o build e BLOQUEIA o deploy se o defeito estiver nos
+      # arquivos deste commit (static sem imageUrl, arquivo ausente/truncado).
+      # Repo novo sem capa = sinal (nao bloqueia): coberto por fallback + autogen
+      # 6h + watchdog 30min. Exit 2 = medicao falhou -> avisa, nao bloqueia.
+      run: |
+        set +e
+        node scripts/check-project-covers.mjs
+        CODE=$?
+        if [ "$CODE" = "1" ]; then
+          echo "::error::Gate de capas: card iria ao ar sem capa real"
+          exit 1
+        fi
+        if [ "$CODE" = "2" ]; then
+          echo "::warning::Gate de capas: nao foi possivel medir (infra) — deploy segue"
+        fi
+
     # ── Deploy & Rollback ──────────────────────────────────────
     - name: Get current production deployment
       if: github.ref_name == 'master' && github.event_name != 'pull_request'
@@ -144,6 +164,14 @@ jobs:
         done
         echo "⚠️ Rollback executado, mas site retornou HTTP $CODE — verificar manualmente"
         echo "rollback_ok=degraded" >> "$GITHUB_OUTPUT"
+
+    - name: Gate pos-deploy - capas no ar (aviso, nao bloqueia)
+      # Prova ao vivo: card em fallback ou capa que nao baixa no site publicado.
+      # Nao bloqueia (o deploy ja aconteceu) — o watchdog de 30min cobre o alerta
+      # nos dois grupos; aqui o sinal fica no log do proprio deploy.
+      if: github.ref_name == 'master' && github.event_name != 'pull_request'
+      continue-on-error: true
+      run: node scripts/check-project-covers.mjs --live https://portifolio.seu.pet
 
     # ── Notificações ──────────────────────────────────────────
     - name: Notify Telegram Success
