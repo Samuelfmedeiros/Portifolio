@@ -12,8 +12,15 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { getProjectI18n } from "@/lib/profileData";
 import { ProjectModal } from "./ProjectModal";
+import { ProjectCoverFallback } from "./ProjectCoverFallback";
 
 const FEATURED = FEATURED_PROJECTS;
+
+/** First #rrggbb colour inside a CSS gradient string, or null. */
+function firstHex(css: string): string | null {
+  const m = css.match(/#[0-9a-fA-F]{6}|#[0-9a-fA-F]{3}/);
+  return m ? m[0] : null;
+}
 
 // Language color map
 const LANG_COLORS: Record<string, string> = {
@@ -102,6 +109,9 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
     ? new Date(repo.pushed_at).toLocaleDateString("pt-BR", { month: "short", year: "2-digit", timeZone: "UTC" })
     : null;
   const gradient = repo.imageGradient || PROJECT_GRADIENTS[repo.name] || "linear-gradient(135deg, var(--accent) 0%, var(--accent-alt, #7c3aed) 100%)";
+  // Cover fallback needs a concrete hex (SVG stroke): pull the first colour
+  // out of the card gradient so the generated cover matches the card.
+  const coverAccent = firstHex(gradient) || "#22d3ee";
   const { track } = useAnalytics();
 
   const handleClick = () => {
@@ -189,9 +199,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
             ) : (
-              <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg relative z-10">
-                {repo.name}
-              </span>
+              <ProjectCoverFallback name={repo.name} accent={coverAccent} />
             )}
             {/* Play overlay on hover */}
             <div className="absolute inset-0 bg-black/0 group-hover/image:bg-black/30 transition-all duration-300 flex items-center justify-center">
@@ -238,9 +246,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
             ) : repo.icon ? (
               <span className="text-4xl relative z-10 drop-shadow-lg">{repo.icon}</span>
             ) : (
-              <span className="font-mono text-xl font-bold text-white/90 tracking-wider drop-shadow-lg relative z-10">
-                {repo.name}
-              </span>
+              <ProjectCoverFallback name={repo.name} accent={coverAccent} />
             )}
             <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[var(--card-bg,#0a0a1a)] to-transparent" />
           </div>
