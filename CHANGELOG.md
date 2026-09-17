@@ -1,5 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-16] — capas dos cards roger-mlops/roger-loop (PR #109) + guarda CSP do beacon
+- **feat(projects)** (`7bbb48b`): `roger-mlops` e `roger-loop` entravam pela API do GitHub sem `imageUrl` e caiam no fallback gradiente+nome (card sem capa em producao). Capas 1280x720 WEBP no padrao da serie viva (FLUX Worker, dark+neon, sem wordmark queimado) + catalogo estatico id 999011/999012 + i18n PT/EN. Guarda de regressao cobre capa em disco, magic bytes WEBP e i18n nos 2 idiomas.
+- **test(csp)** (`abad4a4`): `csp-cloudflare-beacon.test.ts` lia o COMENTARIO da CSP em vez da diretiva e falhava no master desde o PR #106; agora filtra comentarios e assere que a linha e a diretiva.
+- vitest 358 passed · build OK · E2E 65 passed/1 skipped · CI 10/10 · evidencia visual desktop+mobile.
+
+
 ## [2026-09-15] - excecao CSP unsafe-inline documentada (Cerberus 15/09) — branch pendente de merge
 - **docs(csp)** (`0cab79d`, branch `docs/csp-exception-adr`): excecao `unsafe-inline` justificada no ADR + `script-src` igual ao vercel.json (sem `unsafe-eval`).
 - 0 commits no master · push origin+bare OK (master inalterado em `0366c75`).

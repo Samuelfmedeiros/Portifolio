@@ -18,8 +18,9 @@ const ROOT = path.resolve(__dirname, '../..');
 const BEACON_HOST = 'https://static.cloudflareinsights.com';
 
 function scriptSrcOf(raw: string): string {
-  const m = raw.match(/script-src[^"']*(?:https:[^;"']*)*/);
-  const line = raw.split(/\r?\n/).find((l) => l.includes('script-src'));
+  const line = raw
+    .split(/\r?\n/)
+    .find((l) => l.includes('script-src') && !l.trim().startsWith('//'));
   expect(line, 'script-src ausente').toBeTruthy();
   return line as string;
 }
@@ -27,7 +28,9 @@ function scriptSrcOf(raw: string): string {
 describe('CSP autoriza o beacon injetado pela Cloudflare (dominio custom)', () => {
   it('next.config.js — script-src inclui static.cloudflareinsights.com', () => {
     const src = readFileSync(path.join(ROOT, 'next.config.js'), 'utf8');
-    expect(scriptSrcOf(src)).toContain(BEACON_HOST);
+    const line = scriptSrcOf(src);
+    expect(line, 'linha encontrada nao e a diretiva CSP').toContain('script-src \'self\'');
+    expect(line).toContain(BEACON_HOST);
   });
 
   it('vercel.json — script-src inclui static.cloudflareinsights.com', () => {

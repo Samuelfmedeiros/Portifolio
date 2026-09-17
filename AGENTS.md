@@ -362,3 +362,38 @@ varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.
 - **fix(rss)** (`8fc03a4`, PR #103 merge `98688f1`): build deterministico do feed EN (cura iniciada pela ronda de autonomia das 10:31).
 - **Pendente**: `fix/cf-beacon-csp` (`7382fb2`, CSP autorizando o beacon do Cloudflare Web Analytics) e `roger/portifolio-a11y` (`7f20096`) sem merge. Deploy de producao continua esperando ordem explicita.
 
+## Sessao 2026-09-16 — Capas dos cards roger-mlops e roger-loop (PR #109)
+
+**Pedido (grupo Portifolio):** "dois novos projetos no portifolio em producao estao sem capas".
+
+**Causa raiz:** `roger-mlops` e `roger-loop` entram na home pela API publica do GitHub
+(`getRepos()`), nao tinham entrada em `src/lib/staticProjects.ts` e chegavam sem `imageUrl`.
+Sem `imageUrl` o `ProjectHangar` renderiza so o gradiente + o nome em texto — o card parece
+"sem capa". Prova no HTML servido por `portifolio.seu.pet`: os 2 cards apareciam com
+`<span class="font-mono text-xl ...">roger-mlops</span>` no lugar da imagem.
+
+**Correcao:**
+- `public/projects/roger-mlops.webp` + `roger-loop.webp` — 1280x720 WEBP, geradas no Worker FLUX
+  (mesmo do LifeLog) e recortadas para 16:9 por center-crop (o Worker devolve 1024x1024).
+- `src/lib/staticProjects.ts` — entradas id 999011/999012 com `imageUrl`, `topics` reais do repo,
+  gradiente e `hasDemo: false`. **`FEATURED_PROJECTS` e `GAME_PROJECTS` intactos** (badge DESTAQUE
+  e JsonLd fora do escopo — precedente do storydesk em `4121e55`).
+- `src/lib/profileData.ts` — descricao i18n PT/EN (o card usa `getProjectI18n`; sem isso o EN
+  cairia no texto PT do catalogo).
+
+**Guarda de regressao (`staticProjects.test.ts`):** para cada card — existe no catalogo, tem
+`imageUrl`, o arquivo existe em `public/`, e WEBP real (magic bytes `RIFF`/`WEBP`), >10KB
+(placeholder falha) e tem descricao i18n PT **e** EN.
+
+**Bug de baseline corrigido de passagem:** `src/test/csp-cloudflare-beacon.test.ts` procurava a
+primeira linha contendo `script-src` — que no `next.config.js` e o COMENTARIO acima da diretiva.
+O teste falhava no master desde o PR #106 pelo motivo errado (reproduzido na master pura com
+`git stash`). Agora filtra linhas de comentario e afirma que a linha achada e a diretiva.
+
+**Verificacao:** vitest 358 passed (antes 1 failed/351 passed) · `pnpm build` OK · E2E Playwright
+66 specs (65 passed, 1 skipped) no preview local :3461 · CI do PR 10/10 verde · evidencia visual
+desktop+mobile com os 2 cards carregando `/projects/roger-*.webp`.
+
+**Pitfall operacional (worktree):** `node_modules` NAO pode ser symlink no worktree — o Turbopack
+falha com `Symlink [project]/node_modules is invalid, it points out of the filesystem root`.
+Usar `cp -al` (hardlinks) do `node_modules` do repo principal.
