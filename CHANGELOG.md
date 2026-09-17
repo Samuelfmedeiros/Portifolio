@@ -15,6 +15,14 @@
 - Testes: 12 unit + 5 de componente; suite 375/375; build ok.
 
 
+## [2026-09-16 fim de dia] - jogos restaurados, SRI, VRT renovada e capas com fallback/autogen/watchdog
+- **fix(games)** (`660b155`): restaura HTML dos 5 jogos (base64 commitado no PR #107).
+- **test(e2e)** (`606c74e`, `64d1c01`): baseline VRT do CI + webServer do Playwright no TEST_BASE_URL local.
+- **feat(projects)** (`7bbb48b` PR #109, `ccb207d` PR #110): capas roger-mlops/roger-loop + fallback de capa no card.
+- **fix(security)** (`43f87ec`): bandit B324 em `scripts/validate-cv.py` (MD5 -> SHA-256).
+- **pendente**: `docs/csp-exception-adr` (`d263aea`) sem merge.
+- 15 commits no master - push origin+bare OK - HEAD master: `f67b8c6`.
+
 ## [2026-09-16] — capas dos cards roger-mlops/roger-loop (PR #109) + guarda CSP do beacon
 - **feat(projects)** (`7bbb48b`): `roger-mlops` e `roger-loop` entravam pela API do GitHub sem `imageUrl` e caiam no fallback gradiente+nome (card sem capa em producao). Capas 1280x720 WEBP no padrao da serie viva (FLUX Worker, dark+neon, sem wordmark queimado) + catalogo estatico id 999011/999012 + i18n PT/EN. Guarda de regressao cobre capa em disco, magic bytes WEBP e i18n nos 2 idiomas.
 - **test(csp)** (`abad4a4`): `csp-cloudflare-beacon.test.ts` lia o COMENTARIO da CSP em vez da diretiva e falhava no master desde o PR #106; agora filtra comentarios e assere que a linha e a diretiva.

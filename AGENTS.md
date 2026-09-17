@@ -351,6 +351,17 @@ por `TEST_BASE_URL` (local OU producao) com controle negativo provado (RED->GREE
 spec de prevencao ficava em `HEAD~2` (fix commitado DEPOIS da entrega). Agora
 varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.
 
+## Sessao 2026-09-16 (fim de dia) - dia cheio: jogos restaurados, SRI, VRT renovada e capas com fallback/autogen/watchdog
+
+- **fix(games)** (`660b155`): HTML dos 5 jogos restaurado - o PR #107 tinha commitado o arquivo em base64 (pagina quebrada); `fefe5fb` (PR #107) trouxe o SRI.
+- **test(e2e)** (`606c74e`, `64d1c01`, `0a718ab`/`d67ba31`/`87f1a32`/`fc1658f`): baseline VRT renovada no CI + webServer do Playwright na porta do TEST_BASE_URL local + spec de identidade do preview.
+- **feat(projects)** (`7bbb48b` + `abad4a4`, PR #109): capas dos cards `roger-mlops`/`roger-loop` (1280x720 WEBP, catalogo estatico 999011/999012) + guarda de regressao; guarda CSP do beacon voltou a ler a diretiva, nao o comentario.
+- **fix(security)** (`43f87ec`): bandit B324 HIGH em `scripts/validate-cv.py` (baseline da master) - MD5 -> SHA-256.
+- **feat(projects)** (`ccb207d`, PR #110 `f67b8c6`): fallback de capa no card (nunca mais card pelado) - monograma + aneis neon derivados do nome, hash FNV-1a estavel.
+- **docs/sessao** (`aaff07a`): capas fallback/autogen/watchdog + geracao automatica (cron 6h) e watchdog de producao (cron 30min) documentados.
+- **Pendente**: `docs/csp-exception-adr` (`d263aea`, +4 commits ja em `origin/docs/csp-exception-adr` - baseline VRT do branch) sem merge; `chore/vrt-baseline-refresh` (`606c74e`) mergeado via PR #108. Merge/deploy so com ordem explicita do Samuel.
+- 15 commits em `origin/master` (`f67b8c6`) - push origin+bare OK (bare estava 1 atras, `9cea577e`).
+
 ## Sessao 2026-09-15 (fim de dia) - dia sem merge no master; excecao CSP do Cerberus documentada em branch pendente
 
 - **master sem commits hoje** (HEAD `0366c75` = doc do 14/09). Unica entrega do dia esta em `docs/csp-exception-adr` (`0cab79d`): excecao `unsafe-inline` documentada (achado Cerberus 15/09) + `script-src` alinhado ao vercel.json sem `unsafe-eval`.
