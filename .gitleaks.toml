@@ -1,8 +1,11 @@
 title = "Portifolio Security Config"
 
+# Allowlist restrita a fixtures de teste e codigo vendorizado.
+# NUNCA adicionar src/ ou docs/: um segredo real em codigo ou documentacao
+# DEVE falhar o scan (docs/.* ja foi allowlistado e cegava o gitleaks).
 [allowlist]
-description = "Known safe patterns"
-paths = ['''test/.*''', '''docs/.*''', '''node_modules/.*''']
+description = "Test fixtures and vendored node_modules only"
+paths = ['''test/.*''', '''node_modules/.*''']
 
 [[rules]]
 id = "audio-files"

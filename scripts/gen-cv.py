@@ -7,7 +7,7 @@ na mesma linha — glifo separado quebra parse), Calibri/Arial.
 Uso: python3 scripts/gen-cv.py
 """
 import pathlib
-import subprocess
+import subprocess  # nosec B404 (fixed-arg CLI helper only; no shell, no untrusted input)
 
 REPO = pathlib.Path.home() / "projetos/portifolio"
 SRC = REPO / "docs" / "cv"
@@ -65,7 +65,7 @@ def gen(lang: str, filename: str) -> pathlib.Path:
     )
     html_path = SRC / f"{lang}.html"
     html_path.write_text(doc, encoding="utf-8")
-    subprocess.run(
+    subprocess.run(  # nosec B603 B607 (fixed args)
         ["soffice", "--headless", "--convert-to", "pdf", "--outdir", str(SRC), str(html_path)],
         check=True, capture_output=True, timeout=120,
     )
