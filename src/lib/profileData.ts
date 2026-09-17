@@ -225,6 +225,14 @@ const PROJECTS_PT: Record<string, ProjectI18n> = {
     description: "Aprendizados reais de engenharia sem filtro: otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX e design system próprio.",
     topics: ["web", "blog", "astro", "mdx"],
   },
+  "roger-mlops": {
+    description: "Camada de confiabilidade para treino longo de GPU em WSL2: critic determinístico, watchdogs que ressuscitam runs travados e checkpoints à prova de corrupção. Python puro, zero dependências.",
+    topics: ["python", "mlops", "gpu", "wsl2", "watchdog", "deterministic-testing"],
+  },
+  "roger-loop": {
+    description: "Orquestrador de test-loop config-driven: critic determinístico por contrato, rodadas com orçamento e debate de zona cinzenta com pernas isoladas. Zero dependências.",
+    topics: ["python", "orchestrator", "test-loop", "quality-gates", "ci"],
+  },
 };
 
 const PROJECTS_EN: Record<string, ProjectI18n> = {
@@ -243,6 +251,14 @@ const PROJECTS_EN: Record<string, ProjectI18n> = {
   lifelog: {
     description: "Real engineering learnings without filters: performance optimization, refactors, dashboards and behind-the-scenes of my projects. Astro, MDX and a custom design system.",
     topics: ["web", "blog", "astro", "mdx"],
+  },
+  "roger-mlops": {
+    description: "Reliability layer for long unattended GPU training on WSL2: deterministic critic, watchdogs that resurrect wedged runs and crash-safe checkpoint I/O. Pure Python, zero dependencies.",
+    topics: ["python", "mlops", "gpu", "wsl2", "watchdog", "deterministic-testing"],
+  },
+  "roger-loop": {
+    description: "Config-driven test-loop orchestrator for agentic delivery: contract-based deterministic critic, budgeted rounds and gray-zone debate with isolated legs. Zero dependencies.",
+    topics: ["python", "orchestrator", "test-loop", "quality-gates", "ci"],
   },
 };
 
