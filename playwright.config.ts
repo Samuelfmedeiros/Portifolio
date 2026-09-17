@@ -37,7 +37,7 @@ export default defineConfig({
   },
 
   webServer: isLocalBase ? {
-    command: `pnpm exec next start -p ${previewPort}`,
+    command: `./node_modules/.bin/next start -p ${previewPort}`,
     url: BASE_URL,
     // TEST_BASE_URL local explicit = o operador já definiu a porta; se algo
     // saudável responde nela, reusa (evita conflito com preview já subido).
