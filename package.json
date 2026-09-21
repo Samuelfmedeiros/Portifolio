@@ -45,7 +45,7 @@
     "playwright": "^1.63.0",
     "tailwindcss": "^4.3.3",
     "typescript": "^5.9.3",
-    "vercel": "^59.11.7",
+    "vercel": "^59.16.0",
     "vitest": "^5.0.0"
   },
   "overrides": {
