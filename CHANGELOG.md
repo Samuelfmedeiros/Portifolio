@@ -1,5 +1,9 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-09-20] - Dia sem commits na master (campanha Roger em voo)
+- 0 commits hoje em todas as branches; `origin/master` + `bare/master` em `691207a2` (doc de 16/09).
+- Campanha Roger ativa no checkout durante o dia (state + workers r2-r8); tree com 33 entradas de outra sessao - nada commitado daqui.
+
 ## 2026-09-16 — Capas: fallback + geracao automatica + watchdog
 
 - **Fallback de capa no card** (`src/lib/coverFallback.ts` + `ProjectCoverFallback.tsx`):
