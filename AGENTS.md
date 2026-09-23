@@ -438,3 +438,5 @@ O header do card no HTML e' o bloco com `h-[160px] md:h-[200px]`; dentro dele vi
 capa (`<img>`/`<video>`), o icone ou o fallback (`<svg data-cover-name=...>`).
 O guard e o watchdog medem por esse marcador — nao por `<article>`.
 
+
+## Sessao 2026-09-22 (fim de dia) - Fim de dia automático

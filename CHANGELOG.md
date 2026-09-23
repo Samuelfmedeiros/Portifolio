@@ -190,3 +190,4 @@
 - **CV fix**: endereço completo e CEP removidos — fica apenas "Brasília-DF" (regenerado do DOCX fonte em F:\)
 
 **4 commits · HEAD: `1aa9c44` ✅ push bare+origin**
+## [2026-09-22] - Fim de dia automático: documentação de sessão
