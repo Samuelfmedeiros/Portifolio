@@ -440,3 +440,9 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
 
 
 ## Sessao 2026-09-22 (fim de dia) - Fim de dia automático
+
+## Sessao 2026-09-28 (fim de dia) - sem commits; scaffolding alheio intacto
+
+- 0 commits de codigo no dia.
+- Working tree com 8 untracked de outra sessao (.loop-handoff.json, .loop-portifolio.state.json + 6 archives .old-*/.archive-*) - nao commitados nem descartados daqui; decisao cabe ao dono dessas edicoes.
+- Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
