@@ -446,3 +446,10 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
 - 0 commits de codigo no dia.
 - Working tree com 8 untracked de outra sessao (.loop-handoff.json, .loop-portifolio.state.json + 6 archives .old-*/.archive-*) - nao commitados nem descartados daqui; decisao cabe ao dono dessas edicoes.
 - Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
+
+## Sessao 2026-10-02 (fim de dia) - coverage-v8 habilitado como devDependency
+
+- `8c2854f` test: habilita `@vitest/coverage-v8` como devDependency (`package.json` +1, `pnpm-lock.yaml` +304/-72) — sem isso a medicao de cobertura nao roda.
+- 1 commit hoje na branch de trabalho `roger/portifolio-20260921-134947` (HEAD); push `bare` + `origin` OK.
+- Nota de branch: `deploy.yml` do repo dispara em push na `master`; a branch de trabalho nao aciona deploy.
+- Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.

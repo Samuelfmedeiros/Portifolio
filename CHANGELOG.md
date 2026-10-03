@@ -194,3 +194,7 @@
 
 ## [2026-09-28] - dia sem commits; rotina documental
 - 0 commits de codigo; working tree com 8 arquivos .loop-* untracked de outra sessao (intactos).
+
+## [2026-10-02] - coverage-v8 habilitado como devDependency
+- test (`8c2854f`): `@vitest/coverage-v8` habilitado como devDependency.
+- 1 commit na branch de trabalho; push bare+origin OK.
