@@ -15,7 +15,7 @@ Uso: python3 scripts/ats-score.py
 """
 import pathlib
 import re
-import subprocess
+import subprocess  # nosec B404 (fixed-arg CLI helpers only; no shell, no untrusted input)
 
 REPO = pathlib.Path.home() / "projetos/portifolio"
 OUT = REPO / "public"
@@ -33,12 +33,12 @@ TECH_KW = [
 
 
 def text_of(pdf):
-    return subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout
+    return subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True).stdout  # nosec B603 B607 (fixed args)
 
 
 def has_columns(t):
     """Detecta layout em colunas: linhas com 2+ blocos de texto distantes no eixo X."""
-    layout = subprocess.run(["pdftotext", "-layout", str(0)], capture_output=True, text=True).stdout if False else ""
+    layout = subprocess.run(["pdftotext", "-layout", str(0)], capture_output=True, text=True).stdout if False else ""  # nosec B603 B607 (fixed args)
     # fallback simples: procurar padrão de 2 colunas no texto plano é difícil;
     # aqui checamos se há muita repetição de cabeçalho no mesmo y via -layout.
     return False
@@ -52,7 +52,7 @@ def main():
 
         # 1. Estrutura 1 coluna — heurística: sem tabelas/text boxes detectáveis
         #    (PDFs gerados via HTML simples; checamos ausência de xrefs de tabela)
-        layout = subprocess.run(["pdftotext", "-layout", str(pdf), "-"],
+        layout = subprocess.run(["pdftotext", "-layout", str(pdf), "-"],  # nosec B603 B607 (fixed args)
                                 capture_output=True, text=True).stdout
         # linhas com 2+ blocos separados por >10 espaços = suspeita de coluna
         col_suspects = [ln for ln in layout.splitlines() if re.search(r"\S {10,}\S", ln)]
@@ -76,7 +76,7 @@ def main():
         total += 10 if contact else 0
 
         # 6. 1 página
-        info = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout
+        info = subprocess.run(["pdfinfo", str(pdf)], capture_output=True, text=True).stdout  # nosec B603 B607 (fixed args)
         pages = re.search(r"Pages:\s+(\d+)", info)
         total += 10 if (pages and pages.group(1) == "1") else 0
 
@@ -85,12 +85,12 @@ def main():
         total += 5 if orphan == 0 else max(0, 5 - orphan)
 
         # 8. Fonte padrão
-        fonts = subprocess.run(["pdffonts", str(pdf)], capture_output=True, text=True).stdout
+        fonts = subprocess.run(["pdffonts", str(pdf)], capture_output=True, text=True).stdout  # nosec B603 B607 (fixed args)
         ok_fonts = ("Calibri" in fonts or "Arial" in fonts or "Times" in fonts
                     or "LiberationSans" in fonts)
         total += 5 if ok_fonts else 0
 
-        layout2 = subprocess.run(["pdftotext", "-layout", str(pdf), "-"],
+        layout2 = subprocess.run(["pdftotext", "-layout", str(pdf), "-"],  # nosec B603 B607 (fixed args)
                                  capture_output=True, text=True).stdout
         col_suspects2 = [ln for ln in layout2.splitlines() if re.search(r"\S {10,}\S", ln)]
         one_page = bool(pages and pages.group(1) == "1")
