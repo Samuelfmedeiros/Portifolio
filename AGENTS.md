@@ -1,5 +1,11 @@
 # 🛸 Portifolio Samuel — Session State
 
+## Sessao 2026-10-05 (fim de dia) - campanha pf-gate no master + CI de deploy com lint/vitest bloqueantes
+- `eafbb21` (02:02): merge da campanha `pf-gate` no master - gate de seguranca + identidade de preview.
+- `94d096c` (13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` com lint e vitest bloqueantes. Branch ainda **sem merge**.
+- Working tree com 8 entradas antigas (`.loop-*.state.json*`, `.loop-handoff.json`) - nada alheio tocado.
+- Push bare+origin OK; HEAD master `eafbb21` (0/0 vs origin e bare).
+
 ## 🎯 Identidade
 Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel de controle interativo com animações cinematográficas e 5 mini-games
 

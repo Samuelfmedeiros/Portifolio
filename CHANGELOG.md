@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## 2026-10-05 - campanha pf-gate mergeada no master + lint/vitest bloqueantes no deploy
+- **merge(roger)** (`eafbb21`, 02:02): campanha `pf-gate` entra no master - gate de seguranca + identidade de preview.
+- **ci** (`94d096c`, 13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` passa a tratar lint e vitest como **bloqueantes**.
+- Master ja sincronizada com `origin` e com o bare (ahead/behind 0/0). A branch de CI **ainda nao foi mergeada**.
+- Working tree com 8 entradas antigas (estados `.loop-*`, `.loop-handoff.json`) - nada alheio commitado.
+- Push bare+origin OK; HEAD master `eafbb21`.
+
 ## 2026-09-16 — Capas: fallback + geracao automatica + watchdog
 
 - **Fallback de capa no card** (`src/lib/coverFallback.ts` + `ProjectCoverFallback.tsx`):
