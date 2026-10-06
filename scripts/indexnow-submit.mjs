@@ -12,7 +12,7 @@
  *   node scripts/indexnow-submit.mjs --limit 10 # submete as 10 primeiras
  */
 
-const HOST = process.env.INDEXNOW_HOST || 'lifelog-sepia.vercel.app';
+const HOST = process.env.INDEXNOW_HOST || 'portifolio.seu.pet';
 const KEY = process.env.INDEXNOW_KEY || '88232e858891487ce38601cfa8976794';
 const DRY = process.argv.includes('--dry');
 const LIMIT_ARG = process.argv.indexOf('--limit');
@@ -28,7 +28,7 @@ const RETRY_WAIT_MS = Number(process.env.INDEXNOW_RETRY_WAIT_MS || 60000);
 const SITEMAPS = [`https://${HOST}/sitemap-index.xml`, `https://${HOST}/sitemap.xml`];
 
 async function fetchText(url) {
-  const res = await fetch(url, { headers: { 'user-agent': 'lifelog-indexnow/1.0' } });
+  const res = await fetch(url, { headers: { 'user-agent': 'portifolio-indexnow/1.0' } });
   if (!res.ok) return null;
   return res.text();
 }

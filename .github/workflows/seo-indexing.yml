@@ -33,7 +33,11 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     env:
-      INDEXNOW_HOST: samuelmedeiros.vercel.app
+      # Host canonico: dominio proprio (Cloudflare -> Vercel). A chave
+      # IndexNow ja e servida em https://portifolio.seu.pet/<chave>.txt
+      # (medido: HTTP 200, text/plain). O *.vercel.app nao e mais submetido —
+      # duas URLs concorrentes para o mesmo conteudo diluem a indexacao.
+      INDEXNOW_HOST: portifolio.seu.pet
 
     steps:
       - uses: actions/checkout@v4

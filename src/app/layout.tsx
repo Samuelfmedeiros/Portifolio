@@ -72,14 +72,14 @@ export const metadata: Metadata = {
     "cloudflare",
     "tailwind css",
   ],
-  authors: [{ name: "Samuel Medeiros", url: "https://samuelmedeiros.vercel.app" }],
+  authors: [{ name: "Samuel Medeiros", url: SITE_URL }],
   creator: "Samuel Medeiros",
   publisher: "Samuel Medeiros",
   openGraph: {
     type: "website",
     locale: "pt_BR",
     alternateLocale: "en_US",
-    url: "https://samuelmedeiros.vercel.app",
+    url: SITE_URL,
     siteName: "Samuel Medeiros",
     title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     description:
@@ -115,10 +115,14 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://samuelmedeiros.vercel.app",
+    canonical: SITE_URL,
+    // O site e pt-BR only: nao existe rota /en (medido: 404 em
+    // https://portifolio.seu.pet/en). Declarar um alternate en-US que da 404
+    // e defeito — o Search Console acusa "hreflang aponta para pagina
+    // inexistente" e o Google descarta a anotacao inteira.
     languages: {
-      "pt-BR": "https://samuelmedeiros.vercel.app",
-      "en-US": "https://samuelmedeiros.vercel.app/en",
+      "pt-BR": SITE_URL,
+      "x-default": SITE_URL,
     },
   },
   verification: {

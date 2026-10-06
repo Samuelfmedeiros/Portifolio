@@ -10,8 +10,8 @@
 // sumir em modo EN (476px a menos, 0 posts) — bug que derrubou os baselines
 // visuais do CI e escondeu a secao de todo visitante em ingles.
 const LIFELOG_RSS_URLS = {
-  pt: "https://lifelog-sepia.vercel.app/rss.xml",
-  en: "https://lifelog-sepia.vercel.app/en/rss.xml",
+  pt: "https://lifelog.seu.pet/rss.xml",
+  en: "https://lifelog.seu.pet/en/rss.xml",
 } as const;
 export type LifelogLang = keyof typeof LIFELOG_RSS_URLS;
 const FETCH_TIMEOUT_MS = 5000;
