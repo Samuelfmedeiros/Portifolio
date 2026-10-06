@@ -114,10 +114,11 @@ jobs:
           echo "deploy_url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
         fi
 
-    - name: Deploy to Vercel
-      if: github.ref_name == 'master' && github.event_name != 'pull_request'
-      id: deploy
-      run: npx vercel@latest --prod --token=${{ secrets.VERCEL_TOKEN }} --yes 2>&1
+    # 06/10/2026 - step `npx vercel --prod` REMOVIDO: o deploy de producao e feito pela
+    # integracao Git do Vercel (creator=vercel[bot]), que publica no push para master.
+    # O CLI era redundante e falhava por token ("No teams available"), deixando o run
+    # vermelho sem impedir o deploy real. Para voltar com o CLI, restaure este step com
+    # um token Vercel valido (decisao 2 do plano 2026-10-06-indexacao-google-portfolio-lifelog).
 
     - name: Health Check
       if: github.ref_name == 'master' && github.event_name != 'pull_request'
