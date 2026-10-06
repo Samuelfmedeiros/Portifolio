@@ -6,7 +6,7 @@ lixo (glifos órfãos), typos, e que PT/EN realmente diferem no conteúdo.
 """
 import pathlib
 import re
-import subprocess
+import subprocess  # nosec B404 (fixed-arg CLI helpers only; no shell, no untrusted input)
 
 REPO = pathlib.Path.home() / "projetos/portifolio"
 PUBLIC = REPO / "public"
@@ -25,7 +25,7 @@ def check(name, ok, detail=""):
 
 
 def text_of(pdf):
-    out = subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True)
+    out = subprocess.run(["pdftotext", str(pdf), "-"], capture_output=True, text=True)  # nosec B603 B607 (fixed args)
     return out.stdout
 
 
@@ -93,7 +93,7 @@ def main():
 
     # 10. 1 página
     for name, p in (("PT", PT), ("EN", EN)):
-        info = subprocess.run(["pdfinfo", str(p)], capture_output=True, text=True).stdout
+        info = subprocess.run(["pdfinfo", str(p)], capture_output=True, text=True).stdout  # nosec B603 B607 (fixed args)
         pages = re.search(r"Pages:\s+(\d+)", info)
         check(f"{name}: 1 página", pages and pages.group(1) == "1",
               info.splitlines()[0] if info else "")

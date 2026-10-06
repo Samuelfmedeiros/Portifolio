@@ -1,12 +1,22 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## 2026-10-06 - SEO: dados estruturados, verificacao e empurrao pos-deploy (indexacao Google)
+- **feat(seo)**: JSON-LD (`BlogPosting` + `BreadcrumbList` em `@graph`) em toda pagina de post, montado no layout e injetado no `<head>` um unico `<script type="application/ld+json">`.
+- **feat(seo)**: metas de verificacao dirigidas por env (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `msvalidate.01`) — sem env nao emite nada, com env o dono verifica sem novo deploy de codigo.
+- **feat(seo)**: chave IndexNow em `public/` + `scripts/indexnow-submit.mjs` (envia so as URLs publicas) + workflow `seo-indexing.yml`, que roda depois do CI e valida o site por HTTP 200 antes de submeter.
+- Paginas `noindex` (preview de `/ocultos/`) ficam fora do JSON-LD e do envio.
+- Prova: build de producao RC=0, JSON-LD presente e parseavel nas paginas publicas, CI verde, deploy de producao com dados estruturados.
+
+## [2026-09-20] - Dia sem commits na master (campanha Roger em voo)
+- 0 commits hoje em todas as branches; `origin/master` + `bare/master` em `691207a2` (doc de 16/09).
+- Campanha Roger ativa no checkout durante o dia (state + workers r2-r8); tree com 33 entradas de outra sessao - nada commitado daqui.
+
 ## 2026-10-05 - campanha pf-gate mergeada no master + lint/vitest bloqueantes no deploy
 - **merge(roger)** (`eafbb21`, 02:02): campanha `pf-gate` entra no master - gate de seguranca + identidade de preview.
 - **ci** (`94d096c`, 13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` passa a tratar lint e vitest como **bloqueantes**.
 - Master ja sincronizada com `origin` e com o bare (ahead/behind 0/0). A branch de CI **ainda nao foi mergeada**.
 - Working tree com 8 entradas antigas (estados `.loop-*`, `.loop-handoff.json`) - nada alheio commitado.
 - Push bare+origin OK; HEAD master `eafbb21`.
-
 ## 2026-09-16 — Capas: fallback + geracao automatica + watchdog
 
 - **Fallback de capa no card** (`src/lib/coverFallback.ts` + `ProjectCoverFallback.tsx`):

@@ -357,6 +357,13 @@ por `TEST_BASE_URL` (local OU producao) com controle negativo provado (RED->GREE
 spec de prevencao ficava em `HEAD~2` (fix commitado DEPOIS da entrega). Agora
 varre `origin/master..HEAD` inteiro antes de afirmar ausencia de testes.
 
+## Sessao 2026-09-20 (fim de dia) - master sem commits; campanha Roger em voo no checkout
+
+- **Zero commits hoje em todas as branches**; `origin/master` e `bare/master` em `691207a2` (doc de 16/09).
+- **Campanha Roger ativa durante o dia**: `.loop-portifolio.state.json`, `.loop-handoff.json`, workers `r2`-`r8` e `.loop-redator-prompt.md` escritos entre 14:49 e 00:25 - trabalho em voo, nenhum commit na master.
+- **Working tree do checkout (33 entradas de OUTRA sessao)**: 17 modificados de 17/09 (deploy.yml, next.config.js, vercel.json, coverFallback*, staticProjects*) + `scripts/check-project-covers.mjs` alterado hoje 22:03 + artefatos `.loop-*` e `output/` - nada commitado nem descartado daqui.
+- Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
+
 ## Sessao 2026-09-16 (fim de dia) - dia cheio: jogos restaurados, SRI, VRT renovada e capas com fallback/autogen/watchdog
 
 - **fix(games)** (`660b155`): HTML dos 5 jogos restaurado - o PR #107 tinha commitado o arquivo em base64 (pagina quebrada); `fefe5fb` (PR #107) trouxe o SRI.
