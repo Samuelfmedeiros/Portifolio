@@ -21,6 +21,18 @@ export async function GET(
   }
 
   const html = fs.readFileSync(filePath, "utf-8");
+  // Guarda anti-regressao (06/10/2026): em 16/09/2026 o commit 9a34b69 gravou
+  // este index.html em base64 e o endpoint devolveu a string codificada com
+  // HTTP 200 + Content-Type: text/html — os 5 jogos ficaram quebrados por 3
+  // semanas sem nenhum sinal no log. Se o arquivo nao comeca com "<" (ignorando
+  // BOM e espacos), ele nao e HTML: falha alto em vez de servir lixo.
+  const head = html.replace(/^\uFEFF/, "").trimStart();
+  if (!head.startsWith("<")) {
+    console.error(
+      `[api/game] ${slug}/index.html nao e HTML — primeiros bytes: ${JSON.stringify(html.slice(0, 32))}`
+    );
+    return new NextResponse("Game asset is not valid HTML", { status: 500 });
+  }
 
   return new NextResponse(html, {
     status: 200,
