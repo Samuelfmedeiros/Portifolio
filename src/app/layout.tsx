@@ -122,10 +122,13 @@ export const metadata: Metadata = {
     },
   },
   verification: {
-    // SEO verification codes — preencher com valores reais se aplicável
-    // google: "your-code",
-    // yandex: "your-code",
-    // other: { "msvalidate.01": "your-code" },
+    // Tokens de verificacao via env (Vercel -> Environment Variables).
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+      : {}),
   },
   other: {
     "article:author": SITE_URL,
