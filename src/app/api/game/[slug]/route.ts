@@ -28,6 +28,10 @@ export async function GET(
       "Content-Type": "text/html; charset=utf-8",
       // No CSP headers — game runs freely
       "X-Frame-Options": "SAMEORIGIN",
+      // SEO: este endpoint serve o MESMO conteudo de /games/<slug>/index.html
+      // (e e carregado dentro de iframe). Sem noindex, o Google ve duas URLs
+      // identicas e a indexacao se dilui — a versao canonica e a pagina estatica.
+      "X-Robots-Tag": "noindex, nofollow",
       "Cache-Control": "public, max-age=3600",
     },
   });
