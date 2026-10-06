@@ -330,7 +330,7 @@ export function Footer() {
                 Arachne
               </a>
               <a
-                href="https://lifelog-sepia.vercel.app"
+                href="https://lifelog.seu.pet"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"

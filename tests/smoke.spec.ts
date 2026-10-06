@@ -30,7 +30,10 @@ test.describe('Smoke Tests - Production', () => {
   test('canonical URL correct', async ({ page }) => {
     await page.goto('/');
     const canonical = page.locator('link[rel="canonical"]');
-    await expect(canonical).toHaveAttribute('href', /https:\/\/samuelmedeiros\.vercel\.app\/?$/);
+    // Host canonico e o dominio proprio (portifolio.seu.pet). O *.vercel.app
+    // deixou de ser canonico: declarar dois hosts para o mesmo conteudo faz o
+    // Google consolidar tudo no vercel.app e o dominio proprio nunca ranquear.
+    await expect(canonical).toHaveAttribute('href', /https:\/\/portifolio\.seu\.pet\/?$/);
   });
 
   test('manifest linked', async ({ page }) => {

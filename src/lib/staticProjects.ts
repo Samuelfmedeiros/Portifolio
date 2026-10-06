@@ -45,7 +45,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Este site, em estilo cockpit sci-fi — Next.js, Framer Motion e animações cinematográficas. Modo claro/escuro, 6 paletas de cores, PT/EN e atenção total a mobile, acessibilidade e performance.",
     html_url: "https://github.com/Samuelfmedeiros/Portifolio",
-    homepage: "https://samuelmedeiros.vercel.app",
+    homepage: "https://portifolio.seu.pet",
     stargazers_count: 0,
     forks_count: 0,
     language: "TypeScript",
@@ -62,7 +62,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Blog pessoal onde compartilho aprendizados reais de engenharia — otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX, TypeScript e design system próprio.",
     html_url: "https://github.com/Samuelfmedeiros/lifelog",
-    homepage: "https://lifelog-sepia.vercel.app",
+    homepage: "https://lifelog.seu.pet",
     stargazers_count: 0,
     forks_count: 0,
     language: "TypeScript",

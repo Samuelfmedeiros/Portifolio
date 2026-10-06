@@ -64,6 +64,6 @@ test.describe('Dead Links & Rotas', () => {
     const text = await page.locator('body').innerText();
     console.log('\n=== sitemap.xml ===');
     console.log(text.slice(0, 500));
-    expect(text).toContain('samuelmedeiros.vercel.app');
+    expect(text).toContain('portifolio.seu.pet');
   });
 });

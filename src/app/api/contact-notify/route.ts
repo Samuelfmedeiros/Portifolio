@@ -109,7 +109,7 @@ export async function POST(req: NextRequest) {
                   </div>
                 </div>
                 <div style="text-align:center;padding:8px;border-top:1px solid #222;margin-top:16px">
-                  <span style="color:#555;font-size:11px"> Enviado via samuelmedeiros.vercel.app</span>
+                  <span style="color:#555;font-size:11px"> Enviado via portifolio.seu.pet</span>
                 </div>
                 <div style="background:#00e5ff;height:2px;border-radius:2px;margin-top:12px;width:100%;animation:pulse 2s infinite"></div>
               </div>
@@ -156,7 +156,7 @@ export async function POST(req: NextRequest) {
           "",
           "━━━━━━━━━━━━━━━━━━━━━━━━",
           ` ${now}`,
-          ` samuelmedeiros.vercel.app`,
+          ` portifolio.seu.pet`,
         ].join("\n");
 
         const res = await fetch(
