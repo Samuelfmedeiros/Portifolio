@@ -127,7 +127,7 @@ jobs:
         echo "⏳ Aguardando propagação (15s)..."
         sleep 15
         for i in $(seq 1 5); do
-          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://samuelmedeiros.vercel.app 2>/dev/null)
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://portifolio.seu.pet 2>/dev/null)
           echo "Tentativa $i/5: HTTP $CODE"
           if [ "$CODE" = "200" ]; then
             echo "✅ Site online (HTTP $CODE)"
@@ -154,7 +154,7 @@ jobs:
         echo "⏳ Aguardando rollback (15s)..."
         sleep 15
         for i in $(seq 1 3); do
-          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://samuelmedeiros.vercel.app 2>/dev/null)
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://portifolio.seu.pet 2>/dev/null)
           echo "Verificação $i/3: HTTP $CODE"
           if [ "$CODE" = "200" ]; then
             echo "✅ Rollback OK — site online (HTTP $CODE)"
@@ -185,7 +185,7 @@ jobs:
         TEXT="✅ *Portifólio CI*
 
         📦 *Status:* Sucesso
-        🔗 *URL:* https://samuelmedeiros.vercel.app
+        🔗 *URL:* https://portifolio.seu.pet
         📝 *Commit:* \`$COMMIT_SHA\` — $COMMIT_SUBJECT
         📄 *Alterações ($FILE_COUNT arquivos):*
         $CHANGED"

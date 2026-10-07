@@ -83,7 +83,7 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **`scripts/bug-hunter.mjs` ampliado:** escuta `pageerror` (hydration #418), `requestfailed`, e check de `brokenImages` (naturalWidth=0)
 - i18n localizados (PT/EN): ContactForm, LazyContactForm, BuyMeACoffee, ErrorBoundary (`ErrorBoundaryWithI18n` wrapper), termos/privacidade h1, ConsultingButton, StripeConsulting, MpConsultingButton, MissionClock
 - **Intencional PT-only (NÃO localizar):** MiniGames, API routes (emails), AdSense "Anúncio" (label anúncio obrigatório), `item.description` de dados (ProfileSection/GameShowcase)
-- **URL:** https://samuelmedeiros.vercel.app
+- **URL:** https://portifolio.seu.pet
 
 
 ## Sessão 2026-08-28 — Capas PIL dos projetos
@@ -197,7 +197,7 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 **Experiência do usuário:** Parallax scene integrada — grid + cockpit SVG + HUD panels + partículas formam a entrada. Scroll suave com parallax layers (L0-L3). Navegação por scroll + keyboard shortcuts (desktop). Tema escuro ciano+preto com consistência visual cinematográfica.
 
-**URL:** https://samuelmedeiros.vercel.app
+**URL:** https://portifolio.seu.pet
 **Git:** GitHub (público) — Samuelfmedeiros/portifolio
 **Deploy:** Vercel (automático no push pra master)
 

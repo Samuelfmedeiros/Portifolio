@@ -21,7 +21,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const FINDINGS_DIR = resolve(ROOT, 'docs/agents/qualidade/visual-audit');
 const SHOTS_DIR = resolve(ROOT, '.audit-shots');
-const BASE = process.env.TEST_BASE_URL || 'https://samuelmedeiros.vercel.app';
+const BASE = process.env.TEST_BASE_URL || 'https://portifolio.seu.pet';
 
 const AUDIT_PROMPT =
   'Você é um auditor de UI/UX. Analise este screenshot de página web. ' +

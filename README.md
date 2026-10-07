@@ -12,8 +12,8 @@
 </p>
 
 <p align="center">
-  <a href="https://samuelmedeiros.vercel.app">
-    <img src="https://img.shields.io/badge/Live-→_samuelmedeiros.vercel.app-06b6d4?style=flat-square&logoColor=white" alt="Live">
+  <a href="https://portifolio.seu.pet">
+    <img src="https://img.shields.io/badge/Live-→_portifolio.seu.pet-06b6d4?style=flat-square&logoColor=white" alt="Live">
   </a>
   <a href="#-tests">
     <img src="https://img.shields.io/badge/Tests-268_passing-22c55e?style=flat-square" alt="Tests">
@@ -41,7 +41,7 @@
 
 Professional portfolio of **Samuel Medeiros** — full stack developer and data analyst. Breaks the "cute resume" mold: each section is an independent module demonstrating real skills in software architecture, cutting-edge animation, code quality, and user experience.
 
-→ **[samuelmedeiros.vercel.app](https://samuelmedeiros.vercel.app)**
+→ **[portifolio.seu.pet](https://portifolio.seu.pet)**
 
 ### What you'll find here
 
