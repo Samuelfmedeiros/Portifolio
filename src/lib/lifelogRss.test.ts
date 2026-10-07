@@ -7,38 +7,38 @@ const VALID_RSS = `<?xml version="1.0" encoding="UTF-8"?>
     <title>LifeLog</title>
     <item>
       <title>O dashboard que encolheu 74%</title>
-      <link>https://lifelog-sepia.vercel.app/post/capivara-dashboard/</link>
+      <link>https://lifelog.seu.pet/post/capivara-dashboard/</link>
       <pubDate>Sat, 08 Aug 2026 19:00:00 GMT</pubDate>
       <description>O Dashboard do Capivara tinha 994 linhas.</description>
-      <enclosure url="https://lifelog-sepia.vercel.app/covers/capivara.webp" type="image/webp" />
+      <enclosure url="https://lifelog.seu.pet/covers/capivara.webp" type="image/webp" />
       <project>capivara</project>
       <accent>#f59e0b</accent>
     </item>
     <item>
       <title>O pool de conexões</title>
-      <link>https://lifelog-sepia.vercel.app/post/arachne-pool/</link>
+      <link>https://lifelog.seu.pet/post/arachne-pool/</link>
       <pubDate>Sat, 08 Aug 2026 15:00:00 GMT</pubDate>
       <description>O Arachne respondia 200.</description>
-      <enclosure url="https://lifelog-sepia.vercel.app/covers/arachne-pool.webp" type="image/webp" />
+      <enclosure url="https://lifelog.seu.pet/covers/arachne-pool.webp" type="image/webp" />
       <project>arachne</project>
       <accent>#7c3aed</accent>
     </item>
     <item>
       <title>Post sem projeto</title>
-      <link>https://lifelog-sepia.vercel.app/post/sem-projeto/</link>
+      <link>https://lifelog.seu.pet/post/sem-projeto/</link>
       <pubDate>Fri, 07 Aug 2026 12:00:00 GMT</pubDate>
       <description>Sem metadata extra.</description>
     </item>
     <item>
       <title>Quarto (não deve aparecer com max=3)</title>
-      <link>https://lifelog-sepia.vercel.app/post/quarto/</link>
+      <link>https://lifelog.seu.pet/post/quarto/</link>
     </item>
   </channel>
 </rss>`
 
 const CDATA_RSS = `<rss version="2.0"><channel><item>
   <title><![CDATA[Post com <b>HTML</b> no título]]></title>
-  <link><![CDATA[https://lifelog-sepia.vercel.app/post/cdata/]]></link>
+  <link><![CDATA[https://lifelog.seu.pet/post/cdata/]]></link>
   <project><![CDATA[tatuengine]]></project>
   <accent><![CDATA[#14b8a6]]></accent>
 </item></channel></rss>`
@@ -60,10 +60,10 @@ describe('parseRssItems', () => {
     expect(posts).toHaveLength(3)
     expect(posts[0]).toEqual({
       title: 'O dashboard que encolheu 74%',
-      url: 'https://lifelog-sepia.vercel.app/post/capivara-dashboard/',
+      url: 'https://lifelog.seu.pet/post/capivara-dashboard/',
       date: 'Sat, 08 Aug 2026 19:00:00 GMT',
       excerpt: 'O Dashboard do Capivara tinha 994 linhas.',
-      cover: 'https://lifelog-sepia.vercel.app/covers/capivara.webp',
+      cover: 'https://lifelog.seu.pet/covers/capivara.webp',
       project: 'capivara',
       accent: '#f59e0b',
     })
@@ -83,8 +83,8 @@ describe('parseRssItems', () => {
 
   it('mantém posts PT e EN no parse (BlogSection filtra por locale)', () => {
     const rss = `<rss><channel>
-      <item><title>Post PT</title><link>https://lifelog-sepia.vercel.app/post/meu-post/</link></item>
-      <item><title>Post EN</title><link>https://lifelog-sepia.vercel.app/post/en/meu-post/</link></item>
+      <item><title>Post PT</title><link>https://lifelog.seu.pet/post/meu-post/</link></item>
+      <item><title>Post EN</title><link>https://lifelog.seu.pet/post/en/meu-post/</link></item>
     </channel></rss>`
     const posts = parseRssItems(rss)
     expect(posts).toHaveLength(2)
@@ -147,12 +147,12 @@ describe('getLatestLifelogPosts', () => {
   // o BlogSection sumia em modo EN. O fetch agora le os DOIS feeds.
   it('busca os dois feeds (PT + EN) e mescla com dedupe por URL', async () => {
     const PT_RSS = `<rss><channel>
-      <item><title>Post PT</title><link>https://lifelog-sepia.vercel.app/post/pt/</link><pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate></item>
-      <item><title>Duplicado</title><link>https://lifelog-sepia.vercel.app/post/dup/</link><pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate></item>
+      <item><title>Post PT</title><link>https://lifelog.seu.pet/post/pt/</link><pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate></item>
+      <item><title>Duplicado</title><link>https://lifelog.seu.pet/post/dup/</link><pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate></item>
     </channel></rss>`
     const EN_RSS = `<rss><channel>
-      <item><title>Post EN</title><link>https://lifelog-sepia.vercel.app/en/post/pt/</link><pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate></item>
-      <item><title>Duplicado</title><link>https://lifelog-sepia.vercel.app/post/dup/</link><pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate></item>
+      <item><title>Post EN</title><link>https://lifelog.seu.pet/en/post/pt/</link><pubDate>Sun, 13 Sep 2026 12:00:00 GMT</pubDate></item>
+      <item><title>Duplicado</title><link>https://lifelog.seu.pet/post/dup/</link><pubDate>Sat, 12 Sep 2026 12:00:00 GMT</pubDate></item>
     </channel></rss>`
     vi.stubGlobal('fetch', vi.fn(async (url: unknown) => ({
       ok: true,
@@ -162,14 +162,14 @@ describe('getLatestLifelogPosts', () => {
     // 3 URLs unicas (a duplicada aparece nos dois feeds)
     expect(posts).toHaveLength(3)
     expect(posts.filter((p) => p.url.includes('/en/'))).toHaveLength(1)
-    expect(posts.some((p) => p.url === 'https://lifelog-sepia.vercel.app/en/post/pt/')).toBe(true)
+    expect(posts.some((p) => p.url === 'https://lifelog.seu.pet/en/post/pt/')).toBe(true)
     // ordenado por data desc -> o mais velho (dup) cai por ultimo
-    expect(posts[posts.length - 1]?.url).toBe('https://lifelog-sepia.vercel.app/post/dup/')
+    expect(posts[posts.length - 1]?.url).toBe('https://lifelog.seu.pet/post/dup/')
     vi.unstubAllGlobals()
   })
 
   it('um feed fora do ar nao derruba o outro', async () => {
-    const PT_RSS = `<rss><channel><item><title>Só PT</title><link>https://lifelog-sepia.vercel.app/post/so-pt/</link></item></channel></rss>`
+    const PT_RSS = `<rss><channel><item><title>Só PT</title><link>https://lifelog.seu.pet/post/so-pt/</link></item></channel></rss>`
     vi.stubGlobal('fetch', vi.fn(async (url: unknown) => {
       if (String(url).includes('/en/rss.xml')) throw new Error('feed EN caiu')
       return { ok: true, text: async () => PT_RSS }
