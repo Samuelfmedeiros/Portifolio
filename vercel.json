@@ -4,10 +4,6 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "Cache-Control",
-          "value": "s-maxage=1800, stale-while-revalidate=1800"
-        },
-        {
           "key": "X-DNS-Prefetch-Control",
           "value": "on"
         },
