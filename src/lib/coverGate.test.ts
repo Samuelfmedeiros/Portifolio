@@ -1,5 +1,7 @@
-import { describe, it, expect } from "vitest";
+// ... existing imports ...
+import { describe, it, expect, vi } from "vitest";
 import { readFileSync } from "node:fs";
+// ... other imports ...
 import path from "node:path";
 import {
   parseStaticProjects,
@@ -9,6 +11,9 @@ import {
   publicPath,
   MIN_BYTES,
 } from "../../scripts/check-project-covers.mjs";
+
+// Mock global fetch for live mode tests
+global.fetch = vi.fn();
 
 const ROOT = process.cwd();
 const STATIC_SRC = readFileSync(path.join(ROOT, "src/lib/staticProjects.ts"), "utf8");
@@ -79,6 +84,12 @@ describe("check-project-covers — BLOQUEIA defeito nos arquivos deste commit", 
       ONLY_FALLBACK
     );
     expect(formato.blocking[0].reason).toContain("formato inesperado");
+
+    const pequeno = validateProjects(
+      [{ name: "v", imageUrl: "/projects/a.webp", videoUrl: "/projects/v.mp4", source: "static" }],
+      { readSize: (p) => (p.endsWith(".mp4") ? MIN_BYTES - 1 : 99999) }
+    );
+    expect(pequeno.blocking[0].reason).toContain("video de");
   });
 });
 
@@ -130,6 +141,22 @@ describe("check-project-covers — sinal do HTML de producao (modo --live)", () 
   it("deduplica nome de fallback repetido no HTML", () => {
     const html = `<svg data-cover-name="x"></svg><svg data-cover-name="x"></svg><svg data-cover-name="y"></svg>`;
     expect(parseLiveCards(html).fallback).toEqual(["x", "y"]);
+  });
+});
+
+describe("check-project-covers — integration paths", () => {
+  it("valida o fluxo de projects -> validateProjects corretamente", () => {
+    const staticProj = [{ name: "T1", imageUrl: "/projects/t1.webp", videoUrl: "", source: "static" }];
+    const githubRepos = ["T2"];
+    const projects = effectiveProjects({ staticProjects: staticProj, githubRepos });
+    
+    expect(projects).toHaveLength(2);
+    const { blocking, advisory } = validateProjects(projects, { 
+      readSize: (p) => p.includes("t1.webp") ? 10000 : null 
+    });
+    
+    expect(blocking).toEqual([]);
+    expect(advisory[0].name).toBe("T2");
   });
 });
 

@@ -52,8 +52,11 @@ function CockpitSVG() {
       {[...Array(30)].map((_, i) => {
         const angle = (i / 30) * Math.PI * 2;
         const radius = 120 + (i % 3) * 40;
-        const cx = 720 + Math.cos(angle) * radius;
-        const cy = 380 + Math.sin(angle) * radius * 0.6;
+        // toFixed(2): servidor e cliente serializam o float com precisao
+        // diferente (React avisa hydration mismatch em atributo SVG) — arredondar
+        // nos dois lados deixa a string identica.
+        const cx = (720 + Math.cos(angle) * radius).toFixed(2);
+        const cy = (380 + Math.sin(angle) * radius * 0.6).toFixed(2);
         return (
           <circle key={i} cx={cx} cy={cy} r={1 + (i % 2)} fill="var(--accent)" opacity={0.04 + (i % 3) * 0.02} />
         );

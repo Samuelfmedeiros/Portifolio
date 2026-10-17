@@ -207,7 +207,7 @@ async function fetchGithubRepos() {
 }
 
 /** Mede o site publicado: fallback no HTML + cada capa baixada de verdade. */
-async function liveViolations(baseUrl) {
+export async function liveViolations(baseUrl) {
   const home = baseUrl.replace(/\/+$/, "") + "/";
   const res = await fetchRetry(home, { headers: { "User-Agent": "covers-gate/1.0" } });
   if (!res.ok) throw new Error(`home respondeu ${res.status}`);
