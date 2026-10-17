@@ -1,5 +1,36 @@
 # 🛸 Portifolio Samuel — Session State
 
+## Sessao 2026-10-17 — beacon de medição próprio publicado (PR #135, merge `253513c`)
+
+**Pedido/contexto:** o site estava cego para visitas (o Umami é consent-gated e quase não conta).
+Entrou um **beacon próprio, sem cookie**, mais as correções reais que estavam paradas no working
+tree local (que parecia "126 arquivos não revisados" — era clone parado em 12/07).
+
+**Beacon (novo):**
+- `src/lib/hit.ts` — `enviarHit()`: payload `{site:"portfolio", path, ref}`, `sendBeacon` com
+  fallback `fetch keepalive`, respeita **DNT/GPC**, não mede em dev sem override.
+- `src/components/HitBeacon.tsx` — 1 hit por troca de rota (App Router); `<HitBeacon />` no `layout.tsx`.
+- CSP: `skills.seu.pet` no `connect-src` do `next.config.js` **e** do `vercel.json` (a Vercel prioriza o `vercel.json`).
+- **Endpoint:** `POST https://skills.seu.pet/api/hit` (handler em `skills-shop/app.py`, tabela `hits`
+  do `orders.db`) → `200 {"ok":true}`; `site` em allowlist separa portfólio de loja/Agensi.
+
+**Correções que subiram junto:** `Navbar.tsx` (track do `nav_click` antes do ramo `#hero`),
+`CookieBanner.tsx`+`umami.ts` (pageview anônima na 1ª interação + evento `umami:ready`),
+`Footer.tsx`+`privacidade`/`termos` (abas do modal escreviam no estado do Footer — as 2 páginas
+não compilavam, `TS2741`), `ProfileSection.tsx` (`toFixed(2)` — origem do hydration mismatch),
+`DownloadModal.tsx` (timers em ref + `clearTimeout` no unmount), overrides `ajv` no `package.json`
++ lock, tag `power bi` no `ProjectModal`, e `first-pageview.test.ts` reescrito com `vi.resetModules()`.
+
+**Verificação:** vitest 440/440 rc=0 · build OK · lint com os mesmos 13 erros do upstream ·
+Playwright 77 passed/1 skipped/0 falhas (VRT incluso) · critic do grupo **SCORE=100** ·
+CI do PR **9/9** e do master (CI/CD, Gitleaks, Security Scan, E2E) verde · produção
+`portifolio.seu.pet` 200 e **beacon disparando de verdade** (hit registrado em `hits`, `site=portfolio`).
+
+**Pitfalls registrados:** validar beacon em ambiente real exige hook em `navigator.sendBeacon`
+injetado ANTES do load (`Page.addScriptToEvaluateOnNewDocument`) — interceptar no teste local não
+prova a Vercel. E os hits de E2E/CI entram na tabela marcados `is_bot=1` (UA headless), então não
+inflam o painel.
+
 ## Sessao 2026-10-05 (fim de dia) - campanha pf-gate no master + CI de deploy com lint/vitest bloqueantes
 - `eafbb21` (02:02): merge da campanha `pf-gate` no master - gate de seguranca + identidade de preview.
 - `94d096c` (13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` com lint e vitest bloqueantes. Branch ainda **sem merge**.

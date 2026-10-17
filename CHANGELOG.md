@@ -1,5 +1,13 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## 2026-10-17 - Beacon de medicao proprio (sem cookie) + correcoes do working tree
+- **feat(medicao)** (`b8889c6`, PR #135, merge `253513c`): beacon proprio `src/lib/hit.ts` + `HitBeacon.tsx` — 1 hit por troca de rota, `sendBeacon` com fallback `fetch keepalive`, respeita DNT/GPC, sem cookie. CSP com `skills.seu.pet` no `connect-src` do `next.config.js` **e** do `vercel.json`. Endpoint `POST skills.seu.pet/api/hit` -> `200 {"ok":true}` (tabela `hits` do skills-shop, `site` em allowlist).
+- **fix(tracking)**: `Navbar.tsx` media o `nav_click` depois do ramo `#hero` (clicar no home nao media); `CookieBanner.tsx`+`umami.ts` disparam pageview anonima na primeira interacao (aceitar **e** recusar) + evento `umami:ready`.
+- **fix(ui)**: `Footer.tsx` + `/privacidade` + `/termos` — abas do modal escreviam no estado do Footer (as 2 paginas nao compilavam, `TS2741`); `ProfileSection.tsx` com `toFixed(2)` (origem do hydration mismatch); tag `power bi` no `ProjectModal`.
+- **fix(test)**: `DownloadModal.tsx` cancela os timers no unmount (`ReferenceError: window is not defined` derrubava o `vitest run` com rc=1 mesmo com tudo verde); `first-pageview.test.ts` reescrito com `vi.resetModules()`.
+- **chore(deps)**: overrides `ajv` (`@eslint/eslintrc>ajv`, `eslint>ajv`) — o `pnpm lint` quebrava com `TypeError: Cannot set properties of undefined (setting 'defaultMeta')`.
+- Prova: vitest 440/440 rc=0 · build OK · Playwright 77 passed/1 skipped/0 falhas · CI do PR 9/9 e do master verde · producao `portifolio.seu.pet` 200 com **hit real registrado** (`site=portfolio`).
+
 ## 2026-10-06 - SEO: dados estruturados, verificacao e empurrao pos-deploy (indexacao Google)
 - **feat(seo)**: JSON-LD (`BlogPosting` + `BreadcrumbList` em `@graph`) em toda pagina de post, montado no layout e injetado no `<head>` um unico `<script type="application/ld+json">`.
 - **feat(seo)**: metas de verificacao dirigidas por env (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `msvalidate.01`) — sem env nao emite nada, com env o dono verifica sem novo deploy de codigo.
