@@ -39,4 +39,10 @@ export function loadUmamiScript(): void {
   // mesma origem => sem CORP/COEP cross-origin (o COEP require-corp do site
   // ja bloqueou o tracker uma vez por cache envenenado no edge) e sem preflight.
   document.head.appendChild(script);
+
+  // Avisa quem esperava o Umami (first-pageview enfileira pageview quando o
+  // consentimento chega depois da interação). Opção A — 09/10/2026.
+  script.addEventListener("load", () => {
+    window.dispatchEvent(new Event("umami:ready"));
+  });
 }

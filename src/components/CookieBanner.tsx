@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { loadUmamiScript } from "@/lib/umami";
+import { markFirstPageview } from "@/lib/first-pageview";
 
 const CONSENT_KEY = "mc-analytics-consent";
 
@@ -78,6 +79,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setConsent("accepted");
     setShowBanner(false);
     loadUmamiScript();
+    markFirstPageview();
   }, []);
 
   const decline = useCallback(() => {
@@ -95,6 +97,9 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     }
     setConsent("declined");
     setShowBanner(false);
+    // Pageview anônima: recusar também é ação consciente sobre o aviso.
+    // Não carrega o Umami; só registra a visita se o script já existir.
+    markFirstPageview();
   }, []);
 
   /** Accept analytics + choose ads level — also syncs monetization consent */
@@ -108,6 +113,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setAdsChoice(adsLevel);
     setShowBanner(false);
     loadUmamiScript();
+    markFirstPageview();
 
     // Sync monetization consent so MonetizationProvider picks it up
     try {

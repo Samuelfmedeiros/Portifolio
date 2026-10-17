@@ -6,6 +6,7 @@ import { CockpitBackground } from "@/components/CockpitBackground";
 import { ErrorBoundaryWithI18n } from "@/components/ErrorBoundary";
 import { Navbar } from "@/components/Navbar";
 import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
+import HitBeacon from "@/components/HitBeacon";
 import { Footer } from "@/components/Footer";
 import { SupportButton } from "@/components/SupportButton";
 import { ConsultingButton } from "@/components/ConsultingButton";
@@ -175,6 +176,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CookieBannerProvider>
             <MonetizationProvider>
               <ConditionalAnalytics />
+              {/* Medição sem cookie do portfólio (beacon 1x por rota, respeita DNT/GPC) */}
+              <HitBeacon />
               <CockpitBackground />
                 <ScrollProgress />
                 <Navbar />
