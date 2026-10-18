@@ -22,12 +22,26 @@ export function loadOpenpanelScript(): void {
 
   const w = window as unknown as { op?: OpFn };
   if (!w.op) {
-    const queue: unknown[] = [];
+    const queue: unknown[][] = [];
+    // Stub de fila até o op1.js real carregar. O script oficial faz
+    // `s = e.op.q; t = new l(s.shift()[1]); s.forEach(n => ...)`, ou seja:
+    // ele ESPERA que cada item da fila seja [name, args[]] e chama o stub
+    // como função `w.op(name, args)` — logo o Proxy precisa do trap
+    // `apply` (sem ele a chamada cai no vazio, a fila fica vazia e o
+    // `s.shift()[1]` do op1.js lança "Cannot read properties of
+    // undefined (reading '1')" — pageerror em TODO visitante).
     const stub = new Proxy(function () {} as unknown as OpFn, {
+      apply: (_t, _thisArg, args) => {
+        // Fila no formato [method, ...args]: o op1.js faz
+        // `new l(s.shift()[1])` (init: item[1] = options) e
+        // `t[n[0]](...n.slice(1))` (demais: método + args) — os
+        // argumentos crus da chamada já são exatamente esse formato.
+        queue.push(args);
+      },
       get: (_t, prop) => {
         if (prop === "q") return queue;
-        return (...args: unknown[]) => {
-          queue.push([prop as string, ...args]);
+        return (...fnArgs: unknown[]) => {
+          queue.push([prop as string, ...fnArgs]);
         };
       },
       has: (_t, prop) => prop === "q",
