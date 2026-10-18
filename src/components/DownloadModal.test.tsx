@@ -18,8 +18,9 @@ vi.mock("@/lib/supabase", () => ({
   submitCVDownload: vi.fn(),
 }));
 
-vi.mock("@/lib/umami", () => ({
-  loadUmamiScript: vi.fn(),
+vi.mock("@/lib/openpanel", () => ({
+  loadOpenpanelScript: vi.fn(),
+  openpanelTrack: vi.fn(),
 }));
 
 // useFocusTrap real roda rAF/focus no jsdom — mock para determinismo

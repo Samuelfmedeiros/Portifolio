@@ -3,6 +3,7 @@
 import { createContext, useContext, useState, useLayoutEffect, useCallback, useEffect, ReactNode } from "react";
 import type { Theme } from "@/lib/types";
 import { PALETTES, DEFAULT_PALETTE, STORAGE_PALETTE_KEY } from "@/lib/palettes";
+import { openpanelTrack } from "@/lib/openpanel";
 
 const STORAGE_KEY = "mc-theme";
 
@@ -114,9 +115,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
       // que tem bug de travamento em GPU low-end; ver posts do LifeLog 22-24/07/2026.)
       void e;
       setTheme(next);
-      if (typeof window !== "undefined" && window.umami?.track) {
-        window.umami.track("theme_toggle", { theme: next });
-      }
+      openpanelTrack("theme_toggle", { theme: next });
     },
     [theme, setTheme]
   );
