@@ -9,7 +9,7 @@ Uso: python3 scripts/gen-cv.py
 import pathlib
 import subprocess  # nosec B404 (fixed-arg CLI helper only; no shell, no untrusted input)
 
-REPO = pathlib.Path.home() / "projetos/portifolio"
+REPO = pathlib.Path(__file__).resolve().parent.parent  # repo raiz, imune a mudanca de path
 SRC = REPO / "docs" / "cv"
 OUT = REPO / "public"
 
