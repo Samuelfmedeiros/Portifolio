@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { loadUmamiScript } from "@/lib/umami";
+import { loadOpenpanelScript } from "@/lib/openpanel";
 import { markFirstPageview } from "@/lib/first-pageview";
 
 const CONSENT_KEY = "mc-analytics-consent";
@@ -66,6 +67,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setMounted(true);
     if (stored === "accepted") {
       loadUmamiScript();
+      loadOpenpanelScript();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -79,6 +81,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setConsent("accepted");
     setShowBanner(false);
     loadUmamiScript();
+    loadOpenpanelScript();
     markFirstPageview();
   }, []);
 
