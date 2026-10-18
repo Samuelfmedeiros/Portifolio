@@ -11,9 +11,10 @@ vi.mock("@/lib/i18n", () => ({
   }),
 }));
 
-// Mock do Umami script loader
-vi.mock("@/lib/umami", () => ({
-  loadUmamiScript: vi.fn(),
+// Mock do OpenPanel script loader
+vi.mock("@/lib/openpanel", () => ({
+  loadOpenpanelScript: vi.fn(),
+  openpanelTrack: vi.fn(),
 }));
 
 const CONSENT_KEY = "mc-analytics-consent";

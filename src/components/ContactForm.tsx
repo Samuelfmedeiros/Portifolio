@@ -8,7 +8,6 @@ import { submitContactForm } from "@/lib/supabase";
 import type { FormStatus } from "@/lib/types";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
-import { loadUmamiScript } from "@/lib/umami";
 import { loadOpenpanelScript } from "@/lib/openpanel";
 
 export function ContactForm() {
@@ -104,8 +103,7 @@ export function ContactForm() {
     setEmail("");
     setContent("");
     setLgpdConsent(false);
-    // Consentimento implícito (LGPD do form) → carrega Umami + OpenPanel
-    loadUmamiScript();
+    // Consentimento implícito (LGPD do form) → carrega OpenPanel
     loadOpenpanelScript();
     track({ type: "contact_submit" });
   };

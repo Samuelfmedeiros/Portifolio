@@ -7,7 +7,7 @@ import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { submitCVDownload } from "@/lib/supabase";
-import { loadUmamiScript } from "@/lib/umami";
+import { loadOpenpanelScript } from "@/lib/openpanel";
 
 interface DownloadModalProps {
   open: boolean;
@@ -54,8 +54,8 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
     setStatus("loading");
     setErrorMsg("");
 
-    // Consentimento implícito (LGPD do modal) → carrega Umami antes do download
-    loadUmamiScript();
+    // Consentimento implícito (LGPD do modal) → carrega OpenPanel antes do download
+    loadOpenpanelScript();
 
     try {
       const res = await fetch("/api/download-cv", {

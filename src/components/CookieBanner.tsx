@@ -4,9 +4,7 @@ import { useState, useEffect, createContext, useContext, useCallback } from "rea
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { loadUmamiScript } from "@/lib/umami";
 import { loadOpenpanelScript } from "@/lib/openpanel";
-import { markFirstPageview } from "@/lib/first-pageview";
 
 const CONSENT_KEY = "mc-analytics-consent";
 
@@ -55,9 +53,9 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   // wraps MonetizationProvider, so we manage ads consent directly
   const [, setAdsChoice] = useState<"none" | "non-personalized" | "personalized">("none");
 
-  // BUG #1 FIX (11/08/2026): consentimento já salvo == "accepted" deve carregar
-  // o Umami no boot, sem depender de clique. State é lazy-initialized para o
-  // consent, mas loadUmamiScript() precisa ser chamado explicitamente no mount.
+  // Consentimento já salvo == "accepted" deve carregar o analytics no boot,
+  // sem depender de clique. State lazy-initialized; o loader precisa ser
+  // chamado explicitamente no mount.
   useEffect(() => {
     // Leitura real do consentimento SÓ pós-mount (server e 1º render client
     // ficam idênticos → sem #418). O banner aparece após a hidratação.
@@ -66,7 +64,6 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setShowBanner(stored === null);
     setMounted(true);
     if (stored === "accepted") {
-      loadUmamiScript();
       loadOpenpanelScript();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -80,9 +77,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     }
     setConsent("accepted");
     setShowBanner(false);
-    loadUmamiScript();
     loadOpenpanelScript();
-    markFirstPageview();
   }, []);
 
   const decline = useCallback(() => {
@@ -100,9 +95,6 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     }
     setConsent("declined");
     setShowBanner(false);
-    // Pageview anônima: recusar também é ação consciente sobre o aviso.
-    // Não carrega o Umami; só registra a visita se o script já existir.
-    markFirstPageview();
   }, []);
 
   /** Accept analytics + choose ads level — also syncs monetization consent */
@@ -115,8 +107,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setConsent("accepted");
     setAdsChoice(adsLevel);
     setShowBanner(false);
-    loadUmamiScript();
-    markFirstPageview();
+    loadOpenpanelScript();
 
     // Sync monetization consent so MonetizationProvider picks it up
     try {
