@@ -51,6 +51,14 @@ const nextConfig = {
     ];
   },
 
+  // OpenPanel (self-host) via proxy same-origin: mantém CSP 'self' + COEP.
+  async rewrites() {
+    return [
+      { source: '/analytics/op1.js', destination: 'https://openpanel.seu.pet/op1.js' },
+      { source: '/api/op/:path*', destination: 'https://openpanel.seu.pet/api/:path*' },
+    ];
+  },
+
   // Otimização de imagens
   images: {
     formats: ['image/avif', 'image/webp'],
