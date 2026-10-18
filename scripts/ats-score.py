@@ -17,7 +17,7 @@ import pathlib
 import re
 import subprocess  # nosec B404 (fixed-arg CLI helpers only; no shell, no untrusted input)
 
-REPO = pathlib.Path.home() / "projetos/portifolio"
+REPO = pathlib.Path(__file__).resolve().parent.parent  # repo raiz, imune a mudanca de path
 OUT = REPO / "public"
 PDFS = [OUT / "Samuel_Andrade_2026.pdf", OUT / "Samuel_Andrade_Resume_2026.pdf"]
 
