@@ -9,6 +9,7 @@ import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useMounted } from "@/hooks/useMounted";
 import { useLanguage } from "@/lib/i18n";
 import { getProjectI18n } from "@/lib/profileData";
 import { ProjectModal } from "./ProjectModal";
@@ -113,6 +114,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
   // out of the card gradient so the generated cover matches the card.
   const coverAccent = firstHex(gradient) || "#22d3ee";
   const { track } = useAnalytics();
+  const mounted = useMounted();
 
   const handleClick = () => {
     // Todos os cards abrem o modal de detalhes (padrão Arachne)
@@ -125,7 +127,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
     <motion.div
       key={repo.id}
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={mounted ? { opacity: 0, scale: 0.95 } : false}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25, delay: i * 0.05 }}
@@ -364,6 +366,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
   const resolvedTitle = title || t("projects.section.title", "▸ PROJETOS");
   const [selectedProject, setSelectedProject] = useState<Repo | null>(null);
   const { track } = useAnalytics();
+  const mounted = useMounted();
 
   if (!repos || repos.length === 0) {
     return (
@@ -378,7 +381,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
   return (
     <section className="py-8 px-6">
       <motion.h2
-        initial={{ opacity: 0 }}
+        initial={mounted ? { opacity: 0 } : false}
         whileInView={{ opacity: 1 }}
         className="text-xl font-mono text-[var(--accent)] mb-4 text-center"
       >

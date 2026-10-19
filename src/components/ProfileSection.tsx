@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, AnimatePresence, MotionValue, useScroll, useTransform } from "framer-motion";
+import { useMounted } from "@/hooks/useMounted";
 import { useRef, useMemo, useState, useEffect, useCallback, startTransition } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
@@ -292,6 +293,7 @@ function CircuitLines() {
 /* ──────────────────── SKILLS GRID ──────────────────── */
 
 function SkillsCompact() {
+  const mounted = useMounted();
   const { t, locale } = useLanguage();
   const skillsI18n = getSkills(locale);
   const localSkills = [
@@ -310,7 +312,7 @@ function SkillsCompact() {
   return (
     <div className="mb-8">
       <motion.h2
-        initial={{ opacity: 0, y: 10 }}
+        initial={mounted ? { opacity: 0, y: 10 } : false}
         whileInView={{ opacity: 1, y: 0 }}
         className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
       >
@@ -320,7 +322,7 @@ function SkillsCompact() {
         {items.map((skill, i) => (
           <motion.div
             key={skill.name}
-            initial={{ opacity: 0, y: 20 }}
+            initial={mounted ? { opacity: 0, y: 20 } : false}
             whileInView={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.4, delay: i * 0.08 }}
             viewport={{ once: true }}
@@ -407,10 +409,11 @@ function TimelineItem({ item, index, onSelect, isSelected, total }: {
   total?: number;
 }) {
   const isLast = index === (total ?? 0) - 1;
+  const mounted = useMounted();
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: -20 }}
+      initial={mounted ? { opacity: 0, x: -20 } : false}
       animate={{ opacity: 1, x: 0 }}
       transition={{ duration: 0.4, delay: Math.min(index * 0.04, 0.25) }}
       className="relative pl-6"
@@ -888,7 +891,7 @@ export function ProfileSection() {
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
         <div id="jornada" className="pb-16 md:pb-20">
           <motion.h2
-            initial={{ opacity: 0, y: 10 }}
+            initial={mounted ? { opacity: 0, y: 10 } : false}
             whileInView={{ opacity: 1, y: 0 }}
             className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
           >
@@ -898,7 +901,7 @@ export function ProfileSection() {
           {/* P2: CTA expandir quando colapsado */}
           {!showFullTimeline && timelineData.length > TIMELINE_DEFAULT_COUNT && (
             <motion.button
-              initial={{ opacity: 0, y: 8 }}
+              initial={mounted ? { opacity: 0, y: 8 } : false}
               animate={{ opacity: 1, y: 0 }}
               onClick={() => setShowFullTimeline(true)}
               className="w-full text-left px-1 py-1.5 mb-2 text-[11px] font-mono text-[var(--accent)]/70 hover:text-[var(--accent)] transition-colors flex items-center gap-1.5"
@@ -915,7 +918,7 @@ export function ProfileSection() {
               entry.kind === 'sep' ? (
                 <motion.div
                   key={`sep-${entry.label}`}
-                  initial={{ opacity: 0, scaleX: 0.8 }}
+                  initial={mounted ? { opacity: 0, scaleX: 0.8 } : false}
                   whileInView={{ opacity: 1, scaleX: 1 }}
                   className={`flex items-center gap-2 py-1.5 ${entry.hidden ? 'hidden' : ''}`}
                 >
@@ -942,7 +945,7 @@ export function ProfileSection() {
             {/* P2: Botão "mostrar menos" quando expandido (sempre visível) */}
             {showFullTimeline && timelineData.length > TIMELINE_DEFAULT_COUNT && (
               <motion.button
-                initial={{ opacity: 0 }}
+                initial={mounted ? { opacity: 0 } : false}
                 animate={{ opacity: 1 }}
                 onClick={() => setShowFullTimeline(false)}
                 className="w-full py-3 text-center text-[10px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors"
@@ -956,7 +959,7 @@ export function ProfileSection() {
             {/* P2: Botão "ver completa" no final quando colapsado */}
             {!showFullTimeline && timelineData.length > TIMELINE_DEFAULT_COUNT && (
               <motion.button
-                initial={{ opacity: 0 }}
+                initial={mounted ? { opacity: 0 } : false}
                 whileInView={{ opacity: 1 }}
                 onClick={() => setShowFullTimeline(true)}
                 className="w-full py-2 text-center text-[10px] font-mono text-[var(--accent)]/60 hover:text-[var(--accent)] transition-colors"
@@ -969,7 +972,7 @@ export function ProfileSection() {
 
             {/* Fecho visual da Jornada */}
             <motion.div
-              initial={{ opacity: 0 }}
+              initial={mounted ? { opacity: 0 } : false}
               whileInView={{ opacity: 1 }}
               transition={{ duration: 0.6, delay: 0.3 }}
               className="flex flex-col items-center pt-1 pb-8"
@@ -984,7 +987,7 @@ export function ProfileSection() {
                 <div className="w-2 h-2 rounded-full bg-[var(--accent)]/60" />
               </motion.div>
               <motion.span
-                initial={{ opacity: 0, y: 5 }}
+                initial={mounted ? { opacity: 0, y: 5 } : false}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.4 }}
                 className="text-[10px] font-mono text-[var(--text-muted)] mt-3 tracking-wider"

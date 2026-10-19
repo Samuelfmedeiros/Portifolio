@@ -58,17 +58,20 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   }, []);
 
   useEffect(() => {
+    // Delegacao no container: listener sobrevive a re-montagens dos cards
+    // (GlassCard com gate SSR re-renderiza no mount; listeners por botao
+    // ficavam orfaos — pitfall 19/10 provado por identidade de no).
     const container = scrollRef.current;
     if (!container) return;
-    const buttons = container.querySelectorAll("[data-game-btn]");
     const handleClick = (e: Event) => {
-      const btn = e.currentTarget as HTMLElement;
+      const btn = (e.target as HTMLElement).closest("[data-game-btn]") as HTMLElement | null;
+      if (!btn) return;
       const name = btn.getAttribute("data-game-btn");
       const url = btn.getAttribute("data-game-url");
       if (name) playGame(name, url);
     };
-    buttons.forEach((btn) => btn.addEventListener("click", handleClick));
-    return () => buttons.forEach((btn) => btn.removeEventListener("click", handleClick));
+    container.addEventListener("click", handleClick);
+    return () => container.removeEventListener("click", handleClick);
   }, [playGame]);
 
   // Setas de scroll só aparecem quando o trilho realmente transborda. No desktop os

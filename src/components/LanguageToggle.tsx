@@ -2,12 +2,14 @@
 
 import { memo, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useMounted } from "@/hooks/useMounted";
 import { useLanguage } from "@/lib/i18n";
 
 export const LanguageToggle = memo(function LanguageToggle() {
   const { locale, toggle } = useLanguage();
   const { t } = useLanguage();
   const [hover, setHover] = useState(false);
+  const mounted = useMounted();
   // Mostra o idioma de DESTINO (a outra língua) — assim o usuário sabe
   // que o site tem PT e EN. O idioma atual é evidente pelo texto da página.
   const next = locale === "pt" ? "EN" : "PT";
@@ -37,7 +39,7 @@ export const LanguageToggle = memo(function LanguageToggle() {
         <AnimatePresence mode="wait">
           <motion.span
             key={next}
-            initial={{ opacity: 0, scale: 0.5, y: next === "EN" ? -10 : 10 }}
+            initial={mounted ? { opacity: 0, scale: 0.5, y: next === "EN" ? -10 : 10 } : false}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.5, y: next === "EN" ? 10 : -10 }}
             transition={{ duration: 0.2 }}
