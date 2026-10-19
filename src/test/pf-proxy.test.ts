@@ -6,11 +6,11 @@ import { POST, GET } from "@/app/api/pf/[...path]/route";
  * Contrato do proxy same-origin (/api/pf/...).
  *
  * Motivo do teste (14/09/2026): o dominio custom portifolio.seu.pet nao esta na
- * allowlist de CORS do Capivara, e o form de contato + o log de CV + o beacon do
- * Umami morriam com "Failed to fetch" nesse dominio. A cura foi rotear pelo
- * proprio Next. Este teste trava (a) o encaminhamento correto, (b) a allowlist
- * FECHADA — para alguem nao "simplificar" a rota num proxy aberto — e (c) a
- * propagacao do status do upstream.
+ * allowlist de CORS do Capivara, e o form de contato + o log de CV morriam com
+ * "Failed to fetch" nesse dominio. A cura foi rotear pelo proprio Next. Este teste
+ * trava (a) o encaminhamento correto, (b) a allowlist FECHADA — para alguem nao
+ * "simplificar" a rota num proxy aberto — e (c) a propagacao do status do upstream.
+ * (O prefixo umami/ foi retirado em 19/10/2026 — ver o teste de regressao abaixo.)
  */
 
 function ctx(path: string[]) {
@@ -60,10 +60,8 @@ describe("proxy /api/pf/[...path]", () => {
     expect(res.status).toBe(200);
   });
 
-  it("encaminha o beacon do Umami (prefixo umami/) preservando query string", async () => {
-    fetchMock.mockResolvedValue(new Response("{}", { status: 200 }));
-
-    await POST(
+  it("umami/ saiu da allowlist: 404 e ZERO fetch em POST e GET (regressao 19/10/2026)", async () => {
+    const resPost = await POST(
       req("http://localhost:3000/api/pf/umami/api/send?x=1", {
         method: "POST",
         headers: { "content-type": "application/json" },
@@ -71,29 +69,15 @@ describe("proxy /api/pf/[...path]", () => {
       }),
       ctx(["umami", "api", "send"])
     );
+    expect(resPost.status).toBe(404);
 
-    expect(String(fetchMock.mock.calls[0][0])).toBe(
-      "https://capivara.seu.pet/api/umami/api/send?x=1"
-    );
-  });
-
-  it("serve o script do Umami por GET (mesma origem, sem preflight)", async () => {
-    fetchMock.mockResolvedValue(
-      new Response("!function(){}()", {
-        status: 200,
-        headers: { "content-type": "application/javascript" },
-      })
-    );
-
-    const res = await GET(
+    const resGet = await GET(
       req("http://localhost:3000/api/pf/umami/script.js?v=2"),
       ctx(["umami", "script.js"])
     );
+    expect(resGet.status).toBe(404);
 
-    expect(String(fetchMock.mock.calls[0][0])).toBe(
-      "https://capivara.seu.pet/api/umami/script.js?v=2"
-    );
-    expect(res.headers.get("content-type")).toContain("javascript");
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it("NAO e proxy aberto: prefixo fora da allowlist = 404 e ZERO fetch", async () => {
