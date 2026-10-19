@@ -193,6 +193,14 @@ describe("GameShowcase", () => {
     expect(screen.getByLabelText("Direita").className).toContain("hidden");
   });
 
+  it("com overflow, a seta esquerda so aparece depois de rolar", () => {
+    // No mobile ha overflow (622px em 390 de largura): a seta esquerda fica fora no
+    // inicio (nao tem destino e cobria o primeiro card) e entra depois do scroll.
+    renderWithI18n(<GameShowcase repos={gameRepos} />);
+    expect(screen.getByLabelText("Esquerda").className).toContain("hidden");
+    expect(screen.getByLabelText("Direita").className).not.toContain("hidden");
+  });
+
   it("renders each game card with a Play button overlay", () => {
     renderWithI18n(<GameShowcase repos={gameRepos} />);
     // The text is rendered as "▶ Jogar", use regex

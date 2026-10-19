@@ -74,22 +74,28 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   // Setas de scroll só aparecem quando o trilho realmente transborda. No desktop os
   // 5 cards cabem (scrollWidth == clientWidth), então elas não rolavam nada: a da
   // esquerda ficava POR CIMA do primeiro card e a da direita solta no vazio.
-  // Alterna a classe no DOM em vez de setState: um re-render aqui re-monta os cards
-  // e deixa órfãos os listeners de clique registrados no effect acima.
+  // A esquerda só entra depois de rolar (no inicio ela nao tem destino e cobria o
+  // primeiro card); a direita sai ao chegar no fim. Alterna a classe no DOM em vez
+  // de setState: um re-render aqui re-monta os cards e deixa orfaos os listeners de
+  // clique registrados no effect acima.
   useLayoutEffect(() => {
     const el = scrollRef.current;
     if (!el) return;
     const update = () => {
-      const has = el.scrollWidth > el.clientWidth + 1;
-      leftBtnRef.current?.classList.toggle("hidden", !has);
-      rightBtnRef.current?.classList.toggle("hidden", !has);
+      const max = el.scrollWidth - el.clientWidth;
+      const has = max > 1;
+      const x = Math.round(el.scrollLeft);
+      leftBtnRef.current?.classList.toggle("hidden", !has || x <= 4);
+      rightBtnRef.current?.classList.toggle("hidden", !has || x >= max - 4);
     };
     update();
     const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
     ro?.observe(el);
+    el.addEventListener("scroll", update, { passive: true });
     window.addEventListener("resize", update);
     return () => {
       ro?.disconnect();
+      el.removeEventListener("scroll", update);
       window.removeEventListener("resize", update);
     };
   }, [repos]);
