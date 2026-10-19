@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useEffect, useCallback, useState } from "react";
+import { useRef, useEffect, useCallback, useState, useLayoutEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { GlassCard } from "./GlassCard";
 import GameIcon from "./MiniGames/GameIcon";
@@ -23,6 +23,8 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
   const [loading, setLoading] = useState(false);
   const { track } = useAnalytics();
   const { t } = useLanguage();
+  const leftBtnRef = useRef<HTMLButtonElement>(null);
+  const rightBtnRef = useRef<HTMLButtonElement>(null);
 
   const playGame = useCallback((name: string, url: string | null) => {
     track({ type: "game_play", game: name });
@@ -69,6 +71,29 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
     return () => buttons.forEach((btn) => btn.removeEventListener("click", handleClick));
   }, [playGame]);
 
+  // Setas de scroll só aparecem quando o trilho realmente transborda. No desktop os
+  // 5 cards cabem (scrollWidth == clientWidth), então elas não rolavam nada: a da
+  // esquerda ficava POR CIMA do primeiro card e a da direita solta no vazio.
+  // Alterna a classe no DOM em vez de setState: um re-render aqui re-monta os cards
+  // e deixa órfãos os listeners de clique registrados no effect acima.
+  useLayoutEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    const update = () => {
+      const has = el.scrollWidth > el.clientWidth + 1;
+      leftBtnRef.current?.classList.toggle("hidden", !has);
+      rightBtnRef.current?.classList.toggle("hidden", !has);
+    };
+    update();
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(update) : null;
+    ro?.observe(el);
+    window.addEventListener("resize", update);
+    return () => {
+      ro?.disconnect();
+      window.removeEventListener("resize", update);
+    };
+  }, [repos]);
+
   if (!repos || repos.length === 0) return null;
 
   return (
@@ -76,7 +101,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
       <div className="max-w-6xl mx-auto">
         <h2 className="text-xl font-mono text-[var(--accent)] mb-6 text-center">{t("games.section.title")}</h2>
         <div className="relative max-w-5xl mx-auto">
-          <button onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.left")}><ChevronLeft className="w-3.5 h-3.5" /></button>
+          <button ref={leftBtnRef} onClick={() => scrollRef.current?.scrollBy({ left: -220, behavior: "smooth" })} className="hidden absolute -left-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.left")}><ChevronLeft className="w-3.5 h-3.5" /></button>
 
           <div ref={scrollRef} className="flex gap-4 overflow-x-auto overflow-y-hidden hide-scrollbar pb-2 scroll-smooth snap-x snap-mandatory" style={{ overscrollBehaviorX: "contain", WebkitOverflowScrolling: "touch" }}>
             {repos.map((repo) => (
@@ -118,7 +143,7 @@ export function GameShowcase({ repos }: { repos: Repo[] }) {
             ))}
           </div>
 
-          <button onClick={() => scrollRef.current?.scrollBy({ left: 220, behavior: "smooth" })} className="absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.right")}><ChevronRight className="w-3.5 h-3.5" /></button>
+          <button ref={rightBtnRef} onClick={() => scrollRef.current?.scrollBy({ left: 220, behavior: "smooth" })} className="hidden absolute -right-2 top-1/2 -translate-y-1/2 z-10 w-7 h-7 rounded-full bg-[var(--bg-primary)]/90 border border-[var(--border)] flex items-center justify-center opacity-50 hover:opacity-100 transition-opacity" aria-label={t("games.scroll.right")}><ChevronRight className="w-3.5 h-3.5" /></button>
         </div>
 
         <div ref={embedRef} data-game-section style={{ display: "none" }} className="mt-4">
