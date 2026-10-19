@@ -1,7 +1,7 @@
 import { describe, it, expect } from 'vitest'
 import fs from 'fs'
 import path from 'path'
-import { STATIC_PROJECTS, FEATURED_PROJECTS } from './staticProjects'
+import { STATIC_PROJECTS, FEATURED_PROJECTS, GITHUB_ALIASES } from './staticProjects'
 import { getProjectI18n } from './profileData'
 
 describe('staticProjects', () => {
@@ -61,6 +61,32 @@ describe('staticProjects', () => {
     it('tem descricao i18n em PT e EN (card nao cai no texto da API)', () => {
       expect(getProjectI18n('pt', name)?.description).toBeTruthy()
       expect(getProjectI18n('en', name)?.description).toBeTruthy()
+    })
+  })
+
+  // Regressao 19/10/2026: a regiao projetos mostrava 3 cards "Roger" —
+  // roger-mlops (repo renomeado no GitHub), roger-Test-Loops-mlops (o MESMO
+  // repo vindo da API com nome novo) e roger-loop (repo privado -> 404).
+  describe('cards Roger (3 -> 2, sem duplicata e sem link morto)', () => {
+    it('roger-mlops aponta para o repo publico atual (renomeado)', () => {
+      const p = STATIC_PROJECTS.find((x) => x.name === 'roger-mlops')
+      expect(p?.html_url).toBe('https://github.com/Samuelfmedeiros/roger-Test-Loops-mlops')
+    })
+
+    it('roger-loop nao expoe link (repo privado, 404 para o publico)', () => {
+      const p = STATIC_PROJECTS.find((x) => x.name === 'roger-loop')
+      expect(p?.html_url).toBe('')
+    })
+
+    it('GITHUB_ALIASES esconde o nome novo do repo ja coberto pelo catalogo', () => {
+      expect(GITHUB_ALIASES).toContain('roger-Test-Loops-mlops')
+      // Se um card estatico usasse o nome da API, o merge nao deduplicaria.
+      expect(STATIC_PROJECTS.some((p) => p.name === 'roger-Test-Loops-mlops')).toBe(false)
+    })
+
+    it('so existem 2 cards Roger no catalogo estatico', () => {
+      const rogers = STATIC_PROJECTS.filter((p) => p.name.toLowerCase().includes('roger'))
+      expect(rogers).toHaveLength(2)
     })
   })
 })

@@ -6,7 +6,7 @@ import { FadeInSection } from "@/components/FadeInSection";
 import { LazyGameShowcase } from "@/components/LazyGameShowcase";
 import { LazyContactForm } from "@/components/LazyContactForm";
 import { getRepos } from "@/lib/github";
-import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
+import { STATIC_PROJECTS, GAME_PROJECTS, GITHUB_ALIASES } from "@/lib/staticProjects";
 import { BlogSection } from "@/components/BlogSection";
 import { getLatestLifelogPosts } from "@/lib/lifelogRss";
 
@@ -17,7 +17,12 @@ export const revalidate = 1800;
 async function getProjectData() {
   const repos = await getRepos();
   const filteredRepos = repos.filter(
-    (r) => r.name !== "SamuelFmedeiros" && r.name !== "arachne-mcp" && r.name !== "Arachne_Os_Crawl"
+    (r) =>
+      r.name !== "SamuelFmedeiros" &&
+      r.name !== "arachne-mcp" &&
+      r.name !== "Arachne_Os_Crawl" &&
+      // Nome novo de um repo que ja tem card no catalogo estatico (evita duplicata)
+      !GITHUB_ALIASES.includes(r.name)
   );
 
   // Merge static + API, deduplicating by name (static data takes precedence for featured fields)
