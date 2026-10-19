@@ -519,3 +519,14 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
 - **Pitfall de diagnóstico:** `urllib` segue redirect por padrão — sem um opener sem
   `HTTPRedirectHandler` o 302 vira 200 (página de login) e a sonda mente "saudável".
 - **Sem mudança de código do site:** o repo não foi alterado; a correção é 100% infra + guard.
+- **Guard — correção pós-revisão independente (19/10 01:10):** a sonda passou a mandar campos
+  **presentes com tipo errado** (`{"name":0,...}`) em vez de payload vazio. Motivo medido: payload
+  vazio só falha enquanto o campo for obrigatório — `CVDownload` é todo opcional e um probe com
+  `{}` nele **insere linha real** (201 + id em `cv_downloads`). Tipo errado falha sempre.
+  A classificação também distingue **302 = Access** de **0/5xx = origem/túnel fora** (antes um
+  cloudflared caído imprimia "PAINEL EXPOSTO" e mandava mexer no Zero Trust, cura errada).
+  Cenários validados: normal (silencioso) · 302 no público · 200 no admin · origem fora.
+- **Superfície do proxy reduzida (19/10 01:25):** o prefixo `umami/` saiu da `ALLOWED_PREFIXES` do
+  `/api/pf/[...path]` — o site migrou para o OpenPanel e nenhum caminho do frontend chama
+  `/api/pf/umami/`. Os 2 testes que travavam esse encaminhamento viraram 1 caso de regressão
+  (POST e GET em `umami/` = 404 e ZERO fetch). Sobrou só `portifolio/public/`.
