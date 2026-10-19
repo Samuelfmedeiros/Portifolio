@@ -497,3 +497,25 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
 - 1 commit hoje na branch de trabalho `roger/portifolio-20260921-134947` (HEAD); push `bare` + `origin` OK.
 - Nota de branch: `deploy.yml` do repo dispara em push na `master`; a branch de trabalho nao aciona deploy.
 - Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
+
+
+## Sessão 2026-10-19 — Formulário de contato: bypass no Cloudflare Access (infra)
+
+- **Sintoma:** o formulário de contato em produção devolvia `contact.error` em todo envio.
+- **Causa raiz (medida):** o app de Cloudflare Access "Capivara Hub (painel)" cobre
+  `capivara.seu.pet` **inteiro** (criado 18/10 04:15). O proxy same-origin
+  `/api/pf/portifolio/public/*` recebia 302 -> login do Access -> o fetch no browser morria
+  em CORS. Backend e banco estavam intactos (POST local com UA de navegador = 201).
+- **Cura:** app novo no Zero Trust, `domain=capivara.seu.pet/api/portifolio/public/*`,
+  policy `bypass` / `everyone` (id `faa0e396-258d-42b1-83c6-faef416906fc`). Espelha o que já
+  existia para `/api/telegram` e `/api/health`. Os endpoints **admin**
+  (`/api/portifolio/messages`, sem `/public/`) continuam atrás do Access (302).
+- **Provas:** POST direto no Capivara = 201; POST pelo proxy do site = 201; E2E Playwright em
+  produção = "Mensagem enviada" com 0 pageerrors; linha gravada em `messages`.
+- **Prevenção:** `~/.hermes/scripts/portfolio-contact-guard.py` + cron `ecb163c12889`
+  (`25 */6 * * *`, no_agent, entrega no grupo Portifólio). Sonda o endpoint público com payload
+  vazio (espera **422** — a validação do Pydantic roda antes do handler, então não grava nada) e
+  confirma que o admin segue em 302. Silencioso quando OK.
+- **Pitfall de diagnóstico:** `urllib` segue redirect por padrão — sem um opener sem
+  `HTTPRedirectHandler` o 302 vira 200 (página de login) e a sonda mente "saudável".
+- **Sem mudança de código do site:** o repo não foi alterado; a correção é 100% infra + guard.
