@@ -673,8 +673,11 @@ export function ProfileSection() {
     >
       {/* L0: Background parallax — grid + circles (sempre visível) */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: mounted ? 1 : 0 }}
+        // FIX SSR (19/10): `animate={mounted ? 1 : 0}` serializava opacity:0 no HTML
+        // servido — a camada de fundo só existia APÓS a hidratação (e nunca, com JS
+        // bloqueado/atrasado). Padrão gate: SSR nasce visível, animação só no cliente.
+        initial={mounted ? { opacity: 0 } : false}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.3, ease: "easeOut" }}
         style={{ y: bgY, willChange: "transform" }}
         className="absolute inset-0 z-0"
@@ -691,8 +694,8 @@ export function ProfileSection() {
 
       {/* L1: Cockpit SVG overlay (sempre visível) */}
       <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: mounted ? 1 : 0 }}
+        initial={mounted ? { opacity: 0 } : false}
+        animate={{ opacity: 1 }}
         transition={{ duration: 0.4, delay: 0.1, ease: "easeOut" }}
         style={{ y: svgY, willChange: "transform" }}
         className="absolute inset-0 z-[1] pointer-events-none"
