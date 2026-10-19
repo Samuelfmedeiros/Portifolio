@@ -95,7 +95,9 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "roger-mlops",
     description:
       "Camada de confiabilidade para treino longo de GPU em WSL2: critic determinístico sobre IPC de arquivo, watchdogs que ressuscitam runs travados, cura cirúrgica da ponte GPU-PV e checkpoints à prova de corrupção em 9p. Python puro, zero dependências.",
-    html_url: "https://github.com/Samuelfmedeiros/roger-mlops",
+    // Repo renomeado no GitHub (roger-mlops -> roger-Test-Loops-mlops, 301).
+    // O nome antigo duplicava o card que vem da API: ver GITHUB_ALIASES abaixo.
+    html_url: "https://github.com/Samuelfmedeiros/roger-Test-Loops-mlops",
     homepage: "",
     stargazers_count: 0,
     forks_count: 0,
@@ -112,7 +114,8 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "roger-loop",
     description:
       "Orquestrador de test-loop config-driven para entrega agêntica: critic determinístico via contrato SCORE/GAPS/DETAIL, rodadas com orçamento, debate de zona cinzenta com pernas isoladas (pró/contra/juiz) e guardas de nota herdada e de regressão. Zero dependências, agnóstico de provider.",
-    html_url: "https://github.com/Samuelfmedeiros/roger-loop",
+    // Repo privado desde 19/10/2026: link publico da 404 — card sem botao GitHub.
+    html_url: "",
     homepage: "",
     stargazers_count: 0,
     forks_count: 0,
@@ -211,6 +214,13 @@ export const STATIC_PROJECTS: Repo[] = [
     imageUrl: img("/projects/asteroid-dodge.webp"),
   },
 ];
+
+/**
+ * Repos da API do GitHub que sao o MESMO projeto de um card do catalogo
+ * estatico, mas com outro nome (repo renomeado). Sem isso o merge em
+ * page.tsx cria card duplicado — caso roger-mlops/roger-Test-Loops-mlops.
+ */
+export const GITHUB_ALIASES = ["roger-Test-Loops-mlops"];
 
 export const FEATURED_PROJECTS = [
   "DogWalk",
