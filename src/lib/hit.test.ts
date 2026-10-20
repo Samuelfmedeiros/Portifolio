@@ -27,17 +27,24 @@ describe("beacon de visita do portfólio", () => {
     vi.unstubAllEnvs();
   });
 
-  it("manda caminho, referrer e site=portfolio pro caixa da loja", async () => {
+  it("manda caminho, referrer e site=portfolio, same-origin em /api/hit", async () => {
     expect(enviarHit("/projetos", "https://x.com/SAFM_Tatuzin/")).toBe(true);
     expect(beacon).toHaveBeenCalledTimes(1);
     const [url, blob] = beacon.mock.calls[0];
-    expect(url).toBe("https://skills.seu.pet/api/hit");
+    // Relativo = same-origin. O rewrite do next.config.js repassa pro caixa da loja;
+    // chamar skills.seu.pet direto fazia a resposta ser barrada por COEP.
+    expect(url).toBe("/api/hit");
     expect(blob.type).toBe("text/plain"); // text/plain evita preflight de CORS
     expect(JSON.parse(await blob.text())).toEqual({
       site: "portfolio",
       path: "/projetos",
       ref: "https://x.com/SAFM_Tatuzin/",
     });
+  });
+
+  it("override explícito de URL continua valendo (3º argumento)", () => {
+    expect(enviarHit("/", "", "https://skills.seu.pet/api/hit")).toBe(true);
+    expect(beacon.mock.calls[0][0]).toBe("https://skills.seu.pet/api/hit");
   });
 
   it("respeita Do Not Track (não manda nada)", () => {
@@ -67,6 +74,6 @@ describe("beacon de visita do portfólio", () => {
     vi.stubGlobal("fetch", fetchFalso);
     expect(enviarHit("/contato", "")).toBe(true);
     expect(fetchFalso).toHaveBeenCalledTimes(1);
-    expect(fetchFalso.mock.calls[0][0]).toBe("https://skills.seu.pet/api/hit");
+    expect(fetchFalso.mock.calls[0][0]).toBe("/api/hit");
   });
 });
