@@ -62,17 +62,25 @@ for (const r of ROTAS) {
     await page.evaluate(() => {
       document.querySelectorAll('video').forEach((v) => v.pause());
     });
+    // 🔴 20/10/2026: `mask` do #150 NÃO resolvia a seção do blog. Mascarar só pinta um
+    // retângulo por cima do pixel — não devolve a ALTURA que o bloco ocupa. O pipeline do
+    // LifeLog publica 2 posts/dia e a home mostra os últimos 3 via RSS ao vivo; cada
+    // publicação muda a altura da #blog e, como a spec fotografa a PÁGINA INTEIRA, o
+    // fullPage sai com altura diferente da baseline: `Expected 1280x7394, received
+    // 1280x8367` (988px = exatamente a #blog). Medido também no master: as 4 specs falham
+    // igual com o mask aplicado e o código do master — logo a baseline estava stale, não
+    // havia regressão de UI. Curar a altura: ocultar a seção ANTES do screenshot, para o
+    // que sobra ser só a UI do Portifólio (determinística). A cobertura do bloco continua
+    // inteira em tests/blog-locale-presence.spec.ts (por CONTEÚDO, nos dois idiomas).
+    await page.evaluate(() => {
+      const blog = document.querySelector('#blog');
+      if (blog instanceof HTMLElement) blog.style.display = 'none';
+    });
+    await page.waitForTimeout(200);
     await expect(page).toHaveScreenshot(`${r.nome}.png`, {
       fullPage: true,
       maxDiffPixelRatio: 0.05,
       animations: 'disabled',
-      // 🔴 20/10/2026: a seção do blog é DADO VIVO — o pipeline do LifeLog publica 2 posts
-      // por dia e a home mostra os últimos 3. Cada publicação muda o bloco e derruba a
-      // baseline; como a spec fotografa a PÁGINA INTEIRA, as 4 rotas falhavam juntas
-      // (`/`, `/#projects`, `/#games`, `/#contact`) pelo mesmo pixel em `home.png`.
-      // Mascarar isola a parte que muda sozinha. A cobertura do bloco continua em
-      // tests/blog-locale-presence.spec.ts (por CONTEÚDO, nos dois idiomas).
-      mask: [page.locator('#blog')],
     });
   });
 }
