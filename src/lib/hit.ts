@@ -8,12 +8,16 @@
  * de chegada. Este beacon é sem cookie, sem IP e sem identificador: só caminho + referrer,
  * no mesmo endpoint que a loja já usa (`/api/hit`, coluna `site='portfolio'`).
  *
+ * O destino é RELATIVO (`/api/hit`) e o `next.config.js` faz o rewrite pro caixa da loja.
+ * Chamar skills.seu.pet direto funcionava, mas a resposta cross-origin era barrada por COEP
+ * e sujava o console a cada visita; same-origin resolve sem afrouxar COEP nem CSP.
+ *
  * Não coleta dado pessoal, então não depende do banner de cookies (LGPD: dado agregado), mas
  * respeita DNT/GPC: quem pediu pra não ser rastreado não é contado.
  */
 
 const URL_CAIXA =
-  process.env.NEXT_PUBLIC_LOJA_HIT_URL || "https://skills.seu.pet/api/hit";
+  process.env.NEXT_PUBLIC_LOJA_HIT_URL || "/api/hit";
 
 type Corpo = { site: string; path: string; ref: string };
 

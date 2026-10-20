@@ -66,6 +66,13 @@ for (const r of ROTAS) {
       fullPage: true,
       maxDiffPixelRatio: 0.05,
       animations: 'disabled',
+      // 🔴 20/10/2026: a seção do blog é DADO VIVO — o pipeline do LifeLog publica 2 posts
+      // por dia e a home mostra os últimos 3. Cada publicação muda o bloco e derruba a
+      // baseline; como a spec fotografa a PÁGINA INTEIRA, as 4 rotas falhavam juntas
+      // (`/`, `/#projects`, `/#games`, `/#contact`) pelo mesmo pixel em `home.png`.
+      // Mascarar isola a parte que muda sozinha. A cobertura do bloco continua em
+      // tests/blog-locale-presence.spec.ts (por CONTEÚDO, nos dois idiomas).
+      mask: [page.locator('#blog')],
     });
   });
 }

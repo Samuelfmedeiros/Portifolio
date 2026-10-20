@@ -52,10 +52,14 @@ const nextConfig = {
   },
 
   // OpenPanel (self-host) via proxy same-origin: mantém CSP 'self' + COEP.
+  // /api/hit: o beacon de visita vai pelo MESMO domínio e o rewrite repassa pro caixa da
+  // loja. Cross-origin direto (skills.seu.pet) fazia a resposta ser barrada por COEP e
+  // deixava um erro no console a cada visita — o POST chegava, mas o navegador reclamava.
   async rewrites() {
     return [
       { source: '/analytics/op1.js', destination: 'https://openpanel.seu.pet/op1.js' },
       { source: '/api/op/:path*', destination: 'https://openpanel.seu.pet/api/:path*' },
+      { source: '/api/hit', destination: 'https://skills.seu.pet/api/hit' },
     ];
   },
 
