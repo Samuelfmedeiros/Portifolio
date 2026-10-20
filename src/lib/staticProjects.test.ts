@@ -66,16 +66,16 @@ describe('staticProjects', () => {
 
   // Regressao 19/10/2026: a regiao projetos mostrava 3 cards "Roger" —
   // roger-mlops (repo renomeado no GitHub), roger-Test-Loops-mlops (o MESMO
-  // repo vindo da API com nome novo) e roger-loop (repo privado -> 404).
+  // repo vindo da API com nome novo) e roger-loop (que estava privado -> 404).
   describe('cards Roger (3 -> 2, sem duplicata e sem link morto)', () => {
     it('roger-mlops aponta para o repo publico atual (renomeado)', () => {
       const p = STATIC_PROJECTS.find((x) => x.name === 'roger-mlops')
       expect(p?.html_url).toBe('https://github.com/Samuelfmedeiros/roger-Test-Loops-mlops')
     })
 
-    it('roger-loop nao expoe link (repo privado, 404 para o publico)', () => {
+    it('roger-loop aponta para o repo publico do Roger (ai-test-loop)', () => {
       const p = STATIC_PROJECTS.find((x) => x.name === 'roger-loop')
-      expect(p?.html_url).toBe('')
+      expect(p?.html_url).toBe('https://github.com/Samuelfmedeiros/ai-test-loop')
     })
 
     it('GITHUB_ALIASES esconde o nome novo do repo ja coberto pelo catalogo', () => {
