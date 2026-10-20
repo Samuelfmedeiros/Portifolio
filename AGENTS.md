@@ -530,3 +530,21 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
   `/api/pf/[...path]` — o site migrou para o OpenPanel e nenhum caminho do frontend chama
   `/api/pf/umami/`. Os 2 testes que travavam esse encaminhamento viraram 1 caso de regressão
   (POST e GET em `umami/` = 404 e ZERO fetch). Sobrou só `portifolio/public/`.
+
+### Sessão 2026-10-20 — beacon same-origin + VRT determinístico
+
+- **Beacon de visita por `/api/hit` same-origin (PR #149):** `src/lib/hit.ts` chamava
+  `https://skills.seu.pet/api/hit` direto; o POST chegava mas a resposta cross-origin era barrada
+  por COEP (1 erro de console por visita). Agora o destino é relativo e o `next.config.js` faz o
+  rewrite pro caixa da loja. Override por `NEXT_PUBLIC_LOJA_HIT_URL` / 3º arg segue valendo.
+  PITFALL: se a env estiver setada na Vercel com a URL absoluta, ela vence o relativo.
+- **VRT da home dependia de dado vivo (PR #150):** `tests/visual.spec.ts` fotografa `fullPage` e a
+  home lista os 3 últimos posts do LifeLog via RSS ao vivo — 2 posts/dia derrubavam a baseline e as
+  4 rotas (`/`, `/#projects`, `/#games`, `/#contact`) falhavam com o MESMO pixel count (é UMA
+  imagem, não 4 falhas). Cura: `mask: [page.locator('#blog')]` + baseline regenerada no CI.
+  Cobertura do bloco segue em `tests/blog-locale-presence.spec.ts`.
+- **PITFALL CI:** push do `github-actions[bot]` não dispara workflow novo — depois do run com
+  `update_snapshots=true` é preciso `gh workflow run playwright.yml --ref <branch>` outra vez para
+  validar o SHA do bot (senão o "verde" é o do próprio run de update).
+- Registro completo: `~/.hermes/plans/2026-10-20-portfolio-hit-rewrite.md` e
+  `~/.hermes/plans/2026-10-20-portfolio-vrt-blog-dado-vivo.md`.
