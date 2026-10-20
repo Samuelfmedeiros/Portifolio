@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, PenLine } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { useMounted } from "@/hooks/useMounted";
 import type { LifelogPost } from "@/lib/lifelogRss";
 import ProjectIcon from "./ProjectIcon";
 
@@ -38,10 +39,11 @@ function BlogCard({ post, index }: BlogCardProps) {
   const accent = post.accent || DEFAULT_ACCENT;
   const projectLabel = post.project ? (PROJECT_LABELS[post.project] || post.project) : "LifeLog";
   const hasProject = Boolean(post.project && PROJECT_LABELS[post.project]);
+  const mounted = useMounted();
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 16 }}
+      initial={mounted ? { opacity: 0, y: 16 } : false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
@@ -127,6 +129,7 @@ interface BlogSectionProps {
 
 export function BlogSection({ posts }: BlogSectionProps) {
   const { t, locale } = useLanguage();
+  const mounted = useMounted();
   if (!posts || posts.length === 0) return null;
 
   // Filtra por locale: PT mostra posts sem /en/, EN mostra posts EN.
@@ -146,7 +149,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
   return (
     <section className="py-8 px-6">
       <motion.h2
-        initial={{ opacity: 0 }}
+        initial={mounted ? { opacity: 0 } : false}
         whileInView={{ opacity: 1 }}
         className="text-xl font-mono text-[var(--accent)] mb-6 text-center"
       >
