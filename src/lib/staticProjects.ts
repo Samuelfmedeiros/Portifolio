@@ -114,8 +114,9 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "roger-loop",
     description:
       "Orquestrador de test-loop config-driven para entrega agêntica: critic determinístico via contrato SCORE/GAPS/DETAIL, rodadas com orçamento, debate de zona cinzenta com pernas isoladas (pró/contra/juiz) e guardas de nota herdada e de regressão. Zero dependências, agnóstico de provider.",
-    // Repo privado desde 19/10/2026: link publico da 404 — card sem botao GitHub.
-    html_url: "",
+    // Repo voltou a ser publico em 19/10/2026 (gitleaks limpo, MIT): o botao GitHub volta.
+    // Se voltar a privado, este link da 404 — reverter junto com a visibilidade.
+    html_url: "https://github.com/Samuelfmedeiros/roger-loop",
     homepage: "",
     stargazers_count: 0,
     forks_count: 0,
