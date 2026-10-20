@@ -73,9 +73,9 @@ describe('staticProjects', () => {
       expect(p?.html_url).toBe('https://github.com/Samuelfmedeiros/roger-Test-Loops-mlops')
     })
 
-    it('roger-loop aponta para o repo publico (voltou a ser publico em 19/10)', () => {
+    it('roger-loop aponta para o repo publico do Roger (ai-test-loop)', () => {
       const p = STATIC_PROJECTS.find((x) => x.name === 'roger-loop')
-      expect(p?.html_url).toBe('https://github.com/Samuelfmedeiros/roger-loop')
+      expect(p?.html_url).toBe('https://github.com/Samuelfmedeiros/ai-test-loop')
     })
 
     it('GITHUB_ALIASES esconde o nome novo do repo ja coberto pelo catalogo', () => {
