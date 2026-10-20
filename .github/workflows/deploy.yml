@@ -49,12 +49,42 @@ jobs:
       run: pnpm install --frozen-lockfile
 
     - name: Run lint
+      id: lint
       continue-on-error: true
       run: pnpm lint
 
     - name: Run tests
+      id: tests
       continue-on-error: true
       run: pnpm vitest run
+
+    # 20/10/2026: `continue-on-error` nos testes deixa o CI VERDE com teste vermelho — foi
+    # assim que o HitBeacon.test.tsx ficou quebrado no master desde o #149 sem ninguem ver.
+    # Este step NAO bloqueia o deploy (politica pendente do dono), mas o vermelho passa a
+    # gritar: anotacao ::error:: no run + aviso no Telegram.
+    - name: Alerta - teste ou lint vermelho (nao bloqueia)
+      if: steps.tests.outcome == 'failure' || steps.lint.outcome == 'failure'
+      run: |
+        QUAIS=""
+        if [ "${{ steps.lint.outcome }}" = "failure" ]; then QUAIS="lint"; fi
+        if [ "${{ steps.tests.outcome }}" = "failure" ]; then QUAIS="${QUAIS:+$QUAIS }test"; fi
+        echo "::error::Passou com $QUAIS VERMELHO (continue-on-error) — corrigir antes do proximo deploy"
+        if [ "${{ github.ref_name }}" != "master" ]; then
+          echo "fora do master: sem notificacao"
+          exit 0
+        fi
+        COMMIT_SHA=$(git rev-parse --short HEAD)
+        COMMIT_SUBJECT=$(git log -1 --pretty=%s | sed 's/[*_`]/\\&/g')
+        TEXT="⚠️ *Portifólio CI* — verificacao vermelha
+
+        🧪 *Vermelho:* \`$QUAIS\`
+        🚀 *Deploy:* seguiu (continue-on-error ativo)
+        📝 *Commit:* \`$COMMIT_SHA\` — $COMMIT_SUBJECT
+        🔧 Corrigir antes do proximo push."
+        curl -s -X POST "https://api.telegram.org/bot${{ secrets.TELEGRAM_BOT_TOKEN }}/sendMessage" \
+          --data-urlencode "chat_id=${{ secrets.TELEGRAM_CHAT_ID }}" \
+          --data-urlencode "text=$TEXT" \
+          --data-urlencode "parse_mode=Markdown" || true
 
     - name: Build project
       run: pnpm build
