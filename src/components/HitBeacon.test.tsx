@@ -36,7 +36,9 @@ describe("HitBeacon", () => {
     render(<HitBeacon />);
     await vi.waitFor(() => expect(beacon).toHaveBeenCalledTimes(1));
     const [url, blob] = beacon.mock.calls[0];
-    expect(url).toBe("https://skills.seu.pet/api/hit");
+    // Relativo = same-origin (o rewrite do next.config.js repassa pro caixa da loja);
+    // chamar skills.seu.pet direto tinha a resposta barrada por COEP.
+    expect(url).toBe("/api/hit");
     expect(JSON.parse(await blob.text())).toMatchObject({
       site: "portfolio",
       path: "/projetos",
