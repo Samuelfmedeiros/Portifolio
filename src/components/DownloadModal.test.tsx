@@ -82,6 +82,7 @@ describe("DownloadModal", () => {
     vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (
       this: HTMLAnchorElement
     ) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias -- captura intencional do <a> que recebeu o click
       clickedAnchor = this;
     });
 

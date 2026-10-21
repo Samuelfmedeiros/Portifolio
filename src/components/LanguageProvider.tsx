@@ -12,6 +12,7 @@ export function LanguageProvider({ children }: { children: ReactNode }) {
   // Detecta o idioma do usuário só no client, DEPOIS da hidratação.
   // Efeito roda 1x no mount; não sobrescreve toggle manual posterior.
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- leitura de localStorage/navigator só pós-mount evita mismatch de hidratação (#44/#418)
     setLocaleState(getInitialLocale());
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
