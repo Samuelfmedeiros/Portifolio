@@ -48,12 +48,14 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    # 21/10/2026 — decisao do dono (opcao 1): vermelho BARRA o deploy.
+    # O continue-on-error deixou o HitBeacon.test.tsx quebrado no master por dias
+    # (#149) sem ninguem ver. Lint e teste agora sao bloqueantes de verdade.
+    # PR #154 zerou os 14 erros de lint que existiam no master — este gate comeca verde.
     - name: Run lint
-      continue-on-error: true
       run: pnpm lint
 
     - name: Run tests
-      continue-on-error: true
       run: pnpm vitest run
 
     - name: Build project
