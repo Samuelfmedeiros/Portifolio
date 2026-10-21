@@ -2,7 +2,7 @@
 
 import { motion, AnimatePresence, MotionValue, useScroll, useTransform } from "framer-motion";
 import { useMounted } from "@/hooks/useMounted";
-import { useRef, useMemo, useState, useEffect, useCallback, startTransition } from "react";
+import { createElement, useRef, useMemo, useState, useEffect, useCallback, startTransition } from "react";
 import {
   BarChart3, Database, Code2, Brain, Globe, Bot, Container, GitBranch,
   Cpu, Flame, Zap, GitMerge, RefreshCw, HardDrive, Sigma, FileJson,
@@ -441,10 +441,9 @@ function TimelineItem({ item, index, onSelect, isSelected, total }: {
       >
         <div className="flex items-start gap-3">
           <div className="shrink-0 w-7 h-7 rounded-md bg-[var(--accent)]/10 flex items-center justify-center">
-            {(() => {
-              const IconComp = timelineIcon(item.type);
-              return <IconComp className="w-3.5 h-3.5 text-[var(--accent)]" />;
-            })()}
+            {createElement(timelineIcon(item.type), {
+              className: "w-3.5 h-3.5 text-[var(--accent)]",
+            })}
           </div>
           <div className="flex-1 min-w-0">
             <div className="flex items-center gap-2 mb-0.5">
@@ -523,10 +522,9 @@ function TimelineModal({ item, onClose }: { item: TimelineItem; onClose: () => v
           <div className="flex items-start justify-between mb-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-lg bg-[var(--accent)]/10 flex items-center justify-center">
-                {(() => {
-                  const IconComp = timelineIcon(item.type);
-                  return <IconComp className="w-5 h-5 text-[var(--accent)]" />;
-                })()}
+                {createElement(timelineIcon(item.type), {
+                  className: "w-5 h-5 text-[var(--accent)]",
+                })}
               </div>
               <div>
                 <h3 className="font-semibold text-sm md:text-base">{item.title}</h3>

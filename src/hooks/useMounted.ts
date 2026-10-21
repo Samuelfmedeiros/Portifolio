@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
 
 /**
  * useMounted — gate de SSR para animações framer-motion.
@@ -14,13 +14,16 @@ import { useEffect, useState } from "react";
  * Uso:
  *   const mounted = useMounted();
  *   <motion.div initial={mounted ? { opacity: 0, y: 20 } : false} ... />
+ *
+ * NOTA (21/10/2026): implementado com `useSyncExternalStore` em vez de
+ * `useState` + `setState` dentro de efeito. Snapshot do servidor = false,
+ * do cliente = true: mesmo resultado de hidratação, sem setState síncrono em
+ * efeito (regra `react-hooks/set-state-in-effect`) e sem render em cascata.
  */
+const subscribeMounted = () => () => {};
+const clientSnapshot = () => true;
+const serverSnapshot = () => false;
+
 export function useMounted(): boolean {
-  const [mounted, setMounted] = useState(false);
-
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
-  return mounted;
+  return useSyncExternalStore(subscribeMounted, clientSnapshot, serverSnapshot);
 }

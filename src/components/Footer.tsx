@@ -214,6 +214,7 @@ export function Footer() {
   // null no 1º paint = render idêntico server/client; valores reais pós-hidratação.
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hora local só pós-hidratação; new Date() no JSX divergia server(UTC)/client (#418)
     setNow(new Date());
   }, []);
   const [privacyOpen, setPrivacyOpen] = useState(false);

@@ -75,7 +75,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   useLayoutEffect(() => {
     const initialTheme = getInitialTheme();
     const initialPalette = getInitialPalette();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- useLayoutEffect ANTES do paint: evita FOUC e mismatch (#418)
     setThemeState(initialTheme);
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- idem: paleta real lida do localStorage antes do paint
     setPaletteState(initialPalette);
     setThemeClass(initialTheme);
     applyPaletteToDoc(initialPalette, initialTheme);

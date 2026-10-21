@@ -29,14 +29,14 @@ export function TypeWriter({
   // com as novas frases — senão continua mostrando o idioma antigo.
   const phrasesKey = phrases.join("|");
   const [lastKey, setLastKey] = useState(phrasesKey);
-  useEffect(() => {
-    if (phrasesKey !== lastKey) {
-      setLastKey(phrasesKey);
-      setCurrentText("");
-      setIsDeleting(false);
-      setCurrentPhraseIndex(0);
-    }
-  }, [phrasesKey, lastKey]);
+  // Ajuste de estado durante o render (padrão React para prop que mudou):
+  // evita `setState` síncrono dentro de efeito (react-hooks/set-state-in-effect).
+  if (phrasesKey !== lastKey) {
+    setLastKey(phrasesKey);
+    setCurrentText("");
+    setIsDeleting(false);
+    setCurrentPhraseIndex(0);
+  }
 
   const tick = useCallback(() => {
     const fullText = phrases[currentPhraseIndex];
@@ -49,15 +49,8 @@ export function TypeWriter({
   }, [currentPhraseIndex, currentText, isDeleting, phrases]);
 
   // Acessibilidade (WCAG 2.3.3): prefers-reduced-motion → frase completa estática.
-  // O ciclo de digitação é animação não-essencial; mostrar o texto inteiro imediatamente
-  // também estabiliza o fullPage screenshot dos testes visuais.
-  useEffect(() => {
-    if (prefersReducedMotion) {
-      setCurrentText(phrases[0]);
-      setIsDeleting(false);
-      setCurrentPhraseIndex(0);
-    }
-  }, [prefersReducedMotion, phrases]);
+  // Derivado no render (não em efeito) — sem setState síncrono em efeito.
+  const displayedText = prefersReducedMotion ? phrases[0] : currentText;
 
   useEffect(() => {
     if (prefersReducedMotion) return;
@@ -87,7 +80,7 @@ export function TypeWriter({
       role="text"
       aria-label={phrases[currentPhraseIndex]}
     >
-      {currentText}
+      {displayedText}
       <motion.span
         animate={prefersReducedMotion ? { opacity: 1 } : { opacity: [1, 0] }}
         transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}

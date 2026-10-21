@@ -60,6 +60,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     // Leitura real do consentimento SÓ pós-mount (server e 1º render client
     // ficam idênticos → sem #418). O banner aparece após a hidratação.
     const stored = getStoredConsent();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- consentimento vem do localStorage só pós-mount (SSR e 1º render client idênticos, #418)
     setConsent(stored);
     setShowBanner(stored === null);
     setMounted(true);
