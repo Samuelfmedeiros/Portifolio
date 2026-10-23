@@ -24,6 +24,13 @@ describe("cards novos — contrato site-direto", () => {
     }
   });
 
+  it("carregam a capa sem depender de scroll (coverPriority)", () => {
+    for (const n of NOVOS) {
+      const card = STATIC_PROJECTS.find((p) => p.name === n)!;
+      expect(card.coverPriority, `${n} sem coverPriority (capa ficaria lazy)`).toBe(true);
+    }
+  });
+
   it("têm descrição PT e EN no dicionário", () => {
     for (const n of NOVOS) {
       for (const locale of ["pt", "en"] as const) {

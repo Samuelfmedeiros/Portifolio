@@ -29,6 +29,7 @@ export interface Repo {
   imageUrl?: string;
   /** URL for an animated demo (mp4/gif) shown instead of a static image */
   videoUrl?: string;
+  coverPriority?: boolean; /* eager + fetchPriority=high: capa não depende de scroll pra aparecer */
   /** Project emoji/icon for visual identity */
   icon?: string;
 }

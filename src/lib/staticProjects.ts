@@ -145,6 +145,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #2b1a05 0%, #78350f 50%, #b45309 100%)",
     hasDemo: true,
     imageUrl: img("/projects/focinho.webp"),
+    coverPriority: true,
   },
   {
     id: 999014,
@@ -163,6 +164,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #1b0f2e 0%, #4c1d95 50%, #7c3aed 100%)",
     hasDemo: true,
     imageUrl: img("/projects/skills-shop.webp"),
+    coverPriority: true,
   },
   {
     id: 999015,
@@ -181,6 +183,7 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #04241a 0%, #065f46 50%, #10b981 100%)",
     hasDemo: true,
     imageUrl: img("/projects/safmarket.webp"),
+    coverPriority: true,
   },
   // Games — ordem definida pelo Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge
   {
