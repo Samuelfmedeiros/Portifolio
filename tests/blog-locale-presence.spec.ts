@@ -53,11 +53,12 @@ for (const { locale, expectEn } of LOCALES) {
       const blog = page.locator('[id="blog"]');
       await expect(blog, 'section blog nao existe na pagina').toHaveCount(1);
 
+      // espelha BLOG_POSTS_LIMIT (src/components/BlogSection.tsx = 4)
       const cards = blog.locator('a[href*="/post/"]');
       await expect(
         cards,
-        `secao DO BLOG sem cards em ${locale} (regressao do feed por idioma)`,
-      ).toHaveCount(3, { timeout: 15000 });
+        `secao DO BLOG com quantidade errada de cards em ${locale} (regressao do feed por idioma)`,
+      ).toHaveCount(4, { timeout: 15000 });
 
       // o idioma dos cards tem que bater (nao basta "ter qualquer card")
       const hrefs = await cards.evaluateAll((els) =>
@@ -66,7 +67,7 @@ for (const { locale, expectEn } of LOCALES) {
       const enHrefs = hrefs.filter((h) => h.includes('/en/'));
       if (expectEn) {
         expect(enHrefs.length, `locale EN exibindo cards PT: ${JSON.stringify(hrefs)}`)
-          .toBeGreaterThanOrEqual(3);
+          .toBeGreaterThanOrEqual(4);
       } else {
         expect(enHrefs.length, `locale PT exibindo cards EN: ${JSON.stringify(hrefs)}`)
           .toBe(0);
