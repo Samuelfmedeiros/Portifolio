@@ -19,6 +19,10 @@ export interface Repo {
   forks_count: number;
   language: string | null;
   topics: string[];
+  /** Repo é fork de terceiro (API do GitHub) — nunca vira card */
+  fork?: boolean;
+  /** Repo arquivado (API do GitHub) */
+  archived?: boolean;
   pushed_at: string;
   created_at: string;
   /** Custom gradient for project card header */
