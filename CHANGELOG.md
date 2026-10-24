@@ -1,5 +1,12 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-23] - 3 cards novos (Focinho, Skills Shop, SafMarket) + PR #157 merged; github sincronizado, bare local atras
+- **feat** (`7f09616`): cards Focinho, Skills Shop e SafMarket.
+- **perf** (`2f131a7`): capa eager nos 3 cards novos (`coverPriority`).
+- **test** (`7b11027`): snapshots visuais regenerados no CI.
+- **merge** (`ca58398`, PR #157): branch `feat/novos-projetos`.
+- 4 commits no dia - push `github` OK - HEAD master: `ca58398`. PENDENCIA: espelho `origin` (bare local) 61 commits atras, hook acusa prefixo invalido no merge commit.
+
 ## 2026-10-17 - Beacon de medicao proprio (sem cookie) + correcoes do working tree
 - **feat(medicao)** (`b8889c6`, PR #135, merge `253513c`): beacon proprio `src/lib/hit.ts` + `HitBeacon.tsx` — 1 hit por troca de rota, `sendBeacon` com fallback `fetch keepalive`, respeita DNT/GPC, sem cookie. CSP com `skills.seu.pet` no `connect-src` do `next.config.js` **e** do `vercel.json`. Endpoint `POST skills.seu.pet/api/hit` -> `200 {"ok":true}` (tabela `hits` do skills-shop, `site` em allowlist).
 - **fix(tracking)**: `Navbar.tsx` media o `nav_click` depois do ramo `#hero` (clicar no home nao media); `CookieBanner.tsx`+`umami.ts` disparam pageview anonima na primeira interacao (aceitar **e** recusar) + evento `umami:ready`.
