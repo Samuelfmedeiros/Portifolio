@@ -127,6 +127,12 @@ interface BlogSectionProps {
   posts: LifelogPost[];
 }
 
+/**
+ * Quantos posts do LifeLog aparecem no portfólio (Samuel 24/10/2026: 4).
+ * 4 em linha no desktop; 2x2 no tablet; 1 coluna no mobile.
+ */
+export const BLOG_POSTS_LIMIT = 4;
+
 export function BlogSection({ posts }: BlogSectionProps) {
   const { t, locale } = useLanguage();
   const mounted = useMounted();
@@ -142,7 +148,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
   // Sumir a secao custa 476px de layout + conteudo indexavel, e foi exatamente o
   // que derrubou os 4 baselines visuais do CI (6908 -> 6432px).
   // Preferencia mantida: nunca misturar idiomas quando o proprio tem posts.
-  const filtered = (own.length > 0 ? own : other).slice(0, 3);
+  const filtered = (own.length > 0 ? own : other).slice(0, BLOG_POSTS_LIMIT);
 
   if (filtered.length === 0) return null;
 
@@ -156,7 +162,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
         {t("blog.section.title", "▸ DO BLOG")}
       </motion.h2>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         {filtered.map((post, i) => (
           <BlogCard key={post.url} post={post} index={i} />
         ))}
