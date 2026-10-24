@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react'
 import { describe, it, expect } from 'vitest'
-import { BlogSection } from './BlogSection'
+import { BlogSection, BLOG_POSTS_LIMIT } from './BlogSection'
 import { LanguageContext } from '@/lib/i18n'
 import type { ReactNode } from 'react'
 import React from 'react'
@@ -112,5 +112,23 @@ describe('BlogSection', () => {
     const link = screen.getByRole('link', { name: /O dashboard que encolheu 74%/ })
     expect(link).toHaveAttribute('href', posts[0].url)
     expect(link).toHaveAttribute('rel', 'noopener noreferrer')
+  })
+
+  it(`mostra no maximo ${BLOG_POSTS_LIMIT} posts do LifeLog`, () => {
+    const many = Array.from({ length: 7 }, (_, i) => ({
+      title: `Post ${i + 1}`,
+      url: `https://lifelog.seu.pet/post/post-${i + 1}/`,
+      date: 'Sat, 08 Aug 2026 19:00:00 GMT',
+      excerpt: `Resumo ${i + 1}`,
+      cover: `https://lifelog.seu.pet/covers/${i + 1}.webp`,
+      project: 'portifolio',
+      accent: '#7c3aed',
+    }))
+
+    renderWithI18n(<BlogSection posts={many} />)
+
+    expect(screen.getAllByRole('link', { name: /^Post \d/ })).toHaveLength(BLOG_POSTS_LIMIT)
+    expect(screen.getByText('Post 4')).toBeInTheDocument()
+    expect(screen.queryByText('Post 5')).not.toBeInTheDocument()
   })
 })
