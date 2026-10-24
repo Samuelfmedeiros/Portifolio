@@ -195,7 +195,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                   fill
                   className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover/image:scale-110"
                   unoptimized
-                  loading="lazy"
+                  loading={repo.coverPriority ? "eager" : "lazy"}
+                  fetchPriority={repo.coverPriority ? "high" : undefined}
                 />
               )
             ) : repo.icon ? (
@@ -242,7 +243,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                   fill
                   className="absolute inset-0 w-full h-full object-cover object-top"
                   unoptimized
-                  loading="lazy"
+                  loading={repo.coverPriority ? "eager" : "lazy"}
+                  fetchPriority={repo.coverPriority ? "high" : undefined}
                 />
               )
             ) : repo.icon ? (
