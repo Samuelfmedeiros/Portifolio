@@ -1,6 +1,15 @@
 # 🛸 Portifolio Samuel — Session State
 
 
+## Sessao 2026-10-24 (fim de dia) - 6 commits (grade so com repo curado + blog com 4 posts do LifeLog, PRs #158/#159); push github ok
+- **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
+- **test(e2e)** (`16d7f80`): snapshots visuais gerados no ambiente do CI.
+- **merge** (`26641ab`): PR #158 `fix/projetos-curados-by-topic`.
+- **feat(blog)** (`1461e11`): 4 posts do LifeLog no portifolio (era 3).
+- **test(e2e)** (`7a75f0b`): blog agora exige 4 cards (espelha `BLOG_POSTS_LIMIT`).
+- **merge** (`a0b7bee`): PR #159 `feat/blog-4-posts`.
+- Push `github` OK (ahead=0 antes do commit de doc). PENDENCIA conhecida: `origin` (bare local `portifolio.git`) 68 commits atras - hook recusa merge commits.
+
 ## Sessao 2026-10-23 (fim de dia) - 4 commits (3 cards novos + capa eager + VRT do CI + merge PR #157); github ok, bare local pendente
 - **feat** (`7f09616`): cards Focinho, Skills Shop e SafMarket.
 - **perf** (`2f131a7`): capa eager nos 3 cards novos (`coverPriority`) - nao depende de scroll.

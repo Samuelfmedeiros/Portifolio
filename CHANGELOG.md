@@ -1,5 +1,14 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-24] - 6 commits: grade so com repo curado + blog com 4 posts do LifeLog (PRs #158/#159); github sincronizado
+- **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
+- **test(e2e)** (`16d7f80`): snapshots visuais regenerados no ambiente do CI.
+- **merge** (`26641ab`, PR #158): branch `fix/projetos-curados-by-topic`.
+- **feat(blog)** (`1461e11`): 4 posts do LifeLog no portifolio (era 3).
+- **test(e2e)** (`7a75f0b`): blog exige 4 cards (espelha `BLOG_POSTS_LIMIT`).
+- **merge** (`a0b7bee`, PR #159): branch `feat/blog-4-posts`.
+- 6 commits no dia - push `github` OK - HEAD master: `a0b7bee` + doc. PENDENCIA: espelho `origin` (bare local) 68 commits atras (hook de prefixo recusa merge commits).
+
 ## [2026-10-23] - 3 cards novos (Focinho, Skills Shop, SafMarket) + PR #157 merged; github sincronizado, bare local atras
 - **feat** (`7f09616`): cards Focinho, Skills Shop e SafMarket.
 - **perf** (`2f131a7`): capa eager nos 3 cards novos (`coverPriority`).
