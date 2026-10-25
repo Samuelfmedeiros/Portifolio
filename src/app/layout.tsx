@@ -116,14 +116,19 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: SITE_URL,
+    // Canonical AUTORREFERENTE (SEO — 25/10/2026). Antes era `SITE_URL` (a home),
+    // herdado por TODAS as rotas: /privacidade e /termos declaravam a home como
+    // canônica e o Search Console reportou "Cópia: o Google e o usuário
+    // selecionaram uma página canônica diferente". "./" resolve, no build, para
+    // a rota atual contra o metadataBase (docs Next: relative URL em alternates).
+    canonical: "./",
     // O site e pt-BR only: nao existe rota /en (medido: 404 em
     // https://portifolio.seu.pet/en). Declarar um alternate en-US que da 404
     // e defeito — o Search Console acusa "hreflang aponta para pagina
     // inexistente" e o Google descarta a anotacao inteira.
     languages: {
-      "pt-BR": SITE_URL,
-      "x-default": SITE_URL,
+      "pt-BR": "./",
+      "x-default": "./",
     },
   },
   verification: {

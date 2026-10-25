@@ -10,6 +10,7 @@ import {
   parseLiveCards,
   publicPath,
   MIN_BYTES,
+  liveViolations,
 } from "../../scripts/check-project-covers.mjs";
 
 // Mock global fetch for live mode tests
@@ -142,6 +143,12 @@ describe("check-project-covers — sinal do HTML de producao (modo --live)", () 
     const html = `<svg data-cover-name="x"></svg><svg data-cover-name="x"></svg><svg data-cover-name="y"></svg>`;
     expect(parseLiveCards(html).fallback).toEqual(["x", "y"]);
   });
+
+  it("retorna arrays vazios para HTML sem cards", () => {
+    const { fallback, covers } = parseLiveCards("<html></html>");
+    expect(fallback).toEqual([]);
+    expect(covers).toEqual([]);
+  });
 });
 
 describe("check-project-covers — integration paths", () => {
@@ -168,5 +175,55 @@ describe("check-project-covers — controle positivo (estado real do repo)", () 
     });
     expect(checked).toBe(projects.length);
     expect(blocking).toEqual([]);
+  });
+});
+
+describe("check-project-covers — branches de validateProjects", () => {
+  it("aceita extensão de imagem em maiúsculas", () => {
+    const projects = [{ name: "up", imageUrl: "/projects/up.WEBP", videoUrl: "", source: "static" }];
+    const { blocking } = validateProjects(projects, { readSize: () => 10000 });
+    expect(blocking).toEqual([]);
+  });
+
+  it("aceita extensão de vídeo em maiúsculas", () => {
+    const projects = [{ name: "v", imageUrl: "/projects/a.webp", videoUrl: "/projects/v.MP4", source: "static" }];
+    const { blocking } = validateProjects(projects, { readSize: () => 10000 });
+    expect(blocking).toEqual([]);
+  });
+
+  it("não bloqueia quando tamanho é exatamente MIN_BYTES", () => {
+    const projects = [{ name: "min", imageUrl: "/projects/min.webp", videoUrl: "", source: "static" }];
+    const { blocking } = validateProjects(projects, { readSize: () => MIN_BYTES });
+    expect(blocking).toEqual([]);
+  });
+
+  it("não bloqueia imagem válida sem video", () => {
+    const projects = [{ name: "novid", imageUrl: "/projects/n.webp", videoUrl: "", source: "static" }];
+    const { blocking } = validateProjects(projects, { readSize: () => 10000 });
+    expect(blocking).toEqual([]);
+  });
+});
+
+describe("check-project-covers — live mode", () => {
+  it("liveViolations throws on non-ok home", async () => {
+    global.fetch = vi.fn().mockResolvedValue({ ok: false, status: 500 });
+    await expect(liveViolations("http://example.com")).rejects.toThrow("home respondeu 500");
+  });
+
+  it("liveViolations retorna advisory para fallback e sem blocking para capas validas", async () => {
+    const html = `<svg data-cover-name="x"></svg><img src="/projects/a.webp">`;
+    const imageResp = {
+      ok: true,
+      headers: { get: () => "image/webp" },
+      arrayBuffer: () => Promise.resolve(new ArrayBuffer(20000)),
+    };
+    global.fetch = vi.fn()
+      .mockResolvedValueOnce({ ok: true, text: () => Promise.resolve(html) })
+      .mockResolvedValue(imageResp);
+    const result = await liveViolations("http://example.com");
+    expect(result.advisory).toHaveLength(1);
+    expect(result.advisory[0].name).toBe("x");
+    expect(result.blocking).toEqual([]);
+    expect(result.checked).toBeGreaterThan(0);
   });
 });

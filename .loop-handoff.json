@@ -1,0 +1,21 @@
+{
+ "project": "portifolio",
+ "rounds": [
+  {
+   "round": 2,
+   "worker": "general",
+   "rc": 0,
+   "gaps": [
+    "cobertura baixa: ...ct-covers.mjs (42% < 50%)",
+    "cobertura baixa: Terminal.tsx (34% < 50%)",
+    "cobertura baixa: Tooltip.tsx (43% < 50%)"
+   ],
+   "files_touched": [
+    "src/lib/coverGate.test.ts"
+   ],
+   "worker_tail": "&& pnpm vitest --run src/lib/coverGate.test.ts --coverage 2>&1 | grep \"...ct-covers\"\n...ect-covers.mjs |   55.27 |     50.6 |   66.66 |   58.33 | ...35-237,244-321\n\u001b[0m\n\u001b[0m$ \u001b[0mcd /mnt/HOME/samuel/projetos/projetos/portifolio && pnpm vitest --run src/lib/coverGate.test.ts src/components/Terminal.test.tsx src/components/Tooltip.test.tsx 2>&1 | grep -E \"Tests|PASS|FAIL\"\nTests  45 passed (45)\n\u001b[0m\n",
+   "ts": "2026-10-25T22:27:12.284544+00:00"
+  }
+ ],
+ "updated_at": "2026-10-25T22:27:12.284544+00:00"
+}
