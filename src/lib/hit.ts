@@ -16,10 +16,14 @@
  * respeita DNT/GPC: quem pediu pra não ser rastreado não é contado.
  */
 
+import { utmsDaPagina, type Utms } from "./utm";
+
 const URL_CAIXA =
   process.env.NEXT_PUBLIC_LOJA_HIT_URL || "/api/hit";
 
-type Corpo = { site: string; path: string; ref: string };
+// utm_* viaja no corpo: o destino (caixa da loja) grava em hits.utm_source/medium/campaign
+// e como property no OpenPanel. Sem isso a visita chega sem "quem mandou" (medido 24/10).
+type Corpo = { site: string; path: string; ref: string } & Utms;
 
 function pediuParaNaoSerRastreado(): boolean {
   if (typeof navigator === "undefined") return true;
@@ -38,10 +42,24 @@ function deveMedir(): boolean {
   return !pediuParaNaoSerRastreado();
 }
 
-/** Envia o hit. Silencioso de propósito: medição nunca pode atrapalhar a página. */
-export function enviarHit(path: string, ref: string, url: string = URL_CAIXA): boolean {
+/**
+ * Envia o hit. Silencioso de propósito: medição nunca pode atrapalhar a página.
+ *
+ * `utms` sobrescreve o que vem da query string — o padrão é ler `location.search`
+ * (quem chegou com `?utm_source=lifelog` mantém a atribuição) e cair em
+ * `utm_source=portfolio` quando não há UTM nenhum.
+ */
+export function enviarHit(
+  path: string,
+  ref: string,
+  url: string = URL_CAIXA,
+  utms?: Utms,
+): boolean {
   if (!deveMedir()) return false;
-  const corpo: Corpo = { site: "portfolio", path, ref };
+  const daPagina = utmsDaPagina(
+    typeof window !== "undefined" ? window.location.search : "",
+  );
+  const corpo: Corpo = { site: "portfolio", path, ref, ...daPagina, ...utms };
   const dados = JSON.stringify(corpo);
   try {
     // text/plain evita o preflight de CORS (o servidor lê o corpo como JSON de qualquer forma).

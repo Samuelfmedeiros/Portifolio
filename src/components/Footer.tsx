@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
 import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
 import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
+import { comUtm } from "@/lib/utm";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { DownloadModal } from "./DownloadModal";
 import { useLanguage } from "@/lib/i18n";
@@ -322,7 +323,7 @@ export function Footer() {
             </h3>
             <div className="flex flex-col gap-1.5">
               <a
-                href="https://seu.pet"
+                href={comUtm("https://seu.pet", { medium: "footer", campaign: "portfolio", content: "dogwalk" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
@@ -331,7 +332,7 @@ export function Footer() {
                 DogWalk
               </a>
               <a
-                href="https://arachne.seu.pet"
+                href={comUtm("https://arachne.seu.pet", { medium: "footer", campaign: "portfolio", content: "arachne" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
@@ -340,7 +341,7 @@ export function Footer() {
                 Arachne
               </a>
               <a
-                href="https://lifelog.seu.pet"
+                href={comUtm("https://lifelog.seu.pet", { medium: "footer", campaign: "portfolio", content: "lifelog" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"

@@ -8,6 +8,7 @@ import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
+import { comUtm } from "@/lib/utm";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useMounted } from "@/hooks/useMounted";
 import { useLanguage } from "@/lib/i18n";
@@ -104,6 +105,15 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 
   const isFeatured = FEATURED.includes(repo.name);
   const hasLink = !!(repo.homepage || repo.hasDemo);
+  // Amarração (24/10/2026): link que sai do portfólio leva UTM — sem isso o destino
+  // não sabe quem mandou (medido: 13 links cruzados, zero com UTM).
+  const siteHref = repo.homepage
+    ? comUtm(repo.homepage, {
+        medium: "projeto",
+        campaign: repo.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+        content: "card",
+      })
+    : "";
   const techTags = extractTechTags({ ...repo, description: localizedDescription, topics: localizedTopics });
   const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
   const updated = repo.pushed_at
@@ -163,7 +173,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
         {/* Project image header — clickable if has demo */}
         {(repo.homepage || repo.hasDemo) ? (
           <a
-            href={repo.name === "Portifolio" ? (repo.html_url || "#") : (repo.homepage || "#")}
+            href={repo.name === "Portifolio" ? (repo.html_url || "#") : (siteHref || "#")}
             target="_blank"
             rel="noopener noreferrer"
             className="relative h-[160px] md:h-[200px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
@@ -309,7 +319,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
           <div className="mt-auto flex gap-2">
             {(repo.homepage || repo.hasDemo) && (
               <a
-                href={repo.homepage || "#"}
+                href={siteHref || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}

@@ -39,7 +39,35 @@ describe("beacon de visita do portfólio", () => {
       site: "portfolio",
       path: "/projetos",
       ref: "https://x.com/SAFM_Tatuzin/",
+      // sem utm na URL, o beacon se declara como portfólio (24/10/2026)
+      utm_source: "portfolio",
     });
+  });
+
+  it("manda os utm da URL atual (atribuição de quem chegou de fora)", async () => {
+    window.history.replaceState({}, "", "/?utm_source=lifelog&utm_medium=post&utm_campaign=guia");
+    expect(enviarHit("/", "")).toBe(true);
+    const [, blob] = beacon.mock.calls[0];
+    expect(JSON.parse(await blob.text())).toMatchObject({
+      utm_source: "lifelog",
+      utm_medium: "post",
+      utm_campaign: "guia",
+    });
+    window.history.replaceState({}, "", "/");
+  });
+
+  it("utm explícito (4º argumento) sobrescreve o da URL", async () => {
+    window.history.replaceState({}, "", "/?utm_source=qualquer");
+    expect(
+      enviarHit("/projetos", "", undefined, {
+        utm_source: "portfolio",
+        utm_medium: "beacon",
+        utm_campaign: "teste",
+      }),
+    ).toBe(true);
+    const [, blob] = beacon.mock.calls[0];
+    expect(JSON.parse(await blob.text())).toMatchObject({ utm_source: "portfolio" });
+    window.history.replaceState({}, "", "/");
   });
 
   it("override explícito de URL continua valendo (3º argumento)", () => {
