@@ -12,6 +12,7 @@ export default defineConfig({
     setupFiles: ['src/test/setup.tsx'],
     testTimeout: 60000,
     hookTimeout: 60000,
+    pool: 'vmThreads',
   },
   resolve: {
     alias: {
