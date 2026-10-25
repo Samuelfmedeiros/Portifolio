@@ -1,5 +1,6 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { act } from "react";
 import { Tooltip } from "./Tooltip";
 
 describe("Tooltip", () => {
@@ -28,7 +29,7 @@ describe("Tooltip", () => {
     expect(screen.queryByText("Tooltip content")).not.toBeInTheDocument();
   });
 
-  it("does not crash on mouse enter", () => {
+  it("shows tooltip content after mouse enter delay", () => {
     render(
       <Tooltip content="Tooltip content">
         <span data-testid="trigger">Hover</span>
@@ -36,11 +37,13 @@ describe("Tooltip", () => {
     );
     const trigger = screen.getByTestId("trigger").parentElement!;
     fireEvent.mouseEnter(trigger);
-    vi.advanceTimersByTime(200);
-    expect(true).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(screen.getByText("Tooltip content")).toBeInTheDocument();
   });
 
-  it("does not crash on mouse leave", () => {
+  it("hides tooltip on mouse leave before delay completes", () => {
     render(
       <Tooltip content="Tooltip content">
         <span data-testid="trigger">Hover</span>
@@ -49,11 +52,13 @@ describe("Tooltip", () => {
     const trigger = screen.getByTestId("trigger").parentElement!;
     fireEvent.mouseEnter(trigger);
     fireEvent.mouseLeave(trigger);
-    vi.advanceTimersByTime(200);
-    expect(true).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(screen.queryByText("Tooltip content")).not.toBeInTheDocument();
   });
 
-  it("does not crash on touch start", () => {
+  it("toggles tooltip on touch start", () => {
     render(
       <Tooltip content="Touch content">
         <span data-testid="trigger">Touch</span>
@@ -61,11 +66,12 @@ describe("Tooltip", () => {
     );
     const trigger = screen.getByTestId("trigger").parentElement!;
     fireEvent.touchStart(trigger, { preventDefault: () => {} });
+    expect(screen.getByText("Touch content")).toBeInTheDocument();
     fireEvent.touchStart(trigger, { preventDefault: () => {} });
-    expect(true).toBe(true);
+    expect(screen.queryByText("Touch content")).not.toBeInTheDocument();
   });
 
-  it("renders without error for touch outside", () => {
+  it("hides tooltip on touch outside", () => {
     render(
       <Tooltip content="Content">
         <span data-testid="trigger">Hover</span>
@@ -73,7 +79,15 @@ describe("Tooltip", () => {
     );
     const trigger = screen.getByTestId("trigger").parentElement!;
     fireEvent.mouseEnter(trigger);
-    vi.advanceTimersByTime(200);
-    expect(true).toBe(true);
+    act(() => {
+      vi.advanceTimersByTime(200);
+    });
+    expect(screen.getByText("Content")).toBeInTheDocument();
+    const overlay = document.querySelector(".fixed.inset-0");
+    expect(overlay).toBeInTheDocument();
+    act(() => {
+      fireEvent.touchStart(overlay!, { preventDefault: () => {} });
+    });
+    expect(screen.queryByText("Content")).not.toBeInTheDocument();
   });
 });

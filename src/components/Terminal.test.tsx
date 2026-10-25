@@ -1,5 +1,5 @@
 import { describe, it, expect, vi } from 'vitest'
-import { render, screen, fireEvent } from '@testing-library/react'
+import { render, screen, fireEvent, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { Terminal } from './Terminal'
 
@@ -97,22 +97,29 @@ describe('Terminal', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     await userEvent.type(input, 'whoami{Enter}')
+    await waitFor(() => expect(screen.getByText('Samuel Medeiros')).toBeInTheDocument())
     fireEvent.keyDown(input, { key: 'ArrowUp' })
     fireEvent.keyDown(input, { key: 'ArrowDown' })
-    expect(true).toBe(true)
+    await waitFor(() => expect(input.value).toBe(''))
   })
 
   it('handles tab completion', async () => {
+    const user = userEvent.setup()
     render(<Terminal />)
-    expect(screen.getByPlaceholderText('digite um comando...')).toBeInTheDocument()
+    const input = screen.getByPlaceholderText('digite um comando...')
+    await user.type(input, 'pr')
+    await user.keyboard('{Tab}')
+    // Tab completion should change input value from 'pr'
+    await waitFor(() => expect(input.value).not.toBe('pr'))
   })
 
   it('handles input focus and blur', () => {
     render(<Terminal />)
     const input = screen.getByPlaceholderText('digite um comando...')
     fireEvent.focus(input)
+    expect(document.activeElement).toBe(input)
     fireEvent.blur(input)
-    expect(true).toBe(true)
+    expect(document.activeElement).not.toBe(input)
   })
 
   it('shows error for unknown command', async () => {
