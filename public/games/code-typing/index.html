@@ -1661,5 +1661,23 @@ fn partition<T: Ord>(arr: &mut [T]) -> usize {
     const root = ReactDOM.createRoot(document.getElementById('root'));
     root.render(<App />);
   </script>
+
+<!-- amarracao-rodape: regra REGRA-AMARRACAO.md — todo ativo entrega para outro ativo -->
+<style>
+  .amarracao-rodape{position:fixed;left:0;right:0;bottom:0;z-index:9999;display:flex;justify-content:center;
+    align-items:center;gap:10px;padding:6px 10px;background:rgba(10,10,15,.55);font-family:'Courier New',monospace;
+    font-size:11px;line-height:1;color:#9a9aa8;pointer-events:none;backdrop-filter:blur(2px)}
+  .amarracao-rodape a{color:#b9b9c6;text-decoration:none;pointer-events:auto;padding:6px 4px}
+  .amarracao-rodape a:hover{color:#fff;text-decoration:underline}
+  @media(max-width:480px){.amarracao-rodape{font-size:10px}}
+</style>
+<div class="amarracao-rodape" role="contentinfo">
+  <span>Feito por Samuel Medeiros</span>
+  <a href="https://portifolio.seu.pet/?utm_source=portfolio&utm_medium=game&utm_campaign=amarracao&utm_content=code-typing"
+     rel="noopener">portfólio</a>
+  <a href="https://lifelog.seu.pet/?utm_source=portfolio&utm_medium=game&utm_campaign=amarracao&utm_content=code-typing"
+     rel="noopener">blog</a>
+</div>
+
 </body>
 </html>

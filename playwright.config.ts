@@ -1,24 +1,20 @@
 // playwright.config.ts
 import { defineConfig } from '@playwright/test';
 
-// 16/09 (loop r2): TEST_BASE_URL LOCAL antes desligava o webServer inteiro — a
-// porta do preview (ex: :3450) ficava sem servidor da branch e as specs de
-// identidade abortavam com "porta NAO serve o Portifolio" (a machine tem
-// serviço antigo no :3000 e o harness usa :3450). Agora o webServer sobe na
-// porta do TEST_BASE_URL quando ele é local; só URL remota (produção) roda
-// sem webServer, como antes.
+// 25/10 (r6-r8 "3450 is already used"): UM dono de preview — o webServer
+// plugin ABORTAVA antes do command (health-check com reuse:false + orfao na
+// porta) e o fuser do command nunca rodava; globalSetup roda depois do plugin,
+// entao duas subidas nunca podiam coexistir. Agora o dono e o
+// tests/global-setup.ts: limpa a porta (fuser -k), sobe o next start do build
+// da branch na porta do TEST_BASE_URL (local), valida IDENTIDADE HTTP real
+// antes de liberar a suíte e derruba no teardown. URL remota (producao) e
+// noop la dentro. Causa raiz lida do fonte do Playwright 1.63
+// (WebServerPlugin._startProcess: isURLAvailable roda ANTES do command).
 const BASE_URL = process.env.TEST_BASE_URL || 'http://localhost:3000';
-const isLocalBase = /^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?(\/|$)/.test(BASE_URL);
-const previewPort = (() => {
-  try {
-    return new URL(BASE_URL).port || '3000';
-  } catch {
-    return '3000';
-  }
-})();
 
 export default defineConfig({
   testDir: './tests',
+  globalSetup: './tests/global-setup.ts',
   timeout: 60 * 1000,
   expect: {
     timeout: 10000
@@ -35,17 +31,6 @@ export default defineConfig({
     trace: 'on-first-retry',
     screenshot: 'only-on-failure',
   },
-
-  webServer: isLocalBase ? {
-    command: `bash -c "while fuser ${previewPort}/tcp >/dev/null 2>&1; do fuser -k ${previewPort}/tcp 2>/dev/null || true; sleep 0.2; done; ./node_modules/.bin/next start -p ${previewPort}"`,
-    url: BASE_URL,
-    // Não reusar servidor existente para garantir identidade correta do preview.
-    // Reuso causava ERRO_IDENTIDADE_PREVIEW quando porta já estava ocupada por outro app.
-    reuseExistingServer: false,
-    timeout: 120000,
-    stdout: 'pipe',
-    stderr: 'pipe',
-  } : undefined,
 
   projects: [
     {

@@ -1,17 +1,15 @@
 /**
- * Guarda da config do Playwright — regressão do gap de rodada 3:
- * "ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio".
+ * Guarda da config do Playwright — 25/10: UM dono de preview.
  *
- * Causa raiz: quando `TEST_BASE_URL` era local, a config ANTIGA desligava o
- * webServer inteiro (`process.env.TEST_BASE_URL ? undefined : {...}`) e a porta
- * pedida (ex: :3450) ficava sem NINGUÉM servindo a branch — o preview não
- * subia e a checagem de identidade batia em servidor alheio (a máquina tem
- * systemd/staging no :3000 e outro app pode ocupar a porta do harness).
- *
- * A config viva agora deriva a porta do `TEST_BASE_URL` e sobe o `next start`
- * da branch NESSA porta (local); URL remota (produção) continua sem webServer.
- * Estes testes travam essa derivação — sem eles, uma edição futura pode
- * reintroduzir o "webServer desligado" sem ninguém notar.
+ * Histórico: com webServer plugin + reuseExistingServer:false, o health-check
+ * (isURLAvailable) do Playwright 1.63 roda ANTES do command e ABORTA com
+ * "is already used" quando um órfão segura a porta (r6-r8: "3450 is already
+ * used"); o fuser que vivia DENTRO do command nunca executava, e o globalSetup
+ * (que limpava a porta) rodava DEPOIS do plugin — nenhum hook cura isso.
+ * Cura: webServer REMOVIDO; tests/global-setup.ts é o dono (freePort no
+ * início, next start da branch, identidade HTTP real, teardown no fim).
+ * Estes testes travam esse desenho — sem eles, uma edição futura pode
+ * reintroduzir o plugin e reabrir o gap.
  */
 import { describe, it, expect, vi } from 'vitest';
 
@@ -29,7 +27,7 @@ function restoreEnv(snap: Record<string, string | undefined>): void {
 }
 
 async function loadConfig(
-  env: Partial<Record<(typeof ENV_KEYS)[number], string | undefined>>,
+  env: Partial<Record<(typeof ENV_KEYS)[number], string | undefined>>
 ) {
   const snap = snapshotEnv();
   for (const k of ENV_KEYS) delete process.env[k];
@@ -45,55 +43,37 @@ async function loadConfig(
   }
 }
 
-type ServerConfig = { command: string; url: string; reuseExistingServer: boolean };
-
-function webServerOf(cfg: { webServer?: ServerConfig | ServerConfig[] }): ServerConfig {
-  expect(Array.isArray(cfg.webServer), 'webServer não deve ser lista').toBe(false);
-  expect(cfg.webServer, 'webServer ausente — preview da branch não sobe').toBeTruthy();
-  return cfg.webServer as ServerConfig;
-}
-
-describe('playwright.config — preview da branch na porta sob teste', () => {
-  it('sem TEST_BASE_URL usa :3000 e sobe o next da branch (sem reuse)', async () => {
+describe('playwright.config — globalSetup é o único dono do preview', () => {
+  it('globalSetup plugado em qualquer modo (remoto vira noop lá dentro)', async () => {
     const cfg = await loadConfig({});
-    expect(cfg.use?.baseURL).toBe('http://localhost:3000');
-    const ws = webServerOf(cfg);
-    expect(ws.url).toBe('http://localhost:3000');
-    expect(ws.command).toContain('next start');
-    expect(ws.command).toContain('-p 3000');
-    expect(ws.reuseExistingServer).toBe(false);
+    expect(cfg.globalSetup).toBe('./tests/global-setup.ts');
   });
 
-  it('TEST_BASE_URL local (o gap: :3450) sobe o next NA PORTA pedida', async () => {
+  it('sem TEST_BASE_URL usa :3000 como baseURL', async () => {
+    const cfg = await loadConfig({});
+    expect(cfg.use?.baseURL).toBe('http://localhost:3000');
+  });
+
+  it('TEST_BASE_URL local (o gap: :3450) vira o baseURL da suíte', async () => {
     const cfg = await loadConfig({ TEST_BASE_URL: 'http://localhost:3450' });
     expect(cfg.use?.baseURL).toBe('http://localhost:3450');
-    const ws = webServerOf(cfg);
-    expect(ws.url).toBe('http://localhost:3450');
-    expect(ws.command).toContain('-p 3450');
-    // reuse desativado para garantir identidade do preview
-    expect(ws.reuseExistingServer).toBe(false);
-    // guarda anti-regressão: o comando deve liberar a porta antes de subir
-    expect(ws.command).toContain('fuser');
-    expect(ws.command).toContain('while');
   });
 
   it('TEST_BASE_URL local em 127.0.0.1 também é tratado como local', async () => {
     const cfg = await loadConfig({ TEST_BASE_URL: 'http://127.0.0.1:3512' });
-    const ws = webServerOf(cfg);
-    expect(ws.command).toContain('-p 3512');
-    expect(ws.url).toBe('http://127.0.0.1:3512');
+    expect(cfg.use?.baseURL).toBe('http://127.0.0.1:3512');
   });
 
-  it('TEST_BASE_URL remoto (produção) roda SEM webServer', async () => {
+  it('TEST_BASE_URL remoto (produção) mantém baseURL e SEM webServer', async () => {
     const cfg = await loadConfig({ TEST_BASE_URL: 'https://samuelmedeiros.vercel.app' });
     expect(cfg.use?.baseURL).toBe('https://samuelmedeiros.vercel.app');
     expect(cfg.webServer).toBeUndefined();
   });
 
-  it('no CI (sem TEST_BASE_URL) o webServer não reusa servidor existente', async () => {
-    const cfg = await loadConfig({ CI: '1' });
-    const ws = webServerOf(cfg);
-    expect(ws.reuseExistingServer).toBe(false);
-    expect(ws.command).toContain('-p 3000');
+  it('NUNCA tem webServer (health-check abortava antes do command)', async () => {
+    for (const env of [{}, { TEST_BASE_URL: 'http://localhost:3450' }, { CI: '1' }]) {
+      const cfg = await loadConfig(env as Record<string, string>);
+      expect(cfg.webServer, `webServer presente com env=${JSON.stringify(env)}`).toBeUndefined();
+    }
   });
 });
