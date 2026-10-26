@@ -1,5 +1,14 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-25] - 12 commits: cura do ERRO_IDENTIDADE_PREVIEW (reuseExistingServer off + fuser da porta) + parede de testes
+- **fix(e2e)** (`a2a347a`): `reuseExistingServer: false` - fim do ERRO_IDENTIDADE_PREVIEW.
+- **fix(e2e)** (`42d996c`): loop `fuser` libera a porta do preview antes do proximo start.
+- **test(e2e)** (`533d5bf`, `9a9b5b2`, `84bda5b`, `a073611`, `40b493b`): webServer mata listener; guards de identidade/limpeza de porta; teste de reproducao; expectativas do config.
+- **test** (`d015e72`): vitest coverage ligado para medicao.
+- **test** (`f874127`, `4e049b2`, `16a8ebe`, `769d156`): asserts reais em useGsapAnimation/Terminal/Tooltip; cobertura >=50% supabase; BuyMeACoffee/GitHubSponsors.
+- 12 commits na branch `roger/portifolio-20261025-185904` - push `github` OK; espelho `origin` (bare local) pendente (hook recusa merge commits).
+
+
 ## [2026-10-24] - 6 commits: grade so com repo curado + blog com 4 posts do LifeLog (PRs #158/#159); github sincronizado
 - **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
 - **test(e2e)** (`16d7f80`): snapshots visuais regenerados no ambiente do CI.

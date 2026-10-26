@@ -1,6 +1,15 @@
 # 🛸 Portifolio Samuel — Session State
 
 
+## Sessao 2026-10-25 (fim de dia) - 12 commits (cura do ERRO_IDENTIDADE_PREVIEW + parede de testes); push github ok na branch roger
+- **fix(e2e)** (`a2a347a`): `reuseExistingServer: false` no playwright config - o servidor nao herda mais listener/identidade de preview antiga (fim do ERRO_IDENTIDADE_PREVIEW).
+- **fix(e2e)** (`42d996c`): loop `fuser` libera a porta do preview antes do proximo start.
+- **test(e2e)** (`533d5bf`): webServer mata listener existente antes do start; (`9a9b5b2`) assercoes do guard de limpeza de porta; (`84bda5b`) teste de reproducao do gap de limpeza de porta; (`a073611`) config guard para reuso de identidade de preview; (`40b493b`) expectativas do config atualizadas.
+- **test** (`d015e72`): vitest coverage config ligado para medicao.
+- **test** (`f874127`): asserts reais em `useGsapAnimation`; (`4e049b2`) Terminal/Tooltip com asserts reais; (`16a8ebe`) cobertura >=50% em submitContactForm/CV/download/monitores (supabase); (`769d156`) cobertura de BuyMeACoffee, GitHubSponsors e monetizacao.
+- 12 commits na branch `roger/portifolio-20261025-185904` - push `github` OK (HEAD `84bda5b` + doc). Working tree com 14 entradas de estado de loop/playwright sujas - nao tocadas. PENDENCIA: espelho `origin` (bare local) segue atras no master (hook recusa merge commits).
+
+
 ## Sessao 2026-10-24 (fim de dia) - 6 commits (grade so com repo curado + blog com 4 posts do LifeLog, PRs #158/#159); push github ok
 - **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
 - **test(e2e)** (`16d7f80`): snapshots visuais gerados no ambiente do CI.
