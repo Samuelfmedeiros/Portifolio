@@ -3,19 +3,68 @@
  "rounds": [
   {
    "round": 2,
-   "worker": "general",
+   "worker": "test",
    "rc": 0,
    "gaps": [
-    "cobertura baixa: ...ct-covers.mjs (42% < 50%)",
-    "cobertura baixa: Terminal.tsx (34% < 50%)",
-    "cobertura baixa: Tooltip.tsx (43% < 50%)"
+    "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio"
+   ],
+   "files_touched": [],
+   "worker_tail": "olio (era 3)\n26641ab Merge pull request #158 from Samuelfmedeiros/fix/projetos-curados-by-topic\n16d7f80 test(e2e): atualiza snapshots visuais gerados no ambiente do CI\n345bf45 fix(projects): grade só com repo curado (topic featured), sem fork/skill\n5a639c9 docs: sessao de fim de dia 2026-10-23 (AGENTS.md + CHANGELOG.md)\nca58398 Merge pull request #157 from Samuelfmedeiros/feat/novos-projetos\n\u001b[0m\n",
+   "ts": "2026-10-25T23:01:58.541311+00:00"
+  },
+  {
+   "round": 3,
+   "worker": "test",
+   "rc": 0,
+   "gaps": [
+    "e2e playwright falhou: 20 passed (5.2m) — NOVAS falhas: ['cv-direct-pdf-guard', 'games-integrity', 'preview-identity']",
+    "teste novo sem assert de verdade: src/components/Terminal.test.tsx, src/components/Tooltip.test.tsx"
    ],
    "files_touched": [
-    "src/lib/coverGate.test.ts"
+    "src/proxy.ts"
    ],
-   "worker_tail": "&& pnpm vitest --run src/lib/coverGate.test.ts --coverage 2>&1 | grep \"...ct-covers\"\n...ect-covers.mjs |   55.27 |     50.6 |   66.66 |   58.33 | ...35-237,244-321\n\u001b[0m\n\u001b[0m$ \u001b[0mcd /mnt/HOME/samuel/projetos/projetos/portifolio && pnpm vitest --run src/lib/coverGate.test.ts src/components/Terminal.test.tsx src/components/Tooltip.test.tsx 2>&1 | grep -E \"Tests|PASS|FAIL\"\nTests  45 passed (45)\n\u001b[0m\n",
-   "ts": "2026-10-25T22:27:12.284544+00:00"
+   "worker_tail": "erminal.test.tsx > Terminal > handles input focus and blur 4ms\n ✓ src/components/Terminal.test.tsx > Terminal > shows error for unknown command 37ms\n ✓ src/components/Terminal.test.tsx > Terminal > clears history on clear command 73ms\n\n Test Files  2 passed (2)\n      Tests  22 passed (22)\n   Start at  20:35:58\n   Duration  3.42s (environment 43%, tests 43%, setup 6%, transform 5%, import 3%)\n\u001b[0m\n",
+   "ts": "2026-10-25T23:36:24.049840+00:00"
+  },
+  {
+   "round": 4,
+   "worker": "test",
+   "rc": 0,
+   "gaps": [
+    "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio",
+    "teste novo sem assert de verdade: src/hooks/useGsapAnimation.test.ts",
+    "REGRESSÃO: e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio"
+   ],
+   "files_touched": [],
+   "worker_tail": " add config guard for preview identity reuse\"\n[roger/portifolio-20261025-185904 a073611] test: add config guard for preview identity reuse\n 1 file changed, 13 insertions(+)\n create mode 100644 src/test/preview-identity-config.test.ts\n\u001b[0m\n\u001b[0m# \u001b[0mTodos\n[✓] Fix useGsapAnimation.test.ts with real asserts\n[✓] Fix preview identity e2e failure (webServer reuse)\n[✓] Run affected tests and commit\n\u001b[0m\n",
+   "ts": "2026-10-25T23:50:42.683949+00:00"
+  },
+  {
+   "round": 5,
+   "worker": "test",
+   "rc": 0,
+   "gaps": [
+    "vitest falhou: \u001b[2m            \u001b[22m \u001b[2mlearn more: https://vitest.dev/guide/improving-performance#test-environmen",
+    "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio",
+    "COBERTURA não medida (vitest coverage nao medido (rc=1)) — 10pts não concedidos; medir antes de aprovar",
+    "REGRESSÃO: e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio"
+   ],
+   "files_touched": [],
+   "worker_tail": "h na porta sob teste > TEST_BASE_URL remoto (produção) roda SEM webServer 1ms\n ✓ src/test/playwright-config.test.ts > playwright.config — preview da branch na porta sob teste > no CI (sem TEST_BASE_URL) o webServer não reusa servidor existente 1ms\n\n Test Files  1 passed (1)\n      Tests  5 passed (5)\n   Start at  21:11:17\n   Duration  1.83s (tests 47%, environment 43%, setup 7%, transform 2%)\n\u001b[0m\n",
+   "ts": "2026-10-26T00:11:46.742362+00:00"
+  },
+  {
+   "round": 6,
+   "worker": "test",
+   "rc": 0,
+   "gaps": [
+    "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio",
+    "REGRESSÃO: e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio"
+   ],
+   "files_touched": [],
+   "worker_tail": "54:53  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  159:55  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n  163:51  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any\n\n✖ 77 problems (0 errors, 77 warnings)\n  0 errors and 4 warnings potentially fixable with the `--fix` option.\n\u001b[0m\n",
+   "ts": "2026-10-26T00:34:33.636943+00:00"
   }
  ],
- "updated_at": "2026-10-25T22:27:12.284544+00:00"
+ "updated_at": "2026-10-26T00:34:33.636943+00:00"
 }

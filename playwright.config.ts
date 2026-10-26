@@ -37,7 +37,7 @@ export default defineConfig({
   },
 
   webServer: isLocalBase ? {
-    command: `bash -c "lsof -t -i:${previewPort} >/dev/null 2>&1 && lsof -t -i:${previewPort} | xargs kill -9 || true; ./node_modules/.bin/next start -p ${previewPort}"`,
+    command: `bash -c "while fuser ${previewPort}/tcp >/dev/null 2>&1; do fuser -k ${previewPort}/tcp 2>/dev/null || true; sleep 0.2; done; ./node_modules/.bin/next start -p ${previewPort}"`,
     url: BASE_URL,
     // Não reusar servidor existente para garantir identidade correta do preview.
     // Reuso causava ERRO_IDENTIDADE_PREVIEW quando porta já estava ocupada por outro app.
