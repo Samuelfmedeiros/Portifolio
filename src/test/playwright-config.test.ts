@@ -72,6 +72,9 @@ describe('playwright.config — preview da branch na porta sob teste', () => {
     expect(ws.command).toContain('-p 3450');
     // reuse desativado para garantir identidade do preview
     expect(ws.reuseExistingServer).toBe(false);
+    // guarda anti-regressão: o comando deve liberar a porta antes de subir
+    expect(ws.command).toContain('fuser');
+    expect(ws.command).toContain('while');
   });
 
   it('TEST_BASE_URL local em 127.0.0.1 também é tratado como local', async () => {
