@@ -12,6 +12,11 @@ export default defineConfig({
     setupFiles: ['src/test/setup.tsx'],
     testTimeout: 60000,
     hookTimeout: 60000,
+    coverage: {
+      provider: 'v8',
+      reporter: ['text', 'json-summary'],
+      exclude: ['src/components/_old/**', 'node_modules'],
+    },
   },
   resolve: {
     alias: {
