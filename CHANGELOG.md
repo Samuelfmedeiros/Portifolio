@@ -1,5 +1,9 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-26] - 0 commits; 12 diffs de estado de loop preservados; push github ok na branch roger
+- **sem commit de codigo**: 12 diffs nao commitados intactos (residual de `.loop-worker-*.md` + 2 estados de loop) - nada de alheio foi comitado.
+- **push**: `github` OK na branch ativa `roger/portifolio-20261025-185904` (HEAD up-to-date + doc).
+
 ## [2026-10-25] - 12 commits: cura do ERRO_IDENTIDADE_PREVIEW (reuseExistingServer off + fuser da porta) + parede de testes
 - **fix(e2e)** (`a2a347a`): `reuseExistingServer: false` - fim do ERRO_IDENTIDADE_PREVIEW.
 - **fix(e2e)** (`42d996c`): loop `fuser` libera a porta do preview antes do proximo start.
