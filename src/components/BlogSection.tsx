@@ -155,8 +155,7 @@ export function BlogSection({ posts }: BlogSectionProps) {
   return (
     <section className="py-8 px-6">
       <motion.h2
-        initial={mounted ? { opacity: 0 } : false}
-        whileInView={{ opacity: 1 }}
+        initial={false}
         className="text-xl font-mono text-[var(--accent)] mb-6 text-center"
       >
         {t("blog.section.title", "▸ DO BLOG")}

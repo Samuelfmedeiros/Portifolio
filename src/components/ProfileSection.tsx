@@ -312,8 +312,7 @@ function SkillsCompact() {
   return (
     <div className="mb-8">
       <motion.h2
-        initial={mounted ? { opacity: 0, y: 10 } : false}
-        whileInView={{ opacity: 1, y: 0 }}
+        initial={false}
         className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
       >
         {t("profile.skills.heading", "▸ HABILIDADES")}
@@ -889,8 +888,7 @@ export function ProfileSection() {
         {/* Timeline com P1 (separadores) + P2 (collapse) */}
         <div id="jornada" className="pb-16 md:pb-20">
           <motion.h2
-            initial={mounted ? { opacity: 0, y: 10 } : false}
-            whileInView={{ opacity: 1, y: 0 }}
+            initial={false}
             className="font-mono text-xs tracking-[0.25em] text-[var(--accent)] mb-6 text-center"
           >
             {t("profile.journey.heading", "▸ JORNADA")}

@@ -393,8 +393,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
   return (
     <section className="py-8 px-6">
       <motion.h2
-        initial={mounted ? { opacity: 0 } : false}
-        whileInView={{ opacity: 1 }}
+        initial={false}
         className="text-xl font-mono text-[var(--accent)] mb-4 text-center"
       >
         {resolvedTitle}
