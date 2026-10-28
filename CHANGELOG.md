@@ -1,5 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-27] - 2 commits: H2 invisiveis em desktop (fix) + merge do github/master; push github ok
+- **fix(ui)** (`b65b087`): section headings (H2) invisiveis em desktop — `initial={false}` em vez de `whileInView opacity 0`.
+- **merge** (`d79713e`): merge remote-tracking branch 'github/master' na branch roger.
+- Push github OK na branch `roger/portifolio-20261025-185904`; backup (bare) nao aplicavel.
+
 ## [2026-10-26] - 0 commits; 12 diffs de estado de loop preservados; push github ok na branch roger
 - **sem commit de codigo**: 12 diffs nao commitados intactos (residual de `.loop-worker-*.md` + 2 estados de loop) - nada de alheio foi comitado.
 - **push**: `github` OK na branch ativa `roger/portifolio-20261025-185904` (HEAD up-to-date + doc).
