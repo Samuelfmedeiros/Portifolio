@@ -1,5 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-28] - 0 commits; 2 diffs de estado de loop preservados; push github ok
+
+- 0 commits hoje. Diffs preservados: `.loop-handoff.json`, `.loop-portifolio.state.json`.
+- Branch `roger/portifolio-20261025-185904`. Push `github` OK.
+- Docs de fim de dia commitados + push github.
+
 ## [2026-10-27] - 2 commits: H2 invisiveis em desktop (fix) + merge do github/master; push github ok
 - **fix(ui)** (`b65b087`): section headings (H2) invisiveis em desktop — `initial={false}` em vez de `whileInView opacity 0`.
 - **merge** (`d79713e`): merge remote-tracking branch 'github/master' na branch roger.
