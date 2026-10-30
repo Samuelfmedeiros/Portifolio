@@ -1,8 +1,16 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## 2026-10-05 - campanha pf-gate mergeada no master + lint/vitest bloqueantes no deploy
+- **merge(roger)** (`eafbb21`, 02:02): campanha `pf-gate` entra no master - gate de seguranca + identidade de preview.
+- **ci** (`94d096c`, 13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` passa a tratar lint e vitest como **bloqueantes**.
+- Master ja sincronizada com `origin` e com o bare (ahead/behind 0/0). A branch de CI **ainda nao foi mergeada**.
+- Working tree com 8 entradas antigas (estados `.loop-*`, `.loop-handoff.json`) - nada alheio commitado.
+- Push bare+origin OK; HEAD master `eafbb21`.
+
 ## [2026-09-20] - Dia sem commits na master (campanha Roger em voo)
 - 0 commits hoje em todas as branches; `origin/master` + `bare/master` em `691207a2` (doc de 16/09).
 - Campanha Roger ativa no checkout durante o dia (state + workers r2-r8); tree com 33 entradas de outra sessao - nada commitado daqui.
+
 
 ## 2026-09-16 — Capas: fallback + geracao automatica + watchdog
 
@@ -194,3 +202,11 @@
 - **CV fix**: endereço completo e CEP removidos — fica apenas "Brasília-DF" (regenerado do DOCX fonte em F:\)
 
 **4 commits · HEAD: `1aa9c44` ✅ push bare+origin**
+## [2026-09-22] - Fim de dia automático: documentação de sessão
+
+## [2026-09-28] - dia sem commits; rotina documental
+- 0 commits de codigo; working tree com 8 arquivos .loop-* untracked de outra sessao (intactos).
+
+## [2026-10-02] - coverage-v8 habilitado como devDependency
+- test (`8c2854f`): `@vitest/coverage-v8` habilitado como devDependency.
+- 1 commit na branch de trabalho; push bare+origin OK.

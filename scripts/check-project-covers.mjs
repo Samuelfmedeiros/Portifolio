@@ -1,4 +1,3 @@
-#!/usr/bin/env node
 /**
  * Gate de capas: nada que ESTE commit publica pode ir ao ar sem capa real.
  *

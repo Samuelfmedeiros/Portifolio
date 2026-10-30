@@ -1,5 +1,11 @@
 # 🛸 Portifolio Samuel — Session State
 
+## Sessao 2026-10-05 (fim de dia) - campanha pf-gate no master + CI de deploy com lint/vitest bloqueantes
+- `eafbb21` (02:02): merge da campanha `pf-gate` no master - gate de seguranca + identidade de preview.
+- `94d096c` (13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` com lint e vitest bloqueantes. Branch ainda **sem merge**.
+- Working tree com 8 entradas antigas (`.loop-*.state.json*`, `.loop-handoff.json`) - nada alheio tocado.
+- Push bare+origin OK; HEAD master `eafbb21` (0/0 vs origin e bare).
+
 ## 🎯 Identidade
 Portfólio profissional sci-fi · Next.js 16 + React 19 + Tailwind 4 · Painel de controle interativo com animações cinematográficas e 5 mini-games
 
@@ -445,3 +451,18 @@ O header do card no HTML e' o bloco com `h-[160px] md:h-[200px]`; dentro dele vi
 capa (`<img>`/`<video>`), o icone ou o fallback (`<svg data-cover-name=...>`).
 O guard e o watchdog medem por esse marcador — nao por `<article>`.
 
+
+## Sessao 2026-09-22 (fim de dia) - Fim de dia automático
+
+## Sessao 2026-09-28 (fim de dia) - sem commits; scaffolding alheio intacto
+
+- 0 commits de codigo no dia.
+- Working tree com 8 untracked de outra sessao (.loop-handoff.json, .loop-portifolio.state.json + 6 archives .old-*/.archive-*) - nao commitados nem descartados daqui; decisao cabe ao dono dessas edicoes.
+- Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
+
+## Sessao 2026-10-02 (fim de dia) - coverage-v8 habilitado como devDependency
+
+- `8c2854f` test: habilita `@vitest/coverage-v8` como devDependency (`package.json` +1, `pnpm-lock.yaml` +304/-72) — sem isso a medicao de cobertura nao roda.
+- 1 commit hoje na branch de trabalho `roger/portifolio-20260921-134947` (HEAD); push `bare` + `origin` OK.
+- Nota de branch: `deploy.yml` do repo dispara em push na `master`; a branch de trabalho nao aciona deploy.
+- Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
