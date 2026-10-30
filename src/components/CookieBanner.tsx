@@ -4,7 +4,7 @@ import { useState, useEffect, createContext, useContext, useCallback } from "rea
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
-import { loadUmamiScript } from "@/lib/umami";
+import { loadOpenpanelScript } from "@/lib/openpanel";
 
 const CONSENT_KEY = "mc-analytics-consent";
 
@@ -53,18 +53,19 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   // wraps MonetizationProvider, so we manage ads consent directly
   const [, setAdsChoice] = useState<"none" | "non-personalized" | "personalized">("none");
 
-  // BUG #1 FIX (11/08/2026): consentimento já salvo == "accepted" deve carregar
-  // o Umami no boot, sem depender de clique. State é lazy-initialized para o
-  // consent, mas loadUmamiScript() precisa ser chamado explicitamente no mount.
+  // Consentimento já salvo == "accepted" deve carregar o analytics no boot,
+  // sem depender de clique. State lazy-initialized; o loader precisa ser
+  // chamado explicitamente no mount.
   useEffect(() => {
     // Leitura real do consentimento SÓ pós-mount (server e 1º render client
     // ficam idênticos → sem #418). O banner aparece após a hidratação.
     const stored = getStoredConsent();
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- consentimento vem do localStorage só pós-mount (SSR e 1º render client idênticos, #418)
     setConsent(stored);
     setShowBanner(stored === null);
     setMounted(true);
     if (stored === "accepted") {
-      loadUmamiScript();
+      loadOpenpanelScript();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -77,7 +78,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     }
     setConsent("accepted");
     setShowBanner(false);
-    loadUmamiScript();
+    loadOpenpanelScript();
   }, []);
 
   const decline = useCallback(() => {
@@ -107,7 +108,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     setConsent("accepted");
     setAdsChoice(adsLevel);
     setShowBanner(false);
-    loadUmamiScript();
+    loadOpenpanelScript();
 
     // Sync monetization consent so MonetizationProvider picks it up
     try {

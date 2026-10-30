@@ -38,9 +38,9 @@ const nextConfig = {
               "default-src 'self'",
               "script-src 'self' 'unsafe-inline' https://pagead2.googlesyndication.com https://fundingchoicesmessages.google.com https://www.googletagmanager.com https://www.google-analytics.com https://ep2.adtrafficquality.google https://*.adtrafficquality.google https://capivara.seu.pet https://unpkg.com https://static.cloudflareinsights.com",
               "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
-              "img-src 'self' data: blob: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://avatars.githubusercontent.com https://*.googleusercontent.com https://api.qrserver.com https://lifelog-sepia.vercel.app",
+              "img-src 'self' data: blob: https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://www.googletagmanager.com https://www.google-analytics.com https://ep1.adtrafficquality.google https://avatars.githubusercontent.com https://*.googleusercontent.com https://api.qrserver.com https://lifelog.seu.pet https://lifelog-sepia.vercel.app",
               "font-src 'self' https://fonts.gstatic.com",
-              "connect-src 'self' https://capivara.seu.pet https://api.github.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google https://www.google-analytics.com",
+              "connect-src 'self' https://capivara.seu.pet https://skills.seu.pet https://api.github.com https://pagead2.googlesyndication.com https://googleads.g.doubleclick.net https://*.adtrafficquality.google https://www.google-analytics.com",
               "frame-src 'self' https://googleads.g.doubleclick.net https://td.doubleclick.net https://fundingchoicesmessages.google.com https://ep2.adtrafficquality.google https://www.google.com",
               "form-action 'self'",
               "base-uri 'self'",
@@ -48,6 +48,18 @@ const nextConfig = {
           },
         ],
       },
+    ];
+  },
+
+  // OpenPanel (self-host) via proxy same-origin: mantém CSP 'self' + COEP.
+  // /api/hit: o beacon de visita vai pelo MESMO domínio e o rewrite repassa pro caixa da
+  // loja. Cross-origin direto (skills.seu.pet) fazia a resposta ser barrada por COEP e
+  // deixava um erro no console a cada visita — o POST chegava, mas o navegador reclamava.
+  async rewrites() {
+    return [
+      { source: '/analytics/op1.js', destination: 'https://openpanel.seu.pet/op1.js' },
+      { source: '/api/op/:path*', destination: 'https://openpanel.seu.pet/api/:path*' },
+      { source: '/api/hit', destination: 'https://skills.seu.pet/api/hit' },
     ];
   },
 

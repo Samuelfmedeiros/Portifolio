@@ -8,7 +8,9 @@ import { GlassCard } from "./GlassCard";
 import type { Repo } from "@/lib/types";
 import { FEATURED_PROJECTS } from "@/lib/staticProjects";
 import { getProjectAffiliates } from "@/lib/monetization";
+import { comUtm } from "@/lib/utm";
 import { useAnalytics } from "@/hooks/useAnalytics";
+import { useMounted } from "@/hooks/useMounted";
 import { useLanguage } from "@/lib/i18n";
 import { getProjectI18n } from "@/lib/profileData";
 import { ProjectModal } from "./ProjectModal";
@@ -103,6 +105,15 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
 
   const isFeatured = FEATURED.includes(repo.name);
   const hasLink = !!(repo.homepage || repo.hasDemo);
+  // Amarração (24/10/2026): link que sai do portfólio leva UTM — sem isso o destino
+  // não sabe quem mandou (medido: 13 links cruzados, zero com UTM).
+  const siteHref = repo.homepage
+    ? comUtm(repo.homepage, {
+        medium: "projeto",
+        campaign: repo.name.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, ""),
+        content: "card",
+      })
+    : "";
   const techTags = extractTechTags({ ...repo, description: localizedDescription, topics: localizedTopics });
   const langColor = repo.language ? LANG_COLORS[repo.language] || "var(--accent)" : "var(--accent)";
   const updated = repo.pushed_at
@@ -113,6 +124,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
   // out of the card gradient so the generated cover matches the card.
   const coverAccent = firstHex(gradient) || "#22d3ee";
   const { track } = useAnalytics();
+  const mounted = useMounted();
 
   const handleClick = () => {
     // Todos os cards abrem o modal de detalhes (padrão Arachne)
@@ -125,7 +137,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
     <motion.div
       key={repo.id}
       layout
-      initial={{ opacity: 0, scale: 0.95 }}
+      initial={mounted ? { opacity: 0, scale: 0.95 } : false}
       animate={{ opacity: 1, scale: 1 }}
       exit={{ opacity: 0, scale: 0.95 }}
       transition={{ duration: 0.25, delay: i * 0.05 }}
@@ -161,7 +173,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
         {/* Project image header — clickable if has demo */}
         {(repo.homepage || repo.hasDemo) ? (
           <a
-            href={repo.name === "Portifolio" ? (repo.html_url || "#") : (repo.homepage || "#")}
+            href={repo.name === "Portifolio" ? (repo.html_url || "#") : (siteHref || "#")}
             target="_blank"
             rel="noopener noreferrer"
             className="relative h-[160px] md:h-[200px] w-full shrink-0 overflow-hidden flex items-center justify-center block group/image"
@@ -193,7 +205,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                   fill
                   className="absolute inset-0 w-full h-full object-cover object-center transition-transform duration-500 group-hover/image:scale-110"
                   unoptimized
-                  loading="lazy"
+                  loading={repo.coverPriority ? "eager" : "lazy"}
+                  fetchPriority={repo.coverPriority ? "high" : undefined}
                 />
               )
             ) : repo.icon ? (
@@ -240,7 +253,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
                   fill
                   className="absolute inset-0 w-full h-full object-cover object-top"
                   unoptimized
-                  loading="lazy"
+                  loading={repo.coverPriority ? "eager" : "lazy"}
+                  fetchPriority={repo.coverPriority ? "high" : undefined}
                 />
               )
             ) : repo.icon ? (
@@ -305,7 +319,7 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
           <div className="mt-auto flex gap-2">
             {(repo.homepage || repo.hasDemo) && (
               <a
-                href={repo.homepage || "#"}
+                href={siteHref || "#"}
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
@@ -364,6 +378,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
   const resolvedTitle = title || t("projects.section.title", "▸ PROJETOS");
   const [selectedProject, setSelectedProject] = useState<Repo | null>(null);
   const { track } = useAnalytics();
+  const mounted = useMounted();
 
   if (!repos || repos.length === 0) {
     return (
@@ -378,8 +393,7 @@ export function ProjectHangar({ repos, title }: { repos: Repo[]; title?: string 
   return (
     <section className="py-8 px-6">
       <motion.h2
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={false}
         className="text-xl font-mono text-[var(--accent)] mb-4 text-center"
       >
         {resolvedTitle}

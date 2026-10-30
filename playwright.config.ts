@@ -37,11 +37,11 @@ export default defineConfig({
   },
 
   webServer: isLocalBase ? {
-    command: `./node_modules/.bin/next start -p ${previewPort}`,
+    command: `bash -c "while fuser ${previewPort}/tcp >/dev/null 2>&1; do fuser -k ${previewPort}/tcp 2>/dev/null || true; sleep 0.2; done; ./node_modules/.bin/next start -p ${previewPort}"`,
     url: BASE_URL,
-    // TEST_BASE_URL local explicit = o operador já definiu a porta; se algo
-    // saudável responde nela, reusa (evita conflito com preview já subido).
-    reuseExistingServer: process.env.TEST_BASE_URL ? true : !process.env.CI,
+    // Não reusar servidor existente para garantir identidade correta do preview.
+    // Reuso causava ERRO_IDENTIDADE_PREVIEW quando porta já estava ocupada por outro app.
+    reuseExistingServer: false,
     timeout: 120000,
     stdout: 'pipe',
     stderr: 'pipe',

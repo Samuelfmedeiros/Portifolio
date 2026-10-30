@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Image from "next/image";
 import { ArrowUpRight, PenLine } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
+import { useMounted } from "@/hooks/useMounted";
 import type { LifelogPost } from "@/lib/lifelogRss";
 import ProjectIcon from "./ProjectIcon";
 
@@ -38,10 +39,11 @@ function BlogCard({ post, index }: BlogCardProps) {
   const accent = post.accent || DEFAULT_ACCENT;
   const projectLabel = post.project ? (PROJECT_LABELS[post.project] || post.project) : "LifeLog";
   const hasProject = Boolean(post.project && PROJECT_LABELS[post.project]);
+  const mounted = useMounted();
 
   return (
     <motion.article
-      initial={{ opacity: 0, y: 16 }}
+      initial={mounted ? { opacity: 0, y: 16 } : false}
       whileInView={{ opacity: 1, y: 0 }}
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.08 }}
@@ -125,8 +127,15 @@ interface BlogSectionProps {
   posts: LifelogPost[];
 }
 
+/**
+ * Quantos posts do LifeLog aparecem no portfólio (Samuel 24/10/2026: 4).
+ * 4 em linha no desktop; 2x2 no tablet; 1 coluna no mobile.
+ */
+export const BLOG_POSTS_LIMIT = 4;
+
 export function BlogSection({ posts }: BlogSectionProps) {
   const { t, locale } = useLanguage();
+  const mounted = useMounted();
   if (!posts || posts.length === 0) return null;
 
   // Filtra por locale: PT mostra posts sem /en/, EN mostra posts EN.
@@ -139,21 +148,20 @@ export function BlogSection({ posts }: BlogSectionProps) {
   // Sumir a secao custa 476px de layout + conteudo indexavel, e foi exatamente o
   // que derrubou os 4 baselines visuais do CI (6908 -> 6432px).
   // Preferencia mantida: nunca misturar idiomas quando o proprio tem posts.
-  const filtered = (own.length > 0 ? own : other).slice(0, 3);
+  const filtered = (own.length > 0 ? own : other).slice(0, BLOG_POSTS_LIMIT);
 
   if (filtered.length === 0) return null;
 
   return (
     <section className="py-8 px-6">
       <motion.h2
-        initial={{ opacity: 0 }}
-        whileInView={{ opacity: 1 }}
+        initial={false}
         className="text-xl font-mono text-[var(--accent)] mb-6 text-center"
       >
         {t("blog.section.title", "▸ DO BLOG")}
       </motion.h2>
 
-      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
+      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5">
         {filtered.map((post, i) => (
           <BlogCard key={post.url} post={post} index={i} />
         ))}

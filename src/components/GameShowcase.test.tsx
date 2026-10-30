@@ -84,8 +84,20 @@ describe("GameShowcase", () => {
 
   const renderWithI18n = (ui: ReactNode) => render(<I18nWrapper>{ui}</I18nWrapper>);
 
+  const origScrollWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "scrollWidth");
+  const origClientWidth = Object.getOwnPropertyDescriptor(HTMLElement.prototype, "clientWidth");
+
   beforeEach(() => {
     vi.clearAllMocks();
+    // jsdom não calcula layout: simula um trilho que transborda, senão as setas
+    // (que só existem com overflow real) nunca renderizariam nos testes.
+    Object.defineProperty(HTMLElement.prototype, "scrollWidth", { configurable: true, get: () => 1000 });
+    Object.defineProperty(HTMLElement.prototype, "clientWidth", { configurable: true, get: () => 300 });
+  });
+
+  afterEach(() => {
+    if (origScrollWidth) Object.defineProperty(HTMLElement.prototype, "scrollWidth", origScrollWidth);
+    if (origClientWidth) Object.defineProperty(HTMLElement.prototype, "clientWidth", origClientWidth);
   });
 
   it("returns nothing when repos array is empty", () => {
@@ -167,6 +179,26 @@ describe("GameShowcase", () => {
     const rightBtn = screen.getByLabelText("Direita");
     expect(leftBtn).toBeTruthy();
     expect(rightBtn).toBeTruthy();
+  });
+
+  it("esconde as setas quando o trilho não transborda (caso desktop)", () => {
+    // Desktop: os 5 cards cabem — as setas ficavam sobre o primeiro card e soltas
+    // no vazio à direita, sem ter o que rolar. Elas continuam no DOM (mudar a
+    // árvore em runtime re-monta os irmãos e órfã os listeners nativos dos cards)
+    // mas saem de cena via `hidden`.
+    Object.defineProperty(HTMLElement.prototype, "scrollWidth", { configurable: true, get: () => 300 });
+    Object.defineProperty(HTMLElement.prototype, "clientWidth", { configurable: true, get: () => 1000 });
+    renderWithI18n(<GameShowcase repos={gameRepos} />);
+    expect(screen.getByLabelText("Esquerda").className).toContain("hidden");
+    expect(screen.getByLabelText("Direita").className).toContain("hidden");
+  });
+
+  it("com overflow, a seta esquerda so aparece depois de rolar", () => {
+    // No mobile ha overflow (622px em 390 de largura): a seta esquerda fica fora no
+    // inicio (nao tem destino e cobria o primeiro card) e entra depois do scroll.
+    renderWithI18n(<GameShowcase repos={gameRepos} />);
+    expect(screen.getByLabelText("Esquerda").className).toContain("hidden");
+    expect(screen.getByLabelText("Direita").className).not.toContain("hidden");
   });
 
   it("renders each game card with a Play button overlay", () => {

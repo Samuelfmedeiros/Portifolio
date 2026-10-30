@@ -47,7 +47,7 @@ export function JsonLd() {
     sameAs: [
       "https://github.com/Samuelfmedeiros",
       "https://linkedin.com/in/samuelandrademedeiros",
-      "https://lifelog-sepia.vercel.app",
+      "https://lifelog.seu.pet",
       "https://x.com/Samuelfmedeiros",
       "https://wa.me/5561999999999",
     ],
@@ -90,7 +90,7 @@ export function JsonLd() {
     sameAs: [
       "https://github.com/Samuelfmedeiros",
       "https://linkedin.com/in/samuelandrademedeiros",
-      "https://lifelog-sepia.vercel.app",
+      "https://lifelog.seu.pet",
       "https://x.com/Samuelfmedeiros",
     ],
     knowsAbout: [

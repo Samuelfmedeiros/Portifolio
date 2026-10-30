@@ -7,6 +7,7 @@ import { LazyGameShowcase } from "@/components/LazyGameShowcase";
 import { LazyContactForm } from "@/components/LazyContactForm";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
+import { isCuratedRepo } from "@/lib/projectCuration";
 import { BlogSection } from "@/components/BlogSection";
 import { getLatestLifelogPosts } from "@/lib/lifelogRss";
 
@@ -16,9 +17,9 @@ export const revalidate = 1800;
 
 async function getProjectData() {
   const repos = await getRepos();
-  const filteredRepos = repos.filter(
-    (r) => r.name !== "SamuelFmedeiros" && r.name !== "arachne-mcp" && r.name !== "Arachne_Os_Crawl"
-  );
+  // Curadoria (Samuel 24/10/2026): só entra repo com topic `featured`, nunca
+  // fork nem repo de skill. Ver isCuratedRepo / projectCuration.ts.
+  const filteredRepos = repos.filter(isCuratedRepo);
 
   // Merge static + API, deduplicating by name (static data takes precedence for featured fields)
   const repoMap = new Map<string, typeof STATIC_PROJECTS[0]>();

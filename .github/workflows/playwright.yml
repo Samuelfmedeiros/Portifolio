@@ -16,6 +16,7 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
 
     permissions:
       contents: write
@@ -63,6 +64,12 @@ jobs:
         # default de producao, os shards batem no site ao vivo em vez do webServer
         # da branch. Este gate falha o CI na hora se a classe do bug voltar.
         run: node scripts/check-spec-base-url.mjs tests
+
+      - name: Guard - asset estatico sem host legado *.vercel.app
+        # 07/10/2026 (PR #132): public/games/terminal/index.html imprimia
+        # "Site: samuelmedeiros.vercel.app" em producao apos a migracao pro
+        # dominio proprio. public/ nao passa pelo build — este grep pega.
+        run: node scripts/check-legacy-hosts.mjs public
 
       - name: Run Playwright tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
         if: inputs.update_snapshots != true

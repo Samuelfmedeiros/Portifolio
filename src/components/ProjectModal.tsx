@@ -52,7 +52,7 @@ const getTagStyle = (tech: string) => {
     return "bg-orange-500/15 text-orange-400 border-orange-500/30";
   if (["node", "express", "hono", "api"].includes(lower))
     return "bg-green-500/15 text-green-400 border-green-500/30";
-  if (["power", "bi", "dax", "excel"].includes(lower))
+  if (["power bi", "bi", "dax", "excel"].includes(lower))
     return "bg-blue-500/15 text-blue-400 border-blue-500/30";
   return "bg-[var(--border)]/50 text-[var(--text-secondary)] border-[var(--border)]/30";
 };

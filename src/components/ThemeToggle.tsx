@@ -4,11 +4,13 @@ import { memo } from "react";
 import { Moon, Sun } from "lucide-react";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
+import { useMounted } from "@/hooks/useMounted";
 import { useTheme } from "./ThemeProvider";
 
 export const ThemeToggle = memo(function ThemeToggle() {
   const { theme, toggle } = useTheme();
   const [hover, setHover] = useState(false);
+  const mounted = useMounted();
   const next = theme === "dark" ? "light" : "dark";
 
   return (
@@ -39,7 +41,7 @@ export const ThemeToggle = memo(function ThemeToggle() {
           {theme === "dark" ? (
             <motion.div
               key="sun"
-              initial={{ opacity: 0, scale: 0.5, rotate: -90 }}
+              initial={mounted ? { opacity: 0, scale: 0.5, rotate: -90 } : false}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.5, rotate: 90 }}
               transition={{ duration: 0.3 }}
@@ -49,7 +51,7 @@ export const ThemeToggle = memo(function ThemeToggle() {
           ) : (
             <motion.div
               key="moon"
-              initial={{ opacity: 0, scale: 0.5, rotate: 90 }}
+              initial={mounted ? { opacity: 0, scale: 0.5, rotate: 90 } : false}
               animate={{ opacity: 1, scale: 1, rotate: 0 }}
               exit={{ opacity: 0, scale: 0.5, rotate: -90 }}
               transition={{ duration: 0.3 }}

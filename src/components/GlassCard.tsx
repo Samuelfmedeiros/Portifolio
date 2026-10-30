@@ -1,5 +1,6 @@
 import { forwardRef, ReactNode } from "react";
 import { motion } from "framer-motion";
+import { useMounted } from "@/hooks/useMounted";
 
 interface GlassCardProps {
   children: ReactNode;
@@ -15,10 +16,12 @@ interface GlassCardProps {
 
 export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(
   ({ children, className = "", delay = 0, ...rest }, ref) => {
+    // SSR-safe: nasce visível no servidor; fade-in só no cliente (família #418/#50/#142)
+    const mounted = useMounted();
     return (
       <motion.div
         ref={ref}
-        initial={{ opacity: 0, y: 20 }}
+        initial={mounted ? { opacity: 0, y: 20 } : false}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5, delay }}
         viewport={{ once: true }}

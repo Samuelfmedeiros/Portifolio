@@ -48,12 +48,14 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    # 21/10/2026 — decisao do dono (opcao 1): vermelho BARRA o deploy.
+    # O continue-on-error deixou o HitBeacon.test.tsx quebrado no master por dias
+    # (#149) sem ninguem ver. Lint e teste agora sao bloqueantes de verdade.
+    # PR #154 zerou os 14 erros de lint que existiam no master — este gate comeca verde.
     - name: Run lint
-      continue-on-error: true
       run: pnpm lint
 
     - name: Run tests
-      continue-on-error: true
       run: pnpm vitest run
 
     - name: Build project
@@ -114,10 +116,11 @@ jobs:
           echo "deploy_url=$DEPLOY_URL" >> "$GITHUB_OUTPUT"
         fi
 
-    - name: Deploy to Vercel
-      if: github.ref_name == 'master' && github.event_name != 'pull_request'
-      id: deploy
-      run: npx vercel@latest --prod --token=${{ secrets.VERCEL_TOKEN }} --yes 2>&1
+    # 06/10/2026 - step `npx vercel --prod` REMOVIDO: o deploy de producao e feito pela
+    # integracao Git do Vercel (creator=vercel[bot]), que publica no push para master.
+    # O CLI era redundante e falhava por token ("No teams available"), deixando o run
+    # vermelho sem impedir o deploy real. Para voltar com o CLI, restaure este step com
+    # um token Vercel valido (decisao 2 do plano 2026-10-06-indexacao-google-portfolio-lifelog).
 
     - name: Health Check
       if: github.ref_name == 'master' && github.event_name != 'pull_request'
@@ -126,7 +129,7 @@ jobs:
         echo "⏳ Aguardando propagação (15s)..."
         sleep 15
         for i in $(seq 1 5); do
-          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://samuelmedeiros.vercel.app 2>/dev/null)
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://portifolio.seu.pet 2>/dev/null)
           echo "Tentativa $i/5: HTTP $CODE"
           if [ "$CODE" = "200" ]; then
             echo "✅ Site online (HTTP $CODE)"
@@ -153,7 +156,7 @@ jobs:
         echo "⏳ Aguardando rollback (15s)..."
         sleep 15
         for i in $(seq 1 3); do
-          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://samuelmedeiros.vercel.app 2>/dev/null)
+          CODE=$(curl -s -o /dev/null -w '%{http_code}' https://portifolio.seu.pet 2>/dev/null)
           echo "Verificação $i/3: HTTP $CODE"
           if [ "$CODE" = "200" ]; then
             echo "✅ Rollback OK — site online (HTTP $CODE)"
@@ -184,7 +187,7 @@ jobs:
         TEXT="✅ *Portifólio CI*
 
         📦 *Status:* Sucesso
-        🔗 *URL:* https://samuelmedeiros.vercel.app
+        🔗 *URL:* https://portifolio.seu.pet
         📝 *Commit:* \`$COMMIT_SHA\` — $COMMIT_SUBJECT
         📄 *Alterações ($FILE_COUNT arquivos):*
         $CHANGED"

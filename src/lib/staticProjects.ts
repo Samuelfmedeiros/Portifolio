@@ -45,7 +45,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Este site, em estilo cockpit sci-fi — Next.js, Framer Motion e animações cinematográficas. Modo claro/escuro, 6 paletas de cores, PT/EN e atenção total a mobile, acessibilidade e performance.",
     html_url: "https://github.com/Samuelfmedeiros/Portifolio",
-    homepage: "https://samuelmedeiros.vercel.app",
+    homepage: "https://portifolio.seu.pet",
     stargazers_count: 0,
     forks_count: 0,
     language: "TypeScript",
@@ -62,7 +62,7 @@ export const STATIC_PROJECTS: Repo[] = [
     description:
       "Blog pessoal onde compartilho aprendizados reais de engenharia — otimização de performance, refatorações, dashboards e bastidores dos meus projetos. Astro, MDX, TypeScript e design system próprio.",
     html_url: "https://github.com/Samuelfmedeiros/lifelog",
-    homepage: "https://lifelog-sepia.vercel.app",
+    homepage: "https://lifelog.seu.pet",
     stargazers_count: 0,
     forks_count: 0,
     language: "TypeScript",
@@ -95,7 +95,9 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "roger-mlops",
     description:
       "Camada de confiabilidade para treino longo de GPU em WSL2: critic determinístico sobre IPC de arquivo, watchdogs que ressuscitam runs travados, cura cirúrgica da ponte GPU-PV e checkpoints à prova de corrupção em 9p. Python puro, zero dependências.",
-    html_url: "https://github.com/Samuelfmedeiros/roger-mlops",
+    // Repo renomeado no GitHub (roger-mlops -> roger-Test-Loops-mlops, 301).
+    // O nome antigo duplicava o card que vem da API: ver GITHUB_ALIASES abaixo.
+    html_url: "https://github.com/Samuelfmedeiros/roger-Test-Loops-mlops",
     homepage: "",
     stargazers_count: 0,
     forks_count: 0,
@@ -112,7 +114,9 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "roger-loop",
     description:
       "Orquestrador de test-loop config-driven para entrega agêntica: critic determinístico via contrato SCORE/GAPS/DETAIL, rodadas com orçamento, debate de zona cinzenta com pernas isoladas (pró/contra/juiz) e guardas de nota herdada e de regressão. Zero dependências, agnóstico de provider.",
-    html_url: "https://github.com/Samuelfmedeiros/roger-loop",
+    // O codigo publico do Roger (mesmo contrato SCORE/GAPS/DETAIL) vive em
+    // ai-test-loop; o repo roger-loop segue privado. Botao aponta pro publico.
+    html_url: "https://github.com/Samuelfmedeiros/ai-test-loop",
     homepage: "",
     stargazers_count: 0,
     forks_count: 0,
@@ -123,6 +127,63 @@ export const STATIC_PROJECTS: Repo[] = [
     imageGradient: "linear-gradient(135deg, #1b1030 0%, #4c1d95 50%, #0f172a 100%)",
     hasDemo: false,
     imageUrl: img("/projects/roger-loop.webp"),
+  },
+  {
+    id: 999013,
+    name: "Focinho",
+    description:
+      "Veículo independente de pet tech: testes, guias e bastidores para quem vive com bicho, entregues por site e newsletter semanal. Curadoria humana, sem clickbait.",
+    // Repo privado — card aponta só pro site (padrão DogWalk).
+    html_url: "",
+    homepage: "https://focinho.seu.pet",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["web", "pet", "newsletter"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #2b1a05 0%, #78350f 50%, #b45309 100%)",
+    hasDemo: true,
+    imageUrl: img("/projects/focinho.webp"),
+    coverPriority: true,
+  },
+  {
+    id: 999014,
+    name: "Skills Shop",
+    description:
+      "Loja de skills para agentes de IA: pacotes prontos para instalar, com documentação, preço justo e entrega imediata. Cada skill troca semanas de configuração por uma instalação.",
+    // Repo privado — card aponta só pro site (padrão DogWalk).
+    html_url: "",
+    homepage: "https://skills.seu.pet",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "TypeScript",
+    topics: ["web", "ai", "skills", "marketplace"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #1b0f2e 0%, #4c1d95 50%, #7c3aed 100%)",
+    hasDemo: true,
+    imageUrl: img("/projects/skills-shop.webp"),
+    coverPriority: true,
+  },
+  {
+    id: 999015,
+    name: "SafMarket",
+    description:
+      "Loja própria com checkout integrado: catálogo, carrinho e pagamento local. Vitrine enxuta, tema claro como padrão e zero rastreadores de terceiros.",
+    // Repo privado — card aponta só pro site (padrão DogWalk).
+    html_url: "",
+    homepage: "https://safmarket.seu.pet",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "JavaScript",
+    topics: ["web", "ecommerce", "checkout", "payments"],
+    pushed_at: new Date().toISOString(),
+    created_at: new Date().toISOString(),
+    imageGradient: "linear-gradient(135deg, #04241a 0%, #065f46 50%, #10b981 100%)",
+    hasDemo: true,
+    imageUrl: img("/projects/safmarket.webp"),
+    coverPriority: true,
   },
   // Games — ordem definida pelo Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge
   {
@@ -211,6 +272,13 @@ export const STATIC_PROJECTS: Repo[] = [
     imageUrl: img("/projects/asteroid-dodge.webp"),
   },
 ];
+
+/**
+ * Repos da API do GitHub que sao o MESMO projeto de um card do catalogo
+ * estatico, mas com outro nome (repo renomeado). Sem isso o merge em
+ * page.tsx cria card duplicado — caso roger-mlops/roger-Test-Loops-mlops.
+ */
+export const GITHUB_ALIASES = ["roger-Test-Loops-mlops"];
 
 export const FEATURED_PROJECTS = [
   "DogWalk",

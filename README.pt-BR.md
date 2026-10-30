@@ -12,8 +12,8 @@
 </p>
 
 <p align="center">
-  <a href="https://samuelmedeiros.vercel.app">
-    <img src="https://img.shields.io/badge/Live-→_samuelmedeiros.vercel.app-06b6d4?style=flat-square&logoColor=white" alt="Live">
+  <a href="https://portifolio.seu.pet">
+    <img src="https://img.shields.io/badge/Live-→_portifolio.seu.pet-06b6d4?style=flat-square&logoColor=white" alt="Live">
   </a>
   <a href="#-testes">
     <img src="https://img.shields.io/badge/Testes-268_passing-22c55e?style=flat-square" alt="Testes">
@@ -41,7 +41,7 @@
 
 Portfólio profissional de **Samuel Medeiros** — desenvolvedor full stack e analista de dados. Fog do padrão "currículo bonitinho": cada seção é um módulo independente que demonstra habilidades reais em arquitetura de software, animações de ponta, qualidade de código e experiência do usuário.
 
-→ **[samuelmedeiros.vercel.app](https://samuelmedeiros.vercel.app)**
+→ **[portifolio.seu.pet](https://portifolio.seu.pet)**
 
 ### O que você encontra aqui
 

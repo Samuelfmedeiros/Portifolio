@@ -18,8 +18,9 @@ vi.mock("@/lib/supabase", () => ({
   submitCVDownload: vi.fn(),
 }));
 
-vi.mock("@/lib/umami", () => ({
-  loadUmamiScript: vi.fn(),
+vi.mock("@/lib/openpanel", () => ({
+  loadOpenpanelScript: vi.fn(),
+  openpanelTrack: vi.fn(),
 }));
 
 // useFocusTrap real roda rAF/focus no jsdom — mock para determinismo
@@ -81,6 +82,7 @@ describe("DownloadModal", () => {
     vi.spyOn(HTMLAnchorElement.prototype, "click").mockImplementation(function (
       this: HTMLAnchorElement
     ) {
+      // eslint-disable-next-line @typescript-eslint/no-this-alias -- captura intencional do <a> que recebeu o click
       clickedAnchor = this;
     });
 

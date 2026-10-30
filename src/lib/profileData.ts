@@ -233,6 +233,18 @@ const PROJECTS_PT: Record<string, ProjectI18n> = {
     description: "Orquestrador de test-loop config-driven: critic determinístico por contrato, rodadas com orçamento e debate de zona cinzenta com pernas isoladas. Zero dependências.",
     topics: ["python", "orchestrator", "test-loop", "quality-gates", "ci"],
   },
+  Focinho: {
+    description: "Veículo independente de pet tech: testes, guias e bastidores para quem vive com bicho, entregues por site e newsletter semanal. Curadoria humana, sem clickbait.",
+    topics: ["web", "pet", "newsletter"],
+  },
+  "Skills Shop": {
+    description: "Loja de skills para agentes de IA: pacotes prontos para instalar, com documentação, preço justo e entrega imediata. Cada skill troca semanas de configuração por uma instalação.",
+    topics: ["web", "ai", "skills", "marketplace"],
+  },
+  SafMarket: {
+    description: "Loja própria com checkout integrado: catálogo, carrinho e pagamento local. Vitrine enxuta, tema claro como padrão e zero rastreadores de terceiros.",
+    topics: ["web", "ecommerce", "checkout", "payments"],
+  },
 };
 
 const PROJECTS_EN: Record<string, ProjectI18n> = {
@@ -259,6 +271,18 @@ const PROJECTS_EN: Record<string, ProjectI18n> = {
   "roger-loop": {
     description: "Config-driven test-loop orchestrator for agentic delivery: contract-based deterministic critic, budgeted rounds and gray-zone debate with isolated legs. Zero dependencies.",
     topics: ["python", "orchestrator", "test-loop", "quality-gates", "ci"],
+  },
+  Focinho: {
+    description: "An independent pet-tech outlet: tests, guides and behind-the-scenes for people living with pets, delivered via website and weekly newsletter. Human curation, no clickbait.",
+    topics: ["web", "pet", "newsletter"],
+  },
+  "Skills Shop": {
+    description: "A store for AI-agent skills: installable packages with documentation, fair pricing and instant delivery. Each skill trades weeks of setup for a single install.",
+    topics: ["web", "ai", "skills", "marketplace"],
+  },
+  SafMarket: {
+    description: "Self-hosted storefront with integrated checkout: catalog, cart and local payments. Lean storefront, light theme by default and zero third-party trackers.",
+    topics: ["web", "ecommerce", "checkout", "payments"],
   },
 };
 

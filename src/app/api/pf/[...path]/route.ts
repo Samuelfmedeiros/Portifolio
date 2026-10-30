@@ -10,8 +10,12 @@ import { NextRequest, NextResponse } from "next/server";
  * /api/portifolio/public/messages volta 400 sem access-control-allow-origin, e no
  * browser o fetch morre com "TypeError: Failed to fetch". Consequencia: quem entra
  * pelo dominio proprio nao consegue enviar o formulario de contato
- * (POST /messages), nao registra download de CV (POST /cv-downloads) e o beacon do
- * Umami (POST /api/umami/api/send) e bloqueado — zero tracking no dominio proprio.
+ * (POST /messages) nem registrar download de CV (POST /cv-downloads).
+ *
+ * O beacon do Umami (POST /api/umami/api/send) tinha o mesmo problema e era
+ * encaminhado por aqui; foi REMOVIDO da allowlist em 19/10/2026 — o site migrou
+ * para o OpenPanel e nenhum caminho do frontend chama /api/pf/umami/ desde entao.
+ * Manter um prefixo sem consumidor so aumenta a superficie deste proxy.
  *
  * Solucao: rota same-origin no proprio Next. O browser conversa so com o dominio
  * do site (sem preflight, sem depender da allowlist do Capivara) e o servidor da
@@ -28,7 +32,7 @@ import { NextRequest, NextResponse } from "next/server";
  * erro aqui transformaria a allowlist em proxy aberto para o Capivara.
  */
 const CAPIVARA = "https://capivara.seu.pet";
-const ALLOWED_PREFIXES = ["portifolio/public/", "umami/"];
+const ALLOWED_PREFIXES = ["portifolio/public/"];
 const MAX_SEGMENTS = 8;
 
 function decodeFully(segment: string): string {

@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
 import { GitHubSponsorsIcon } from "@/components/monetization/GitHubSponsors";
 import { BMC_CONFIG, GITHUB_SPONSORS_CONFIG } from "@/lib/monetization";
+import { comUtm } from "@/lib/utm";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { DownloadModal } from "./DownloadModal";
 import { useLanguage } from "@/lib/i18n";
@@ -35,7 +36,7 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms' }) {
+export function PrivacyModal({ open, onClose, activeTab, onTabChange }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms'; onTabChange: (tab: 'privacy' | 'terms') => void }) {
   const { t, locale } = useLanguage();
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
   const modalRef = useRef<HTMLDivElement>(null);
@@ -86,12 +87,14 @@ export function PrivacyModal({ open, onClose, activeTab }: { open: boolean; onCl
               {/* Tabs */}
               <div className="flex border-b border-[var(--border)]/50 mb-6">
                 <button
+                  onClick={() => onTabChange('privacy')}
                   className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'privacy' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
                   aria-current={activeTab === 'privacy' ? 'page' : undefined}
                 >
                   {t("modal.tab.privacy")}
                 </button>
                 <button
+                  onClick={() => onTabChange('terms')}
                   className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'terms' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
                   aria-current={activeTab === 'terms' ? 'page' : undefined}
                 >
@@ -212,6 +215,7 @@ export function Footer() {
   // null no 1º paint = render idêntico server/client; valores reais pós-hidratação.
   const [now, setNow] = useState<Date | null>(null);
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- hora local só pós-hidratação; new Date() no JSX divergia server(UTC)/client (#418)
     setNow(new Date());
   }, []);
   const [privacyOpen, setPrivacyOpen] = useState(false);
@@ -219,6 +223,13 @@ export function Footer() {
   const { track } = useAnalytics();
   const [showDownloadModal, setShowDownloadModal] = useState(false);
   const { t, locale } = useLanguage();
+
+  // As abas do modal de privacidade/termos precisam escrever no estado do Footer:
+  // sem isso clicar na outra aba não muda nada (e as páginas /privacidade e /termos
+  // não compilavam — TS2741, prop obrigatória ausente).
+  const handleTabChange = (tab: 'privacy' | 'terms') => {
+    setActiveTab(tab);
+  };
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
 
   const handleCopyEmail = () => {
@@ -312,7 +323,7 @@ export function Footer() {
             </h3>
             <div className="flex flex-col gap-1.5">
               <a
-                href="https://seu.pet"
+                href={comUtm("https://seu.pet", { medium: "footer", campaign: "portfolio", content: "dogwalk" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
@@ -321,7 +332,7 @@ export function Footer() {
                 DogWalk
               </a>
               <a
-                href="https://arachne.seu.pet"
+                href={comUtm("https://arachne.seu.pet", { medium: "footer", campaign: "portfolio", content: "arachne" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
@@ -330,7 +341,7 @@ export function Footer() {
                 Arachne
               </a>
               <a
-                href="https://lifelog-sepia.vercel.app"
+                href={comUtm("https://lifelog.seu.pet", { medium: "footer", campaign: "portfolio", content: "lifelog" })}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors py-1.5 inline-block"
@@ -433,7 +444,12 @@ export function Footer() {
       </div>
 
       {/* Privacy/Terms Modal */}
-      <PrivacyModal open={privacyOpen} onClose={() => setPrivacyOpen(false)} activeTab={activeTab} />
+      <PrivacyModal
+        open={privacyOpen}
+        onClose={() => setPrivacyOpen(false)}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
       <DownloadModal
         open={showDownloadModal}
         onClose={() => setShowDownloadModal(false)}

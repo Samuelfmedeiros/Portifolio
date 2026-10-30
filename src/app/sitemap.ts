@@ -11,8 +11,13 @@ const GAMES = [
   "asteroid-dodge",
 ] as const;
 
+// Data de geracao do sitemap no build. Antes era um literal fixo
+// (2026-07-07) que mentia para o crawler: o sitemap parecia congelado
+// desde julho mesmo com o site mudando.
+const buildDate = new Date();
+
 export default function sitemap(): MetadataRoute.Sitemap {
-  const lastModified = new Date("2026-07-07T22:10:50-03:00");
+  const lastModified = buildDate;
 
   const pages: MetadataRoute.Sitemap = [
     {

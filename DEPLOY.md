@@ -26,7 +26,7 @@ A Vercel detecta o push, roda `pnpm build`, e deploya em ~2-3 minutos.
 4. Rollback automático se health check falhar
 
 **Status:** https://vercel.com/samuelfmedeiros/portifolio/activity
-**Live:** https://samuelmedeiros.vercel.app
+**Live:** https://portifolio.seu.pet
 
 ---
 
@@ -50,10 +50,10 @@ vercel --prod
 
 ```bash
 # Headers de segurança
-curl -sI https://samuelmedeiros.vercel.app/ | grep -E "(Strict-Transport|Content-Security|X-Frame|Permissions)"
+curl -sI https://portifolio.seu.pet/ | grep -E "(Strict-Transport|Content-Security|X-Frame|Permissions)"
 
 # Conteúdo renderizado
-curl -sL https://samuelmedeiros.vercel.app/ | grep -o "▸ HABILIDADES\|▸ JORNADA" | head -5
+curl -sL https://portifolio.seu.pet/ | grep -o "▸ HABILIDADES\|▸ JORNADA" | head -5
 
 # Testes locais
 pnpm test:run       # Vitest (uma vez)

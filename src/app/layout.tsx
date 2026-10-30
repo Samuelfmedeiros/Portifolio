@@ -6,6 +6,7 @@ import { CockpitBackground } from "@/components/CockpitBackground";
 import { ErrorBoundaryWithI18n } from "@/components/ErrorBoundary";
 import { Navbar } from "@/components/Navbar";
 import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
+import HitBeacon from "@/components/HitBeacon";
 import { Footer } from "@/components/Footer";
 import { SupportButton } from "@/components/SupportButton";
 import { ConsultingButton } from "@/components/ConsultingButton";
@@ -72,14 +73,14 @@ export const metadata: Metadata = {
     "cloudflare",
     "tailwind css",
   ],
-  authors: [{ name: "Samuel Medeiros", url: "https://samuelmedeiros.vercel.app" }],
+  authors: [{ name: "Samuel Medeiros", url: SITE_URL }],
   creator: "Samuel Medeiros",
   publisher: "Samuel Medeiros",
   openGraph: {
     type: "website",
     locale: "pt_BR",
     alternateLocale: "en_US",
-    url: "https://samuelmedeiros.vercel.app",
+    url: SITE_URL,
     siteName: "Samuel Medeiros",
     title: "Samuel Medeiros — Desenvolvedor Full Stack & Analista de Dados",
     description:
@@ -115,17 +116,29 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://samuelmedeiros.vercel.app",
+    // Canonical AUTORREFERENTE (SEO — 25/10/2026). Antes era `SITE_URL` (a home),
+    // herdado por TODAS as rotas: /privacidade e /termos declaravam a home como
+    // canônica e o Search Console reportou "Cópia: o Google e o usuário
+    // selecionaram uma página canônica diferente". "./" resolve, no build, para
+    // a rota atual contra o metadataBase (docs Next: relative URL em alternates).
+    canonical: "./",
+    // O site e pt-BR only: nao existe rota /en (medido: 404 em
+    // https://portifolio.seu.pet/en). Declarar um alternate en-US que da 404
+    // e defeito — o Search Console acusa "hreflang aponta para pagina
+    // inexistente" e o Google descarta a anotacao inteira.
     languages: {
-      "pt-BR": "https://samuelmedeiros.vercel.app",
-      "en-US": "https://samuelmedeiros.vercel.app/en",
+      "pt-BR": "./",
+      "x-default": "./",
     },
   },
   verification: {
-    // SEO verification codes — preencher com valores reais se aplicável
-    // google: "your-code",
-    // yandex: "your-code",
-    // other: { "msvalidate.01": "your-code" },
+    // Tokens de verificacao via env (Vercel -> Environment Variables).
+    ...(process.env.GOOGLE_SITE_VERIFICATION
+      ? { google: process.env.GOOGLE_SITE_VERIFICATION }
+      : {}),
+    ...(process.env.BING_SITE_VERIFICATION
+      ? { other: { "msvalidate.01": process.env.BING_SITE_VERIFICATION } }
+      : {}),
   },
   other: {
     "article:author": SITE_URL,
@@ -168,6 +181,8 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <CookieBannerProvider>
             <MonetizationProvider>
               <ConditionalAnalytics />
+              {/* Medição sem cookie do portfólio (beacon 1x por rota, respeita DNT/GPC) */}
+              <HitBeacon />
               <CockpitBackground />
                 <ScrollProgress />
                 <Navbar />

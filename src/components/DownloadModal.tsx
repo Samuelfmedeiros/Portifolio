@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useRef, type FormEvent } from "react";
+import { useState, useRef, useEffect, type FormEvent } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Download, X, User, Mail, Shield } from "lucide-react";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 import { submitCVDownload } from "@/lib/supabase";
-import { loadUmamiScript } from "@/lib/umami";
+import { loadOpenpanelScript } from "@/lib/openpanel";
 
 interface DownloadModalProps {
   open: boolean;
@@ -21,6 +21,26 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
   const [errorMsg, setErrorMsg] = useState("");
   const downloadingRef = useRef(false);
+  // Timers do modal (fechar após sucesso, limpar formulário após fechar) ficam
+  // registrados e são cancelados no unmount: sem isso um timer dispara depois do
+  // componente sair da tela e o React escreve estado com `window` já destruído
+  // (medido 17/10: "ReferenceError: window is not defined" não tratado, que
+  // derrubava o `vitest run` inteiro com rc=1 mesmo com todos os testes verdes).
+  const timersRef = useRef<ReturnType<typeof setTimeout>[]>([]);
+  const agendar = (fn: () => void, ms: number) => {
+    const id = setTimeout(() => {
+      timersRef.current = timersRef.current.filter((t) => t !== id);
+      fn();
+    }, ms);
+    timersRef.current.push(id);
+  };
+  useEffect(
+    () => () => {
+      timersRef.current.forEach(clearTimeout);
+      timersRef.current = [];
+    },
+    []
+  );
   const { track } = useAnalytics();
   const { t, locale } = useLanguage();
   const modalRef = useRef<HTMLDivElement>(null);
@@ -34,8 +54,8 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
     setStatus("loading");
     setErrorMsg("");
 
-    // Consentimento implícito (LGPD do modal) → carrega Umami antes do download
-    loadUmamiScript();
+    // Consentimento implícito (LGPD do modal) → carrega OpenPanel antes do download
+    loadOpenpanelScript();
 
     try {
       const res = await fetch("/api/download-cv", {
@@ -76,7 +96,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
       URL.revokeObjectURL(url);
 
       setStatus("success");
-      setTimeout(() => {
+      agendar(() => {
         onClose();
         resetForm();
       }, 1500);
@@ -99,7 +119,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   function handleClose() {
     if (status === "loading") return;
     onClose();
-    setTimeout(resetForm, 200);
+    agendar(resetForm, 200);
   }
 
   return (

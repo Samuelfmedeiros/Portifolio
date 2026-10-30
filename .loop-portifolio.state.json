@@ -1,0 +1,293 @@
+{
+  "round": 6,
+  "scores": [
+    {
+      "round": 1,
+      "score": 80,
+      "gaps": [
+        "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio",
+        "cobertura baixa: ...ct-covers.mjs (42% < 50%)",
+        "cobertura baixa: Terminal.tsx (34% < 50%)",
+        "cobertura baixa: Tooltip.tsx (43% < 50%)"
+      ],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": 70,
+          "gaps": [
+            "cobertura baixa: ...ct-covers.mjs (42% < 50%)",
+            "cobertura baixa: Terminal.tsx (34% < 50%)",
+            "cobertura baixa: Tooltip.tsx (43% < 50%)",
+            "cobertura baixa: BuyMeACoffee.tsx (38% < 50%)",
+            "cobertura baixa: ...bSponsors.tsx (14% < 50%)",
+            "cobertura baixa: ...pAnimation.ts (3% < 50%)",
+            "cobertura baixa: supabase.ts (8% < 50%)"
+          ],
+          "low_files": [
+            {
+              "file": "...ct-covers.mjs",
+              "pct": 42
+            },
+            {
+              "file": "Terminal.tsx",
+              "pct": 34
+            },
+            {
+              "file": "Tooltip.tsx",
+              "pct": 43
+            },
+            {
+              "file": "BuyMeACoffee.tsx",
+              "pct": 38
+            },
+            {
+              "file": "...bSponsors.tsx",
+              "pct": 14
+            },
+            {
+              "file": "...pAnimation.ts",
+              "pct": 3
+            },
+            {
+              "file": "supabase.ts",
+              "pct": 8
+            }
+          ],
+          "error": "",
+          "stack": "js",
+          "via": "local"
+        }
+      },
+      "ts": "2026-10-25T22:01:53.373336+00:00",
+      "critic_fp": "37904e581a0c"
+    },
+    {
+      "round": 2,
+      "score": 70,
+      "gaps": [
+        "e2e playwright falhou: 20 passed (5.2m) — NOVAS falhas: ['cv-direct-pdf-guard', 'games-integrity', 'preview-identity']",
+        "teste novo sem assert de verdade: src/components/Terminal.test.tsx, src/components/Tooltip.test.tsx",
+        "cobertura baixa: BuyMeACoffee.tsx (38% < 50%)",
+        "cobertura baixa: ...bSponsors.tsx (14% < 50%)",
+        "cobertura baixa: ...pAnimation.ts (3% < 50%)"
+      ],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": 74,
+          "gaps": [
+            "cobertura baixa: BuyMeACoffee.tsx (38% < 50%)",
+            "cobertura baixa: ...bSponsors.tsx (14% < 50%)",
+            "cobertura baixa: ...pAnimation.ts (3% < 50%)",
+            "cobertura baixa: supabase.ts (8% < 50%)"
+          ],
+          "low_files": [
+            {
+              "file": "BuyMeACoffee.tsx",
+              "pct": 38
+            },
+            {
+              "file": "...bSponsors.tsx",
+              "pct": 14
+            },
+            {
+              "file": "...pAnimation.ts",
+              "pct": 3
+            },
+            {
+              "file": "supabase.ts",
+              "pct": 8
+            }
+          ],
+          "error": "",
+          "stack": "js",
+          "via": "local"
+        }
+      },
+      "ts": "2026-10-25T23:09:42.000406+00:00",
+      "critic_fp": "37904e581a0c"
+    },
+    {
+      "round": 3,
+      "score": 70,
+      "gaps": [
+        "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio",
+        "teste novo sem assert de verdade: src/hooks/useGsapAnimation.test.ts",
+        "cobertura baixa: supabase.ts (8% < 50%)"
+      ],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": 77,
+          "gaps": [
+            "cobertura baixa: supabase.ts (8% < 50%)"
+          ],
+          "low_files": [
+            {
+              "file": "supabase.ts",
+              "pct": 8
+            }
+          ],
+          "error": "",
+          "stack": "js",
+          "via": "local"
+        }
+      },
+      "ts": "2026-10-25T23:41:12.307425+00:00",
+      "critic_fp": "37904e581a0c"
+    },
+    {
+      "round": 4,
+      "score": 45,
+      "gaps": [
+        "vitest falhou: \u001b[2m            \u001b[22m \u001b[2mlearn more: https://vitest.dev/guide/improving-performance#test-environmen",
+        "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio",
+        "COBERTURA não medida (vitest coverage nao medido (rc=1)) — 10pts não concedidos; medir antes de aprovar"
+      ],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": null,
+          "gaps": [],
+          "low_files": [],
+          "error": "vitest coverage nao medido (rc=1)",
+          "stack": "js",
+          "via": "local"
+        }
+      },
+      "ts": "2026-10-25T23:56:03.508581+00:00",
+      "critic_fp": "37904e581a0c"
+    },
+    {
+      "round": 5,
+      "score": 80,
+      "gaps": [
+        "e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio"
+      ],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": 78,
+          "gaps": [],
+          "low_files": [],
+          "error": "",
+          "stack": "js",
+          "via": "local"
+        }
+      },
+      "ts": "2026-10-26T00:16:21.551897+00:00",
+      "critic_fp": "37904e581a0c"
+    },
+    {
+      "round": 6,
+      "score": 80,
+      "gaps": [
+        "e2e playwright falhou: Error: http://127.0.0.1:3450 is already used, make sure that nothing is running on the port/url or s"
+      ],
+      "detail": {
+        "critic_rc": 0,
+        "security": {
+          "rc": 0,
+          "score": 100,
+          "gap": ""
+        },
+        "coverage": {
+          "total": 78,
+          "gaps": [],
+          "low_files": [],
+          "error": "",
+          "stack": "js",
+          "via": "local"
+        }
+      },
+      "ts": "2026-10-26T00:37:58.627884+00:00",
+      "critic_fp": "37904e581a0c"
+    }
+  ],
+  "started_at": "2026-10-25T21:59:04.246349+00:00",
+  "campaign": "38ef53d",
+  "v3_heal": {
+    "wsl_ok": true,
+    "vmmem": {
+      "used_gb": 0.0,
+      "limit_gb": 0.0,
+      "pct": 0.0
+    },
+    "actions": []
+  },
+  "v2_kb": "# Roger — Base de Conhecimento Global\n\nLições aprendidas durante runs do test-loop, compiladas em 02/09/2026.\nUse no worker/reviewer/redator para evitar repetir erros passados.\n\n## Pitfalls Conhecidos\n\n- SECURITY GATE universal: executar critic_security.py (gitleaks+trufflehog+bandit+opengrep) DEPOIS de cada critic. Se falhar, desconta 20pts.\n- SECURITY BATCH (30/08): todas as vulns do security reviewer entram nos gaps de uma vez — worker resolve todas na mesma rodada.\n- Painel A+B+C (30/08): especialistas com seleção hierárquica + debate com tiebreaker. BLOQUEIA sempre que security DISCORDO.\n- Zona cinzenta (28/08): nota 85-90 → 2o reviewer adversarial audita antes de entregar.\n- Debate 2-visões (28/08): 1 DISCORDO → reabre com gaps combinados. Ambos DISCORDAM → prioridade alta.\n- SECURITY_ISSUE (ou inconclusivo) → reabre com gap(s) de segurança.\n- Workers especializados (30/08): cada gap roteado pro worker certo (test/lint/security/ui).\n- Painel falhou → seguir com ENTREGA (não bloquear por falha de reviewer).\n- 2o reviewer falhou → seguir (não reabrir).\n- Security reviewer FALHOU → SECURITY_ISSUE (fail-closed: trata como vulnerabilidade).\n- Yurumi checkpoint apenas se cfg[\"yurumi_checkpoint\"] ativo.\n- HTML via gen_loop_report_html.py (stdlib, <1s). PDF via gen_loop_report_dense.py é fallback.\n- Pós-convergência: melhorias propostas (Roger v2) não bloqueiam entrega, entram no relatório.\n- Regressões (Roger v2): gaps fechados que reaparecem em rodada posterior → prefixo REGRESSÃO:.\n\n## Padrões de Projeto\n\n- `_quarantine_untrusted()`: envolve texto em barreira de segurança (não permitir prompt injection de output de ferramentas).\n- `run_builder()`: executa opencode CLI com prompt em arquivo temporário. Usar `.loop-*-prompt.md` no path do projeto.\n- `_git()`: wrapper que executa git no path do projeto e retorna stdout limpo.\n- `CONFIG_DIR`: `~/.hermes/config/test-loop/` — configurações por projeto (JSON) e KB.\n\n## Lições v3.3 (07/09 — backlog miner, revisadas)\n\n- Banner '🔒 jail ativo' do ai-jail pode contaminar GAPS no quality.db (não só stdout de wsl.exe) — gap que só diz 'jail ativo/comandos sandboxados' é ruído do sandbox, não falha do projeto.\n- Gap 'sem testes novos nesta rodada' repetiu 2x (portifolio) — worker de testes deve ADICIONAR testes novos, não só consertar os existentes.\n- Improvements do propositor chegam limpos desde v3.3 (_clean_improvements_text); ANSI no texto de melhorias = state legado — re-minerar, não propagar.- 2026-09-16 handoff Roger->grupo: tg_progress.notify/ _find_token DEVE rodar com o python do VENV WINDOWS (hermes-agent/venv/Scripts/python.exe). Com o python3 do WSL o _find_token nao acha o .env (fallbacks sao paths Windows) e notify devolve False silencioso -> ack nao sai. Sintoma: RES=False sem erro. Cura: chamar pelo venv Windows.\n- 2026-09-16 handoff Roger->grupo: tg_progress.notify/ _find_token DEVE rodar com o python do VENV WINDOWS (hermes-agent/venv/Scripts/python.exe). Com o python3 do WSL o _find_token nao acha o .env (fallbacks sao paths Windows) e notify devolve False silencioso -> ack nao sai. Sintoma: RES=False sem erro. Cura: chamar pelo venv Windows.\n\n## Classes de bug que o Roger DEVE pegar (Portifolio)\n- **2026-09-13 (PR #98/#99) — spec de seguranca com DEFAULT de base URL apontando pra producao.** O playwright.yml nao seta TEST_BASE_URL; se a spec nasce com `BASE = env.TEST_BASE_URL || \"https://samuelmedeiros.vercel.app\"`, os shards do CI batem no site AO VIVO em vez do webServer da branch. Resultado: CI vermelho sem regressao nenhuma na branch (o RED do controle negativo vazou pra dentro do pipeline) — e o inverso e pior: um anti-bypass que so verifica producao pode dar GREEN com a branch quebrada. Gate no ponto da falha: `scripts/check-spec-base-url.mjs` roda no CI antes do E2E e falha na classe (comentario/assercao de conteudo sao allowlist). No critic local isso NAO aparece porque o critic SEMPRE seta TEST_BASE_URL (:3450) — so o CI pega. Regra: default de BASE em spec = `http://localhost:3000`; producao exclusivamente via override explicito.\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n- `2026-09-08 08:44` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 55.51s\u001b[2m (transform 13.51s, setup 24.25s, import 29.74s, tests 45.47s, envir**\n- `2026-09-08 08:50` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 49.71s\u001b[2m (transform 8.32s, setup 20.87s, import 21.49s, tests 32.21s, enviro**\n- `2026-09-08 08:56` (nota 40) **build falhou:  ELIFECYCLE  Command failed with exit code 1.**\n- `2026-09-08 08:56` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 37.67s\u001b[2m (transform 5.32s, setup 17.94s, import 15.60s, tests 26.99s, enviro**\n- `2026-09-08 09:03` (nota 40) **build falhou: \u0000**\n- `2026-09-08 09:03` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 34.64s\u001b[2m (transform 8.85s, setup 18.68s, import 17.03s, tests 27.33s, enviro**\n- `2026-09-08 09:10` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 30.55s\u001b[2m (transform 10.06s, setup 13.30s, import 20.37s, tests 22.28s, envir**\n- `2026-09-08 09:17` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 51.36s\u001b[2m (transform 10.14s, setup 26.85s, import 23.74s, tests 33.72s, envir**\n- `2026-09-08 09:24` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-08 16:15` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-08 16:31` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-08 17:45` (nota 40) **vitest falhou: \u001b[2m   Duration \u001b[22m 77.51s\u001b[2m (transform 13.40s, setup 31.83s, import 32.84s, tests 58.06s, envir**\n- `2026-09-16 03:22` (nota 100) **build falhou:  ELIFECYCLE  Command failed with exit code 1.**\n- `2026-09-16 03:22` (nota 100) **e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio**\n- `2026-09-16 03:22` (nota 100) **vitest falhou: \u001b[2m            \u001b[22m \u001b[2mlearn more: https://vitest.dev/guide/improving-performance#test-environmen**\n- `2026-09-16 03:25` (nota 70) **build falhou:  ELIFECYCLE  Command failed with exit code 1.**\n- `2026-09-16 03:25` (nota 70) **e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio**\n- `2026-09-16 03:25` (nota 70) **vitest falhou: \u001b[2m            \u001b[22m \u001b[2mlearn more: https://vitest.dev/guide/improving-performance#test-environmen**\n- `2026-09-16 04:47` (nota 80) **sem testes novos nesta rodada**\n- `2026-09-16 05:41` (nota 100) **security gate: bandit: severidade HIGH encontrada — >> Issue: [B324:hashlib] Use of weak MD5 hash for security. Consider**\n- `2026-09-20 19:05` (nota 100) **vitest falhou: \u001b[2m            \u001b[22m \u001b[2mlearn more: https://vitest.dev/guide/improving-performance#test-environmen**\n- `2026-10-08 11:25` (nota 0) **cobertura baixa: ...ct-covers.mjs (41% < 50%)**\n- `2026-10-08 11:25` (nota 0) **cobertura baixa: Navbar.tsx (33% < 50%)**\n- `2026-10-08 11:25` (nota 0) **cobertura baixa: Footer.tsx (48% < 50%)**\n- `2026-10-08 11:39` (nota 0) **COBERTURA não medida (vitest coverage nao medido (rc=1)) — 10pts não concedidos; medir antes de aprovar**\n- `2026-10-08 11:51` (nota 0) **cobertura baixa: ProjectModal.tsx (8% < 50%)**\n- `2026-10-08 11:51` (nota 0) **cobertura baixa: Navbar.tsx (33% < 50%)**\n- `2026-10-08 12:05` (nota 0) **cobertura baixa: ContactForm.tsx (24% < 50%)**\n- `2026-10-08 12:05` (nota 0) **cobertura baixa: Navbar.tsx (48% < 50%)**\n- `2026-10-08 12:30` (nota 0) **cobertura baixa: ProjectModal.tsx (8% < 50%)**\n- `2026-10-08 12:30` (nota 0) **cobertura baixa: ...ct-covers.mjs (41% < 50%)**\n- `2026-10-08 12:30` (nota 0) **cobertura baixa: Terminal.tsx (34% < 50%)**\n- `2026-10-08 17:15` (nota 0) **security gate: opengrep: 0 achado(s) ERROR/WARNING — [opengrep inconclusivo rc=0] sem JSON válido (falha/truncamento)**\n- `2026-10-08 17:18` (nota 0) **security gate: opengrep: 0 achado(s) ERROR/WARNING — [opengrep inconclusivo rc=0] sem JSON válido (falha/truncamento)**\n- `2026-10-08 17:58` (nota 0) **security gate: opengrep: 0 achado(s) ERROR/WARNING — [opengrep inconclusivo rc=0] sem JSON válido (falha/truncamento)**\n- `2026-10-09 16:19` (nota 55) **security gate: opengrep: 0 achado(s) ERROR/WARNING — [opengrep inconclusivo rc=0] sem JSON válido (falha/truncamento)**\n- `2026-10-09 16:19` (nota 55) **AMBIENTE: critic inconclusivo (rc=1; suíte não rodou de verdade — checar RAM/WSL/jail antes de codar)**\n- `2026-10-09 23:51` (nota 55) **AMBIENTE: critic inconclusivo (rc=1; suíte não rodou de verdade — checar RAM/WSL/jail antes de codar)**\n- `2026-10-09 23:51` (nota 55) **security gate: opengrep: 0 achado(s) ERROR/WARNING — [opengrep inconclusivo rc=0] sem JSON válido (falha/truncamento)**\n- `2026-10-11 13:37` (nota 35) **security gate: opengrep: 0 achado(s) ERROR/WARNING — [opengrep inconclusivo rc=0] sem JSON válido (falha/truncamento)**\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)\n- `2026-10-11 13:37` (nota 35) **AMBIENTE: critic inconclusivo (rc=1; suíte não rodou de verdade — checar RAM/WSL/jail antes de codar)**\n  (gap fechado automaticamente, arquivado em KB dinâmica v3)",
+  "v2_gh": {
+    "remote": "/mnt/HDD2T/Samuel Backup/git-bare/portifolio.git",
+    "owner": "",
+    "repo": "",
+    "commits": [],
+    "open_prs": [],
+    "latest_release": "",
+    "default_branch": "",
+    "pushed_at": "",
+    "error": "remote nao-github"
+  },
+  "roger_version": "3.5+rolling(p14/09)",
+  "campaign_branch": "roger/portifolio-20261025-185904",
+  "campaign_base_ref": "38ef53d",
+  "campaign_orig_branch": "master",
+  "tokens_since": "2026-10-26T00:34:33.639887+00:00",
+  "tokens_recorded_round": 6,
+  "ambiente_retries": 0,
+  "workers": [
+    {
+      "round": 2,
+      "worker": "test+general",
+      "rc": 1
+    },
+    {
+      "round": 3,
+      "worker": "test+general",
+      "rc": 0
+    },
+    {
+      "round": 4,
+      "worker": "test+general",
+      "rc": 0
+    },
+    {
+      "round": 5,
+      "worker": "test",
+      "rc": 0
+    },
+    {
+      "round": 6,
+      "worker": "test",
+      "rc": 0
+    }
+  ],
+  "v3_notifications": 5,
+  "regressions": [
+    "REGRESSÃO: e2e playwright falhou: ERRO_IDENTIDADE_PREVIEW: 3450 nao serve o portifolio"
+  ]
+}

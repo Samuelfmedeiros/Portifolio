@@ -1,5 +1,68 @@
 # 🛸 Portifolio Samuel — Session State
 
+## Sessao 2026-10-26 (fim de dia) - 0 commits no HEAD; 12 diffs de loop preservados; push github ok na branch roger
+- Nenhum commit hoje na branch `roger/portifolio-20261025-185904` (HEAD inalterado). 12 diffs nao commitados preservados intactos: 9 remocoes de `.loop-worker-*.md` (residual de rodada anterior), 2 modificados (`.loop-handoff.json`, `.loop-portifolio.state.json`) e 1 novo - nada de alheio comitado.
+- Push `github` OK para a branch ativa (estava up-to-date; fast-forward apos o doc). Observacao: `feat/amarracao-jogos` (`bc17990`) tem commit de hoje mas NAO é o HEAD deste checkout - fica como esta.
+- O job `finalizar-dia.sh` declara `master` para este repo, mas o checkout ativo esta na branch da campanha `roger/*` - push do `master` nao casa. Registrado como ajuste de roteiro do script.
+
+
+
+## Sessao 2026-10-25 (fim de dia) - 12 commits (cura do ERRO_IDENTIDADE_PREVIEW + parede de testes); push github ok na branch roger
+- **fix(e2e)** (`a2a347a`): `reuseExistingServer: false` no playwright config - o servidor nao herda mais listener/identidade de preview antiga (fim do ERRO_IDENTIDADE_PREVIEW).
+- **fix(e2e)** (`42d996c`): loop `fuser` libera a porta do preview antes do proximo start.
+- **test(e2e)** (`533d5bf`): webServer mata listener existente antes do start; (`9a9b5b2`) assercoes do guard de limpeza de porta; (`84bda5b`) teste de reproducao do gap de limpeza de porta; (`a073611`) config guard para reuso de identidade de preview; (`40b493b`) expectativas do config atualizadas.
+- **test** (`d015e72`): vitest coverage config ligado para medicao.
+- **test** (`f874127`): asserts reais em `useGsapAnimation`; (`4e049b2`) Terminal/Tooltip com asserts reais; (`16a8ebe`) cobertura >=50% em submitContactForm/CV/download/monitores (supabase); (`769d156`) cobertura de BuyMeACoffee, GitHubSponsors e monetizacao.
+- 12 commits na branch `roger/portifolio-20261025-185904` - push `github` OK (HEAD `84bda5b` + doc). Working tree com 14 entradas de estado de loop/playwright sujas - nao tocadas. PENDENCIA: espelho `origin` (bare local) segue atras no master (hook recusa merge commits).
+
+
+## Sessao 2026-10-24 (fim de dia) - 6 commits (grade so com repo curado + blog com 4 posts do LifeLog, PRs #158/#159); push github ok
+- **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
+- **test(e2e)** (`16d7f80`): snapshots visuais gerados no ambiente do CI.
+- **merge** (`26641ab`): PR #158 `fix/projetos-curados-by-topic`.
+- **feat(blog)** (`1461e11`): 4 posts do LifeLog no portifolio (era 3).
+- **test(e2e)** (`7a75f0b`): blog agora exige 4 cards (espelha `BLOG_POSTS_LIMIT`).
+- **merge** (`a0b7bee`): PR #159 `feat/blog-4-posts`.
+- Push `github` OK (ahead=0 antes do commit de doc). PENDENCIA conhecida: `origin` (bare local `portifolio.git`) 68 commits atras - hook recusa merge commits.
+
+## Sessao 2026-10-23 (fim de dia) - 4 commits (3 cards novos + capa eager + VRT do CI + merge PR #157); github ok, bare local pendente
+- **feat** (`7f09616`): cards Focinho, Skills Shop e SafMarket.
+- **perf** (`2f131a7`): capa eager nos 3 cards novos (`coverPriority`) - nao depende de scroll.
+- **test** (`7b11027`): snapshots visuais regenerados no ambiente do CI.
+- **merge** (`ca58398`): PR #157 de `feat/novos-projetos`.
+- Push `github` OK (ahead=0). PENDENCIA: `origin` (bare local `portifolio.git`) **recusou** o push - hook de prefixo invalido no merge commit `ca58398`; bare 61 commits atras.
+
+## Sessao 2026-10-17 — beacon de medição próprio publicado (PR #135, merge `253513c`)
+
+**Pedido/contexto:** o site estava cego para visitas (o Umami é consent-gated e quase não conta).
+Entrou um **beacon próprio, sem cookie**, mais as correções reais que estavam paradas no working
+tree local (que parecia "126 arquivos não revisados" — era clone parado em 12/07).
+
+**Beacon (novo):**
+- `src/lib/hit.ts` — `enviarHit()`: payload `{site:"portfolio", path, ref}`, `sendBeacon` com
+  fallback `fetch keepalive`, respeita **DNT/GPC**, não mede em dev sem override.
+- `src/components/HitBeacon.tsx` — 1 hit por troca de rota (App Router); `<HitBeacon />` no `layout.tsx`.
+- CSP: `skills.seu.pet` no `connect-src` do `next.config.js` **e** do `vercel.json` (a Vercel prioriza o `vercel.json`).
+- **Endpoint:** `POST https://skills.seu.pet/api/hit` (handler em `skills-shop/app.py`, tabela `hits`
+  do `orders.db`) → `200 {"ok":true}`; `site` em allowlist separa portfólio de loja/Agensi.
+
+**Correções que subiram junto:** `Navbar.tsx` (track do `nav_click` antes do ramo `#hero`),
+`CookieBanner.tsx`+`umami.ts` (pageview anônima na 1ª interação + evento `umami:ready`),
+`Footer.tsx`+`privacidade`/`termos` (abas do modal escreviam no estado do Footer — as 2 páginas
+não compilavam, `TS2741`), `ProfileSection.tsx` (`toFixed(2)` — origem do hydration mismatch),
+`DownloadModal.tsx` (timers em ref + `clearTimeout` no unmount), overrides `ajv` no `package.json`
++ lock, tag `power bi` no `ProjectModal`, e `first-pageview.test.ts` reescrito com `vi.resetModules()`.
+
+**Verificação:** vitest 440/440 rc=0 · build OK · lint com os mesmos 13 erros do upstream ·
+Playwright 77 passed/1 skipped/0 falhas (VRT incluso) · critic do grupo **SCORE=100** ·
+CI do PR **9/9** e do master (CI/CD, Gitleaks, Security Scan, E2E) verde · produção
+`portifolio.seu.pet` 200 e **beacon disparando de verdade** (hit registrado em `hits`, `site=portfolio`).
+
+**Pitfalls registrados:** validar beacon em ambiente real exige hook em `navigator.sendBeacon`
+injetado ANTES do load (`Page.addScriptToEvaluateOnNewDocument`) — interceptar no teste local não
+prova a Vercel. E os hits de E2E/CI entram na tabela marcados `is_bot=1` (UA headless), então não
+inflam o painel.
+
 ## Sessao 2026-10-05 (fim de dia) - campanha pf-gate no master + CI de deploy com lint/vitest bloqueantes
 - `eafbb21` (02:02): merge da campanha `pf-gate` no master - gate de seguranca + identidade de preview.
 - `94d096c` (13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` com lint e vitest bloqueantes. Branch ainda **sem merge**.
@@ -83,7 +146,7 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 - **`scripts/bug-hunter.mjs` ampliado:** escuta `pageerror` (hydration #418), `requestfailed`, e check de `brokenImages` (naturalWidth=0)
 - i18n localizados (PT/EN): ContactForm, LazyContactForm, BuyMeACoffee, ErrorBoundary (`ErrorBoundaryWithI18n` wrapper), termos/privacidade h1, ConsultingButton, StripeConsulting, MpConsultingButton, MissionClock
 - **Intencional PT-only (NÃO localizar):** MiniGames, API routes (emails), AdSense "Anúncio" (label anúncio obrigatório), `item.description` de dados (ProfileSection/GameShowcase)
-- **URL:** https://samuelmedeiros.vercel.app
+- **URL:** https://portifolio.seu.pet
 
 
 ## Sessão 2026-08-28 — Capas PIL dos projetos
@@ -197,7 +260,7 @@ Sem evidência real (testes + screenshot + nota + PDF entregue) NÃO é entrega 
 
 **Experiência do usuário:** Parallax scene integrada — grid + cockpit SVG + HUD panels + partículas formam a entrada. Scroll suave com parallax layers (L0-L3). Navegação por scroll + keyboard shortcuts (desktop). Tema escuro ciano+preto com consistência visual cinematográfica.
 
-**URL:** https://samuelmedeiros.vercel.app
+**URL:** https://portifolio.seu.pet
 **Git:** GitHub (público) — Samuelfmedeiros/portifolio
 **Deploy:** Vercel (automático no push pra master)
 
@@ -466,3 +529,54 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
 - 1 commit hoje na branch de trabalho `roger/portifolio-20260921-134947` (HEAD); push `bare` + `origin` OK.
 - Nota de branch: `deploy.yml` do repo dispara em push na `master`; a branch de trabalho nao aciona deploy.
 - Rotina fim-de-dia: entrada no CHANGELOG + esta secao; commit cirurgico so dos 2 docs.
+
+
+## Sessão 2026-10-19 — Formulário de contato: bypass no Cloudflare Access (infra)
+
+- **Sintoma:** o formulário de contato em produção devolvia `contact.error` em todo envio.
+- **Causa raiz (medida):** o app de Cloudflare Access "Capivara Hub (painel)" cobre
+  `capivara.seu.pet` **inteiro** (criado 18/10 04:15). O proxy same-origin
+  `/api/pf/portifolio/public/*` recebia 302 -> login do Access -> o fetch no browser morria
+  em CORS. Backend e banco estavam intactos (POST local com UA de navegador = 201).
+- **Cura:** app novo no Zero Trust, `domain=capivara.seu.pet/api/portifolio/public/*`,
+  policy `bypass` / `everyone` (id `faa0e396-258d-42b1-83c6-faef416906fc`). Espelha o que já
+  existia para `/api/telegram` e `/api/health`. Os endpoints **admin**
+  (`/api/portifolio/messages`, sem `/public/`) continuam atrás do Access (302).
+- **Provas:** POST direto no Capivara = 201; POST pelo proxy do site = 201; E2E Playwright em
+  produção = "Mensagem enviada" com 0 pageerrors; linha gravada em `messages`.
+- **Prevenção:** `~/.hermes/scripts/portfolio-contact-guard.py` + cron `ecb163c12889`
+  (`25 */6 * * *`, no_agent, entrega no grupo Portifólio). Sonda o endpoint público com payload
+  vazio (espera **422** — a validação do Pydantic roda antes do handler, então não grava nada) e
+  confirma que o admin segue em 302. Silencioso quando OK.
+- **Pitfall de diagnóstico:** `urllib` segue redirect por padrão — sem um opener sem
+  `HTTPRedirectHandler` o 302 vira 200 (página de login) e a sonda mente "saudável".
+- **Sem mudança de código do site:** o repo não foi alterado; a correção é 100% infra + guard.
+- **Guard — correção pós-revisão independente (19/10 01:10):** a sonda passou a mandar campos
+  **presentes com tipo errado** (`{"name":0,...}`) em vez de payload vazio. Motivo medido: payload
+  vazio só falha enquanto o campo for obrigatório — `CVDownload` é todo opcional e um probe com
+  `{}` nele **insere linha real** (201 + id em `cv_downloads`). Tipo errado falha sempre.
+  A classificação também distingue **302 = Access** de **0/5xx = origem/túnel fora** (antes um
+  cloudflared caído imprimia "PAINEL EXPOSTO" e mandava mexer no Zero Trust, cura errada).
+  Cenários validados: normal (silencioso) · 302 no público · 200 no admin · origem fora.
+- **Superfície do proxy reduzida (19/10 01:25):** o prefixo `umami/` saiu da `ALLOWED_PREFIXES` do
+  `/api/pf/[...path]` — o site migrou para o OpenPanel e nenhum caminho do frontend chama
+  `/api/pf/umami/`. Os 2 testes que travavam esse encaminhamento viraram 1 caso de regressão
+  (POST e GET em `umami/` = 404 e ZERO fetch). Sobrou só `portifolio/public/`.
+
+### Sessão 2026-10-20 — beacon same-origin + VRT determinístico
+
+- **Beacon de visita por `/api/hit` same-origin (PR #149):** `src/lib/hit.ts` chamava
+  `https://skills.seu.pet/api/hit` direto; o POST chegava mas a resposta cross-origin era barrada
+  por COEP (1 erro de console por visita). Agora o destino é relativo e o `next.config.js` faz o
+  rewrite pro caixa da loja. Override por `NEXT_PUBLIC_LOJA_HIT_URL` / 3º arg segue valendo.
+  PITFALL: se a env estiver setada na Vercel com a URL absoluta, ela vence o relativo.
+- **VRT da home dependia de dado vivo (PR #150):** `tests/visual.spec.ts` fotografa `fullPage` e a
+  home lista os 3 últimos posts do LifeLog via RSS ao vivo — 2 posts/dia derrubavam a baseline e as
+  4 rotas (`/`, `/#projects`, `/#games`, `/#contact`) falhavam com o MESMO pixel count (é UMA
+  imagem, não 4 falhas). Cura: `mask: [page.locator('#blog')]` + baseline regenerada no CI.
+  Cobertura do bloco segue em `tests/blog-locale-presence.spec.ts`.
+- **PITFALL CI:** push do `github-actions[bot]` não dispara workflow novo — depois do run com
+  `update_snapshots=true` é preciso `gh workflow run playwright.yml --ref <branch>` outra vez para
+  validar o SHA do bot (senão o "verde" é o do próprio run de update).
+- Registro completo: `~/.hermes/plans/2026-10-20-portfolio-hit-rewrite.md` e
+  `~/.hermes/plans/2026-10-20-portfolio-vrt-blog-dado-vivo.md`.

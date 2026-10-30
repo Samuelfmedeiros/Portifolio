@@ -54,14 +54,14 @@ function webServerOf(cfg: { webServer?: ServerConfig | ServerConfig[] }): Server
 }
 
 describe('playwright.config — preview da branch na porta sob teste', () => {
-  it('sem TEST_BASE_URL usa :3000 e sobe o next da branch (reuse em dev)', async () => {
+  it('sem TEST_BASE_URL usa :3000 e sobe o next da branch (sem reuse)', async () => {
     const cfg = await loadConfig({});
     expect(cfg.use?.baseURL).toBe('http://localhost:3000');
     const ws = webServerOf(cfg);
     expect(ws.url).toBe('http://localhost:3000');
     expect(ws.command).toContain('next start');
     expect(ws.command).toContain('-p 3000');
-    expect(ws.reuseExistingServer).toBe(true);
+    expect(ws.reuseExistingServer).toBe(false);
   });
 
   it('TEST_BASE_URL local (o gap: :3450) sobe o next NA PORTA pedida', async () => {
@@ -70,8 +70,11 @@ describe('playwright.config — preview da branch na porta sob teste', () => {
     const ws = webServerOf(cfg);
     expect(ws.url).toBe('http://localhost:3450');
     expect(ws.command).toContain('-p 3450');
-    // explicit local = operador já escolheu a porta; reusa se algo saudável responde
-    expect(ws.reuseExistingServer).toBe(true);
+    // reuse desativado para garantir identidade do preview
+    expect(ws.reuseExistingServer).toBe(false);
+    // guarda anti-regressão: o comando deve liberar a porta antes de subir
+    expect(ws.command).toContain('fuser');
+    expect(ws.command).toContain('while');
   });
 
   it('TEST_BASE_URL local em 127.0.0.1 também é tratado como local', async () => {

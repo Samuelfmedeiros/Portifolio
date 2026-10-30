@@ -153,6 +153,12 @@ export const Navbar = memo(function Navbar() {
       navTimeoutRef.current = null;
     }
 
+    // Analitico do clique ANTES de qualquer ramificacao: o ramo `#hero`
+    // (logo / nav.home) retorna cedo e perdia o evento — clicar no home
+    // navegava sem registrar. Regressao fixada por Navbar.test.tsx
+    const sectionId = href.replace("#", "");
+    track({ type: "nav_click" as const, section: sectionId as SectionName });
+
     // Cancel in-progress smooth scroll so animations don't pile up
     window.scrollTo({ top: window.scrollY, behavior: "instant" });
 
@@ -163,7 +169,6 @@ export const Navbar = memo(function Navbar() {
       return;
     }
     if (target) {
-      const sectionId = href.replace("#", "") as SectionName;
       // offsetTop acumulado NÃO inclui transform (animação FadeInSection);
       // scroll-padding lido do CSS = fonte única do offset (mobile 112px / desktop 80px)
       const scrollPadding = parseFloat(getComputedStyle(document.documentElement).scrollPaddingTop) || 80;
@@ -220,7 +225,6 @@ export const Navbar = memo(function Navbar() {
         settle(0);
       }, 2500);
 
-      track({ type: "nav_click" as const, section: sectionId });
     }
   };
 

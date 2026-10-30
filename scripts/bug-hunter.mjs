@@ -14,7 +14,7 @@ const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '..');
 const FINDINGS_DIR = resolve(ROOT, 'docs/agents/qualidade/bug-hunter/findings');
 const REPORT_PATH = resolve(FINDINGS_DIR, `audit-${new Date().toISOString().split('T')[0]}.json`);
-const PREVIEW = 'https://samuelmedeiros.vercel.app';
+const PREVIEW = 'https://portifolio.seu.pet';
 
 const ROUTES = ['/']; // SPA single-page
 

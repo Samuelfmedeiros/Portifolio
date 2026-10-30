@@ -1,7 +1,12 @@
 // === Portifolio Samuel — Centralized Type Definitions ===
 
-/** Primary production URL — Vercel is primary deploy target */
-export const SITE_URL = "https://samuelmedeiros.vercel.app";
+// Host canonico do portfolio. O dominio custom (Cloudflare -> Vercel)
+// ja respondia 200 desde 14/09/2026, mas canonical/sitemap/robots ainda
+// apontavam para o *.vercel.app — duas URLs concorrentes para o mesmo
+// conteudo. Override por env para previews/staging.
+const DEFAULT_SITE_URL = "https://portifolio.seu.pet";
+export const SITE_URL =
+  process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || DEFAULT_SITE_URL;
 
 /** GitHub repository returned by the public API */
 export interface Repo {
@@ -14,6 +19,10 @@ export interface Repo {
   forks_count: number;
   language: string | null;
   topics: string[];
+  /** Repo é fork de terceiro (API do GitHub) — nunca vira card */
+  fork?: boolean;
+  /** Repo arquivado (API do GitHub) */
+  archived?: boolean;
   pushed_at: string;
   created_at: string;
   /** Custom gradient for project card header */
@@ -24,6 +33,7 @@ export interface Repo {
   imageUrl?: string;
   /** URL for an animated demo (mp4/gif) shown instead of a static image */
   videoUrl?: string;
+  coverPriority?: boolean; /* eager + fetchPriority=high: capa não depende de scroll pra aparecer */
   /** Project emoji/icon for visual identity */
   icon?: string;
 }

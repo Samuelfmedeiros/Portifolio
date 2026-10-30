@@ -4,12 +4,14 @@ import { ContactForm } from './ContactForm'
 
 // Mock supabase
 vi.mock('@/lib/supabase', () => ({
+  submitContactForm: vi.fn(),
   supabase: {
     from: vi.fn(() => ({
       insert: vi.fn(),
     })),
   },
 }))
+
 
 // Mock i18n — return fallback when provided, key otherwise
 vi.mock('@/lib/i18n', () => ({
@@ -65,6 +67,52 @@ describe('ContactForm', () => {
     render(<ContactForm />)
     const copyButton = screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i })
     expect(copyButton).toBeInTheDocument()
+  })
+
+  it('handles form submission successfully', async () => {
+    const { submitContactForm } = await import('@/lib/supabase')
+    vi.mocked(submitContactForm).mockResolvedValue(true)
+    
+    render(<ContactForm />)
+    
+    fireEvent.change(screen.getByLabelText('contact.form.name'), { target: { value: 'Test User' } })
+    fireEvent.change(screen.getByLabelText('contact.form.email'), { target: { value: 'test@example.com' } })
+    fireEvent.change(screen.getByLabelText('contact.form.message'), { target: { value: 'Hello world' } })
+    
+    const checkbox = document.getElementById('contact-lgpd-consent')
+    if (checkbox) fireEvent.click(checkbox)
+    
+    const submitButton = screen.getByRole('button', { name: /contact.form.submit/i })
+    fireEvent.click(submitButton)
+    
+    await new Promise(r => setTimeout(r, 50))
+    expect(screen.getByText(/contact.form.success/i)).toBeInTheDocument()
+  })
+
+  it('shows error message when API fails', async () => {
+    const { submitContactForm } = await import('@/lib/supabase')
+    vi.mocked(submitContactForm).mockResolvedValue(false)
+    
+    render(<ContactForm />)
+    
+    fireEvent.change(screen.getByLabelText('contact.form.name'), { target: { value: 'Test User' } })
+    fireEvent.change(screen.getByLabelText('contact.form.email'), { target: { value: 'test@example.com' } })
+    fireEvent.change(screen.getByLabelText('contact.form.message'), { target: { value: 'Hello world' } })
+    
+    const checkbox = document.getElementById('contact-lgpd-consent')
+    if (checkbox) fireEvent.click(checkbox)
+    
+    const submitButton = screen.getByRole('button', { name: /contact.form.submit/i })
+    fireEvent.click(submitButton)
+    
+    await new Promise(r => setTimeout(r, 50))
+    expect(screen.getAllByText(/contact.error/i)[0]).toBeInTheDocument()
+  })
+
+  it('prevents submission when form is invalid', () => {
+    render(<ContactForm />)
+    const submitButton = screen.getByRole('button', { name: /contact.form.submit/i })
+    expect(submitButton).toBeDisabled()
   })
 
   it('has accessible form labels', () => {

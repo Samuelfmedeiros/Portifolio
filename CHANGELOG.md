@@ -1,17 +1,64 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-27] - 2 commits: H2 invisiveis em desktop (fix) + merge do github/master; push github ok
+- **fix(ui)** (`b65b087`): section headings (H2) invisiveis em desktop — `initial={false}` em vez de `whileInView opacity 0`.
+- **merge** (`d79713e`): merge remote-tracking branch 'github/master' na branch roger.
+- Push github OK na branch `roger/portifolio-20261025-185904`; backup (bare) nao aplicavel.
+
+## [2026-10-26] - 0 commits; 12 diffs de estado de loop preservados; push github ok na branch roger
+- **sem commit de codigo**: 12 diffs nao commitados intactos (residual de `.loop-worker-*.md` + 2 estados de loop) - nada de alheio foi comitado.
+- **push**: `github` OK na branch ativa `roger/portifolio-20261025-185904` (HEAD up-to-date + doc).
+
+## [2026-10-25] - 12 commits: cura do ERRO_IDENTIDADE_PREVIEW (reuseExistingServer off + fuser da porta) + parede de testes
+- **fix(e2e)** (`a2a347a`): `reuseExistingServer: false` - fim do ERRO_IDENTIDADE_PREVIEW.
+- **fix(e2e)** (`42d996c`): loop `fuser` libera a porta do preview antes do proximo start.
+- **test(e2e)** (`533d5bf`, `9a9b5b2`, `84bda5b`, `a073611`, `40b493b`): webServer mata listener; guards de identidade/limpeza de porta; teste de reproducao; expectativas do config.
+- **test** (`d015e72`): vitest coverage ligado para medicao.
+- **test** (`f874127`, `4e049b2`, `16a8ebe`, `769d156`): asserts reais em useGsapAnimation/Terminal/Tooltip; cobertura >=50% supabase; BuyMeACoffee/GitHubSponsors.
+- 12 commits na branch `roger/portifolio-20261025-185904` - push `github` OK; espelho `origin` (bare local) pendente (hook recusa merge commits).
+
+
+## [2026-10-24] - 6 commits: grade so com repo curado + blog com 4 posts do LifeLog (PRs #158/#159); github sincronizado
+- **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
+- **test(e2e)** (`16d7f80`): snapshots visuais regenerados no ambiente do CI.
+- **merge** (`26641ab`, PR #158): branch `fix/projetos-curados-by-topic`.
+- **feat(blog)** (`1461e11`): 4 posts do LifeLog no portifolio (era 3).
+- **test(e2e)** (`7a75f0b`): blog exige 4 cards (espelha `BLOG_POSTS_LIMIT`).
+- **merge** (`a0b7bee`, PR #159): branch `feat/blog-4-posts`.
+- 6 commits no dia - push `github` OK - HEAD master: `a0b7bee` + doc. PENDENCIA: espelho `origin` (bare local) 68 commits atras (hook de prefixo recusa merge commits).
+
+## [2026-10-23] - 3 cards novos (Focinho, Skills Shop, SafMarket) + PR #157 merged; github sincronizado, bare local atras
+- **feat** (`7f09616`): cards Focinho, Skills Shop e SafMarket.
+- **perf** (`2f131a7`): capa eager nos 3 cards novos (`coverPriority`).
+- **test** (`7b11027`): snapshots visuais regenerados no CI.
+- **merge** (`ca58398`, PR #157): branch `feat/novos-projetos`.
+- 4 commits no dia - push `github` OK - HEAD master: `ca58398`. PENDENCIA: espelho `origin` (bare local) 61 commits atras, hook acusa prefixo invalido no merge commit.
+
+## 2026-10-17 - Beacon de medicao proprio (sem cookie) + correcoes do working tree
+- **feat(medicao)** (`b8889c6`, PR #135, merge `253513c`): beacon proprio `src/lib/hit.ts` + `HitBeacon.tsx` — 1 hit por troca de rota, `sendBeacon` com fallback `fetch keepalive`, respeita DNT/GPC, sem cookie. CSP com `skills.seu.pet` no `connect-src` do `next.config.js` **e** do `vercel.json`. Endpoint `POST skills.seu.pet/api/hit` -> `200 {"ok":true}` (tabela `hits` do skills-shop, `site` em allowlist).
+- **fix(tracking)**: `Navbar.tsx` media o `nav_click` depois do ramo `#hero` (clicar no home nao media); `CookieBanner.tsx`+`umami.ts` disparam pageview anonima na primeira interacao (aceitar **e** recusar) + evento `umami:ready`.
+- **fix(ui)**: `Footer.tsx` + `/privacidade` + `/termos` — abas do modal escreviam no estado do Footer (as 2 paginas nao compilavam, `TS2741`); `ProfileSection.tsx` com `toFixed(2)` (origem do hydration mismatch); tag `power bi` no `ProjectModal`.
+- **fix(test)**: `DownloadModal.tsx` cancela os timers no unmount (`ReferenceError: window is not defined` derrubava o `vitest run` com rc=1 mesmo com tudo verde); `first-pageview.test.ts` reescrito com `vi.resetModules()`.
+- **chore(deps)**: overrides `ajv` (`@eslint/eslintrc>ajv`, `eslint>ajv`) — o `pnpm lint` quebrava com `TypeError: Cannot set properties of undefined (setting 'defaultMeta')`.
+- Prova: vitest 440/440 rc=0 · build OK · Playwright 77 passed/1 skipped/0 falhas · CI do PR 9/9 e do master verde · producao `portifolio.seu.pet` 200 com **hit real registrado** (`site=portfolio`).
+
+## 2026-10-06 - SEO: dados estruturados, verificacao e empurrao pos-deploy (indexacao Google)
+- **feat(seo)**: JSON-LD (`BlogPosting` + `BreadcrumbList` em `@graph`) em toda pagina de post, montado no layout e injetado no `<head>` um unico `<script type="application/ld+json">`.
+- **feat(seo)**: metas de verificacao dirigidas por env (`NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION`, `msvalidate.01`) — sem env nao emite nada, com env o dono verifica sem novo deploy de codigo.
+- **feat(seo)**: chave IndexNow em `public/` + `scripts/indexnow-submit.mjs` (envia so as URLs publicas) + workflow `seo-indexing.yml`, que roda depois do CI e valida o site por HTTP 200 antes de submeter.
+- Paginas `noindex` (preview de `/ocultos/`) ficam fora do JSON-LD e do envio.
+- Prova: build de producao RC=0, JSON-LD presente e parseavel nas paginas publicas, CI verde, deploy de producao com dados estruturados.
+
+## [2026-09-20] - Dia sem commits na master (campanha Roger em voo)
+- 0 commits hoje em todas as branches; `origin/master` + `bare/master` em `691207a2` (doc de 16/09).
+- Campanha Roger ativa no checkout durante o dia (state + workers r2-r8); tree com 33 entradas de outra sessao - nada commitado daqui.
+
 ## 2026-10-05 - campanha pf-gate mergeada no master + lint/vitest bloqueantes no deploy
 - **merge(roger)** (`eafbb21`, 02:02): campanha `pf-gate` entra no master - gate de seguranca + identidade de preview.
 - **ci** (`94d096c`, 13:38, branch `fix/ci-gate-lint-test-bloqueante`): `deploy.yml` passa a tratar lint e vitest como **bloqueantes**.
 - Master ja sincronizada com `origin` e com o bare (ahead/behind 0/0). A branch de CI **ainda nao foi mergeada**.
 - Working tree com 8 entradas antigas (estados `.loop-*`, `.loop-handoff.json`) - nada alheio commitado.
 - Push bare+origin OK; HEAD master `eafbb21`.
-
-## [2026-09-20] - Dia sem commits na master (campanha Roger em voo)
-- 0 commits hoje em todas as branches; `origin/master` + `bare/master` em `691207a2` (doc de 16/09).
-- Campanha Roger ativa no checkout durante o dia (state + workers r2-r8); tree com 33 entradas de outra sessao - nada commitado daqui.
-
-
 ## 2026-09-16 — Capas: fallback + geracao automatica + watchdog
 
 - **Fallback de capa no card** (`src/lib/coverFallback.ts` + `ProjectCoverFallback.tsx`):
