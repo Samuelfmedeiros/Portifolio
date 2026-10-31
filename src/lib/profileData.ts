@@ -1,4 +1,3 @@
-import type { Repo } from "./types";
 
 /**
  * Bilingual profile data — replaces hardcoded PT text in components.
