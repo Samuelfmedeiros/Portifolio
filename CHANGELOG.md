@@ -1,5 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-10-31] - 4 commits: merge da campanha Roger no master + limpeza de import; push github+bare ok
+
+- **merge** (`fc4f0d6`): `roger/portifolio-20261025-234512` integrada no `master` com 4 commits de campanha/testes do `freePort`.
+- **chore** (`c2eb6e8`): import `Repo` nao usado removido de `profileData.ts`.
+- Push `github` + `origin` (bare) OK. Working tree limpo.
+
 ## [2026-10-29] - 0 commits; 2 diffs de estado de loop preservados; push github ok
 
 - 0 commits hoje. Diffs preservados: `.loop-handoff.json`, `.loop-portifolio.state.json`.
