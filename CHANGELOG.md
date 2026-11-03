@@ -1,5 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-11-02] - 1 commit: bump dependabot actions/setup-python (branch propria, PENDING merge); push github+bare ok
+
+- `1d7a9e3` chore(deps) actions/setup-python 7.0.0 → 7.1.0 em `dependabot/github_actions/actions/setup-python-7.1.0`; merge no master PENDING.
+- `master` sincronizado 0/0 nos 2 remotes, working tree limpo. Docs de fim de dia commitados e pushados.
+
 ## [2026-10-31] - 4 commits: merge da campanha Roger no master + limpeza de import; push github+bare ok
 
 - **merge** (`fc4f0d6`): `roger/portifolio-20261025-234512` integrada no `master` com 4 commits de campanha/testes do `freePort`.
