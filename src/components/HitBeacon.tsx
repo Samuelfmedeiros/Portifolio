@@ -4,6 +4,7 @@ import { useEffect } from "react";
 import { usePathname } from "next/navigation";
 
 import { enviarHit } from "@/lib/hit";
+import { agendarAposCarga } from "@/lib/apos-carga";
 
 /**
  * Dispara o beacon de visita a cada troca de rota (App Router: `usePathname` muda sem reload).
@@ -17,7 +18,9 @@ export default function HitBeacon() {
     // `location.pathname` o efeito sai calado e NADA é medido (era o caso até 17/10).
     const caminho = pathname || window.location.pathname;
     if (!caminho) return;
-    enviarHit(caminho, document.referrer || "");
+    // Fora do caminho crítico: o beacon sai depois do `load` (medido 04/11 —
+    // os dois beacons somavam ~646 ms no load do site).
+    agendarAposCarga(() => enviarHit(caminho, document.referrer || ""));
   }, [pathname]);
 
   return null;
