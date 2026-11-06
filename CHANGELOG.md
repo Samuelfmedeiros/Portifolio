@@ -1,5 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-11-05] - 2 commits: perf(analytics) beacons após load + merge dependabot setup-node; push github+origin ok
+
+- `7f54c6f` perf(analytics) `agendarAposCarga` + `d2c1115` merge do dependabot no master.
+- master 0/0 com github e origin; working tree limpo.
+
 ## [2026-11-04] - 1 commit: bump dependabot actions/setup-node (branch própria, PENDING merge); push github+origin ok
 
 - `286a1c3` chore(deps) actions/setup-node 7.0.0 → 7.1.0 em `dependabot/github_actions/actions/setup-node-7.1.0`; merge no master PENDING.
