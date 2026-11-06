@@ -86,3 +86,6 @@ graphify-out/
 # CV artifacts (intermediários de geração)
 docs/cv/*.html
 .audit-shots/
+
+# Roger/test-loop campaign state (nunca versionar: lixo de campanha)
+.loop-*
