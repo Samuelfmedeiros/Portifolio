@@ -209,9 +209,9 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                       }`}
                     >
                       <span className="block text-xs font-semibold text-[var(--text-primary)] font-mono">
-                        {t("cv.variant.dados", "Dados & BI")}
+                        {variant === "dados" ? "✓ " : ""}{t("cv.variant.dados", "Dados & BI")}
                       </span>
-                      <span className="block text-[10px] text-[var(--text-secondary)] mt-0.5">
+                      <span className="block text-[11px] text-[var(--text-secondary)] mt-0.5">
                         {t("cv.variant.dados.hint", "Analista / BI / Analytics")}
                       </span>
                     </button>
@@ -227,9 +227,9 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                       }`}
                     >
                       <span className="block text-xs font-semibold text-[var(--text-primary)] font-mono">
-                        {t("cv.variant.fullstack", "Full Stack")}
+                        {variant === "fullstack" ? "✓ " : ""}{t("cv.variant.fullstack", "Full Stack")}
                       </span>
-                      <span className="block text-[10px] text-[var(--text-secondary)] mt-0.5">
+                      <span className="block text-[11px] text-[var(--text-secondary)] mt-0.5">
                         {t("cv.variant.fullstack.hint", "Dev / Backend / Frontend")}
                       </span>
                     </button>
