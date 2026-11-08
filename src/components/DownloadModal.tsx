@@ -196,7 +196,11 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                   <label className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] mb-1.5">
                     {t("cv.variant.label", "Qual versão do currículo?")}
                   </label>
-                  <div role="radiogroup" aria-label={t("cv.variant.label", "Qual versão do currículo?")} className="grid grid-cols-2 gap-2">
+                  {/* Mobile empilha (grid-cols-1) porque 150px de largura por card
+                      fazia "Full Stack (Dev)" quebrar em 2 linhas e o hint deixar
+                      a barra "/" no fim da linha (medido em 390px, 08/11/2026).
+                      A partir de sm (640px) voltam lado a lado, onde cabem. */}
+                  <div role="radiogroup" aria-label={t("cv.variant.label", "Qual versão do currículo?")} className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     <button
                       type="button"
                       role="radio"
@@ -208,11 +212,23 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                           : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)]/40"
                       }`}
                     >
-                      <span className="block text-xs font-semibold text-[var(--text-primary)] font-mono">
-                        {variant === "dados" ? "✓ " : ""}{t("cv.variant.dados", "Dados & BI")}
+                      <span className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-semibold text-[var(--text-primary)] font-mono truncate">
+                          {t("cv.variant.dados", "Dados & BI")}
+                        </span>
+                        {/* Check como elemento proprio: nao empurra o titulo e nao
+                            fica orfao numa segunda linha. */}
+                        <span
+                          aria-hidden="true"
+                          className={`shrink-0 text-[11px] leading-none transition-opacity ${
+                            variant === "dados" ? "opacity-100 text-[var(--accent)]" : "opacity-0"
+                          }`}
+                        >
+                          ✓
+                        </span>
                       </span>
-                      <span className="block text-[11px] text-[var(--text-secondary)] mt-0.5">
-                        {t("cv.variant.dados.hint", "Analista / BI / Analytics")}
+                      <span className="block text-[11px] text-[var(--text-secondary)] mt-1 truncate">
+                        {t("cv.variant.dados.hint", "BI e Analytics")}
                       </span>
                     </button>
                     <button
@@ -226,11 +242,21 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                           : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)]/40"
                       }`}
                     >
-                      <span className="block text-xs font-semibold text-[var(--text-primary)] font-mono">
-                        {variant === "fullstack" ? "✓ " : ""}{t("cv.variant.fullstack", "Full Stack")}
+                      <span className="flex items-center justify-between gap-2">
+                        <span className="text-xs font-semibold text-[var(--text-primary)] font-mono truncate">
+                          {t("cv.variant.fullstack", "Full Stack")}
+                        </span>
+                        <span
+                          aria-hidden="true"
+                          className={`shrink-0 text-[11px] leading-none transition-opacity ${
+                            variant === "fullstack" ? "opacity-100 text-[var(--accent)]" : "opacity-0"
+                          }`}
+                        >
+                          ✓
+                        </span>
                       </span>
-                      <span className="block text-[11px] text-[var(--text-secondary)] mt-0.5">
-                        {t("cv.variant.fullstack.hint", "Dev / Backend / Frontend")}
+                      <span className="block text-[11px] text-[var(--text-secondary)] mt-1 truncate">
+                        {t("cv.variant.fullstack.hint", "Dev e Backend")}
                       </span>
                     </button>
                   </div>
