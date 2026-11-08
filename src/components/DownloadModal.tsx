@@ -19,6 +19,9 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
   const [email, setEmail] = useState("");
   const [consent, setConsent] = useState(false);
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  // Versao do curriculo: 'dados' (BI/Analytics) ou 'fullstack' (dev). Default
+  // 'dados' porque e' o alvo historico das candidaturas.
+  const [variant, setVariant] = useState<"dados" | "fullstack">("dados");
   const [errorMsg, setErrorMsg] = useState("");
   const downloadingRef = useRef(false);
   // Timers do modal (fechar após sucesso, limpar formulário após fechar) ficam
@@ -66,6 +69,7 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
           email: email || undefined,
           consent: true,
           locale,
+          variant,
         }),
       });
 
@@ -89,7 +93,15 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
       const url = URL.createObjectURL(blob);
       const a = document.createElement("a");
       a.href = url;
-      a.download = locale === "en" ? "Samuel_Andrade_Resume_2026.pdf" : "Samuel_Andrade_2026.pdf";
+      const base =
+        variant === "fullstack"
+          ? locale === "en"
+            ? "Samuel_Andrade_Resume_FullStack_2026.pdf"
+            : "Samuel_Andrade_FullStack_2026.pdf"
+          : locale === "en"
+            ? "Samuel_Andrade_Resume_Dados_2026.pdf"
+            : "Samuel_Andrade_Dados_2026.pdf";
+      a.download = base;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -176,6 +188,54 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
               </div>
             ) : (
               <form onSubmit={handleSubmit} className="space-y-4">
+                {/* Variante — bifurcacao do curriculo (08/11/2026).
+                    Motivo: um curriculo unico ("dados + dev") faz o recrutador
+                    descartar por ambiguidade em ~6s. Duas versoes especializadas
+                    alinham o vocabulario ao ATS da vaga alvo. */}
+                <div>
+                  <label className="flex items-center gap-1.5 text-xs font-mono text-[var(--text-secondary)] mb-1.5">
+                    {t("cv.variant.label", "Qual versão do currículo?")}
+                  </label>
+                  <div role="radiogroup" aria-label={t("cv.variant.label", "Qual versão do currículo?")} className="grid grid-cols-2 gap-2">
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={variant === "dados"}
+                      onClick={() => setVariant("dados")}
+                      className={`px-3 py-2.5 rounded-lg border text-left transition-colors ${
+                        variant === "dados"
+                          ? "border-[var(--accent)] bg-[var(--accent)]/10"
+                          : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)]/40"
+                      }`}
+                    >
+                      <span className="block text-xs font-semibold text-[var(--text-primary)] font-mono">
+                        {t("cv.variant.dados", "Dados & BI")}
+                      </span>
+                      <span className="block text-[10px] text-[var(--text-secondary)] mt-0.5">
+                        {t("cv.variant.dados.hint", "Analista / BI / Analytics")}
+                      </span>
+                    </button>
+                    <button
+                      type="button"
+                      role="radio"
+                      aria-checked={variant === "fullstack"}
+                      onClick={() => setVariant("fullstack")}
+                      className={`px-3 py-2.5 rounded-lg border text-left transition-colors ${
+                        variant === "fullstack"
+                          ? "border-[var(--accent)] bg-[var(--accent)]/10"
+                          : "border-[var(--border)] bg-[var(--bg-card)] hover:border-[var(--accent)]/40"
+                      }`}
+                    >
+                      <span className="block text-xs font-semibold text-[var(--text-primary)] font-mono">
+                        {t("cv.variant.fullstack", "Full Stack")}
+                      </span>
+                      <span className="block text-[10px] text-[var(--text-secondary)] mt-0.5">
+                        {t("cv.variant.fullstack.hint", "Dev / Backend / Frontend")}
+                      </span>
+                    </button>
+                  </div>
+                </div>
+
                 {/* Name — optional */}
                 <div>
                   <label

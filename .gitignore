@@ -90,3 +90,4 @@ docs/cv/*.html
 
 # Roger/test-loop campaign state (nunca versionar: lixo de campanha)
 .loop-*
+scripts/_cv_build/

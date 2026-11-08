@@ -39,6 +39,11 @@ export const dict = {
     // ── CV Download Modal ──
     "cv.title": "Baixar Currículo",
     "cv.subtitle": "Samuel Medeiros — Currículo 2026",
+    "cv.variant.label": "Qual versão do currículo?",
+    "cv.variant.dados": "Dados & BI",
+    "cv.variant.dados.hint": "Analista / BI / Analytics",
+    "cv.variant.fullstack": "Full Stack (Dev)",
+    "cv.variant.fullstack.hint": "Desenvolvimento / Backend / Frontend",
     "cv.name": "Nome",
     "cv.name.placeholder": "Seu nome",
     "cv.name.optional": "(opcional)",
@@ -376,6 +381,11 @@ export const dict = {
     // ── CV Download Modal ──
     "cv.title": "Download CV",
     "cv.subtitle": "Samuel Medeiros — Resume 2026",
+    "cv.variant.label": "Which resume version?",
+    "cv.variant.dados": "Data & BI",
+    "cv.variant.dados.hint": "Analyst / BI / Analytics",
+    "cv.variant.fullstack": "Full Stack",
+    "cv.variant.fullstack.hint": "Dev / Backend / Frontend",
     "cv.name": "Name",
     "cv.name.placeholder": "Your name",
     "cv.name.optional": "(optional)",

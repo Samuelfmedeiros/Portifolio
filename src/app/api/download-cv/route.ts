@@ -58,8 +58,13 @@ function getClientIp(req: NextRequest): string {
 export async function POST(req: NextRequest) {
   try {
     const body = await req.json().catch(() => ({}));
-    const { name, email, consent, locale } = body;
+    const { name, email, consent, locale, variant } = body;
     const isEn = locale === "en";
+    // Bifurcacao de curriculo (08/11/2026, pedido do Samuel a partir do diagnostico
+    // do AI Studio): o curriculo unico fazia o recrutador descartar por ambiguidade
+    // ("dados ou dev?"). Agora existem duas versoes especializadas — 'dados' e
+    // 'fullstack'. Sem variant explicita, cai no Dados & BI (o alvo historico).
+    const isStack = variant === "fullstack";
 
     // Rate limit por IP (anti-spam de notificações)
     if (!checkRateLimit(getClientIp(req))) {
@@ -92,6 +97,9 @@ export async function POST(req: NextRequest) {
     notifications.push(
       fetch(`${CAPIVARA_API}/cv-downloads`, {
         method: "POST",
+        // Teto duro: o host do Capivara pode pendurar (Cloudflare Access / backend fora).
+        // Sem isto o Promise.allSettled abaixo espera para sempre e o currículo não baixa.
+        signal: AbortSignal.timeout(4_000),
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: entry.name || "anonimo",
@@ -138,6 +146,7 @@ export async function POST(req: NextRequest) {
           `https://api.telegram.org/bot${botToken}/sendMessage`,
           {
             method: "POST",
+            signal: AbortSignal.timeout(4_000),
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({
               chat_id: chatId,
@@ -169,6 +178,7 @@ export async function POST(req: NextRequest) {
             });
             const res = await fetch("https://api.resend.com/emails", {
               method: "POST",
+              signal: AbortSignal.timeout(4_000),
               headers: {
                 Authorization: `Bearer ${resendKey}`,
                 "Content-Type": "application/json",
@@ -223,8 +233,10 @@ export async function POST(req: NextRequest) {
     // Aguarda notificações antes de responder (evita corte do Vercel)
     await Promise.allSettled(notifications);
 
-    // Serve o PDF
-    const pdfName = isEn ? "Samuel_Andrade_Resume_2026.pdf" : "Samuel_Andrade_2026.pdf";
+    // Serve o PDF — versao especializada (Dados & BI ou Full Stack) por idioma
+    const pdfName = isStack
+      ? (isEn ? "Samuel_Andrade_Resume_FullStack_2026.pdf" : "Samuel_Andrade_FullStack_2026.pdf")
+      : (isEn ? "Samuel_Andrade_Resume_Dados_2026.pdf" : "Samuel_Andrade_Dados_2026.pdf");
     const pdfPath = path.join(process.cwd(), "public", pdfName);
     if (!fs.existsSync(pdfPath)) {
       return NextResponse.json({ error: isEn ? "Resume not found" : "Currículo não encontrado" }, { status: 404 });
