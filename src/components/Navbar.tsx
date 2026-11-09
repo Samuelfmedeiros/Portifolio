@@ -35,6 +35,9 @@ export const Navbar = memo(function Navbar() {
   // o settle NÃO deve puxar o scroll de volta pro alvo.
   const interruptedRef = useRef(false);
   const targetTopRef = useRef(0);
+  // Referência ao <nav> para o scroll spy medir a altura real da barra fixa
+  // (mobile tem duas fileiras: 96px; desktop 65px) sem chutar constante.
+  const navRef = useRef<HTMLElement | null>(null);
 
   // Scroll detection — requestAnimationFrame throttle
   useEffect(() => {
@@ -69,72 +72,92 @@ export const Navbar = memo(function Navbar() {
     };
   }, []);
 
-  // IntersectionObserver — picks most visible section, with fallback scan when sections leave
+  // Scroll spy — a seção ativa é a ÚLTIMA cujo topo já cruzou a linha de
+  // referência (topo + offset). Regra geométrica, não razão de visibilidade.
+  //
+  // 🔴 Regressão medida 08/11/2026 (relatada como "estou na sessão blog mas a
+  // navbar marca a de cima"): a versão anterior escolhia pelo
+  // `intersectionRatio`/maior área visível. Isso favorece seções ALTAS: com
+  // #profile medindo 2966px e #blog 434px, ao chegar em #blog o ratio de
+  // #profile ainda era maior e a navbar continuava marcando a seção anterior
+  // (medido: em #blog a navbar marcava #contact; em #contact marcava #games —
+  // trocava pelo motivo errado). Razão de área compara tamanhos diferentes;
+  // posição de topo não.
+  //
+  // Também removido o gate `if (navigatingRef.current) return;`: ele deixava a
+  // navbar travada na seção de origem quando o usuário clicava e o observer
+  // pausava durante o scroll suave.
   useEffect(() => {
     const ids = NAV_ITEMS.map((i) => i.href.replace("#", ""));
     let alive = true;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (!alive) return;
-        // During a smooth-scroll navigation, observer is paused so rapid
-        // clicks don't get overwritten by intermediate sections.
-        if (navigatingRef.current) return;
+    let raf = 0;
 
-        // 1. Among sections that entered viewport, pick the one with
-        //    the highest visible ratio (most prominent on screen).
-        //    This handles the case where #jornada (child of #profile)
-        //    and #profile are both visible — the dominant one wins.
-        let bestEntered: string | null = null;
-        let bestRatio = 0;
+    const computeActive = () => {
+      if (!alive) return;
+      // Linha de referência: logo abaixo da navbar fixa, para que a seção
+      // "ativa" seja a que está de fato ocupando o topo da tela.
+      // Fallback 64: em jsdom (e antes do 1º layout) a altura medida é 0, o
+      // que jogaria a linha para y=24 e faria a seção mais alta vencer sempre.
+      const measured = navRef.current?.getBoundingClientRect().height ?? 0;
+      const navH = measured > 0 ? measured : 64;
+      const probeY = navH + 24;
+      const viewH = window.innerHeight;
 
-        for (const entry of entries) {
-          if (entry.isIntersecting && entry.intersectionRatio > bestRatio) {
-            bestRatio = entry.intersectionRatio;
-            bestEntered = entry.target.id;
+      let active = ids[0];
+      let bestTop = -Infinity;
+
+      for (const id of ids) {
+        const el = document.getElementById(id);
+        if (!el) continue;
+        const rect = el.getBoundingClientRect();
+        // Seção já começou (topo acima da linha) e ainda não terminou
+        // (fundo abaixo do topo da viewport): é candidata.
+        if (rect.top <= probeY && rect.bottom > probeY) {
+          if (rect.top > bestTop) {
+            bestTop = rect.top;
+            active = id;
           }
         }
+      }
 
-        if (bestEntered) {
-          setActiveSection(bestEntered);
-          return;
+      // Fim da página: quando o último trecho está visível e o scroll chegou no
+      // limite, marca a última seção (senão "games" nunca acenderia, porque a
+      // página acaba antes do topo dela cruzar a linha de referência).
+      // Guarda obrigatória: só faz sentido quando a página REALMENTE rola
+      // (scrollHeight > viewport). Sem ela, ambiente com scrollHeight 0 (jsdom,
+      // página em branco) satisfazia a condição sempre e marcava a última seção.
+      const scrollable = document.documentElement.scrollHeight - viewH;
+      const atBottom = scrollable > 4 && window.scrollY >= scrollable - 4;
+      if (atBottom) {
+        for (let i = ids.length - 1; i >= 0; i--) {
+          if (document.getElementById(ids[i])) { active = ids[i]; break; }
         }
+      }
 
-        // 2. No section entered → sections left viewport.
-        //    Scan ALL sections to find the most visible one.
-        //    This fixes the bug where scrolling back to top keeps
-        //    "jornada" active (because #profile never re-enters).
-        let fallback = ids[0];
-        let fallbackRatio = 0;
-        const viewH = window.innerHeight;
+      setActiveSection((prev) => (prev === active ? prev : active));
+    };
 
-        for (const id of ids) {
-          const el = document.getElementById(id);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            const visiblePx = Math.min(rect.bottom, viewH) - Math.max(rect.top, 0);
-            const ratio = visiblePx / Math.max(rect.height, 1);
-            if (ratio > fallbackRatio) {
-              fallbackRatio = ratio;
-              fallback = id;
-            }
-          }
-        }
+    const onScroll = () => {
+      if (raf) return;
+      raf = requestAnimationFrame(() => {
+        raf = 0;
+        computeActive();
+      });
+    };
 
-        if (fallbackRatio > 0.01) {
-          setActiveSection(fallback);
-        }
-      },
-      { threshold: 0 }
-    );
-
-    for (const id of ids) {
-      const el = document.getElementById(id);
-      if (el) observer.observe(el);
-    }
+    computeActive();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    window.addEventListener("resize", onScroll);
+    // Recalcula quando o layout muda (imagens/fonte carregando empurram seções)
+    const ro = typeof ResizeObserver !== "undefined" ? new ResizeObserver(onScroll) : null;
+    if (ro) ro.observe(document.body);
 
     return () => {
       alive = false;
-      observer.disconnect();
+      if (raf) cancelAnimationFrame(raf);
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onScroll);
+      ro?.disconnect();
       if (navTimeoutRef.current !== null) clearTimeout(navTimeoutRef.current);
     };
   }, []);
@@ -232,6 +255,7 @@ export const Navbar = memo(function Navbar() {
 
   return (
     <motion.nav
+      ref={navRef}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
       transition={{ duration: 0.15, ease: "easeOut" }}

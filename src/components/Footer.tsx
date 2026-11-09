@@ -74,7 +74,10 @@ export function PrivacyBody({ activeTab }: { activeTab: 'privacy' | 'terms' }) {
   const { t, locale } = useLanguage();
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
   return (
-    <div className="space-y-4 text-xs font-mono text-[var(--text-secondary)] leading-relaxed">
+    // text-sm (14px) em vez de text-xs (12px): no mobile o texto legal em 12px
+    // mono ficava difícil de ler e o Samuel reportou como texto "cortado" ao
+    // ler o print (08/11/2026). leading-relaxed mantém o respiro entre linhas.
+    <div className="space-y-4 text-sm font-mono text-[var(--text-secondary)] leading-relaxed">
                 {activeTab === 'privacy' && (
                   <>
                     <p>

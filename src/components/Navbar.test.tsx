@@ -123,33 +123,54 @@ describe('Navbar', () => {
     });
   })
 
-  it('updates active section based on intersection observer', () => {
-    let observerCallback: (entries: any[]) => void = () => {}
-    global.IntersectionObserver = class IntersectionObserver {
-      constructor(cb: any) {
-        observerCallback = cb
-      }
-      observe = vi.fn()
-      unobserve = vi.fn()
-      disconnect = vi.fn()
-    } as any
+  // Scroll spy geometrico (08/11/2026): a secao ativa e a ULTIMA cujo topo ja
+  // cruzou a linha de referencia abaixo da navbar — nao a de maior area visivel.
+  // A regra antiga (intersectionRatio) marcava a secao ERRADA quando as alturas
+  // diferem: #profile tem 2966px e #blog 434px, entao em #blog o ratio de
+  // #profile ainda vencia e a navbar ficava na secao de cima.
+  it('marca a secao cujo topo cruzou a linha de referencia (nao a de maior area)', async () => {
+    // Geometria espelha a MEDICAO real na home (08/11/2026), onde o bug ocorria:
+    // #profile h=2966 e #blog h=434. Ao chegar em #projects, a seção alta
+    // (#profile) ainda cobre mais área da viewport e vencia pelo ratio antigo,
+    // mesmo com o topo dela lá em cima. Pela regra geométrica correta, quem
+    // vence é a seção com o MAIOR top que ainda cruzou a linha (navH+24 ≈ 88).
+    const geo: Record<string, { top: number; height: number }> = {
+      profile: { top: -2000, height: 2500 }, // topo muito acima, ainda "visível"
+      jornada: { top: -1000, height: 900 },
+      projects: { top: 50, height: 600 },    // topo cruzou a linha = vencedora
+      blog: { top: 900, height: 400 },
+      contact: { top: 1500, height: 300 },
+      games: { top: 1900, height: 200 },
+    }
+    const created: HTMLElement[] = []
+    for (const [id, g] of Object.entries(geo)) {
+      const el = document.createElement('section')
+      el.id = id
+      el.getBoundingClientRect = () =>
+        ({
+          top: g.top, bottom: g.top + g.height, height: g.height,
+          left: 0, right: 0, width: 0, x: 0, y: 0, toJSON: () => ({}),
+        }) as DOMRect
+      document.body.appendChild(el)
+      created.push(el)
+    }
 
     render(<Navbar />)
-    
-    act(() => {
-      observerCallback([
-        {
-          isIntersecting: true,
-          intersectionRatio: 0.8,
-          target: { id: 'projects' }
-        }
-      ])
+
+    // O scroll spy roda DENTRO de requestAnimationFrame (throttle a 1 frame),
+    // então o dispatch precisa de um frame real antes da asserção — com
+    // act() síncrono o estado ainda não foi atualizado (medido 08/11/2026).
+    await act(async () => {
+      window.dispatchEvent(new Event('scroll'))
+      await new Promise((r) => requestAnimationFrame(() => r(null)))
     })
-    
-    // Verify visually through class or simply that it didn't crash.
-    // Since activeSection is internal state, we check the aria-current of the link.
+
+    // #projects tem o maior top que ainda cruzou a linha (50 <= 88), então vence
+    // — mesmo com #profile ocupando mais pixels de viewport (que era o bug).
     const projectLink = screen.getAllByText('nav.projects')[0]
     expect(projectLink).toHaveAttribute('aria-current', 'true')
+
+    created.forEach((el) => el.remove())
   })
 
   it('renders mobile nav with label pairs', () => {
