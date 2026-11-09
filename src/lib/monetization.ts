@@ -13,10 +13,25 @@ export const ADSENSE_CONFIG = {
   footerSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER || "",
   /** Ad slot ID for sidebar. Set via NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR */
   sidebarSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR || "",
-  /** Whether AdSense is enabled (requires client ID) */
+  /**
+   * Whether AdSense is enabled (requires client ID).
+   *
+   * ⚠️ `enabled` sozinho NÃO basta para renderizar: o componente também exige
+   * `isValidAdSlot(slot)`. Motivo medido 08/11/2026 — com client ID válido e
+   * slot="footer", o <ins> era montado e o push falhava no AdSense, deixando um
+   * espaço reservado vazio no rodapé.
+   */
   get enabled(): boolean {
     const value = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
     return !!value;
+  },
+  /** Diagnóstico: por que o anúncio não aparece (usado em dev/log). */
+  get status(): { clientId: boolean; footerSlot: boolean; sidebarSlot: boolean } {
+    return {
+      clientId: !!process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID,
+      footerSlot: /^\d{6,}$/.test((this.footerSlot || "").trim()),
+      sidebarSlot: /^\d{6,}$/.test((this.sidebarSlot || "").trim()),
+    };
   },
 };
 
@@ -153,6 +168,19 @@ export function parseMonetizationConsent(raw: string | null): MonetizationConsen
     // invalid JSON
   }
   return null;
+}
+
+/**
+ * Slot ID de bloco de anúncio do AdSense: numérico, ~10 dígitos.
+ *
+ * 🔴 Medido 08/11/2026: o .env trazia `footer` e `sidebar` como slot — texto, não
+ * ID. O AdSense rejeita isso no push (`TagError`) e o catch silencioso do
+ * componente escondia a falha. Sem esta validação, publicar as env vars na Vercel
+ * do jeito que estão NÃO faria anúncio nenhum aparecer.
+ */
+export function isValidAdSlot(slot: string | undefined | null): boolean {
+  if (!slot) return false;
+  return /^\d{6,}$/.test(slot.trim());
 }
 
 /** Default monetization consent (all denied) */

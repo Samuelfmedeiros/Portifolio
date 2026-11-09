@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { ADSENSE_CONFIG, canShowAds } from "@/lib/monetization";
+import { ADSENSE_CONFIG, canShowAds, isValidAdSlot } from "@/lib/monetization";
 import { useMonetizationConsent } from "./MonetizationProvider";
 
 /**
@@ -68,13 +68,23 @@ export function AdSense({
       if (!alreadyPushed) {
         adsbygoogle.push({});
       }
-    } catch {
-      // AdSense not loaded yet — silently skip
+    } catch (err) {
+      // 🔴 Antes (até 08/11/2026) este catch era silencioso: `catch { }` com
+      // comentário "AdSense not loaded yet — silently skip". Efeito medido: o
+      // anúncio ficou 2 meses sem renderizar em produção e ninguém soube. Agora
+      // a falha é registrada com o motivo — console em dev, e o atributo
+      // data-adsbygoogle-status no nó fica observável em produção.
+      if (process.env.NODE_ENV !== "production") {
+        // eslint-disable-next-line no-console
+        console.warn("[AdSense] push falhou:", err, { slot, clientId: ADSENSE_CONFIG.clientId });
+      }
+      insRef.current?.setAttribute("data-adsense-error", String(err).slice(0, 120));
     }
   }, [adsAllowed, slot]);
 
-  // Don't render if no consent or no config
-  if (!ADSENSE_CONFIG.enabled || !adsAllowed || !slot) return null;
+  // Don't render if no consent or no config. `isValidAdSlot` tambem barra:
+  // sem ele, slot="footer" renderizaria o <ins> e o push falharia no AdSense.
+  if (!ADSENSE_CONFIG.enabled || !adsAllowed || !isValidAdSlot(slot)) return null;
 
   return (
     <div

@@ -191,9 +191,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </main>
                 {/* Landmark (axe rule 'region', 12/09/2026): conteúdo do layout fora do <main> */}
                 <div role="region" aria-label="Apoio e consultoria">
-                  {/* AdSense banner — só aparece quando configurado no .env local */}
+                  {/* AdSense banner — só aparece quando o slot é um ID numérico
+                      VÁLIDO. O fallback antigo `|| "footer"` injetava o texto
+                      "footer" como data-ad-slot, que o AdSense rejeita: o <ins>
+                      era montado vazio e o espaço de 90px ficava reservado sem
+                      anúncio (medido 08/11/2026). Sem slot válido = não renderiza. */}
                   <div className="max-w-4xl mx-auto px-4 md:px-6 py-4">
-                    <AdSense slot={ADSENSE_CONFIG.footerSlot || "footer"} format="horizontal" className="min-h-[90px]" />
+                    <AdSense slot={ADSENSE_CONFIG.footerSlot} format="horizontal" className="min-h-[90px]" />
                   </div>
                   <div className="flex flex-wrap justify-center gap-4 px-4 pb-6">
                     <SupportButton />

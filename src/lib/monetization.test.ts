@@ -10,6 +10,7 @@ import {
   parseMonetizationConsent,
   DEFAULT_MONETIZATION_CONSENT,
   MONETIZATION_CONSENT_KEY,
+  isValidAdSlot,
 } from "./monetization";
 
 describe("monetization", () => {
@@ -31,6 +32,33 @@ describe("monetization", () => {
     it("is disabled when no client ID", () => {
       vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT_ID", "");
       expect(ADSENSE_CONFIG.enabled).toBe(false);
+    });
+  });
+
+  // Regressao 08/11/2026: o .env trazia "footer"/"sidebar" como slot — texto,
+  // nao ID numerico. O AdSense rejeita no push e o catch silencioso escondia.
+  describe("isValidAdSlot", () => {
+    it("aceita slot numerico de ~10 digitos", () => {
+      expect(isValidAdSlot("1234567890")).toBe(true);
+      expect(isValidAdSlot("123456")).toBe(true);
+      expect(isValidAdSlot("  1234567890  ")).toBe(true);
+    });
+
+    it("rejeita os valores fantasma que estavam no .env", () => {
+      expect(isValidAdSlot("footer")).toBe(false);
+      expect(isValidAdSlot("sidebar")).toBe(false);
+    });
+
+    it("rejeita vazio, nulo e curto demais", () => {
+      expect(isValidAdSlot("")).toBe(false);
+      expect(isValidAdSlot(null)).toBe(false);
+      expect(isValidAdSlot(undefined)).toBe(false);
+      expect(isValidAdSlot("12345")).toBe(false);
+    });
+
+    it("rejeita texto com digitos misturados", () => {
+      expect(isValidAdSlot("footer-123456")).toBe(false);
+      expect(isValidAdSlot("123456-preview")).toBe(false);
     });
   });
 
