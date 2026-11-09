@@ -91,3 +91,6 @@ docs/cv/*.html
 # Roger/test-loop campaign state (nunca versionar: lixo de campanha)
 .loop-*
 scripts/_cv_build/
+
+# saida de reporter JSON do vitest (artefato local)
+.vitest/
