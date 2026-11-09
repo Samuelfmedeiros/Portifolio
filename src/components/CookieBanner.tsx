@@ -147,10 +147,23 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
 
                   <div className="flex items-center gap-2 flex-nowrap">
                     <button
-                      onClick={() => acceptWithAds("none")}
+                      onClick={() => acceptWithAds("personalized")}
                       className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
                     >
                       {t("cookie.banner.accept_all")}
+                    </button>
+                    {/* 🔴 Bug corrigido 09/11/2026: "Aceitar tudo" chamava
+                        acceptWithAds("none"), gravando ads:false e
+                        nonPersonalizedAds:false. Efeito medido: nenhum anúncio
+                        carregava NUNCA, nem com AdSense configurado — o usuário
+                        dizia "aceito tudo" e o site entendia "nenhum anúncio".
+                        Agora "Aceitar tudo" = personalizado; quem não quer
+                        rastreamento tem o botão explícito ao lado. */}
+                    <button
+                      onClick={() => acceptWithAds("non-personalized")}
+                      className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
+                    >
+                      {t("cookie.banner.accept_non_personalized", "Sem rastreio")}
                     </button>
                     <button
                       onClick={() => decline()}
