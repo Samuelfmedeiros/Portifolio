@@ -16,7 +16,7 @@ import { SkipLink } from "@/components/SkipLink";
 import { JsonLd } from "@/components/JsonLd";
 import { BackToTop } from "@/components/BackToTop";
 import { CookieBannerProvider } from "@/components/CookieBanner";
-import { MonetizationProvider, AdSense } from "@/components/monetization";
+import { MonetizationProvider, AdSense, AutoAdsScript } from "@/components/monetization";
 import { MotionConfig } from "framer-motion";
 import { ADSENSE_CONFIG } from "@/lib/monetization";
 import { SITE_URL } from "@/lib/types";
@@ -144,6 +144,11 @@ export const metadata: Metadata = {
     "article:author": SITE_URL,
     "article:section": "Portfolio",
     "article:tag": "desenvolvimento, tecnologia, portfólio, dados, fullstack",
+    // Verificação/propriedade do AdSense. O Google exige esta meta tag para
+    // confirmar que o site pertence à conta — sem ela, Auto ads não ativa e o
+    // domínio fica "não verificado" no painel (medido 09/11/2026: o site tinha
+    // 0 ocorrências de `ca-pub-` no HTML). O valor é público por definição.
+    "google-adsense-account": ADSENSE_CONFIG.clientId,
   },
   icons: {
     icon: "/icon.svg",
@@ -213,7 +218,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <JsonLd />
         <BackToTop />
 
-        {/* Google AdSense — loaded conditionally by AdSense component based on consent */}
+        {/* Google AdSense — script carregado por AutoAdsScript (uma vez por
+            página). Antes ficava só dentro do componente <AdSense>, que só
+            monta com slot manual válido — sem slot, o script nunca entrava e a
+            conta ficava invisível para o Google (medido 09/11/2026). */}
+        <AutoAdsScript />
       </body>
     </html>
   );

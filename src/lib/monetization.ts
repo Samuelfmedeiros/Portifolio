@@ -2,28 +2,46 @@
 // Centralized config for all monetization methods.
 // All IDs are loaded from env vars for security — no hardcoded secrets.
 
+/**
+ * Client ID público do AdSense (formato `ca-pub-NNNN`).
+ *
+ * 🔴 Medido 09/11/2026: `NEXT_PUBLIC_ADSENSE_CLIENT_ID` existia SÓ no `.env.local`.
+ * `NEXT_PUBLIC_*` é resolvido em tempo de BUILD, então o build da Vercel — que não
+ * tem essa variável — gerava HTML com `ADSENSE_CONFIG.enabled === false` e o script
+ * do AdSense nunca era injetado. Resultado: 0 ocorrências de `adsbygoogle` e
+ * `ca-pub-` no HTML de produção, por ~2 meses.
+ *
+ * Este valor NÃO é segredo: o client ID é público por definição, já estava publicado
+ * em `public/ads.txt` e aparece na URL do script em qualquer site com AdSense. Por
+ * isso ele serve de fallback — o env var continua tendo precedência quando existir.
+ */
+const PUBLIC_ADSENSE_CLIENT_ID = "ca-pub-5928931854509344";
+
 /** AdSense configuration — requires analytics/ads consent */
 export const ADSENSE_CONFIG = {
   /** Google AdSense client ID (ca-pub-XXXX). Set via NEXT_PUBLIC_ADSENSE_CLIENT_ID */
   get clientId(): string {
     const value = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
-    return value ?? "";
+    return value || PUBLIC_ADSENSE_CLIENT_ID;
   },
   /** Ad slot ID for the footer banner. Set via NEXT_PUBLIC_ADSENSE_SLOT_FOOTER */
   footerSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_FOOTER || "",
   /** Ad slot ID for sidebar. Set via NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR */
   sidebarSlot: process.env.NEXT_PUBLIC_ADSENSE_SLOT_SIDEBAR || "",
   /**
-   * Whether AdSense is enabled (requires client ID).
+   * Whether AdSense is enabled.
    *
-   * ⚠️ `enabled` sozinho NÃO basta para renderizar: o componente também exige
-   * `isValidAdSlot(slot)`. Motivo medido 08/11/2026 — com client ID válido e
-   * slot="footer", o <ins> era montado e o push falhava no AdSense, deixando um
-   * espaço reservado vazio no rodapé.
+   * ⚠️ `enabled` sozinho NÃO basta para renderizar um bloco manual: o componente
+   * também exige `isValidAdSlot(slot)`. Motivo medido 08/11/2026 — com client ID
+   * válido e slot="footer", o <ins> era montado e o push falhava no AdSense,
+   * deixando um espaço reservado vazio no rodapé.
+   *
+   * Com o client ID público como fallback, isto passa a ser `true` em produção e
+   * habilita o script do AdSense (Auto ads + verificação da conta), mesmo sem
+   * nenhum slot manual configurado.
    */
   get enabled(): boolean {
-    const value = process.env.NEXT_PUBLIC_ADSENSE_CLIENT_ID;
-    return !!value;
+    return !!this.clientId;
   },
   /** Diagnóstico: por que o anúncio não aparece (usado em dev/log). */
   get status(): { clientId: boolean; footerSlot: boolean; sidebarSlot: boolean } {

@@ -1,5 +1,6 @@
 // Barrel export for monetization components
 export { AdSense } from "./AdSense";
+export { AutoAdsScript } from "./AutoAdsScript";
 export { BuyMeACoffee, BuyMeACoffeeIcon } from "./BuyMeACoffee";
 export { PixDonate } from "./PixDonate";
 export { AffiliateBadge, ProjectAffiliates, AffiliateSection } from "./AffiliateLinks";
