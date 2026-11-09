@@ -31,6 +31,9 @@ describe('i18n dictionary — paridade PT/EN', () => {
       'github.stars', 'github.forks', 'monetization.pix', 'monetization.coffee',
       'monetization.sponsor', 'aria.github', 'aria.linkedin', 'aria.whatsapp',
       'aria.email', 'terminal.uptime',
+      // 'Full Stack' e' nome de especialidade tecnica, nao texto traduzivel —
+      // fica igual em PT e EN de proposito (08/11/2026).
+      'cv.variant.fullstack',
     ]
     const unexpected = identical.filter((k) => !allowlist.includes(k))
     expect(unexpected, `pares idênticos inesperados: ${unexpected.join(', ')}`).toEqual([])

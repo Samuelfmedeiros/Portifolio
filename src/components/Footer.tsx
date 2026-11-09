@@ -36,74 +36,45 @@ function WhatsAppIcon({ className }: { className?: string }) {
   );
 }
 
-export function PrivacyModal({ open, onClose, activeTab, onTabChange }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms'; onTabChange: (tab: 'privacy' | 'terms') => void }) {
+export function PrivacyContent({ activeTab, onTabChange }: { activeTab: 'privacy' | 'terms'; onTabChange: (tab: 'privacy' | 'terms') => void }) {
   const { t, locale } = useLanguage();
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
-  const modalRef = useRef<HTMLDivElement>(null);
-  useFocusTrap(modalRef, open, onClose);
-  if (!open) return null;
-
   return (
-    <AnimatePresence>
-      {open && (
-        <>
-          {/* Backdrop */}
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            onClick={onClose}
-            className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
-          />
-          {/* Modal */}
-          <motion.div
-            ref={modalRef}
-            initial={{ opacity: 0, scale: 0.95, y: 20 }}
-            animate={{ opacity: 1, scale: 1, y: 0 }}
-            exit={{ opacity: 0, scale: 0.95, y: 20 }}
-            onClick={onClose}
-            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
-            role="dialog"
-            aria-modal="true"
-            aria-label={activeTab === 'privacy' ? t("modal.privacy.title") : t("modal.terms.title")}
-          >
-            <div onClick={(e) => e.stopPropagation()} className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
-              <div className="flex items-center justify-between mb-6">
-                <div className="flex items-center gap-2">
-                  <Shield className="w-5 h-5 text-[var(--accent)]" />
-                  <h2 className="font-mono text-lg text-[var(--accent)]">
-                    {activeTab === 'privacy' ? t("modal.privacy.title") : t("modal.terms.title")}
-                  </h2>
-                </div>
-                <button
-                  onClick={onClose}
-                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
-                  aria-label={t("modal.close")}
-                >
-                  <X className="w-5 h-5" />
-                </button>
-              </div>
+    <>
+      {/* Tabs */}
+      <div className="flex border-b border-[var(--border)]/50 mb-6">
+        <button
+          onClick={() => onTabChange('privacy')}
+          className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'privacy' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
+          aria-current={activeTab === 'privacy' ? 'page' : undefined}
+        >
+          {t("modal.tab.privacy")}
+        </button>
+        <button
+          onClick={() => onTabChange('terms')}
+          className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'terms' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
+          aria-current={activeTab === 'terms' ? 'page' : undefined}
+        >
+          {t("modal.tab.terms")}
+        </button>
+      </div>
+      <PrivacyBody activeTab={activeTab} />
+    </>
+  );
+}
 
-              {/* Tabs */}
-              <div className="flex border-b border-[var(--border)]/50 mb-6">
-                <button
-                  onClick={() => onTabChange('privacy')}
-                  className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'privacy' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
-                  aria-current={activeTab === 'privacy' ? 'page' : undefined}
-                >
-                  {t("modal.tab.privacy")}
-                </button>
-                <button
-                  onClick={() => onTabChange('terms')}
-                  className={`flex-1 py-2 text-center font-mono text-sm ${activeTab === 'terms' ? 'text-[var(--accent)] border-b-2 border-[var(--accent)]' : 'text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors'}`}
-                  aria-current={activeTab === 'terms' ? 'page' : undefined}
-                >
-                  {t("modal.tab.terms")}
-                </button>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-4 text-xs font-mono text-[var(--text-secondary)] leading-relaxed">
+/**
+ * Corpo do texto legal (privacidade/termos), sem tabs nem container de modal.
+ * Extraido em 08/11/2026 para as rotas /privacidade e /termos renderizarem o
+ * conteudo INLINE: antes elas montavam o PrivacyModal com open={true}, cujo
+ * backdrop `fixed inset-0 z-[9999]` cobria a navbar (z-50) e o visitante nao
+ * conseguia navegar de volta — o sintoma relatado como "navbar nao acompanha".
+ */
+export function PrivacyBody({ activeTab }: { activeTab: 'privacy' | 'terms' }) {
+  const { t, locale } = useLanguage();
+  const dateLocale = locale === "en" ? "en-US" : "pt-BR";
+  return (
+    <div className="space-y-4 text-xs font-mono text-[var(--text-secondary)] leading-relaxed">
                 {activeTab === 'privacy' && (
                   <>
                     <p>
@@ -199,7 +170,57 @@ export function PrivacyModal({ open, onClose, activeTab, onTabChange }: { open: 
                     </p>
                   </>
                 )}
+    </div>
+  );
+}
+
+export function PrivacyModal({ open, onClose, activeTab, onTabChange }: { open: boolean; onClose: () => void; activeTab: 'privacy' | 'terms'; onTabChange: (tab: 'privacy' | 'terms') => void }) {
+  const { t } = useLanguage();
+  const modalRef = useRef<HTMLDivElement>(null);
+  useFocusTrap(modalRef, open, onClose);
+  if (!open) return null;
+
+  return (
+    <AnimatePresence>
+      {open && (
+        <>
+          {/* Backdrop */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[9998] bg-black/60 backdrop-blur-sm"
+          />
+          {/* Modal */}
+          <motion.div
+            ref={modalRef}
+            initial={{ opacity: 0, scale: 0.95, y: 20 }}
+            animate={{ opacity: 1, scale: 1, y: 0 }}
+            exit={{ opacity: 0, scale: 0.95, y: 20 }}
+            onClick={onClose}
+            className="fixed inset-0 z-[9999] flex items-center justify-center p-4"
+            role="dialog"
+            aria-modal="true"
+            aria-label={activeTab === 'privacy' ? t("modal.privacy.title") : t("modal.terms.title")}
+          >
+            <div onClick={(e) => e.stopPropagation()} className="glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl max-w-2xl w-full max-h-[80vh] overflow-y-auto p-6 md:p-8">
+              <div className="flex items-center justify-between mb-6">
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-[var(--accent)]" />
+                  <h2 className="font-mono text-lg text-[var(--accent)]">
+                    {activeTab === 'privacy' ? t("modal.privacy.title") : t("modal.terms.title")}
+                  </h2>
+                </div>
+                <button
+                  onClick={onClose}
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors"
+                  aria-label={t("modal.close")}
+                >
+                  <X className="w-5 h-5" />
+                </button>
               </div>
+              <PrivacyContent activeTab={activeTab} onTabChange={onTabChange} />
             </div>
           </motion.div>
         </>

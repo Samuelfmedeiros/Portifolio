@@ -119,7 +119,7 @@ describe("DownloadModal", () => {
     await waitFor(() => {
       expect(clickedAnchor).not.toBeNull();
     });
-    expect(clickedAnchor!.download).toBe("Samuel_Andrade_2026.pdf");
+    expect(clickedAnchor!.download).toBe("Samuel_Andrade_Dados_2026.pdf");
   });
 
   it("mostra estado de sucesso e fecha após 1.5s", async () => {

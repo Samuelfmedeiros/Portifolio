@@ -10,6 +10,13 @@ const nextConfig = {
   // Fix workspace root inference (stray pnpm-lock in home dir)
   outputFileTracingRoot: path.join(__dirname),
 
+  // Os PDFs de public/ NÃO entram sozinhos no bundle da serverless function: sem isto
+  // o fs.readFileSync(public/Samuel_Andrade_*.pdf) da rota /api/download-cv dá ENOENT
+  // em produção e responde 404 "Currículo não encontrado" (medido 08/11/2026).
+  outputFileTracingIncludes: {
+    '/api/download-cv': ['./public/*.pdf'],
+  },
+
   // Turbopack (Next.js 16 default) — webpack config removido, não é necessário
   turbopack: {},
 

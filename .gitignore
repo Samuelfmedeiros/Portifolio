@@ -36,6 +36,7 @@ pnpm-debug.log*
 # playwright
 test-results/
 playwright-report/
+.playwright/
 
 # local env files
 .env
@@ -86,3 +87,7 @@ graphify-out/
 # CV artifacts (intermediários de geração)
 docs/cv/*.html
 .audit-shots/
+
+# Roger/test-loop campaign state (nunca versionar: lixo de campanha)
+.loop-*
+scripts/_cv_build/

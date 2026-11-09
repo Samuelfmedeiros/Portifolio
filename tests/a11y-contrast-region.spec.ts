@@ -17,6 +17,12 @@ test.describe('a11y — contraste e landmarks (regressão)', () => {
 
   for (const theme of themes) {
     test(`home ${theme.name} — sem color-contrast nem region fora de landmark`, async ({ page }) => {
+      // Home cresceu (4 posts do RSS, 10 cards) e o scroll real pela página inteira
+      // em 20 round-trips page.evaluate estourava o timeout default de 60s sob
+      // workers paralelos (medido 06/11/2026: 8/8 falhas por TIMEOUT, zero
+      // violação de contraste). Teto explícito + loop dentro de um evaluate só.
+      test.setTimeout(120_000);
+
       await page.addInitScript((t) => {
         localStorage.setItem('mc-theme', t);
         localStorage.setItem('mc-analytics-consent', 'accepted');
@@ -51,13 +57,34 @@ test.describe('a11y — contraste e landmarks (regressão)', () => {
       }
 
       // Seções lazy (contato/games) só montam perto da viewport — scroll progressivo.
-      const height = await page.evaluate(() => document.body.scrollHeight);
-      for (let y = 0; y < height; y += 400) {
-        await page.evaluate((v) => window.scrollTo(0, v), y);
-        await page.waitForTimeout(100);
-      }
-      await page.evaluate(() => window.scrollTo(0, 0));
-      await page.waitForTimeout(600);
+      // Loop DENTRO de um único evaluate: cada page.evaluate é uma ida e volta ao
+      // browser e, com N workers disputando CPU, 20 delas custavam mais que o teste
+      // inteiro. Um evaluate só percorre a página sem round-trip (mesmo efeito de
+      // montagem das seções lazy, 1/20 do custo).
+      await page.evaluate(async () => {
+        const height = document.body.scrollHeight;
+        for (let y = 0; y < height; y += 400) {
+          window.scrollTo(0, y);
+          await new Promise((r) => setTimeout(r, 100));
+        }
+        window.scrollTo(0, 0);
+        await new Promise((r) => setTimeout(r, 600));
+      });
+
+      // O item ativo da navbar usa `transition-all`: ao voltar ao topo, fundo
+      // (ciano -> glass) e texto (bg-primary -> text-secondary) transicionam em
+      // velocidades diferentes. Medido 06/11/2026: nessa janela o axe pegava o
+      // frame intermediário (#94a3b8 sobre #22d3ee = 1.41:1 no dark, #526079
+      // sobre #0369a1 = 1.06:1 no light) e reprovava cerca de 1 em cada 12
+      // rodadas, em tema aleatório. O estado FINAL do elemento está correto.
+      // Esperar as animações não resolve (o React participa depois do scroll e o
+      // `finished` de animação idle do framer-motion nunca resolve). Desligar as
+      // transições CSS antes de medir é determinístico e NÃO afrouxa a regra:
+      // as cores finais são as mesmas e o framer-motion usa WAAPI, imune a
+      // `transition: none`.
+      await page.addStyleTag({
+        content: '*, *::before, *::after { transition: none !important; }',
+      });
 
       const results = await new AxeBuilder({ page })
         .withRules(['color-contrast', 'region'])

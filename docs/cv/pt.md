@@ -15,6 +15,8 @@ Analista de Dados e Produto | Criação de Dashboards e Insights Estratégicos |
 
 Profissional de Tecnologia da Informação com experiência em análise de dados e desenvolvimento full stack. Atuação na criação de dashboards em Power BI, consultas em SQL e automação de rotinas com Python, além do desenvolvimento de plataformas web completas com React, Next.js e FastAPI. Experiência com integração de APIs e pagamentos, bancos de dados relacionais, infraestrutura em Docker e Cloudflare, e aplicações com LLMs locais e RAG. Conhecimentos em Ciência de Dados (Data Science) e Machine Learning aplicados à análise e interpretação de dados.
 
+**Implantação de IA em produção (perfil FDE — Forward/Frontier Deployed):** além de construir, coloco sistemas de IA para rodar e continuar rodando: plataforma multi-agente em execução contínua, agentes com acesso a ferramentas (MCP), RAG sobre base própria com Knowledge Graph, avaliação automatizada de qualidade antes de publicar, observabilidade (logs, latência, custo por execução), guardrails contra uso indevido e contenção de custo de inferência. Trabalho no modelo do FDE — diagnóstico, arquitetura, código em produção, avaliação, operação e realimentação — aplicado à infraestrutura própria, hoje com sites, scraping/RAG, pagamentos e agentes em produção. Provas: samuelmedeiros.vercel.app e github.com/Samuelfmedeiros.
+
 ## Experiências Profissionais
 
 ### Desenvolvedor Full Stack & Analista de Dados — Freelancer (2025 – Atual)
