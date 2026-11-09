@@ -145,7 +145,11 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                     {t("cookie.banner.text")}
                   </p>
 
-                  <div className="flex items-center gap-2 flex-nowrap">
+                  {/* 09/11/2026: `flex-nowrap` com 3 botoes vazava no mobile —
+                      390px de viewport e o "Recusar" terminava em 398px.
+                      `flex-wrap` deixa quebrar em 2 linhas no celular e mantem
+                      tudo numa linha so no desktop (sm:nowrap). */}
+                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
                     <button
                       onClick={() => acceptWithAds("personalized")}
                       className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
