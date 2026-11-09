@@ -142,7 +142,7 @@ describe("deps batch8 — regressão dos 4 bumps (e9f8240)", () => {
     expect(typeof client.checkout.sessions.create).toBe("function");
     expect(typeof client.prices.retrieve).toBe("function");
     const installed = readJson(join("node_modules", "stripe", "package.json")).version;
-    expect(installed.split(".")[0]).toBe("22");
+    expect(installed.split(".")[0]).toBe("23");
   });
 
   it("entry points públicos do next 16 usados pelo app resolvem no pacote instalado", () => {
