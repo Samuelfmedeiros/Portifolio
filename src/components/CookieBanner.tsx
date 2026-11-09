@@ -135,24 +135,31 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
             transition={{ duration: 0.3, ease: "easeOut" }}
-            className="fixed bottom-0 left-0 right-0 z-[9999] p-4"
+            className="fixed bottom-0 left-0 right-0 z-[9999] p-2.5 md:p-4"
           >
-            <div className="max-w-3xl mx-auto glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl p-4 md:p-5">
-              <div className="flex items-start gap-3">
-                <Cookie className="w-5 h-5 text-[var(--accent)] shrink-0 mt-0.5" />
+            {/* 09/11/2026 — compactado a pedido do Samuel ("banner menor e mais
+                organizado, principalmente no mobile"). Antes: card 154px de
+                altura no mobile porque os 3 botoes quebravam em 2 linhas
+                (texto 12px, p-4, mb-3). Agora: grid de 3 colunas iguais no
+                celular (1 linha so), padding e tipografia reduzidos, icone
+                menor, texto em 11px. Altura de toque mantida em 34px (acima
+                do minimo WCAG 2.5.8 de 24px). */}
+            <div className="max-w-2xl mx-auto glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl px-3 py-2.5 md:px-5 md:py-4">
+              <div className="flex items-start gap-2 md:gap-3">
+                <Cookie className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent)] shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
-                  <p className="text-xs md:text-sm font-mono text-[var(--text-primary)] mb-3">
+                  <p className="text-[11px] md:text-sm font-mono text-[var(--text-primary)] leading-snug mb-2 md:mb-3">
                     {t("cookie.banner.text")}
                   </p>
 
-                  {/* 09/11/2026: `flex-nowrap` com 3 botoes vazava no mobile —
-                      390px de viewport e o "Recusar" terminava em 398px.
-                      `flex-wrap` deixa quebrar em 2 linhas no celular e mantem
-                      tudo numa linha so no desktop (sm:nowrap). */}
-                  <div className="flex flex-wrap sm:flex-nowrap items-center gap-2">
+                  {/* 09/11/2026 — 2 botoes so, a pedido do Samuel: "se a pessoa
+                      aceita tudo ela aceita o rastreio e as demais coisas".
+                      O botao "Sem rastreio" foi removido. Grid de 2 colunas no
+                      mobile (1 linha) e linha unica no desktop. */}
+                  <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 sm:gap-2">
                     <button
                       onClick={() => acceptWithAds("personalized")}
-                      className="px-4 py-2 rounded-lg font-mono text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all shrink-0"
+                      className="min-h-[34px] px-1 sm:px-4 py-1.5 sm:py-2 rounded-lg font-mono text-[11px] sm:text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all leading-tight"
                     >
                       {t("cookie.banner.accept_all")}
                     </button>
@@ -161,17 +168,10 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                         nonPersonalizedAds:false. Efeito medido: nenhum anúncio
                         carregava NUNCA, nem com AdSense configurado — o usuário
                         dizia "aceito tudo" e o site entendia "nenhum anúncio".
-                        Agora "Aceitar tudo" = personalizado; quem não quer
-                        rastreamento tem o botão explícito ao lado. */}
-                    <button
-                      onClick={() => acceptWithAds("non-personalized")}
-                      className="px-3 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
-                    >
-                      {t("cookie.banner.accept_non_personalized", "Sem rastreio")}
-                    </button>
+                        Agora "Aceitar tudo" = personalizado (rastreio incluso). */}
                     <button
                       onClick={() => decline()}
-                      className="px-4 py-2 rounded-lg font-mono text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors shrink-0"
+                      className="min-h-[34px] px-1 sm:px-4 py-1.5 sm:py-2 rounded-lg font-mono text-[11px] sm:text-xs text-[var(--text-secondary)] border border-[var(--border)] hover:bg-[var(--border)]/20 transition-colors leading-tight"
                     >
                       {t("cookie.banner.decline")}
                     </button>
@@ -179,10 +179,10 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                 </div>
                 <button
                   onClick={() => decline()}
-                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0"
+                  className="text-[var(--text-secondary)] hover:text-[var(--text-primary)] transition-colors shrink-0 -mt-0.5 -mr-0.5 p-1"
                   aria-label={t("cookie.close", "Fechar banner de cookies")}
                 >
-                  <X className="w-4 h-4" />
+                  <X className="w-3.5 h-3.5 md:w-4 md:h-4" />
                 </button>
               </div>
             </div>
