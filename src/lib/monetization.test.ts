@@ -19,19 +19,30 @@ describe("monetization", () => {
   });
 
   describe("ADSENSE_CONFIG", () => {
-    it("returns empty string when env var not set", () => {
+    // 🔴 09/11/2026: o client ID publico passou a ser fallback. `NEXT_PUBLIC_*`
+    // e resolvido em tempo de BUILD — a Vercel nao tinha a var, entao o HTML de
+    // producao saia com enabled=false e o script do AdSense nunca era injetado.
+    // O client ID nao e segredo (esta em public/ads.txt e na URL do script).
+    it("usa o client ID publico quando a env var nao existe", () => {
       vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT_ID", "");
-      expect(ADSENSE_CONFIG.clientId).toBe("");
+      expect(ADSENSE_CONFIG.clientId).toBe("ca-pub-5928931854509344");
     });
 
-    it("returns client ID from env var", () => {
+    it("env var tem precedencia sobre o client ID publico", () => {
       vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT_ID", "ca-pub-12345");
       expect(ADSENSE_CONFIG.clientId).toBe("ca-pub-12345");
     });
 
-    it("is disabled when no client ID", () => {
+    it("fica habilitado mesmo sem env var (fallback publico)", () => {
       vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT_ID", "");
-      expect(ADSENSE_CONFIG.enabled).toBe(false);
+      expect(ADSENSE_CONFIG.enabled).toBe(true);
+    });
+
+    it("status.clientId reflete a env var, nao o fallback", () => {
+      vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT_ID", "");
+      expect(ADSENSE_CONFIG.status.clientId).toBe(false);
+      vi.stubEnv("NEXT_PUBLIC_ADSENSE_CLIENT_ID", "ca-pub-999");
+      expect(ADSENSE_CONFIG.status.clientId).toBe(true);
     });
   });
 
