@@ -1,5 +1,10 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-11-09] - 4 commits em master (PR #113 + a11y + ci); push github ok; origin bare pendente
+
+- `9305d01a` fix de texto, `652cf071` ci dependabot, `b7315329` Merge PR #113, `fc42c228` bump @applitools.
+- master 0/0 com github; origin (bare) 18 commits atrás (hook rejeita merge).
+
 ## [2026-11-06] - 3 commits de teste (i18n + a11y) fora do master; master 0/0; push github+origin ok
 
 - `c414076` test(a11y) cura timeout e falso positivo de contraste; `d096c54` test(i18n) contrato real do módulo; `5bf27b0` test vitest JSON.
