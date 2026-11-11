@@ -1,5 +1,11 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-11-11] - 6 commits: AutoAdsScript no MonetizationProvider + botão de consentimento Aceitar/Accept; push github+origin ok
+
+- `bec7692` AutoAdsScript dentro do provider com teste de regressão; `cab278d` botão de consentimento com rótulo localizado.
+- `801d389`/`1ab0cbd` WIP da branch `fix/i18n-test-e-loop-junk` (CV + prova de deploy FDE); `b4e7144` residual da campanha Roger.
+- `master` 0/0 nos 2 remotes antes da rodada; push FF em `github` (GitHub) e `origin` (bare local).
+
 ## [2026-11-09] - 4 commits em master (PR #113 + a11y + ci); push github ok; origin bare pendente
 
 - `9305d01a` fix de texto, `652cf071` ci dependabot, `b7315329` Merge PR #113, `fc42c228` bump @applitools.
@@ -60,7 +66,6 @@
 - **test** (`f874127`, `4e049b2`, `16a8ebe`, `769d156`): asserts reais em useGsapAnimation/Terminal/Tooltip; cobertura >=50% supabase; BuyMeACoffee/GitHubSponsors.
 - 12 commits na branch `roger/portifolio-20261025-185904` - push `github` OK; espelho `origin` (bare local) pendente (hook recusa merge commits).
 
-
 ## [2026-10-24] - 6 commits: grade so com repo curado + blog com 4 posts do LifeLog (PRs #158/#159); github sincronizado
 - **fix(projects)** (`345bf45`): grade so com repo curado (topic `featured`), sem fork/skill.
 - **test(e2e)** (`16d7f80`): snapshots visuais regenerados no ambiente do CI.
@@ -116,7 +121,6 @@
 - **Guard e2e** (`scripts/portfolio-covers-guard.py`): falha se algum card ficar pelado.
 - Testes: 12 unit + 5 de componente; suite 375/375; build ok.
 
-
 ## [2026-09-16 fim de dia] - jogos restaurados, SRI, VRT renovada e capas com fallback/autogen/watchdog
 - **fix(games)** (`660b155`): restaura HTML dos 5 jogos (base64 commitado no PR #107).
 - **test(e2e)** (`606c74e`, `64d1c01`): baseline VRT do CI + webServer do Playwright no TEST_BASE_URL local.
@@ -129,7 +133,6 @@
 - **feat(projects)** (`7bbb48b`): `roger-mlops` e `roger-loop` entravam pela API do GitHub sem `imageUrl` e caiam no fallback gradiente+nome (card sem capa em producao). Capas 1280x720 WEBP no padrao da serie viva (FLUX Worker, dark+neon, sem wordmark queimado) + catalogo estatico id 999011/999012 + i18n PT/EN. Guarda de regressao cobre capa em disco, magic bytes WEBP e i18n nos 2 idiomas.
 - **test(csp)** (`abad4a4`): `csp-cloudflare-beacon.test.ts` lia o COMENTARIO da CSP em vez da diretiva e falhava no master desde o PR #106; agora filtra comentarios e assere que a linha e a diretiva.
 - vitest 358 passed · build OK · E2E 65 passed/1 skipped · CI 10/10 · evidencia visual desktop+mobile.
-
 
 ## [2026-09-15] - excecao CSP unsafe-inline documentada (Cerberus 15/09) — branch pendente de merge
 - **docs(csp)** (`0cab79d`, branch `docs/csp-exception-adr`): excecao `unsafe-inline` justificada no ADR + `script-src` igual ao vercel.json (sem `unsafe-eval`).
@@ -158,8 +161,6 @@
 ## [2026-09-10] — fix cache-bust do tracker Umami
 - **fix(umami)** (`a07a6e9`): cache-bust `?v=2` no URL do script.js do tracker — script.js immutable servia versão velha
 - 1 commit no dia · HEAD: `a07a6e9`
-
-
 
 ## [2026-09-09] — dependabot deps-dev integrado (PRs #74-#82)
 - **deps-dev** (dependabot): 9 PRs — vercel 58.9.0→59.11.7, eslint-config-next 16.3.0→16.3.4, user-event 14.6.3→14.6.7, netlify-cli 27.1.1→27.5.0, @vitejs/plugin-react 6.1.1, testing-library/react 16.3.3, vitest 5.0.0, framer-motion 13.2.0, mercadopago 3.6.0
@@ -300,6 +301,3 @@
 ## [2026-10-02] - coverage-v8 habilitado como devDependency
 - test (`8c2854f`): `@vitest/coverage-v8` habilitado como devDependency.
 - 1 commit na branch de trabalho; push bare+origin OK.
-
-## [2026-11-11]
-- Sincronização e fechamento de expediente.
