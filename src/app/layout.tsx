@@ -210,6 +210,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                   </div>
                 </div>
                 <Footer />
+                {/* Google AdSense — script global (Auto ads), uma vez por página.
+                    DENTRO do MonetizationProvider: fora dele `useMonetizationConsent()`
+                    devolve o default do createContext (`adsAllowed: false`) e o script
+                    nunca é injetado. Era a causa de `pagead2` = 0 no HTML de produção
+                    mesmo com o componente montado (medido 10/11/2026). */}
+                <AutoAdsScript />
             </MonetizationProvider>
           </CookieBannerProvider>
           </LanguageProvider>
@@ -217,12 +223,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </ThemeProvider>
         <JsonLd />
         <BackToTop />
-
-        {/* Google AdSense — script carregado por AutoAdsScript (uma vez por
-            página). Antes ficava só dentro do componente <AdSense>, que só
-            monta com slot manual válido — sem slot, o script nunca entrava e a
-            conta ficava invisível para o Google (medido 09/11/2026). */}
-        <AutoAdsScript />
       </body>
     </html>
   );
