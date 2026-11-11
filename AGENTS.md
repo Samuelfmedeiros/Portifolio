@@ -637,3 +637,7 @@ O guard e o watchdog medem por esse marcador — nao por `<article>`.
   validar o SHA do bot (senão o "verde" é o do próprio run de update).
 - Registro completo: `~/.hermes/plans/2026-10-20-portfolio-hit-rewrite.md` e
   `~/.hermes/plans/2026-10-20-portfolio-vrt-blog-dado-vivo.md`.
+
+
+## Sessão 2026-11-11
+- Fim de dia sync: rotina de fechamento automatizada.

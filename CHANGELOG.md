@@ -300,3 +300,6 @@
 ## [2026-10-02] - coverage-v8 habilitado como devDependency
 - test (`8c2854f`): `@vitest/coverage-v8` habilitado como devDependency.
 - 1 commit na branch de trabalho; push bare+origin OK.
+
+## [2026-11-11]
+- Sincronização e fechamento de expediente.
