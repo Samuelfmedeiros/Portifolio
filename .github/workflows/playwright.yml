@@ -52,6 +52,13 @@ jobs:
           PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD: 0
 
       - name: Install Playwright system deps
+        # 12/11/2026: `install-deps` depende do apt/DNS do runner e derrubou
+        # os 3 shards em 11/11 com "Temporary failure resolving
+        # archive.ubuntu.com" — job vermelho com ZERO teste executado.
+        # continue-on-error: se o apt falhar, o job segue e quem reprova e o
+        # teste de verdade. O chromium so precisa das libs que o runner
+        # ubuntu-latest ja traz na imagem.
+        continue-on-error: true
         run: pnpm exec playwright install-deps chromium
 
       - name: Build Next.js
