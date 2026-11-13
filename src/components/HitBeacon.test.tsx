@@ -20,16 +20,26 @@ describe("HitBeacon", () => {
   beforeEach(() => {
     vi.stubEnv("NEXT_PUBLIC_LOJA_HIT_URL", "https://skills.seu.pet/api/hit");
     pathnameFalso.valor = null;
+    // jsdom roda em localhost; o guard de hostname só mede produção. Sem fixar o host aqui,
+    // todo teste deste componente falha por um motivo que não é o que ele testa.
+    vi.stubGlobal("location", {
+      hostname: "portifolio.seu.pet",
+      search: "",
+      href: "https://portifolio.seu.pet/projetos",
+      pathname: "/projetos",
+    });
     beacon.mockReset();
     beacon.mockReturnValue(true);
     Object.defineProperty(navigator, "sendBeacon", { value: beacon, configurable: true });
     Object.defineProperty(navigator, "doNotTrack", { value: "0", configurable: true });
+    Object.defineProperty(navigator, "webdriver", { value: false, configurable: true });
     Object.defineProperty(window, "globalPrivacyControl", { value: false, configurable: true });
     window.history.replaceState({}, "", "/projetos");
   });
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 
   it("mede mesmo quando usePathname() vem null (usa location.pathname)", async () => {
