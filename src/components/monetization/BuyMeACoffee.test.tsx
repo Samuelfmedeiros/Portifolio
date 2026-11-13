@@ -26,10 +26,12 @@ describe('BuyMeACoffee', () => {
     expect(screen.getByText('monetization.buycoffee.title')).toBeInTheDocument()
   })
 
-  it('does not render when disabled', () => {
-    delete process.env.NEXT_PUBLIC_BMC_USERNAME
-    // Need fresh import to pick up env change – recreate component via dynamic import
-    // Simpler: test disabled case separately by mocking config via vi
+  it('does not render when disabled', async () => {
+    process.env.NEXT_PUBLIC_BMC_USERNAME = undefined
+    vi.resetModules()
+    const { BuyMeACoffee } = await import('./BuyMeACoffee')
+    render(<BuyMeACoffee />)
+    expect(screen.queryByTestId('bmc-button')).not.toBeInTheDocument()
   })
 })
 
