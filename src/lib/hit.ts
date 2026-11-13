@@ -33,12 +33,26 @@ function pediuParaNaoSerRastreado(): boolean {
   return dnt === "1" || dnt === "yes" || gpc === true;
 }
 
+/** Só os hosts de produção contam. `next start` local roda com NODE_ENV=production e
+ * mandava visita de localhost:3000 pro seupet (46 eventos em 3h, medido 24/10). */
+function hostMedido(host: string): boolean {
+  return host === "portifolio.seu.pet" || host === "www.portifolio.seu.pet";
+}
+
 function deveMedir(): boolean {
   if (typeof window === "undefined") return false;
   // Em desenvolvimento o beacon poluiria a contagem real; só roda com override explícito.
   if (process.env.NODE_ENV !== "production" && !process.env.NEXT_PUBLIC_LOJA_HIT_URL) {
     return false;
   }
+  if (!hostMedido(window.location.hostname)) return false;
+  // Guard de AUTOMAÇÃO (medido 13/11/2026): o QA harness do próprio projeto
+  // (`scripts/portfolio-qa-harness.mjs`, cron a cada 4h) abre o site com um UA de
+  // Chrome normal. Sem esta checagem, cada rodada do QA entrava como visita humana:
+  // 145 "desktop" em 7 dias, todos na `/`, hits espaçados em 16-24s e batendo
+  // 00:17/04:17/08:17 — o relógio do cron, não gente.
+  // `navigator.webdriver` é true no Chromium controlado por CDP/Playwright.
+  if (typeof navigator !== "undefined" && navigator.webdriver === true) return false;
   return !pediuParaNaoSerRastreado();
 }
 

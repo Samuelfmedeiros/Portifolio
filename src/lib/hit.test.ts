@@ -9,10 +9,25 @@ import { enviarHit } from "@/lib/hit";
  */
 describe("beacon de visita do portfólio", () => {
   const beacon = vi.fn<(url: string, dados: Blob) => boolean>();
+  // `location` de mentira e mutável: o guard de hostname exige produção, e os testes de
+  // UTM precisam mudar a query string sem depender do jsdom (que roda em localhost).
+  let loc: { hostname: string; search: string; href: string; pathname: string };
+
+  const setSearch = (search: string) => {
+    loc.search = search;
+    loc.href = `https://portifolio.seu.pet/${search}`;
+  };
 
   beforeEach(() => {
     // NODE_ENV de teste só mede com override explícito (o dev local não pode poluir a conta)
     vi.stubEnv("NEXT_PUBLIC_LOJA_HIT_URL", "https://skills.seu.pet/api/hit");
+    loc = {
+      hostname: "portifolio.seu.pet",
+      search: "",
+      href: "https://portifolio.seu.pet/",
+      pathname: "/",
+    };
+    vi.stubGlobal("location", loc);
     beacon.mockReset();
     beacon.mockReturnValue(true);
     Object.defineProperty(navigator, "sendBeacon", { value: beacon, configurable: true });
@@ -21,10 +36,12 @@ describe("beacon de visita do portfólio", () => {
       value: false,
       configurable: true,
     });
+    Object.defineProperty(navigator, "webdriver", { value: false, configurable: true });
   });
 
   afterEach(() => {
     vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
   });
 
   it("manda caminho, referrer e site=portfolio, same-origin em /api/hit", async () => {
@@ -45,7 +62,7 @@ describe("beacon de visita do portfólio", () => {
   });
 
   it("manda os utm da URL atual (atribuição de quem chegou de fora)", async () => {
-    window.history.replaceState({}, "", "/?utm_source=lifelog&utm_medium=post&utm_campaign=guia");
+    setSearch("?utm_source=lifelog&utm_medium=post&utm_campaign=guia");
     expect(enviarHit("/", "")).toBe(true);
     const [, blob] = beacon.mock.calls[0];
     expect(JSON.parse(await blob.text())).toMatchObject({
@@ -53,11 +70,10 @@ describe("beacon de visita do portfólio", () => {
       utm_medium: "post",
       utm_campaign: "guia",
     });
-    window.history.replaceState({}, "", "/");
   });
 
   it("utm explícito (4º argumento) sobrescreve o da URL", async () => {
-    window.history.replaceState({}, "", "/?utm_source=qualquer");
+    setSearch("?utm_source=qualquer");
     expect(
       enviarHit("/projetos", "", undefined, {
         utm_source: "portfolio",
@@ -67,7 +83,6 @@ describe("beacon de visita do portfólio", () => {
     ).toBe(true);
     const [, blob] = beacon.mock.calls[0];
     expect(JSON.parse(await blob.text())).toMatchObject({ utm_source: "portfolio" });
-    window.history.replaceState({}, "", "/");
   });
 
   it("override explícito de URL continua valendo (3º argumento)", () => {
@@ -103,5 +118,53 @@ describe("beacon de visita do portfólio", () => {
     expect(enviarHit("/contato", "")).toBe(true);
     expect(fetchFalso).toHaveBeenCalledTimes(1);
     expect(fetchFalso.mock.calls[0][0]).toBe("/api/hit");
+  });
+});
+
+describe("guard de automação (QA harness contava como visita)", () => {
+  const beacon = vi.fn<(url: string, dados: Blob) => boolean>();
+
+  beforeEach(() => {
+    vi.stubEnv("NEXT_PUBLIC_LOJA_HIT_URL", "https://skills.seu.pet/api/hit");
+    vi.stubGlobal("location", {
+      hostname: "portifolio.seu.pet",
+      search: "",
+      href: "https://portifolio.seu.pet/",
+      pathname: "/",
+    });
+    beacon.mockReset();
+    beacon.mockReturnValue(true);
+    Object.defineProperty(navigator, "sendBeacon", { value: beacon, configurable: true });
+    Object.defineProperty(navigator, "doNotTrack", { value: "0", configurable: true });
+    Object.defineProperty(navigator, "globalPrivacyControl", { value: false, configurable: true });
+  });
+
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.unstubAllGlobals();
+  });
+
+  it("navegador controlado por CDP (navigator.webdriver=true) não mede", () => {
+    Object.defineProperty(navigator, "webdriver", { value: true, configurable: true });
+    expect(enviarHit("/", "")).toBe(false);
+    expect(beacon).not.toHaveBeenCalled();
+  });
+
+  it("navegador normal (webdriver=false) mede", () => {
+    Object.defineProperty(navigator, "webdriver", { value: false, configurable: true });
+    expect(enviarHit("/", "")).toBe(true);
+    expect(beacon).toHaveBeenCalledTimes(1);
+  });
+
+  it("host que não é portifolio.seu.pet não mede (localhost:3000 rodava em production)", () => {
+    vi.stubGlobal("location", {
+      hostname: "localhost",
+      search: "",
+      href: "http://localhost:3000/",
+      pathname: "/",
+    });
+    Object.defineProperty(navigator, "webdriver", { value: false, configurable: true });
+    expect(enviarHit("/", "")).toBe(false);
+    expect(beacon).not.toHaveBeenCalled();
   });
 });
