@@ -19,6 +19,16 @@ type OpFn = ((...args: unknown[]) => void) & { q?: unknown[] };
 export function loadOpenpanelScript(): void {
   if (typeof window === "undefined") return;
   if (document.querySelector('script[data-op-analytics]')) return;
+  // Guard de instância ÚNICA (medido 13/11/2026): 5 call sites chamam esta
+  // função (CookieBanner x3, ConditionalAnalytics, ContactForm, DownloadModal).
+  // Como o `<script>` só é anexado no FIM da função, chamadas que chegam antes
+  // passam todas pelo check acima — cada uma criava seu próprio stub, refazia o
+  // `init` e disparava seu próprio `page_view`. Resultado: 2 eventos idênticos
+  // por load (um com device `dono:<ip>`, outro com hash). A flag é setada antes
+  // de qualquer trabalho, então só a primeira execução avança.
+  const marca = window as unknown as { __opIniciado?: boolean };
+  if (marca.__opIniciado) return;
+  marca.__opIniciado = true;
 
   const w = window as unknown as { op?: OpFn };
   if (!w.op) {
@@ -52,10 +62,27 @@ export function loadOpenpanelScript(): void {
   w.op("init", {
     apiUrl: OP_API_URL,
     clientId: OP_CLIENT_ID,
-    trackScreenViews: true,
+    // Desligado 13/11/2026: gerava um `screen_view` por navegação, sem `path` e
+    // sem `site` — evento que não serve para funil e infla a contagem do
+    // projeto `seupet`. O `page_view` vai abaixo, com path e marca de quem é.
+    trackScreenViews: false,
     trackOutgoingLinks: true,
     trackAttributes: true,
   });
+
+  // NÃO emitir `page_view` daqui (medido 13/11/2026).
+  //
+  // O portfólio já tem um medidor: `HitBeacon` → `/api/hit` → caixa da loja,
+  // que grava na tabela `hits` (com UTM) E reenvia pro OpenPanel com
+  // `site='portfolio'`. Somar um segundo `page_view` por JS fazia todo load
+  // entrar 2x — um com device `dono:<ip>` (classificação por IP, no servidor) e
+  // outro com hash + `visitante_motivo=cookie`. Medido: 2 eventos idênticos em
+  // `/` no mesmo segundo.
+  //
+  // O caminho do servidor é MELHOR: ele sabe o IP (marca o dono mesmo sem
+  // cookie) e carrega o UTM, que o JS não vê depois do primeiro load. Então a
+  // medição de visita fica só com o beacon; este arquivo serve para os eventos
+  // de conversão (`openpanelTrack`: contato, download de CV).
 
   const script = document.createElement("script");
   script.async = true;
