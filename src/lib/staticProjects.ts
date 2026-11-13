@@ -95,9 +95,8 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "roger-mlops",
     description:
       "Camada de confiabilidade para treino longo de GPU em WSL2: critic determinístico sobre IPC de arquivo, watchdogs que ressuscitam runs travados, cura cirúrgica da ponte GPU-PV e checkpoints à prova de corrupção em 9p. Python puro, zero dependências.",
-    // Repo renomeado no GitHub (roger-mlops -> roger-Test-Loops-mlops, 301).
-    // O nome antigo duplicava o card que vem da API: ver GITHUB_ALIASES abaixo.
-    html_url: "https://github.com/Samuelfmedeiros/roger-Test-Loops-mlops",
+    // Repo privado desde 13/11/2026 — card sem botão GitHub (padrão roger-loop).
+    html_url: "",
     homepage: "",
     stargazers_count: 0,
     forks_count: 0,
