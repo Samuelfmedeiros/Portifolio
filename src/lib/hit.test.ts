@@ -167,4 +167,28 @@ describe("guard de automação (QA harness contava como visita)", () => {
     expect(enviarHit("/", "")).toBe(false);
     expect(beacon).not.toHaveBeenCalled();
   });
+
+  // `hostMedido` aceita dois hosts e só o apex era testado: trocar o guard por
+  // `=== "portifolio.seu.pet"` zera a contagem de quem chega pelo www, sem quebrar teste.
+  it("host www.portifolio.seu.pet também mede", () => {
+    vi.stubGlobal("location", {
+      hostname: "www.portifolio.seu.pet",
+      search: "",
+      href: "https://www.portifolio.seu.pet/",
+      pathname: "/",
+    });
+    Object.defineProperty(navigator, "webdriver", { value: false, configurable: true });
+    expect(enviarHit("/", "")).toBe(true);
+    expect(beacon).toHaveBeenCalledTimes(1);
+  });
+
+  // O `try/catch` de `enviarHit` nunca era exercitado: beacon que lança (ex: Blob
+  // recusado, contexto descarregando) precisa devolver false em vez de estourar na página.
+  it("beacon que lança devolve false em vez de quebrar a página", () => {
+    beacon.mockImplementation(() => {
+      throw new DOMException("contexto descarregando", "InvalidStateError");
+    });
+    Object.defineProperty(navigator, "webdriver", { value: false, configurable: true });
+    expect(enviarHit("/", "")).toBe(false);
+  });
 });
