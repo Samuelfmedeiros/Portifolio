@@ -232,6 +232,10 @@ const PROJECTS_PT: Record<string, ProjectI18n> = {
     description: "Orquestrador de test-loop config-driven: critic determinístico por contrato, rodadas com orçamento e debate de zona cinzenta com pernas isoladas. Zero dependências.",
     topics: ["python", "orchestrator", "test-loop", "quality-gates", "ci"],
   },
+  TatuEngine: {
+    description: "Motor de inferência experimental com pesos ternários e travessia híbrida CPU/GPU: blocos 32×32 de 288 bytes comprimem o checkpoint em 113,8× e cabem em 245 MiB de VRAM. Fase bit-exata, 16/16 testes de coerência e 69,4× de speedup. C++23, CUDA e PyTorch, com benchmarks e limitações publicados.",
+    topics: ["ai", "cuda", "cpp", "inference", "benchmarks", "gpu"],
+  },
   Focinho: {
     description: "Veículo independente de pet tech: testes, guias e bastidores para quem vive com bicho, entregues por site e newsletter semanal. Curadoria humana, sem clickbait.",
     topics: ["web", "pet", "newsletter"],
@@ -270,6 +274,10 @@ const PROJECTS_EN: Record<string, ProjectI18n> = {
   "roger-loop": {
     description: "Config-driven test-loop orchestrator for agentic delivery: contract-based deterministic critic, budgeted rounds and gray-zone debate with isolated legs. Zero dependencies.",
     topics: ["python", "orchestrator", "test-loop", "quality-gates", "ci"],
+  },
+  TatuEngine: {
+    description: "Experimental inference engine with ternary weights and a hybrid CPU/GPU traversal: 32×32 blocks of 288 bytes compress the checkpoint by 113.8× and fit in 245 MiB of VRAM. Bit-exact phase, 16/16 coherence tests and 69.4× speedup. C++23, CUDA and PyTorch, with benchmarks and limitations published.",
+    topics: ["ai", "cuda", "cpp", "inference", "benchmarks", "gpu"],
   },
   Focinho: {
     description: "An independent pet-tech outlet: tests, guides and behind-the-scenes for people living with pets, delivered via website and weekly newsletter. Human curation, no clickbait.",

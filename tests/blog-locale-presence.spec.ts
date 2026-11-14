@@ -31,6 +31,13 @@ for (const { locale, expectEn } of LOCALES) {
     test.use({ locale, viewport: { width: 1280, height: 900 } });
 
     test(`secao DO BLOG renderiza cards em ${locale}`, async ({ page }) => {
+      // Mesmo motivo do a11y-contrast-region.spec.ts: com o gate rodando em
+      // paralelo (workers = cores/2), o carregamento da home + o scroll
+      // progressivo estouram o default de 60s — medido 14/11/2026, o e2e do
+      // Roger reprovava este spec por TIMEOUT (não por conteúdo: isolado passa
+      // em 5s, com 10s para os 2 locales). Teto maior, asserções idênticas.
+      test.setTimeout(120_000);
+
       const res = await page.goto('/', { waitUntil: 'domcontentloaded' });
       expect(res, 'liveness: servidor nao respondeu').toBeTruthy();
       expect(res!.status(), 'liveness: GET / nao devolveu 200').toBe(200);

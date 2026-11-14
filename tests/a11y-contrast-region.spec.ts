@@ -86,6 +86,38 @@ test.describe('a11y — contraste e landmarks (regressão)', () => {
         content: '*, *::before, *::after { transition: none !important; }',
       });
 
+      // O `transition: none` acima NÃO alcança animações de JS. Duas famílias
+      // escapam dele:
+      //  (a) WAAPI/framer-motion (`element.animate`) — coberto por `finish()`;
+      //  (b) GSAP + ScrollTrigger (FadeInSection): anima `opacity`/`transform`
+      //      setando style inline quadro a quadro, e NÃO aparece em
+      //      `document.getAnimations()`. Medido 14/11/2026 no e2e do Roger
+      //      (rodada 4, tema claro): o axe pegou `.max-w-6xl.mx-auto > .text-xl`
+      //      com "insufficient color contrast of 4.46 (foreground #1f79ab,
+      //      background #f5f7fa)". `#1f79ab` é `--accent #0369a1` a ~89% sobre
+      //      o fundo — frame PARCIAL do fade-in do GSAP, não o estado final
+      //      (que passa AA). Isolado passava porque sem carga o fade termina
+      //      antes da medição; com 12 workers o frame congelava no meio.
+      // Forçar o estado de REPOUSO (opacity 1, sem transform) é o que o usuário
+      // vê depois da animação e não afrouxa a regra: nenhuma cor é tocada.
+      await page.addStyleTag({
+        content:
+          '*, *::before, *::after { opacity: 1 !important; transform: none !important; }',
+      });
+
+      for (let i = 0; i < 3; i++) {
+        await page.evaluate(() => {
+          for (const anim of document.getAnimations()) {
+            try {
+              anim.finish();
+            } catch {
+              /* animação infinita/idle: não tem fim — ignora */
+            }
+          }
+        });
+        await page.waitForTimeout(150);
+      }
+
       const results = await new AxeBuilder({ page })
         .withRules(['color-contrast', 'region'])
         .analyze();

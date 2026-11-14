@@ -41,6 +41,24 @@ export const STATIC_PROJECTS: Repo[] = [
 
   {
     id: 999003,
+    name: "TatuEngine",
+    description:
+      "Motor de inferência experimental com pesos ternários {-1, 0, +1} e travessia híbrida CPU/GPU: blocos 32×32 empacotados em 288 bytes comprimem o checkpoint em 113,8× e cabem em 245 MiB de VRAM. Fase bit-exata, 16/16 testes de coerência, 69,4× de speedup (4,092s → 0,059s por token). C++23, CUDA, PyTorch, com benchmarks, logs e limitações publicados.",
+    html_url: "https://github.com/Samuelfmedeiros/TatuEngine-Benchmarks",
+    homepage: "",
+    stargazers_count: 0,
+    forks_count: 0,
+    language: "C++",
+    topics: ["featured", "ai", "cuda", "cpp", "inference", "benchmarks", "gpu", "pytorch"],
+    pushed_at: "2026-11-14T03:15:28Z",
+    created_at: "2026-10-31T13:24:45Z",
+    imageGradient: "linear-gradient(135deg, #0a0f1e 0%, #1e3a5f 50%, #0d9488 100%)",
+    hasDemo: false,
+    imageUrl: img("/projects/tatuengine.webp"),
+  },
+
+  {
+    id: 999004,
     name: "Portifolio",
     description:
       "Este site, em estilo cockpit sci-fi — Next.js, Framer Motion e animações cinematográficas. Modo claro/escuro, 6 paletas de cores, PT/EN e atenção total a mobile, acessibilidade e performance.",
@@ -282,6 +300,7 @@ export const GITHUB_ALIASES = ["roger-Test-Loops-mlops"];
 export const FEATURED_PROJECTS = [
   "DogWalk",
   "Arachne",
+  "TatuEngine",
   "Portifolio",
   "lifelog",
   "memory-matrix",

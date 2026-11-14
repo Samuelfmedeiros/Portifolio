@@ -7,6 +7,7 @@ import { LazyGameShowcase } from "@/components/LazyGameShowcase";
 import { LazyContactForm } from "@/components/LazyContactForm";
 import { getRepos } from "@/lib/github";
 import { STATIC_PROJECTS, GAME_PROJECTS } from "@/lib/staticProjects";
+import { orderProjects } from "@/lib/projectOrder";
 import { isCuratedRepo } from "@/lib/projectCuration";
 import { BlogSection } from "@/components/BlogSection";
 import { getLatestLifelogPosts } from "@/lib/lifelogRss";
@@ -26,18 +27,16 @@ async function getProjectData() {
   for (const r of filteredRepos) repoMap.set(r.name, r);
   for (const r of STATIC_PROJECTS) repoMap.set(r.name, r);
   const allProjects = Array.from(repoMap.values());
-  // DogWalk primeiro (Samuel: "Dog walk deve ser primeiro projeto")
-  allProjects.sort((a, b) => {
-    if (a.name === 'DogWalk') return -1;
-    if (b.name === 'DogWalk') return 1;
-    return 0;
-  });
+  // Ordem dos cards: TatuEngine primeiro, depois DogWalk (Samuel 14/11/2026).
+  // A prioridade mora em projectOrder.ts — lista explícita, testada, sem o
+  // bug de dois `if` disputando o primeiro lugar.
+  const ordered = orderProjects(allProjects);
 
   // Split games from other projects
-  const games = allProjects.filter((r) => GAME_PROJECTS.includes(r.name));
+  const games = ordered.filter((r) => GAME_PROJECTS.includes(r.name));
   // Sort games by GAME_PROJECTS order (Samuel: memory-matrix → simon-game → code-typing → terminal → asteroid-dodge)
   games.sort((a, b) => GAME_PROJECTS.indexOf(a.name) - GAME_PROJECTS.indexOf(b.name));
-  const projects = allProjects.filter((r) => !GAME_PROJECTS.includes(r.name));
+  const projects = ordered.filter((r) => !GAME_PROJECTS.includes(r.name));
 
   return { projects, games };
 }

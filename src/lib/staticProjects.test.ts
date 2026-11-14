@@ -41,7 +41,7 @@ describe('staticProjects', () => {
   // Regressao 16/09/2026: roger-mlops e roger-loop entraram no site pela API do
   // GitHub (sem entrada no catalogo estatico) e cairam no fallback "gradiente +
   // nome" — card parecia SEM CAPA em producao. A capa mora em public/projects/.
-  describe.each(['roger-mlops', 'roger-loop'])('%s (card com capa propria)', (name) => {
+  describe.each(['roger-mlops', 'roger-loop', 'TatuEngine'])('%s (card com capa propria)', (name) => {
     const project = STATIC_PROJECTS.find((p) => p.name === name)
 
     it('existe no catalogo estatico com imageUrl', () => {
