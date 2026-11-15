@@ -72,10 +72,22 @@ jobs:
         # da branch. Este gate falha o CI na hora se a classe do bug voltar.
         run: node scripts/check-spec-base-url.mjs tests
 
+      - name: Install poppler-utils (pdftotext do guard de host legado)
+        # 15/11/2026: o guard le os 6 PDFs de public/ via `pdftotext`; a imagem
+        # ubuntu-latest NAO traz poppler, entao sem este step o guard saia
+        # "NAO VERIFICAVEL" em todo run e a cobertura de PDF nunca era
+        # exercitada no CI. continue-on-error: infra de apoio (apt/DNS do
+        # runner ja falhou em 11/11); ausente, o guard volta a NAO VERIFICAVEL
+        # e nunca a PASS.
+        continue-on-error: true
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+
       - name: Guard - asset estatico sem host legado *.vercel.app
         # 07/10/2026 (PR #132): public/games/terminal/index.html imprimia
         # "Site: samuelmedeiros.vercel.app" em producao apos a migracao pro
         # dominio proprio. public/ nao passa pelo build — este grep pega.
+        # 15/11/2026: extendido a PDF (pdftotext) — os 6 curriculos citavam o
+        # host legado e o guard imprimia PASS.
         run: node scripts/check-legacy-hosts.mjs public
 
       - name: Run Playwright tests (shard ${{ matrix.shardIndex }}/${{ matrix.shardTotal }})
