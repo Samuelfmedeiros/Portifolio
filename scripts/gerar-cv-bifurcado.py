@@ -101,8 +101,13 @@ def doc(nome, role, contato, links, resumo, jobs, formacao, skills, labels):
 NOME = "Samuel Andrade Fonseca de Medeiros"
 CONTATO_PT = "Brasília-DF · (61) 99119-1722 · samuelandrademedeiros@gmail.com"
 CONTATO_EN = "Brasília, Brazil · +55 61 99119-1722 · samuelandrademedeiros@gmail.com"
-LINKS = "linkedin.com/in/samuelandrademedeiros · github.com/Samuelfmedeiros · samuelmedeiros.vercel.app"
-LINKS_EN = "linkedin.com/in/samuelandrademedeiros · github.com/Samuelfmedeiros · samuelmedeiros.vercel.app/en"
+# Host CANÔNICO (07/10/2026: `samuelmedeiros.vercel.app` é legado — o guard
+# scripts/check-legacy-hosts.mjs existe justamente para impedir que volte para
+# artefato público; PDF é artefato público). O site é i18n CLIENT-SIDE: não há
+# rota /en (dá 404), então PT e EN usam o mesmo endereço raiz.
+SITE = "portifolio.seu.pet"
+LINKS = f"linkedin.com/in/samuelandrademedeiros · github.com/Samuelfmedeiros · {SITE}"
+LINKS_EN = LINKS
 
 LABELS_PT = {"resumo": "Resumo Profissional", "exp": "Experiência Profissional",
              "form": "Formação Acadêmica", "skills": "Competências Técnicas"}

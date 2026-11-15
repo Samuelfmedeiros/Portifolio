@@ -4,7 +4,7 @@
 
 Brasília-DF · (61) 99119-1722 · samuelandrademedeiros@gmail.com  
 LinkedIn: https://www.linkedin.com/in/samuelandrademedeiros  
-Site: https://samuelmedeiros.vercel.app  
+Site: https://portifolio.seu.pet  
 GitHub: https://github.com/Samuelfmedeiros
 
 ## Objective
@@ -15,7 +15,7 @@ Data and Product Analyst | Creation of Dashboards and Strategic Insights | BI an
 
 Information Technology professional with experience in data analysis and full stack development. Experience in creating Power BI dashboards, SQL queries, and automation of routines with Python, as well as development of complete web platforms with React, Next.js, and FastAPI. Experience with API and payment integrations, relational databases, Docker and Cloudflare infrastructure, and applications with local LLMs and RAG. Knowledge of Data Science and Machine Learning applied to data analysis and interpretation.
 
-**AI deployment in production (FDE profile — Forward/Frontier Deployed):** beyond building systems, I make AI systems run and keep running: a multi-agent platform in continuous execution, agents with tool access (MCP), RAG over an own knowledge base with a Knowledge Graph, automated quality evaluation before publishing, observability (logs, latency, cost per run), guardrails against misuse and inference cost control. I work in the FDE model — discovery, architecture, production code, evaluation, operation and feedback — applied to my own infrastructure, today with sites, scraping/RAG, payments and agents in production. Proof: samuelmedeiros.vercel.app and github.com/Samuelfmedeiros.
+**AI deployment in production (FDE profile — Forward/Frontier Deployed):** beyond building systems, I make AI systems run and keep running: a multi-agent platform in continuous execution, agents with tool access (MCP), RAG over an own knowledge base with a Knowledge Graph, automated quality evaluation before publishing, observability (logs, latency, cost per run), guardrails against misuse and inference cost control. I work in the FDE model — discovery, architecture, production code, evaluation, operation and feedback — applied to my own infrastructure, today with sites, scraping/RAG, payments and agents in production. Proof: portifolio.seu.pet and github.com/Samuelfmedeiros.
 
 ## Work Experience
 

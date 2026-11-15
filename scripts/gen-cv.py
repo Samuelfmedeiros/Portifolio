@@ -14,9 +14,9 @@ SRC = REPO / "docs" / "cv"
 OUT = REPO / "public"
 
 CSS = """\
-@page { size: A4; margin: 0.9cm; }
-body { font-family: Calibri, Arial, sans-serif; font-size: 9.8pt; color: #1a1a1a; margin: 0; }
-h1, h2, h3, p, li, div, blockquote { font-family: Calibri, Arial, sans-serif !important; }
+@page { size: A4; margin: 0.8cm; }
+body { font-family: Calibri, Carlito, Arial, sans-serif; font-size: 9.4pt; color: #1a1a1a; margin: 0; }
+h1, h2, h3, p, li, div, blockquote { font-family: Calibri, Carlito, Arial, sans-serif !important; }
 h1 { font-size: 14pt; margin: 0 0 2pt 0; }
 p.role { font-size: 10.5pt; color: #333; margin: 0 0 4pt 0; }
 p.contact { font-size: 9pt; margin: 0 0 4pt 0; }
