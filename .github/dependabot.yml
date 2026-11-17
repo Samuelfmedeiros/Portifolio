@@ -15,6 +15,16 @@ updates:
       - security
     reviewers:
       - Samuelfmedeiros
+    # `playwright` e `@playwright/test` PRECISAM andar na mesma versão: o binário
+    # que roda a suíte vem de `playwright` e o `test`/`expect` importado pelos
+    # specs vem de `@playwright/test`. Bump separado (PR #165, 16/11/2026) deixou
+    # 1.63 no runner e 1.65 na lib → "Playwright Test did not expect
+    # test.describe() to be called here" nos 3 shards, sem 1 teste executado.
+    groups:
+      playwright:
+        patterns:
+          - "playwright"
+          - "@playwright/test"
     ignore:
       - dependency-name: "next"
         versions: [">=17.0.0"]
