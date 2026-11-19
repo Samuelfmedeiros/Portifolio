@@ -48,6 +48,12 @@ jobs:
     - name: Install dependencies
       run: pnpm install --frozen-lockfile
 
+    # 19/11/2026 — o contrato `check-legacy-hosts.contract.test.ts` le os PDFs com
+    # `pdftotext`. Sem poppler no runner o guard responde NAO VERIFICAVEL e o teste
+    # cai (master ficou vermelho em 0b8cd3f). O workflow de E2E ja instalava; este nao.
+    - name: Install poppler-utils (pdftotext do guard de host legado)
+      run: sudo apt-get update -qq && sudo apt-get install -y -qq poppler-utils
+
     # 21/10/2026 — decisao do dono (opcao 1): vermelho BARRA o deploy.
     # O continue-on-error deixou o HitBeacon.test.tsx quebrado no master por dias
     # (#149) sem ninguem ver. Lint e teste agora sao bloqueantes de verdade.
