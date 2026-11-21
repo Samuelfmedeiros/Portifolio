@@ -158,6 +158,12 @@ describe("monetization", () => {
         expect(result[0]).toHaveProperty("icon");
       }
     });
+
+    it("nao atribui Cloudflare ao DogWalk (rodape 'powered by' errado no card)", () => {
+      // 21/11/2026: o card do DogWalk exibia "powered by Cloudflare" sem o projeto
+      // usar Cloudflare. O rodape e' patrocinado; atribuicao falsa e' propaganda enganosa.
+      expect(getProjectAffiliates("DogWalk").some((a) => a.key === "cloudflare")).toBe(false);
+    });
   });
 
   describe("getActiveAffiliates", () => {

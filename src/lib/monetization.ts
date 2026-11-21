@@ -142,7 +142,7 @@ export function getActiveAffiliates(category?: AffiliateLink["category"]): Affil
 export const PROJECT_AFFILIATES: Record<string, string[]> = {
   "seu.pet": [],
   "portifolio": ["vercel"],
-  DogWalk: ["fastapi-sqlite", "cloudflare"],
+  DogWalk: ["fastapi-sqlite"],
 };
 
 /** Get affiliate keys for a project name */
