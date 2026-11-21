@@ -59,7 +59,6 @@ export function JsonLd() {
       "SQL",
       "Power BI",
       "Machine Learning",
-      "Cloudflare Workers",
       "PostgreSQL",
       "GitHub Actions",
       "CI/CD",
@@ -68,7 +67,7 @@ export function JsonLd() {
       "Data Analysis",
     ],
     description:
-      "Desenvolvedor Full Stack com 5+ anos de experiência. Especializado em React, Next.js, TypeScript, Python e Cloudflare. Transformando dados em decisões estratégicas.",
+      "Desenvolvedor Full Stack com 5+ anos de experiência. Especializado em React, Next.js, TypeScript, Python. Transformando dados em decisões estratégicas.",
     image: `${SITE_URL}/opengraph-image`,
   };
 
@@ -95,12 +94,12 @@ export function JsonLd() {
     ],
     knowsAbout: [
       "React", "Next.js", "TypeScript", "Python", "SQL",
-      "Power BI", "Machine Learning", "Cloudflare Workers",
+      "Power BI", "Machine Learning",
       "PostgreSQL", "GitHub Actions", "CI/CD", "LLMs",
       "Business Intelligence", "Data Analysis",
     ],
     description:
-      "Desenvolvedor Full Stack com 5+ anos de experiência. Especializado em React, Next.js, TypeScript, Python e Cloudflare. Transformando dados em decisões estratégicas.",
+      "Desenvolvedor Full Stack com 5+ anos de experiência. Especializado em React, Next.js, TypeScript, Python. Transformando dados em decisões estratégicas.",
   };
 
   const website = {

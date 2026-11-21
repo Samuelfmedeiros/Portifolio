@@ -122,13 +122,6 @@ export const AFFILIATE_LINKS: AffiliateLink[] = [
     category: "database",
     active: true,
   },
-  {
-    key: "cloudflare",
-    name: "Cloudflare",
-    url: "https://www.cloudflare.com/?utm_source=samuelmedeiros",
-    category: "hosting",
-    active: true,
-  },
 ];
 
 /** Get active affiliates filtered by category */

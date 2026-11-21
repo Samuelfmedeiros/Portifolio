@@ -323,7 +323,7 @@ export const dict = {
     "terminal.projects": "PROJETOS:\n   DogWalk        — Plataforma de passeio de cães (Next.js + Supabase)\n   Portifolio Samuel — Este portfólio (Next.js + Framer Motion)\n   ANA Dashboards  — Dashboards de dados (Power BI + SQL)",
     "terminal.skills": "HABILIDADES:\n  [Linguagens]    Python, SQL, TypeScript\n  [BI/Analytics] Power BI, Excel, Power Query, DAX\n  [ML/IA]         Scikit-learn, Pandas, LLMs\n  [Web]           Next.js, React, Tailwind CSS\n  [Banco]         PostgreSQL, Supabase, MySQL\n  [Ferramentas]   Docker, Git, Linux, Azure",
     "terminal.contact": "CONTATO:\n   Email:    samuelandrademedeiros@gmail.com\n   LinkedIn: linkedin.com/in/samuelandrademedeiros\n   GitHub:   github.com/Samuelfmedeiros\n   WhatsApp: wa.me/556191191722",
-    "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animações: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testes:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
+    "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animações: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL)\n  Testes:    Vitest, Playwright\n  Deploy:    Vercel\n  CI/CD:     GitHub Actions",
     "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Repos públicos: portifolio, dog-walk e mais\n  Linguagens: TypeScript, Python, SQL, JavaScript\n  Contribuições: Frequentes",
     "terminal.theme_toggled": "Tema alternado com sucesso.",
 
@@ -714,7 +714,7 @@ export const dict = {
     "terminal.projects": "PROJECTS:\n   DogWalk        — Dog walking platform (Next.js + Supabase)\n   Portifolio Samuel — This portfolio (Next.js + Framer Motion)\n   ANA Dashboards  — Data dashboards (Power BI + SQL)",
     "terminal.skills": "SKILLS:\n  [Languages]    Python, SQL, TypeScript\n  [BI/Analytics] Power BI, Excel, Power Query, DAX\n  [ML/AI]        Scikit-learn, Pandas, LLMs\n  [Web]          Next.js, React, Tailwind CSS\n  [Database]     PostgreSQL, Supabase, MySQL\n  [Tools]        Docker, Git, Linux, Azure",
     "terminal.contact": "CONTACT:\n   Email:    samuelandrademedeiros@gmail.com\n   LinkedIn: linkedin.com/in/samuelandrademedeiros\n   GitHub:   github.com/Samuelfmedeiros\n   WhatsApp: wa.me/556191191722",
-    "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animations: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL), Cloudflare Workers\n  Testing:    Vitest, Playwright\n  Deploy:    Cloudflare Pages, Vercel\n  CI/CD:     GitHub Actions",
+    "terminal.stack": "TECH STACK:\n  Frontend:  Next.js 16, React 19, TypeScript, Tailwind CSS 4\n  Animations: Framer Motion, Lucide Icons\n  Backend:   Supabase (PostgreSQL)\n  Testing:    Vitest, Playwright\n  Deploy:    Vercel\n  CI/CD:     GitHub Actions",
     "terminal.github": "GitHub: github.com/Samuelfmedeiros\n  Public repos: portifolio, dog-walk & more\n  Languages: TypeScript, Python, SQL, JavaScript\n  Contributions: Frequent",
     "terminal.theme_toggled": "Theme toggled successfully.",
 
