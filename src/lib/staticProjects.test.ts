@@ -64,6 +64,20 @@ describe('staticProjects', () => {
     })
   })
 
+  describe('card Arachne (repo GitHub nao responde 200)', () => {
+    // 21/11/2026: Samuelfmedeiros/arachne-mcp devolve 404 (curl com UA de navegador).
+    // Card mantem o site (homepage 200) e perde o botao GitHub para nao levar a 404.
+    it('Arachne nao linka GitHub morto e mantem homepage https', () => {
+      const p = STATIC_PROJECTS.find((x) => x.name === 'Arachne')
+      expect(p?.html_url).toBe('')
+      expect(p?.homepage).toBe('https://arachne.seu.pet')
+    })
+
+    it('nenhum card estatico aponta para arachne-mcp', () => {
+      expect(STATIC_PROJECTS.some((p) => p.html_url.includes('arachne-mcp'))).toBe(false)
+    })
+  })
+
   describe('cards Roger (2 cards, sem links mortos)', () => {
     // 19/10/2026: roger-mlops e roger-loop.
     // roger-mlops: repo privado → html_url vazio

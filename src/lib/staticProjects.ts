@@ -26,7 +26,7 @@ export const STATIC_PROJECTS: Repo[] = [
     name: "Arachne",
     description:
       "Da página web à resposta: captura conteúdo de qualquer site, extrai dados de 44+ formatos de documento e conversa com o conhecimento via RAG semântico. MCP server + crawl4ai, com busca híbrida web e vetorial.",
-    html_url: "https://github.com/Samuelfmedeiros/arachne-mcp",
+    html_url: "",
     homepage: "https://arachne.seu.pet",
     stargazers_count: 1,
     forks_count: 0,
