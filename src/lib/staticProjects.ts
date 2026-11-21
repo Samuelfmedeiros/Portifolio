@@ -40,26 +40,6 @@ export const STATIC_PROJECTS: Repo[] = [
   },
 
   {
-    id: 999016,
-    name: "Capivara",
-    description:
-      "Hub pessoal multi-tenant: um só lugar para dados, ferramentas e agentes. API em FastAPI com autenticação JWT, isolamento por tenant e painel de governança — hoje atrás de login privado, sem vitrine pública.",
-    // Acesso protegido por login (Cloudflare Access): card sem link para não
-    // entregar o visitante numa tela de login. Padrão roger-mlops.
-    html_url: "",
-    homepage: "",
-    stargazers_count: 0,
-    forks_count: 0,
-    language: "Python",
-    topics: ["featured", "fastapi", "python", "postgresql", "jwt", "multi-tenant", "dashboard"],
-    pushed_at: new Date().toISOString(),
-    created_at: new Date().toISOString(),
-    imageGradient: "linear-gradient(135deg, #070b14 0%, #0d1526 55%, #0a1a1a 100%)",
-    hasDemo: false,
-    imageUrl: img("/projects/capivara.webp"),
-  },
-
-  {
     id: 999003,
     name: "TatuEngine",
     description:
