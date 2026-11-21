@@ -70,7 +70,6 @@ export const metadata: Metadata = {
     "llm",
     "stripe",
     "playwright",
-    "cloudflare",
     "tailwind css",
   ],
   authors: [{ name: "Samuel Medeiros", url: SITE_URL }],
