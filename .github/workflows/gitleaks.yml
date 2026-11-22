@@ -18,11 +18,12 @@ jobs:
           fetch-depth: 0
 
       - name: Run Gitleaks
-        uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
-        env:
-          # ⚠️ GITLEAKS_LICENSE (22/11/2026): a gitleaks-action pode exigir licença
-          # para org/uso corporativo. Se a secret nao estiver configurada no repo,
-          # este gate bloqueante falha por CONFIGURACAO, nao por achado.
-          # Acao do dono: confirmar a secret GITLEAKS_LICENSE no GitHub ou trocar a
-          # action pelo binario gitleaks OSS. Detalhes em CHECKPOINT-GITLEAKS-LICENSE-2026-11-22.md.
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        # Binario OSS gitleaks v8.28.0 — SHA-256 fixado; substitui a action
+        # que exigia licenca paga. Sem token interpolado no scan.
+        run: |
+          set -euo pipefail
+          curl -sSL -o gitleaks.tgz \
+            https://github.com/gitleaks/gitleaks/releases/download/v8.28.0/gitleaks_8.28.0_linux_x64.tar.gz
+          echo "a65b5253807a68ac0cafa4414031fd740aeb55f54fb7e55f386acb52e6a840eb  gitleaks.tgz" | sha256sum -c -
+          tar -xzf gitleaks.tgz gitleaks
+          ./gitleaks git --redact --exit-code 1 .
