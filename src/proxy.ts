@@ -54,6 +54,26 @@ const PDF_NAMES = [
   "samuel_andrade_resume_2026.pdf",
 ] as const;
 
+/**
+ * Família de PDFs do CV por PADRÃO, não por nome exato.
+ *
+ * ── 22/11/2026: MEDIDO em produção — 4 variantes respondiam `200 application/pdf`
+ *    direto, fora do fluxo do modal (sem consentimento LGPD, sem log em
+ *    cv_downloads, sem notificação):
+ *      /Samuel_Andrade_Dados_2026.pdf           -> 200 (21025 B)
+ *      /Samuel_Andrade_FullStack_2026.pdf       -> 200 (20918 B)
+ *      /Samuel_Andrade_Resume_Dados_2026.pdf    -> 200 (19717 B)
+ *      /Samuel_Andrade_Resume_FullStack_2026.pdf-> 200 (19762 B)
+ *    Causa: a regex defensiva era `^samuel_andrade(_resume)?_2026…` e os nomes
+ *    novos têm o segmento da variante ANTES do ano (`_dados_2026`), então não
+ *    casavam. Guard preso a nome exato volta a furar a cada arquivo novo.
+ *
+ * Regra: qualquer basename que comece pela família do CV e termine em `.pdf`.
+ * O basename já chega normalizado (percent-decode até fixpoint, dot-segments
+ * colapsados, minúsculo) — ver `normalizePathname`.
+ */
+const CV_PDF_PATTERN = /^samuel[_\-\s]?andrade.*\.pdf$/;
+
 /** Decodifica até não mudar mais (cobre %2575 -> %75 -> u). */
 function percentDecode(input: string): string {
   let out = input;
@@ -110,8 +130,8 @@ export function isBlockedCvPath(rawPathname: string): boolean {
   for (const name of PDF_NAMES) {
     if (base === name) return true;
   }
-  // Variante defensiva: cópias tipo "samuel_andrade_2026 (1).pdf"
-  return /^samuel_andrade(_resume)?_2026[^/]*\.pdf$/.test(base);
+  // Família inteira (inclui variantes _dados_/_fullstack_ e cópias baixadas).
+  return CV_PDF_PATTERN.test(base);
 }
 
 export default function proxy(request: NextRequest) {

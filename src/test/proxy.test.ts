@@ -44,6 +44,41 @@ describe("proxy — bloqueio de PDFs estáticos do CV", () => {
     expect(proxy(fakeRequest("/samuel_andrade_2026.pdf")).status).toBe(404);
   });
 
+  // 🔴 MEDIDO em produção 22/11/2026: as 4 variantes do modal respondiam
+  //    200 application/pdf direto (sem consentimento, sem log em cv_downloads).
+  //    A regex antiga (`^samuel_andrade(_resume)?_2026…`) não casava porque o
+  //    segmento da variante vem ANTES do ano. Estes casos travam a regressão.
+  const variantes = [
+    "/Samuel_Andrade_Dados_2026.pdf",
+    "/Samuel_Andrade_FullStack_2026.pdf",
+    "/Samuel_Andrade_Resume_Dados_2026.pdf",
+    "/Samuel_Andrade_Resume_FullStack_2026.pdf",
+  ];
+
+  it.each(variantes)("bloqueia a variante do modal acessada direto: %s", (path) => {
+    expect(proxy(fakeRequest(path)).status).toBe(404);
+  });
+
+  it.each(variantes)("bloqueia a variante com encoding no path: %s", (path) => {
+    const encoded = path.replace("S", "%53").replace("A", "%41");
+    expect(proxy(fakeRequest(encoded)).status).toBe(404);
+  });
+
+  it("bloqueia cópia baixada pelo navegador da família do CV", () => {
+    expect(proxy(fakeRequest("/Samuel_Andrade_Dados_2026%20(1).pdf")).status).toBe(404);
+    expect(proxy(fakeRequest("/samuel-andrade-fullstack-2026.pdf")).status).toBe(404);
+  });
+
+  it("não bloqueia PDF que não é da família do CV", () => {
+    expect(proxy(fakeRequest("/projects/doc.pdf")).status).toBe(200);
+    expect(proxy(fakeRequest("/modalidades/dados.pdf")).status).toBe(200);
+  });
+
+  it("bloqueia CV da família em outros anos (2025, 2027)", () => {
+    expect(isBlockedCvPath("/samuel_andrade_2025.pdf")).toBe(true);
+    expect(isBlockedCvPath("/Samuel_Andrade_Resume_FullStack_2027.pdf")).toBe(true);
+  });
+
   it("não bloqueia a rota da API (fluxo do modal continua funcionando)", () => {
     expect(proxy(fakeRequest("/api/download-cv")).status).toBe(200);
   });
@@ -130,7 +165,10 @@ describe("isBlockedCvPath — não bloqueia o que deve passar", () => {
     "/tatu-armadillo.svg",
     "/v3-screenshot.png",
     "/samuel", // nome parecido, não é o CV
-    "/samuel_andrade_2025.pdf", // outro ano: fora do contrato atual
+    // 22/11/2026: `/samuel_andrade_2025.pdf` SAiu desta lista. O contrato antigo
+    // ("outro ano: fora do contrato atual") só valia enquanto o guard era por
+    // nome exato — e foi exatamente isso que deixou as 4 variantes de 2026
+    // abertas em produção. CV de qualquer ano é dado pessoal: bloqueia.
     "/Samuel_Andrade_2026.pdf.txt", // não é pdf
     "/cv-samuel.pdf", // não casa o padrão do arquivo do CV
   ];
