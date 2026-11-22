@@ -18,8 +18,12 @@ jobs:
       - name: Gitleaks scan
         uses: gitleaks/gitleaks-action@e0c47f4f8be36e29cdc102c57e68cb5cbf0e8d1e # v3
         env:
+          # ⚠️ GITLEAKS_LICENSE (22/11/2026): a gitleaks-action pode exigir licença
+          # para org/uso corporativo. Se a secret nao estiver configurada no repo,
+          # este gate bloqueante falha por CONFIGURACAO, nao por achado.
+          # Acao do dono: confirmar a secret GITLEAKS_LICENSE no GitHub ou trocar a
+          # action pelo binario gitleaks OSS. Detalhes em CHECKPOINT-GITLEAKS-LICENSE-2026-11-22.md.
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
 
   bandit-opengrep:
     runs-on: ubuntu-latest
@@ -37,14 +41,14 @@ jobs:
       - name: Bandit scan (se houver Python)
         run: |
           if find . -name "*.py" -not -path "*/node_modules/*" | grep -q .; then
-            bandit -q -r . -x "*/tests/*,*/node_modules/*" --severity-level medium || true
+            bandit -q -r . -x "*/tests/*,*/node_modules/*" --severity-level medium
           else
             echo "Sem arquivos Python — pulando bandit"
           fi
       - name: Opengrep scan (regras custom)
         run: |
           if [ -f .security/opengrep-rules.yml ]; then
-            opengrep --config .security/opengrep-rules.yml . || true
+            opengrep --config .security/opengrep-rules.yml .
           else
             echo "Sem regras custom (.security/opengrep-rules.yml) — pulando opengrep"
           fi
