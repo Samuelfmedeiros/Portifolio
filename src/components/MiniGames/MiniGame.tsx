@@ -98,7 +98,7 @@ export function MiniGame() {
       {phase === "idle" || phase === "gameover" ? (
         <button
           onClick={startGame}
-          className="px-4 py-2 rounded-lg bg-[var(--accent)] text-white font-mono text-xs hover:brightness-110 transition-all"
+          className="px-4 py-2 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-xs hover:brightness-110 transition-all"
         >
           {phase === "gameover" ? "Tentar Novamente" : "Iniciar Jogo"}
         </button>

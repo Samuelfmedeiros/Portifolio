@@ -159,7 +159,7 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                   <div className="grid grid-cols-2 sm:flex sm:items-center gap-1.5 sm:gap-2">
                     <button
                       onClick={() => acceptWithAds("personalized")}
-                      className="min-h-[34px] px-1 sm:px-4 py-1.5 sm:py-2 rounded-lg font-mono text-[11px] sm:text-xs font-semibold bg-[var(--accent)] text-white border border-[var(--accent)] hover:brightness-110 transition-all leading-tight"
+                      className="min-h-[34px] px-1 sm:px-4 py-1.5 sm:py-2 rounded-lg font-mono text-[11px] sm:text-xs font-semibold bg-[var(--accent)] text-[var(--bg-primary)] border border-[var(--accent)] hover:brightness-110 transition-all leading-tight"
                     >
                       {t("cookie.banner.accept_all")}
                     </button>
