@@ -23,6 +23,13 @@ describe('Footer', () => {
     expect(screen.getByText('Samuel Medeiros')).toBeInTheDocument()
   })
   
+  it('renders the Serviço link to /servico', () => {
+    render(<Footer />)
+    const servico = screen.getByTestId('footer-servico')
+    expect(servico).toBeInTheDocument()
+    expect(servico.getAttribute('href')).toBe('/servico')
+  })
+
   it('renders GitHub link with correct href', () => {
     render(<Footer />)
     const githubLink = screen.getByLabelText('GitHub')

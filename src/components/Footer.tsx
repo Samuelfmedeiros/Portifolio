@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useRef, useEffect } from "react";
+import Link from "next/link";
 import { Mail, Copy, Check, Shield, X } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { BuyMeACoffeeIcon } from "@/components/monetization/BuyMeACoffee";
@@ -346,6 +347,14 @@ export function Footer() {
               {t("footer.projects.title")}
             </h3>
             <div className="flex flex-col gap-1.5">
+              <Link
+                href="/servico"
+                data-testid="footer-servico"
+                className="text-xs font-mono text-[var(--accent)] hover:underline transition-colors py-1.5 inline-block"
+                onClick={() => track({ type: "external_link", url: "/servico", label: t("footer.servico", "Serviço") })}
+              >
+                {t("footer.servico", "Serviço — automação com IA")} →
+              </Link>
               <a
                 href={comUtm("https://seu.pet", { medium: "footer", campaign: "portfolio", content: "dogwalk" })}
                 target="_blank"

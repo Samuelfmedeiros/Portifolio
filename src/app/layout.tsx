@@ -8,6 +8,7 @@ import { Navbar } from "@/components/Navbar";
 import { ConditionalAnalytics } from "@/components/ConditionalAnalytics";
 import HitBeacon from "@/components/HitBeacon";
 import { Footer } from "@/components/Footer";
+import { ServicoButton } from "@/components/ServicoButton";
 import { SupportButton } from "@/components/SupportButton";
 import { ConsultingButton } from "@/components/ConsultingButton";
 import { ScrollProgress } from "@/components/ScrollProgress";
@@ -204,6 +205,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     <AdSense slot={ADSENSE_CONFIG.footerSlot} format="horizontal" className="min-h-[90px]" />
                   </div>
                   <div className="flex flex-wrap justify-center gap-4 px-4 pb-6">
+                    <ServicoButton />
                     <SupportButton />
                     <ConsultingButton />
                   </div>
