@@ -101,7 +101,10 @@ describe('Footer', () => {
     })
     
     render(<Footer />)
-    const copyBtn = screen.getByLabelText('footer.copy.email')
+    const copyBtn = screen.getByLabelText(/footer\.copy\.email/)
+    // WCAG 2.5.3 (label in name): o nome acessível tem de conter o texto visível,
+    // que é o próprio e-mail. Só "footer.copy.email" reprovava no axe de produção.
+    expect(copyBtn.getAttribute('aria-label')).toContain('samuelandrademedeiros@gmail.com')
     fireEvent.click(copyBtn)
     
     expect(screen.getAllByText('footer.copied')[0]).toBeInTheDocument()

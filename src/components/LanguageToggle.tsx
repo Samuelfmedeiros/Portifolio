@@ -13,6 +13,11 @@ export const LanguageToggle = memo(function LanguageToggle() {
   // Mostra o idioma de DESTINO (a outra língua) — assim o usuário sabe
   // que o site tem PT e EN. O idioma atual é evidente pelo texto da página.
   const next = locale === "pt" ? "EN" : "PT";
+  // Nome acessível precisa CONTER o texto visível ("EN"/"PT") — WCAG 2.5.3 (label in
+  // name). Só "Mudar para inglês" reprovava em label-content-name-mismatch no axe de
+  // produção (4 rotas x 2 temas x 2 viewports, sério). O rótulo por dicionário já é
+  // o certo em cada idioma ("Mudar para inglês" / "Switch to Portuguese").
+  const ariaLabel = `${next} — ${t("aria.language.toggle")}`;
 
   return (
     <div className="relative">
@@ -34,7 +39,7 @@ export const LanguageToggle = memo(function LanguageToggle() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full min-w-[36px] flex items-center justify-center"
-        aria-label={locale === "pt" ? t("aria.language.toggle") : "Mudar para português"}
+        aria-label={ariaLabel}
       >
         <AnimatePresence mode="wait">
           <motion.span
