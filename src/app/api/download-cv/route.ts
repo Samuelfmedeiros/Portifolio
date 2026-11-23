@@ -81,13 +81,31 @@ export async function POST(req: NextRequest) {
       );
     }
 
+    // Limite de tamanho: sem teto, um POST com 1 MB de "name" vira mensagem
+    // gigante no Telegram/Resend e polui o log de downloads.
+    const limpar = (v: unknown, max: number): string | undefined => {
+      if (typeof v !== "string") return undefined;
+      const s = v.trim().slice(0, max);
+      return s ? s : undefined;
+    };
+
+    const emailLimpo = limpar(email, 254);
+    // E-mail é opcional no modal, mas se vier preenchido tem que ser e-mail:
+    // antes, "x" ou "qualquer coisa" passava e ia para a notificação.
+    if (emailLimpo && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailLimpo)) {
+      return NextResponse.json(
+        { error: isEn ? "Invalid email" : "E-mail inválido" },
+        { status: 400 }
+      );
+    }
+
     const entry: DownloadLog = {
       timestamp: new Date().toISOString(),
       ip: getClientIp(req),
-      userAgent: req.headers.get("user-agent") ?? "unknown",
-      referrer: req.headers.get("referer") ?? req.headers.get("referrer") ?? "direct",
-      name: typeof name === "string" && name.trim() ? name.trim() : undefined,
-      email: typeof email === "string" && email.trim() ? email.trim() : undefined,
+      userAgent: (req.headers.get("user-agent") ?? "unknown").slice(0, 512),
+      referrer: (req.headers.get("referer") ?? req.headers.get("referrer") ?? "direct").slice(0, 512),
+      name: limpar(name, 120),
+      email: emailLimpo,
     };
 
     // ── Persistência + Notificações (paralelo, não bloqueia o download) ──
@@ -213,7 +231,7 @@ export async function POST(req: NextRequest) {
                       </div>
                     </div>
                     <div style="text-align:center;padding:8px;border-top:1px solid #222;margin-top:16px">
-                      <span style="color:#555;font-size:11px"> Enviado via portifolio.seu.pet</span>
+                      <span style="color:#555;font-size:11px"> Enviado via portifolio.seu.pet — ${now}</span>
                     </div>
                     <div style="background:#00e5ff;height:2px;border-radius:2px;margin-top:12px;width:100%"></div>
                   </div>
