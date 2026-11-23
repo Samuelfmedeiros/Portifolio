@@ -52,9 +52,30 @@ export async function POST(req: NextRequest) {
 
     const { name, email, content } = await req.json();
 
-    if (!name || !email || !content) {
+    // Entrada de formulário público: tipo, formato e teto de tamanho antes de
+    // qualquer coisa tocar Telegram/Resend. Sem isto, `name: 1` estourava o
+    // escapeHtml (500) e um campo de 20 KB virava mensagem gigante no chat.
+    const limpar = (v: unknown, max: number): string | undefined => {
+      if (typeof v !== "string") return undefined;
+      const s = v.trim().slice(0, max);
+      return s ? s : undefined;
+    };
+
+    const nameLimpo = limpar(name, 120);
+    const emailLimpo = limpar(email, 254);
+    const contentLimpo = limpar(content, 5000);
+
+    if (!nameLimpo || !emailLimpo || !contentLimpo) {
       return NextResponse.json({ error: "Missing fields" }, { status: 400 });
     }
+
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(emailLimpo)) {
+      return NextResponse.json({ error: "E-mail inválido" }, { status: 400 });
+    }
+
+    // Backtick no nome/e-mail fecha o bloco de código do Markdown do Telegram
+    // e o resto da mensagem é interpretado como formatação.
+    const tgSafe = (s: string): string => s.replace(/`/g, "'");
 
     const results: { email?: string; telegram?: string; telemetry?: string } = {};
 
@@ -65,7 +86,7 @@ export async function POST(req: NextRequest) {
       body: JSON.stringify({
         event_type: "contact_submit",
         source: "portifolio",
-        payload: { name, email, message: content },
+        payload: { name: nameLimpo, email: emailLimpo, message: contentLimpo },
       }),
     }).then((r) => {
       results.telemetry = r.ok ? "sent" : `falha: ${r.status}`;
@@ -86,7 +107,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             from: "Portifolio Samuel <contato@seu.pet>",
             to: "samuelandrademedeiros@gmail.com",
-            subject: `Contato do Portfólio — ${name}`,
+            subject: `Contato do Portfólio — ${tgSafe(nameLimpo)}`,
             html: `
               <div style="background:#0a0a0f;color:#e0e0e0;font-family:'Segoe UI',Arial,sans-serif;padding:32px;max-width:600px;margin:0 auto;border:2px solid #00e5ff;border-radius:12px">
                 <div style="text-align:center;padding:20px;background:linear-gradient(135deg,#00e5ff22,#0a0a0f);border-radius:8px;margin-bottom:24px;border:1px solid #00e5ff">
@@ -97,15 +118,15 @@ export async function POST(req: NextRequest) {
                 <div style="background:#111118;border:1px solid #00e5ff44;border-radius:8px;padding:16px;margin-bottom:16px">
                   <div style="margin-bottom:12px">
                     <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Nome</span>
-                    <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border:1px solid #00e5ff;border-radius:4px">${escapeHtml(name)}</div>
+                    <div style="color:#fff;font-size:18px;font-weight:bold;margin-top:2px;padding:8px 12px;background:#0a0a0f;border:1px solid #00e5ff;border-radius:4px">${escapeHtml(nameLimpo)}</div>
                   </div>
                   <div style="margin-bottom:12px">
                     <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Email</span>
-                    <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border:1px solid #00e5ff;border-radius:4px">${escapeHtml(email)}</div>
+                    <div style="color:#fff;font-size:16px;margin-top:2px;padding:8px 12px;background:#0a0a0f;border:1px solid #00e5ff;border-radius:4px">${escapeHtml(emailLimpo)}</div>
                   </div>
                   <div>
                     <span style="color:#00e5ff;font-size:12px;text-transform:uppercase;letter-spacing:1px;font-weight:bold"> Mensagem</span>
-                    <div style="color:#e0e0e0;font-size:15px;margin-top:2px;padding:12px;background:#0a0a0f;border:1px solid #00e5ff;border-radius:4px;line-height:1.5;white-space:pre-wrap">${escapeHtml(content)}</div>
+                    <div style="color:#e0e0e0;font-size:15px;margin-top:2px;padding:12px;background:#0a0a0f;border:1px solid #00e5ff;border-radius:4px;line-height:1.5;white-space:pre-wrap">${escapeHtml(contentLimpo)}</div>
                   </div>
                 </div>
                 <div style="text-align:center;padding:8px;border-top:1px solid #222;margin-top:16px">
@@ -146,13 +167,13 @@ export async function POST(req: NextRequest) {
           "━━━━━━━━━━━━━━━━━━━━━━━━",
           "",
           " *Nome*",
-          `\`\`${name}\`\``,
+          `\`\`${tgSafe(nameLimpo)}\`\``,
           "",
           " *Email*",
-          `\`\`${email}\`\``,
+          `\`\`${tgSafe(emailLimpo)}\`\``,
           "",
           " *Mensagem*",
-          `\`\`\`\n${content.replace(/```/g, "'''")}\n\`\`\``,
+          `\`\`\`\n${contentLimpo.replace(/```/g, "'''")}\n\`\`\``,
           "",
           "━━━━━━━━━━━━━━━━━━━━━━━━",
           ` ${now}`,

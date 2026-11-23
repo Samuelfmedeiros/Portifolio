@@ -92,4 +92,50 @@ describe('/api/contact-notify (POST)', () => {
     expect(corpo.html).not.toContain('<script>alert(1)</script>')
     expect(corpo.html).toContain('&lt;img src=x onerror=alert(1)&gt;')
   })
+
+  it('rejeita e-mail sem formato válido com 400', async () => {
+    const res = await chamar({ name: 'Ana', email: 'x', content: 'oi' }, '10.0.0.6')
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ error: 'E-mail inválido' })
+  })
+
+  it('rejeita campos que não são string em vez de estourar 500', async () => {
+    const res = await chamar({ name: 1, email: 2, content: 3 }, '10.0.0.7')
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ error: 'Missing fields' })
+  })
+
+  it('limita o tamanho dos campos antes de notificar', async () => {
+    vi.stubEnv('TELEGRAM_BOT_TOKEN', 'tok_test')
+    const res = await chamar(
+      {
+        name: 'N'.repeat(300),
+        email: 'ana@example.com',
+        content: 'C'.repeat(20_000),
+      },
+      '10.0.0.8',
+    )
+    expect(res.status).toBe(200)
+
+    const telegram = fetchMock.mock.calls.find(([url]) => String(url).includes('api.telegram.org'))
+    expect(telegram).toBeTruthy()
+    const init = (telegram as unknown[])[1] as { body: string }
+    const texto = JSON.parse(init.body).text as string
+    expect(texto).not.toContain('N'.repeat(200))
+    expect(texto.length).toBeLessThan(8_000)
+  })
+
+  it('backtick no nome não quebra o bloco Markdown do Telegram', async () => {
+    vi.stubEnv('TELEGRAM_BOT_TOKEN', 'tok_test')
+    const res = await chamar(
+      { name: 'Ana `x` Medeiros', email: 'ana@example.com', content: 'oi' },
+      '10.0.0.9',
+    )
+    expect(res.status).toBe(200)
+
+    const telegram = fetchMock.mock.calls.find(([url]) => String(url).includes('api.telegram.org'))
+    const init = (telegram as unknown[])[1] as { body: string }
+    const texto = JSON.parse(init.body).text as string
+    expect(texto).not.toContain('`x`')
+  })
 })
