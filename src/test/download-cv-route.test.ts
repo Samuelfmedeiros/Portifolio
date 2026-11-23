@@ -57,6 +57,18 @@ describe('/api/download-cv (POST)', () => {
     vi.unstubAllEnvs()
   })
 
+  it('returns 400 when email vem preenchido e inválido', async () => {
+    const res = await chamar({ locale: 'pt', consent: true, email: 'x' }, '10.10.0.9')
+    expect(res.status).toBe(400)
+    expect(await res.json()).toMatchObject({ error: 'E-mail inválido' })
+  })
+
+  it('aceita download sem email (campo opcional no modal)', async () => {
+    const res = await chamar({ locale: 'pt', consent: true }, '10.10.0.10')
+    expect(res.status).toBe(200)
+    expect(res.headers.get('content-type')).toBe('application/pdf')
+  })
+
   it('returns 400 when consent is missing', async () => {
     const res = await chamar({ locale: 'pt' }, '10.10.0.2')
     expect(res.status).toBe(400)
