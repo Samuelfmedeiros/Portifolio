@@ -250,6 +250,16 @@ export function Footer() {
   const [activeTab, setActiveTab] = useState<'privacy' | 'terms'>('privacy');
   const { track } = useAnalytics();
   const [showDownloadModal, setShowDownloadModal] = useState(false);
+  // GSC mediu 404 em /cdn-cgi/l/email-protection: o Cloudflare Email Obfuscation
+  // reescreve todo href="mailto:" do HTML servido e o crawler segue esse caminho,
+  // que a origem não serve. Montar o mailto só no cliente (pós-hidratação) evita
+  // que o CF reescreva — o HTML estático sai com #contato, que existe na página.
+  // Medido 24/11/2026 no perfil moedas (mesmo defeito corrigido no safmarket).
+  const [emailHref, setEmailHref] = useState("#contato");
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- mailto só pós-hidratação para fugir do Email Obfuscation do Cloudflare
+    setEmailHref(`mailto:${EMAIL}`);
+  }, []);
   const { t, locale } = useLanguage();
 
   // As abas do modal de privacidade/termos precisam escrever no estado do Footer:
@@ -344,7 +354,7 @@ export function Footer() {
                 <WhatsAppIcon className="w-5 h-5" />
               </a>
               <a
-                href="mailto:samuelandrademedeiros@gmail.com"
+                href={emailHref}
                 className="text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
                 aria-label={t("aria.email", "Email")}
                 onClick={() => track({ type: "external_link", url: "mail", label: t("aria.email", "Email") })}

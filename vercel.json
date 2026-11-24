@@ -1,4 +1,26 @@
 {
+  "redirects": [
+    {
+      "source": "/projetos",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/projetos/",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog",
+      "destination": "/",
+      "permanent": true
+    },
+    {
+      "source": "/blog/",
+      "destination": "/",
+      "permanent": true
+    }
+  ],
   "headers": [
     {
       "source": "/(.*)",
