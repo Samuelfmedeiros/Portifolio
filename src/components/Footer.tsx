@@ -13,6 +13,9 @@ import { DownloadModal } from "./DownloadModal";
 import { useLanguage } from "@/lib/i18n";
 import { useFocusTrap } from "@/hooks/useFocusTrap";
 
+// Fonte única do e-mail do rodapé (botão de copiar + link mailto).
+const EMAIL = "samuelandrademedeiros@gmail.com";
+
 function GithubIcon({ className }: { className?: string }) {
   return (
     <svg className={className} viewBox="0 0 24 24" fill="currentColor">
@@ -258,7 +261,7 @@ export function Footer() {
   const dateLocale = locale === "en" ? "en-US" : "pt-BR";
 
   const handleCopyEmail = () => {
-    navigator.clipboard.writeText("samuelandrademedeiros@gmail.com");
+    navigator.clipboard.writeText(EMAIL);
     setCopied(true);
     track({ type: "external_link", url: "email", label: t("footer.copy.email", "Copiar email") });
     setTimeout(() => setCopied(false), 2000);
@@ -276,22 +279,32 @@ export function Footer() {
             <p className="text-xs font-mono text-[var(--text-secondary)]">
               {t("footer.brand.desc")}
             </p>
-            <button
-              onClick={handleCopyEmail}
-              className="relative group flex items-center gap-1.5 py-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
-              aria-label={t("footer.copy.email")}
-            >
-              {copied ? (
-                <Check className="w-3.5 h-3.5 text-[var(--success)]" />
-              ) : (
-                <Copy className="w-3.5 h-3.5" />
-              )}
-              <span>{copied ? t("footer.copied") : "samuelandrademedeiros@gmail.com"}</span>
-              {/* Tooltip */}
-              <span className={`absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-[var(--bg-secondary)]/90 text-[var(--text-primary)] whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
+            <span className="relative inline-flex group">
+              <button
+                onClick={handleCopyEmail}
+                className="flex items-center gap-1.5 py-1.5 text-xs font-mono text-[var(--text-secondary)] hover:text-[var(--accent)] transition-colors"
+                // WCAG 2.5.3 (label in name): o nome acessível TEM de conter o texto
+                // visível — o e-mail, ou "Copiado!" no estado pós-clique. Só
+                // "Copiar email" reprovava em label-content-name-mismatch no axe de
+                // produção (todas as rotas, 2 nós).
+                aria-label={`${copied ? t("footer.copied") : t("footer.copy.email")}: ${EMAIL}`}
+              >
+                {copied ? (
+                  <Check className="w-3.5 h-3.5 text-[var(--success)]" />
+                ) : (
+                  <Copy className="w-3.5 h-3.5" />
+                )}
+                {/* O texto visível alterna para "Copiado!" no clique; o aria-label
+                    acima acompanha o estado para não quebrar a regra 2.5.3. */}
+                <span>{copied ? t("footer.copied") : EMAIL}</span>
+              </button>
+              {/* Tooltip FORA do botão: dentro dele o texto ("Clique para copiar")
+                  entra no conteúdo visível no hover e volta a quebrar a 2.5.3,
+                  porque o nome acessível não contém essa frase. */}
+              <span aria-hidden="true" className={`pointer-events-none absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-2 py-1 rounded text-[10px] font-mono bg-[var(--bg-secondary)]/90 text-[var(--text-primary)] whitespace-nowrap transition-opacity duration-200 ${copied ? "opacity-100" : "opacity-0 group-hover:opacity-100"}`}>
                 {copied ? " " + t("footer.copied") : t("footer.copy.tooltip")}
               </span>
-            </button>
+            </span>
           </div>
 
           {/* Links */}
