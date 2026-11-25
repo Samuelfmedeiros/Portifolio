@@ -97,4 +97,36 @@ describe("ProfileSection", () => {
     const btn = screen.getByRole("button", { name: /hero.btn.cv/i });
     expect(btn).toBeInTheDocument();
   });
+
+  // Contrato do parallax do bloco Skills/Timeline (medido 24/11/2026).
+  // Com amplitude em "%" da altura do bloco o conteúdo descia ~196px em 1280px
+  // e o último texto ("∞ Continuo evoluindo") cruzava o H2 "▸ PROJETOS"
+  // (120×13 px de sobreposição, 6 posições de scroll em produção).
+  // A cura é amplitude FIXA em px + padding-bottom que reserva essa amplitude.
+  it("parallax do conteúdo usa amplitude fixa em px e reserva espaço equivalente", () => {
+    const fs = require("node:fs");
+    const path = require("node:path");
+    const src = fs.readFileSync(path.join(__dirname, "ProfileSection.tsx"), "utf8");
+
+    const linhaContentY = src.split("\n").find((l) => l.includes("const contentY = useTransform"));
+    expect(linhaContentY, "contentY não encontrado").toBeTruthy();
+
+    // proíbe amplitude relativa: ["0%", "X%"] volta a estourar em telas altas
+    expect(linhaContentY).not.toMatch(/"\d+%"/);
+    // exige amplitude em px
+    const px = linhaContentY!.match(/"0px",\s*"(\d+)px"/);
+    expect(px, "amplitude em px ausente").toBeTruthy();
+    const amplitude = Number(px![1]);
+    expect(amplitude).toBeGreaterThan(0);
+    expect(amplitude).toBeLessThanOrEqual(128);
+
+    // o container que recebe style={{ y: contentY }} precisa reservar a amplitude
+    const idx = src.indexOf("style={{ y: contentY }}");
+    expect(idx).toBeGreaterThan(-1);
+    const bloco = src.slice(idx, idx + 400);
+    const pb = bloco.match(/pb-(\d+)/);
+    expect(pb, "padding-bottom de reserva ausente").toBeTruthy();
+    const reserva = Number(pb![1]) * 4; // tailwind: 1 unidade = 4px
+    expect(reserva).toBeGreaterThanOrEqual(amplitude);
+  });
 });

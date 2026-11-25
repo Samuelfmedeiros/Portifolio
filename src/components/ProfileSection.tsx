@@ -635,7 +635,10 @@ export function ProfileSection() {
   const floatY = useTransform(scrollYProgress, [0, 1], ["0%", "50%"]);
   const heroY = useTransform(scrollYProgress, [0, 0.5], ["0%", "60%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-  const contentY = useTransform(scrollYProgress, [0, 1], ["0%", "8%"]);
+  // Parallax medido: 8% da altura do bloco (~196px em 1280px) empurrava o conteúdo
+  // sobre a seção PROJETOS — auditoria visual 24/11 mediu '∞ Continuo evoluindo'
+  // 100% coberto por '▸ PROJETOS'. Amplitude fixa + pb reservado = nunca cruza.
+  const contentY = useTransform(scrollYProgress, [0, 1], ["0px", "64px"]);
 
   // P1 + P2: grouped timeline + collapse
   const typeConfig: Record<string, { label: string; icon: React.ComponentType<{ className?: string }> }> = {
@@ -878,10 +881,10 @@ export function ProfileSection() {
         </div>
       </motion.div>
 
-      {/* L4: Skills + Timeline — parallax sutil */}
+      {/* L4: Skills + Timeline — parallax sutil (pb-20 = 80px reserva os 64px + 16px de folga) */}
       <motion.div
         style={{ y: contentY }}
-        className="relative z-10 max-w-4xl mx-auto"
+        className="relative z-10 max-w-4xl mx-auto pb-20"
       >
         <SkillsCompact />
 
