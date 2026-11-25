@@ -1,5 +1,7 @@
 import { describe, it, expect, vi } from "vitest";
 import { render, screen, fireEvent } from "@testing-library/react";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { ProfileSection } from "./ProfileSection";
 
 // Mock i18n — return fallback when provided, key otherwise
@@ -104,9 +106,7 @@ describe("ProfileSection", () => {
   // (120×13 px de sobreposição, 6 posições de scroll em produção).
   // A cura é amplitude FIXA em px + padding-bottom que reserva essa amplitude.
   it("parallax do conteúdo usa amplitude fixa em px e reserva espaço equivalente", () => {
-    const fs = require("node:fs");
-    const path = require("node:path");
-    const src = fs.readFileSync(path.join(__dirname, "ProfileSection.tsx"), "utf8");
+    const src = readFileSync(join(__dirname, "ProfileSection.tsx"), "utf8");
 
     const linhaContentY = src.split("\n").find((l) => l.includes("const contentY = useTransform"));
     expect(linhaContentY, "contentY não encontrado").toBeTruthy();
