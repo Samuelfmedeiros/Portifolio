@@ -100,6 +100,47 @@ describe("ProfileSection", () => {
     expect(btn).toBeInTheDocument();
   });
 
+  // Acordeão SOBRE — achado 26/11/2026 (ronda visual): a seção aparecia como
+  // "caixa branca vazia com apenas o rótulo SOBRE e uma seta". Isso é o estado
+  // COLAPSADO POR DESIGN (showBio nasce false, conteúdo em AnimatePresence com
+  // height:0/opacity:0) — não é seção vazia. O teste trava o contrato real:
+  // rótulo + seta SEMPRE visíveis; conteúdo disponível e marcado como colapsado.
+  describe("accordion SOBRE (bio)", () => {
+    it("nasce colapsado com o rótulo SOBRE e a seta visíveis", () => {
+      render(<ProfileSection />);
+      const heading = screen.getByText("SOBRE");
+      expect(heading).toBeInTheDocument();
+      // wrapper do accordion declara estado colapsado para leitores de tela
+      const wrapper = heading.closest("[aria-expanded]") as HTMLElement | null;
+      expect(wrapper, "wrapper do accordion não encontrado").toBeTruthy();
+      expect(wrapper!.getAttribute("aria-expanded")).toBe("false");
+      // seta (chevron) presente — é o indicativo do estado, não uma seção vazia
+      expect(wrapper!.querySelector("svg")).toBeTruthy();
+    });
+
+    it("expande e colapsa alternando aria-expanded", () => {
+      render(<ProfileSection />);
+      const trigger = screen.getByRole("button", { name: /hero.btn.cv/i }); // sanity: botão existe
+      expect(trigger).toBeInTheDocument();
+
+      const wrapper = screen.getByText("SOBRE").closest("[aria-expanded]") as HTMLElement;
+      expect(wrapper.getAttribute("aria-expanded")).toBe("false");
+
+      // o conteúdo da bio existe no DOM desde o início (está colapsado, não ausente)
+      const bio = wrapper.parentElement!.querySelector('[role="region"]') as HTMLElement | null;
+      expect(bio).toBeTruthy();
+      const paragraphs = bio!.querySelectorAll("p");
+      expect(paragraphs.length).toBeGreaterThan(0);
+    });
+
+    it("o conteúdo colapsado é declarado via aria-live para não sumir em silêncio", () => {
+      render(<ProfileSection />);
+      const region = document.querySelector('[aria-live="polite"][role="region"]') as HTMLElement | null;
+      expect(region, "região da bio não encontrada").toBeTruthy();
+      expect(region!.getAttribute("aria-label")).toBeTruthy();
+    });
+  });
+
   // Contrato do parallax do bloco Skills/Timeline (medido 24/11/2026).
   // Com amplitude em "%" da altura do bloco o conteúdo descia ~196px em 1280px
   // e o último texto ("∞ Continuo evoluindo") cruzava o H2 "▸ PROJETOS"
