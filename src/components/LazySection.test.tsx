@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest'
-import { render, screen, act } from '@testing-library/react'
+import { render, screen, act, cleanup } from '@testing-library/react'
 import { LazySection } from './LazySection'
 
 /**
@@ -46,19 +46,35 @@ describe('LazySection', () => {
     }
   }
 
+  // O original do setup fica guardado aqui para ser devolvido no afterEach.
+  const originalIO = window.IntersectionObserver
+
   beforeEach(() => {
-    // `mockImplementation` precisa receber uma função NEWABLE — o componente faz
-    // `new IntersectionObserver(...)` e uma arrow function não pode ser `new`'d
-    // ("is not a constructor"). Função regular pode, e o `return` de um objeto
-    // dentro dela faz o `new` devolver exatamente esse objeto.
-    vi.spyOn(window, 'IntersectionObserver').mockImplementation(
-      function () {
-        return new CapturingIntersectionObserver()
-      } as unknown as typeof IntersectionObserver,
-    )
+    // O setup global (src/test/setup.tsx) publica IntersectionObserver com
+    // `Object.defineProperty(window, ..., { writable: true })` — sem
+    // `configurable`. A property nasce NÃO configurável, então nem
+    // `vi.stubGlobal` nem outro `defineProperty` trocam ela ("Cannot redefine
+    // property"). Continua `writable`, então ASSIGNMENT direto troca.
+    //
+    // `vi.spyOn(window, 'IntersectionObserver')` + `mockImplementation` até
+    // instala, mas o mock do spy é um construtor sintético: ele faz
+    // `ReflectConstruct(implementation, args, new.target)` com `new.target` =
+    // o próprio spy. A classe que captura precisa ser NEWABLE e receber os
+    // DOIS argumentos do componente (callback e options) — a versão anterior
+    // chamava `new CapturingIntersectionObserver()` sem repassar nada, e o
+    // contrato do componente (rootMargin/threshold) nunca era capturado.
+    ;(window as unknown as { IntersectionObserver: unknown }).IntersectionObserver =
+      CapturingIntersectionObserver
   })
 
   afterEach(() => {
+    // O setup do projeto NÃO registra auto-cleanup do RTL (sem globals do
+    // testing-library), então o DOM de um teste vaza para o próximo:
+    // "Found multiple elements with the text". Sem este cleanup, qualquer
+    // assert por texto quebra a partir do 2º teste.
+    cleanup()
+    ;(window as unknown as { IntersectionObserver: unknown }).IntersectionObserver =
+      originalIO
     vi.restoreAllMocks()
   })
 
