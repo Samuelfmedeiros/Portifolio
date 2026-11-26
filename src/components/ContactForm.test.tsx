@@ -310,6 +310,85 @@ describe('ContactForm — regras de submissão (rodada 2)', () => {
     expect(execSpy).toHaveBeenCalledWith('copy')
   })
 
+  it('rejeita e-mail fora do formato antes de chamar a API', async () => {
+    const { submitContactForm } = await import('@/lib/supabase')
+    vi.mocked(submitContactForm).mockResolvedValue(true)
+    render(<ContactForm />)
+
+    // `isFormValid` só checa presença de texto — não valida o formato. Sem este
+    // teste, o regex do handler (linha 78) ficava fora da cobertura: o contrato
+    // real é "bloqueia no handler, com mensagem, sem tocar no backend".
+    fireEvent.change(screen.getByLabelText('contact.form.name'), { target: { value: 'Test User' } })
+    fireEvent.change(screen.getByLabelText('contact.form.email'), { target: { value: 'nao-e-email' } })
+    fireEvent.change(screen.getByLabelText('contact.form.message'), { target: { value: 'Hello world' } })
+    fireEvent.click(marcarLgpd())
+    await waitFor(() =>
+      expect(screen.getByRole('button', { name: /contact.form.submit/i })).toBeEnabled(),
+    )
+
+    // `fireEvent.click` no botão passa pela validação nativa do input type=email
+    // e o jsdom NÃO dispara o submit quando o e-mail é inválido — o handler nunca
+    // roda. `fireEvent.submit` no form exercita o caminho real do handler.
+    await act(async () => {
+      fireEvent.submit(screen.getByRole('form'))
+    })
+
+    expect(submitContactForm).not.toHaveBeenCalled()
+    expect(screen.getAllByText(/Formato de email inválido\./i)).toHaveLength(2)
+  })
+
+  it('o contador do rate limit expira sozinho e libera um novo envio', async () => {
+    const { submitContactForm } = await import('@/lib/supabase')
+    vi.mocked(submitContactForm).mockResolvedValue(true)
+
+    render(<ContactForm />)
+    await preencherValido()
+    await act(async () => {
+      fireEvent.click(screen.getByRole('button', { name: /contact.form.submit/i }))
+    })
+    await act(async () => {
+      fireEvent.click(screen.getByText('contact.form.send.another'))
+    })
+    // tudo que depende de re-render acontece com timers REAIS: os fake timers
+    // são ligados só na hora de avançar o countdown, senão o `waitFor` interno
+    // do preencherValido nunca resolve.
+    await preencherValido()
+
+    // o botão troca de rótulo durante o bloqueio ("Aguarde {n}s..."), então o
+    // locator estável é o type=submit — não o nome acessível.
+    const botaoSubmit = () => document.querySelector('button[type="submit"]') as HTMLButtonElement
+
+    vi.useFakeTimers()
+    try {
+      await act(async () => {
+        fireEvent.submit(screen.getByRole('form'))
+      })
+      expect(submitContactForm).toHaveBeenCalledTimes(1)
+
+      // 1s depois ainda bloqueado — o countdown começou em 30 e decrementou
+      act(() => {
+        vi.advanceTimersByTime(1000)
+      })
+      expect(botaoSubmit()).toBeDisabled()
+      expect(botaoSubmit().textContent).toBe('Aguarde 29s...')
+
+      // os 29s restantes: o interval se limpa sozinho ao chegar em 0
+      act(() => {
+        vi.advanceTimersByTime(29_000)
+      })
+      expect(botaoSubmit()).toBeEnabled()
+      expect(botaoSubmit().textContent).toContain('contact.form.submit')
+
+      // com a janela expirada, o envio passa de novo
+      await act(async () => {
+        fireEvent.submit(screen.getByRole('form'))
+      })
+      expect(submitContactForm).toHaveBeenCalledTimes(2)
+    } finally {
+      vi.useRealTimers()
+    }
+  })
+
   it('envia mensagem vazia com LGPD desmarcado sem chamar a API', async () => {
     const { submitContactForm } = await import('@/lib/supabase')
     vi.mocked(submitContactForm).mockResolvedValue(true)
