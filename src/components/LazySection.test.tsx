@@ -29,21 +29,28 @@ function makeRect(top: number) {
 describe('LazySection', () => {
   let io: IOStub
 
-  /** Captura o observer para disparar o callback e contar o disconnect. */
-  class CapturingIntersectionObserver {
-    callback: IOCallback
-    options?: IntersectionObserverInit
-    root = null
-    rootMargin = ''
-    thresholds: number[] = []
-    observe = vi.fn()
-    unobserve = vi.fn()
-    disconnect = vi.fn()
-    constructor(callback: IOCallback, options?: IntersectionObserverInit) {
-      this.callback = callback
-      this.options = options
-      io = this
+  /**
+   * Captura a instância do observer para disparar o callback e contar o
+   * disconnect.
+   *
+   * Função fábora em vez de classe com `io = this`: o
+   * `@typescript-eslint/no-this-alias` do repo reprova atribuir `this` a
+   * variável local. A closure captura os DOIS argumentos do construtor
+   * (callback e options) sem precisar de `this`, e continua NEWABLE porque
+   * o React a chama com `new` — uma função construtora que devolve objeto
+   * faz o `new` devolver esse objeto.
+   */
+  const CapturingIntersectionObserver = function (
+    callback: IOCallback,
+    options?: IntersectionObserverInit,
+  ): IOStub {
+    io = {
+      callback,
+      options,
+      observe: vi.fn(),
+      disconnect: vi.fn(),
     }
+    return io
   }
 
   // O original do setup fica guardado aqui para ser devolvido no afterEach.
