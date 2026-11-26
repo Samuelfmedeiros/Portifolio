@@ -1,28 +1,12 @@
 "use client";
 
-import { useEffect } from "react";
-import { usePathname } from "next/navigation";
-
-import { initEngagement } from "@/lib/engagement";
-
 /**
- * Ponto de extensao do analytics. O OpenPanel ja registra page_view pelo beacon
- * server-side (`/api/hit` -> HitBeacon), entao aqui NAO emitimos page_view —
- * isso dobraria a contagem (medido 13/11/2026).
- *
- * Este componente e montado por ConditionalAnalytics somente apos consentimento;
- * reinicia os observadores a cada troca de rota do App Router (sem reload).
+ * Mantido como ponto de extensao, mas sem efeito: o engajamento foi movido
+ * para ConditionalAnalytics para nao depender do banner de consentimento.
+ * O OpenPanel e cookieless e ja carrega independentemente — medido 26/11/2026:
+ * com o tracker detras do gate `consent === "accepted"`, zero eventos de
+ * scroll_depth/section_time/ui_click chegavam ao ClickHouse em producao.
  */
 export function AnalyticsTracker() {
-  const pathname = usePathname();
-
-  useEffect(() => {
-    try {
-      return initEngagement({ site: "portfolio", keyPrefix: "pf" });
-    } catch {
-      return () => {}; // analytics nunca quebra a pagina
-    }
-  }, [pathname]);
-
   return null;
 }
