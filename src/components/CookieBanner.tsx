@@ -150,7 +150,28 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
       doc.querySelector<HTMLElement>('[data-testid="cookie-banner"]');
     const aplicar = () => {
       const h = el?.offsetHeight ?? 0;
-      if (h > 0) doc.style.setProperty("--cookie-banner-h", `${h}px`);
+      if (h <= 0) return;
+      const previa = parseFloat(doc.style.getPropertyValue("--cookie-banner-h")) || 0;
+      if (previa === h) return;
+      // 26/11/2026 (medido no e2e mobile 390x844): quem chega ao fim do
+      // documento com UM salto (tecla End, flick, scroll instantâneo do
+      // teste) recebe a reserva DEPOIS de já ter parado no fundo — a barra
+      // nascia 114px acima do fim e cobria as 2 últimas linhas do footer
+      // ("Last updated", "Portifolio Samuel v2.0"). A reserva aumenta o
+      // scrollHeight; sem acompanhar, o usuário fica 114px antes do fim.
+      // Cura: se estava colado no fundo, o scroll avança o mesmo tanto.
+      // (a página precisar rolar já livra o jsdom, onde scrollHeight é 0 e
+      // `scrollTo` não existe — evita o "Not implemented" no console.)
+      const rola =
+        document.documentElement.scrollHeight > window.innerHeight + 8;
+      const noFim =
+        rola &&
+        window.scrollY + window.innerHeight >=
+          document.documentElement.scrollHeight - 2;
+      doc.style.setProperty("--cookie-banner-h", `${h}px`);
+      if (noFim && h > previa) {
+        window.scrollTo({ top: window.scrollY + (h - previa), behavior: "auto" });
+      }
     };
     aplicar();
     let ro: ResizeObserver | undefined;
@@ -240,7 +261,15 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
                 celular (1 linha so), padding e tipografia reduzidos, icone
                 menor, texto em 11px. Altura de toque mantida em 34px (acima
                 do minimo WCAG 2.5.8 de 24px). */}
-            <div className="max-w-2xl mx-auto glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl px-3 py-2.5 md:px-5 md:py-4">
+            {/* Região explícita: o axe acusa `region` moderate quando o
+                conteúdo do banner (o <p> do texto de consentimento) vive
+                fora de qualquer landmark. Solução: marcar o card como
+                região nomeada — o texto passa a ter ancestral com role. */}
+            <div
+              role="region"
+              aria-label={t("cookie.banner.title", "Consentimento de cookies")}
+              className="max-w-2xl mx-auto glass rounded-xl border border-[var(--border)]/50 backdrop-blur-md shadow-2xl px-3 py-2.5 md:px-5 md:py-4"
+            >
               <div className="flex items-start gap-2 md:gap-3">
                 <Cookie className="w-4 h-4 md:w-5 md:h-5 text-[var(--accent)] shrink-0 mt-0.5" />
                 <div className="flex-1 min-w-0">
