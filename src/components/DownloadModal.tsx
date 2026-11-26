@@ -329,6 +329,8 @@ export function DownloadModal({ open, onClose }: DownloadModalProps) {
                 <button
                   type="submit"
                   disabled={!consent || status === "loading"}
+                  data-analytics-id="cv.download"
+                  data-analytics-label="Baixar curriculo"
                   className="w-full py-2.5 rounded-lg bg-[var(--accent)] text-[var(--bg-primary)] font-mono text-sm font-semibold hover:opacity-90 disabled:opacity-30 disabled:cursor-not-allowed transition-all flex items-center justify-center gap-2"
                 >
                   {status === "loading" ? (
