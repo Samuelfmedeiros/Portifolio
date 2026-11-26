@@ -14,6 +14,16 @@ const ROTAS = [
 ];
 
 test.beforeEach(async ({ page }) => {
+  // 26/11/2026: a baseline mede o LAYOUT da página, não a barra de cookies.
+  // Sem consentimento decidido, a barra entra no DOM durante o scroll
+  // progressivo abaixo e publica `padding-bottom` da própria altura no body
+  // (reserva real, `ee4823e`) — o fullPage ficava 131px mais alto que a
+  // baseline e quebrava o VRT por TAMANHO, não por pixel. O contrato da barra
+  // (revelação, reserva e landmark) tem spec própria:
+  // tests/cookie-banner-skills-mobile.spec.ts. Aqui ela fica fora do caminho.
+  await page.addInitScript(() => {
+    window.localStorage.setItem('mc-analytics-consent', 'declined');
+  });
   // desliga animações de verdade (Framer Motion respeita prefers-reduced-motion)
   await page.emulateMedia({ reducedMotion: 'reduce' });
 });
