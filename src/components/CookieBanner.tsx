@@ -1,12 +1,33 @@
 "use client";
 
-import { useState, useEffect, createContext, useContext, useCallback } from "react";
+import { useState, useEffect, useRef, createContext, useContext, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Cookie, X } from "lucide-react";
 import { useLanguage } from "@/lib/i18n";
 import { loadOpenpanelScript } from "@/lib/openpanel";
 
 const CONSENT_KEY = "mc-analytics-consent";
+
+/**
+ * 26/11/2026 — gap de UI (rodada 2 do test-loop): a barra de consentimento é
+ * `fixed bottom-0` e media ~110px (desktop) / ~154px (mobile). No primeiro
+ * viewport ela cobria a linha "NÍVEL" dos cards de habilidades — informação
+ * real escondida por um overlay, não uma questão de gosto.
+ *
+ * Cura em 2 camadas, sem tocar no contrato do contexto (`showBanner` continua
+ * `true` no mount; só a revelação do DOM é atrasada):
+ *
+ *  1. REVELAÇÃO — a barra só entra depois do primeiro scroll do usuário
+ *     (ou imediatamente, se a página não tem scroll suficiente: aí não existe
+ *     conteúdo para ser coberto). Em scrollY=0 nada é sobreposto.
+ *  2. RESERVA — com a barra no ar, a altura REAL dela (medida, não chute) é
+ *     gravada em `--cookie-banner-h` no `<html>`; o `body` consome a var como
+ *     `padding-bottom`. Quando o usuário chega no fim da página, o rodapé
+ *     termina antes da barra, não embaixo dela. Some a var no hide/unmount.
+ */
+const BANNER_HEIGHT_VAR = "--cookie-banner-h";
+/** px de scroll que contam como "usuário começou a rolar" */
+const REVEAL_SCROLL_PX = 8;
 
 export type AnalyticsConsent = "accepted" | "declined" | null;
 
@@ -47,6 +68,9 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
   const [consent, setConsent] = useState<AnalyticsConsent>(null);
   const [showBanner, setShowBanner] = useState(false);
   const [mounted, setMounted] = useState(false);
+  // Revelacao da barra fixa (ver efeito abaixo).
+  const [revealed, setRevealed] = useState(false);
+  const bannerRef = useRef<HTMLDivElement | null>(null);
   const { t } = useLanguage();
 
   // We can't use useMonetizationConsent here because CookieBannerProvider
@@ -69,6 +93,76 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // 🔴 Gap da rodada 2 do test-loop (medido em .audit-shots): a barra é
+  // `fixed bottom-0`, então na primeira pintada ela nascia POR CIMA do conteúdo
+  // — 110px no desktop / 154px no mobile cobrindo justamente a linha "NÍVEL"
+  // dos cards de skills (cards em y≈655-790, barra em y≈690-800). Nenhuma
+  // reserva de espaço cura isso com o topo da página visível: `padding-bottom`
+  // só empurra o FIM do documento, não o que está na primeira viewport.
+  //
+  // Cura: a barra só entra no DOM quando (a) a página não rola — aí não há
+  // nada para cobrir, ou (b) o usuário já rolou. `showBanner` continua true no
+  // mount (contrato do provider intacto: consentimento ainda não decidido), só
+  // a BARRA deixa de nascer sobre conteúdo. Aceitar/recusar seguem iguais.
+  useEffect(() => {
+    if (!showBanner || typeof window === "undefined") return;
+    const doc = document.documentElement;
+    const onScroll = () => {
+      if (window.scrollY > 4 || doc.scrollTop > 4) {
+        setRevealed(true);
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onResize);
+      }
+    };
+    // Página que deixa de ser rolavel (rotação/teclado): nada a cobrir, mostra.
+    const onResize = () => {
+      if (doc.scrollHeight <= window.innerHeight + 8) {
+        setRevealed(true);
+        window.removeEventListener("scroll", onScroll);
+        window.removeEventListener("resize", onResize);
+      }
+    };
+    if (doc.scrollHeight <= window.innerHeight + 8) {
+      setRevealed(true);
+      return;
+    }
+    window.addEventListener("scroll", onScroll);
+    window.addEventListener("resize", onResize);
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      window.removeEventListener("resize", onResize);
+    };
+  }, [showBanner]);
+
+  // Reserva de espaço: com a barra na tela, o documento ganha `padding-bottom`
+  // da altura REAL dela (medida por ResizeObserver, não constante — o card muda
+  // entre mobile e desktop). Sem isso o último bloco do footer ficava embaixo
+  // da barra e inacessível no fim da página.
+  useEffect(() => {
+    if (!mounted || !showBanner || !revealed) return;
+    const doc = document.documentElement;
+    // O mock de framer-motion do jsdom (src/test/setup.tsx) renderiza motion.div
+    // como <div> puro e não repassa `ref`; o querySelector é o fallback para a
+    // medição continuar testável fora do navegador real.
+    const el =
+      bannerRef.current ??
+      doc.querySelector<HTMLElement>('[data-testid="cookie-banner"]');
+    const aplicar = () => {
+      const h = el?.offsetHeight ?? 0;
+      if (h > 0) doc.style.setProperty("--cookie-banner-h", `${h}px`);
+    };
+    aplicar();
+    let ro: ResizeObserver | undefined;
+    if (el && typeof ResizeObserver !== "undefined") {
+      ro = new ResizeObserver(aplicar);
+      ro.observe(el);
+    }
+    return () => {
+      ro?.disconnect();
+      doc.style.removeProperty("--cookie-banner-h");
+    };
+  }, [mounted, showBanner, revealed]);
 
   const accept = useCallback(() => {
     try {
@@ -129,8 +223,10 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
     <CookieBannerContext.Provider value={{ consent, accept, decline, showBanner }}>
       {children}
       <AnimatePresence>
-        {mounted && showBanner && (
+        {mounted && showBanner && revealed && (
           <motion.div
+            ref={bannerRef}
+            data-testid="cookie-banner"
             initial={{ y: 100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 100, opacity: 0 }}
