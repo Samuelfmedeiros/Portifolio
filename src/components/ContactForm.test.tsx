@@ -283,14 +283,31 @@ describe('ContactForm — regras de submissão (rodada 2)', () => {
       value: { writeText },
     })
 
-    render(<ContactForm />)
-    await act(async () => {
-      fireEvent.click(
-        screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i }),
-      )
-    })
+    // O handler liga `setCopied(true)` e agenda `setTimeout(..., 2000)` para
+    // apagar o selo. Sem timer falso esse timeout fica PENDENTE no fim do
+    // arquivo: com a sessão jsdom já desmontada ele estoura
+    // "ReferenceError: window is not defined" e vira erro NÃO TRATADO —
+    // `vitest run` devolve rc=1 com a suíte inteira verde.
+    vi.useFakeTimers()
+    try {
+      render(<ContactForm />)
+      await act(async () => {
+        fireEvent.click(
+          screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i }),
+        )
+      })
 
-    expect(writeText).toHaveBeenCalledWith('samuelandrademedeiros@gmail.com')
+      expect(writeText).toHaveBeenCalledWith('samuelandrademedeiros@gmail.com')
+
+      // contrato do selo: acende na cópia e apaga sozinho depois de 2s
+      expect(screen.getByRole('button', { name: /contact.email.copied/i })).toBeInTheDocument()
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+      expect(screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i })).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('cai no fallback (execCommand) quando o clipboard não existe', async () => {
@@ -300,14 +317,27 @@ describe('ContactForm — regras de submissão (rodada 2)', () => {
     const execSpy = vi.fn(() => true)
     Object.defineProperty(document, 'execCommand', { configurable: true, value: execSpy })
 
-    render(<ContactForm />)
-    await act(async () => {
-      fireEvent.click(
-        screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i }),
-      )
-    })
+    vi.useFakeTimers()
+    try {
+      render(<ContactForm />)
+      await act(async () => {
+        fireEvent.click(
+          screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i }),
+        )
+      })
 
-    expect(execSpy).toHaveBeenCalledWith('copy')
+      expect(execSpy).toHaveBeenCalledWith('copy')
+
+      // mesmo selo de 2s do caminho com clipboard — o timeout precisa ser
+      // consumido aqui para não estourar depois do teardown do jsdom.
+      expect(screen.getByRole('button', { name: /contact.email.copied/i })).toBeInTheDocument()
+      act(() => {
+        vi.advanceTimersByTime(2000)
+      })
+      expect(screen.getByRole('button', { name: /samuelandrademedeiros@gmail.com/i })).toBeInTheDocument()
+    } finally {
+      vi.useRealTimers()
+    }
   })
 
   it('rejeita e-mail fora do formato antes de chamar a API', async () => {
