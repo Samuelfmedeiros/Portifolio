@@ -303,6 +303,8 @@ export function ContactForm() {
 
             <button
               type="submit"
+              data-analytics-id="contact.submit"
+              data-analytics-label={t("contact.form.submit")}
               disabled={status === "sending" || !isFormValid || rateLimitCountdown > 0}
               aria-busy={status === "sending"}
               className={`w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] transition-colors flex items-center justify-center gap-2 ${

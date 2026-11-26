@@ -790,6 +790,8 @@ export function ProfileSection() {
           >
             <a
               href="#projects"
+              data-analytics-id="hero.projects"
+              data-analytics-label={t("hero.btn.projects")}
               className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-sans text-base font-bold overflow-hidden
                 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
                 border-2 border-[var(--accent)]/50 hover:border-[var(--accent)]
@@ -807,6 +809,8 @@ export function ProfileSection() {
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}
+              data-analytics-id="hero.cv"
+              data-analytics-label={t("hero.btn.cv")}
               className="group relative inline-flex items-center justify-center px-6 py-3 rounded-xl font-sans text-sm font-semibold overflow-hidden
                 bg-gradient-to-br from-[var(--accent)] via-[var(--accent)]/90 to-[var(--accent-alt)]/40
                 text-black
