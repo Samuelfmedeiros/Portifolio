@@ -281,10 +281,19 @@ function CircuitLines() {
         transition={{ duration: 4, repeat: Infinity, ease: "linear", delay: 3 }}
       />
       {/* Circuit path 4 — bottom right */}
+      {/* Auditoria visual 27/11/2026: este path era o UNICO sem `opacity` e sem
+          `strokeDasharray` — um traço solido em --accent aparecia na borda
+          direita inferior ("linha azul solta"). Irmão dos outros 3: mesma
+          opacidade maxima e mesmo tracejado. */}
       <motion.path
         d="M1460,700 L1340,700 L1260,620 L1260,500"
         fill="none"
         stroke="var(--accent)"
+        strokeWidth="0.5"
+        opacity={0.05}
+        strokeDasharray="8 6"
+        initial={{ strokeDashoffset: 0 }}
+        animate={{ strokeDashoffset: 100 }}
         transition={{ duration: 4.5, repeat: Infinity, ease: "linear", delay: 3.5 }}
       />
     </svg>
