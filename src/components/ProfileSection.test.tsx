@@ -139,6 +139,10 @@ describe("ProfileSection", () => {
       expect(region, "região da bio não encontrada").toBeTruthy();
       expect(region!.getAttribute("aria-label")).toBeTruthy();
     });
+
+    // Contrato de interação do accordion SOBRE (achado 26/11) vive em
+    // `ProfileSection.about-accordion.test.tsx` — medido com re-query pelo ID,
+    // porque o AnimatePresence remonta o nó do gatilho a cada toggle.
   });
 
   // Contrato do parallax do bloco Skills/Timeline (medido 24/11/2026).
