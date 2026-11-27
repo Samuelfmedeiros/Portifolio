@@ -1,5 +1,38 @@
 # 🛸 Portifolio Samuel — Session State
 
+## Sessão 2026-11-27 (worker ui do loop) — 2 gaps visuais corrigidos + 1 falso positivo provado; push `github` ok
+
+- **fix(ui)** (`73f1f30`): contraste AA do botão "Ver Projetos" do hero no tema **light**.
+  Medido no browser real (composição de alpha + **pior stop do gradiente**, porque o
+  axe-core trata fundo com gradiente como desconhecido e não emite `color-contrast`):
+  light **4.32:1** — reprova AA (fonte 16px bold não é "large text"); dark 7.50:1 (ok).
+  Cura no padrão já usado no repo (`--whatsapp-contrast`/`.alt-readable`): token novo
+  `--accent-readable` em `src/app/globals.css` — dark mantém `var(--accent)`; light
+  mistura 80% do accent com o slate do tema (`color-mix`) → **5.22:1** calculado.
+  1 linha no className do CTA (`ProfileSection.tsx`).
+- **test(a11y)** (`70dc20b`): `tests/a11y-hero-contrast.spec.ts` mede o contraste
+  **in-page** nos 2 temas para os 2 alvos citados na auditoria (CTA + TypeWriter),
+  sem fixar cor — quebra se alguém trocar o token por algo que reprove AA.
+  **Prova RED→GREEN:** com o token no valor pré-fix a spec falha
+  (`CTA "Ver Projetos" (light): 4.32:1 — fg=rgb(3,105,161) bg=rgb(202,223,235)`);
+  com a cura passam dark+light.
+- **Falso positivo do achado multimodal:** TypeWriter ("Desenvolvedor…") mede
+  **6.22:1** (light) e **7.69:1** (dark) — passa AA. O VLMmediu frame parcial de
+  animação. Fica coberto pelo teste novo para não voltar como "bug" sem número.
+- **Verificação:** build rc=0 · spec nova 2 passed · `a11y-contrast-region` 2 passed
+  (0 violações, 2 temas) · `visual.spec` 4 baselines fullPage **passed sem regenerar**
+  (`maxDiffPixelRatio: 0.05` absorveu a mudança de cor do CTA).
+- **Push:** `github` ok (`b72bcfe..70dc20b master -> master`). O bare local
+  (`origin`, `/mnt/HDD2T/.../portifolio.git`) foi **bloqueado pelo repo-guard**
+  ("commit novo depois do 'ok' = muda o entregável") — pendência registrada, não
+  forçada com `--no-verify`.
+- **Pitfall novo (vale para o loop):** Tailwind 4 devolve `oklab(...)` no
+  `computedStyle`; parser que só entende `rgb()` mede preto (1.07:1) e gerou 13
+  falsos positivos no dark. Converter oklab→sRGB antes de medir.
+- Achado extra no light **fora do gap e não tratado**: `--success #16a34a` 3.23:1 e
+  `--proficiency-proficient #d97706` 3.12:1 em spans 10px do HUD/badges —
+  decorativos/`aria-hidden`, provável falso negativo do axe.
+
 ## Sessão 2026-11-11 (fim de dia) — 6 commits em `master` (AutoAdsScript no provider + correção do botão de consentimento + campanha Roger); `master` 0/0 nos 2 remotes; push `github`+`origin` ok
 
 - 6 commits hoje em `master`: `bec7692` fix(ads): AutoAdsScript dentro do MonetizationProvider + teste de regressão, `b4e7144` roger: trabalho residual da campanha, `801d389`/`1ab0cbd` WIP/index on `fix/i18n-test-e-loop-junk` (docs de CV com prova de deploy FDE + playwright gitignore), `cab278d` fix(cookie): botão de consentimento vira 'Aceitar'/'Accept' (topo antes do doc) e `5886f46` docs(expediente) — stub substituído por esta seção.
