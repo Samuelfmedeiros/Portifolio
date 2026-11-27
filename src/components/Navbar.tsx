@@ -13,7 +13,6 @@ const NAV_ITEMS = [
   { href: "#projects", key: "nav.projects", icon: "" },
   { href: "#blog", key: "nav.blog", icon: "" },
   { href: "#contact", key: "nav.contact", icon: "" },
-  { href: "#games", key: "nav.games", icon: "" },
 ];
 
 import { useAnalytics } from "@/hooks/useAnalytics";

@@ -34,7 +34,7 @@ describe('Navbar', () => {
 
   it('renders all navigation items on desktop', () => {
     render(<Navbar />)
-    const navItems = ['nav.home', 'nav.journey', 'nav.projects', 'nav.blog', 'nav.contact', 'nav.games']
+    const navItems = ['nav.home', 'nav.journey', 'nav.projects', 'nav.blog', 'nav.contact']
     for (const item of navItems) {
       expect(screen.getAllByText(item).length).toBeGreaterThanOrEqual(1)
     }
@@ -181,7 +181,7 @@ describe('Navbar', () => {
     expect(hrefs).toContain('#profile')
     expect(hrefs).toContain('#jornada')
     expect(hrefs).toContain('#projects')
-    expect(hrefs).toContain('#games')
+    expect(hrefs).not.toContain('#games')
     expect(hrefs).toContain('#contact')
     // mobile nav existe (aria-label da chave)
     expect(screen.getAllByText(/nav\./i).length).toBeGreaterThanOrEqual(5)
