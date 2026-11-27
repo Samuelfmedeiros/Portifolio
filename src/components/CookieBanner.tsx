@@ -123,13 +123,19 @@ export function CookieBannerProvider({ children }: { children: React.ReactNode }
         window.removeEventListener("resize", onResize);
       }
     };
+    // `setState` sincrono dentro de effect dispara render em cascata
+    // (react-hooks/set-state-in-effect, ligado pelo core-web-vitals do Next 16).
+    // A decisao e de layout e nao muda com 1 frame de atraso — entao o frame
+    // garante render unico sem alterar comportamento.
+    let frame = 0;
     if (doc.scrollHeight <= window.innerHeight + 8) {
-      setRevealed(true);
-      return;
+      frame = window.requestAnimationFrame(() => setRevealed(true));
+    } else {
+      window.addEventListener("scroll", onScroll);
+      window.addEventListener("resize", onResize);
     }
-    window.addEventListener("scroll", onScroll);
-    window.addEventListener("resize", onResize);
     return () => {
+      if (frame) window.cancelAnimationFrame(frame);
       window.removeEventListener("scroll", onScroll);
       window.removeEventListener("resize", onResize);
     };
