@@ -851,7 +851,14 @@ export function ProfileSection() {
             onClick={() => setShowBio(!showBio)}
             className="w-full text-center focus:outline-none group cursor-pointer"
             aria-expanded={showBio}
-            aria-label={t("profile.about.aria", "Sobre mim")}
+            // WCAG 2.5.3 (label-content-name-mismatch): o nome acessível tem de
+            // CONTER o texto visível — "SOBRE" na tela, "Sobre mim" no nome
+            // reprovava no axe exatamente como o LanguageToggle em 23/11.
+            aria-label={`${t("profile.about.heading", "SOBRE")} — ${t("profile.about.aria", "Sobre mim")}`}
+            // Liga o gatilho à região que ele controla: sem aria-controls, o
+            // leitor de tela anuncia "expandido" sem dizer O QUÊ.
+            aria-controls="profile-about-region"
+            id="profile-about-trigger"
           >
             <div className="flex items-center justify-center gap-3">
               <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "SOBRE")}</h2>
@@ -876,8 +883,9 @@ export function ProfileSection() {
               transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
               className="overflow-hidden"
               role="region"
+              id="profile-about-region"
               aria-live="polite"
-              aria-label={t("profile.about.aria", "Sobre mim")}
+              aria-label={`${t("profile.about.heading", "SOBRE")} — ${t("profile.about.aria", "Sobre mim")}`}
             >
               <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-4 mt-3 border-t border-[var(--border)]/30">
                 {about.paragraphs.map((para, i) => (
