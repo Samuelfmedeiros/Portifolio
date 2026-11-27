@@ -46,6 +46,9 @@ html {
   --whatsapp-contrast: #0a0a12;
   /* --accent-alt cru em texto 9px dava 4.41:1 no cyan dark -> mistura 65% com o tema */
   --alt-readable: color-mix(in srgb, var(--accent-alt) 65%, #ffffff);
+  /* Texto de --accent sobre fundo SÓLIDO passa no light (5.5:1+); no dark dá 7.5:1.
+     Mantido como var(--accent) porque o gap 27/11/2026 era só no light. */
+  --accent-readable: var(--accent);
   /* Proficiency colors - dark */
   --proficiency-expert: #34d399;
   --proficiency-advanced: #60a5fa;
@@ -73,6 +76,14 @@ html {
   /* light: branco sobre #0f766e ja passa (5.47:1) */
   --whatsapp-contrast: #ffffff;
   --alt-readable: color-mix(in srgb, var(--accent-alt) 65%, #1e293b);
+  /* Contraste AA do CTA do hero no light (auditoria 27/11/2026): o botão
+     "Ver Projetos" tem fundo em GRADIENTE de --accent/20 -> --accent/5 sobre
+     --bg-card. No pior stop o fundo fica rgb(202,223,235) e --accent cru
+     (#0369a1) dá 4.32:1 — reprova AA e o axe-core NÃO pega (fundo com
+     gradiente é tratado como "unknown" pelo scanner). Mistura de 80% com o
+     slate do tema preserva o matiz ciano e sobe para 5.22:1 (medido no
+     browser real, composição de alpha + pior stop do gradiente). */
+  --accent-readable: color-mix(in srgb, var(--accent) 80%, #1e293b);
   /* Proficiency colors - light */
   --proficiency-expert: #16a34a;
   --proficiency-advanced: #2563eb;

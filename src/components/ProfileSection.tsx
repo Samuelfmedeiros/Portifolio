@@ -804,7 +804,7 @@ export function ProfileSection() {
               className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-sans text-base font-bold overflow-hidden
                 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
                 border-2 border-[var(--accent)]/50 hover:border-[var(--accent)]
-                text-[var(--accent)] hover:text-white
+                text-[var(--accent-readable)] hover:text-white
                 shadow-lg shadow-[var(--accent)]/20 hover:shadow-[var(--accent)]/40
                 hover:scale-[1.06] active:scale-[0.97]
                 transition-all duration-300"
