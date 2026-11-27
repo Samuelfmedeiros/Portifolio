@@ -11,6 +11,7 @@ import {
 import { GlassCard } from "./GlassCard";
 import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
+import { BlackHoleVortex } from "./BlackHoleVortex";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { getAbout, getTimeline, getSkills, type TimelineItem } from "@/lib/profileData";
@@ -725,6 +726,9 @@ export function ProfileSection() {
       <div className="hidden md:block">
         <CircuitLines />
       </div>
+
+      {/* L2c: Buraco negro — vortex de fundo na base da Jornada (parallax + paleta) */}
+      <BlackHoleVortex progress={scrollYProgress} />
 
       {/* L3: Hero content — parallax mais rápido, fade out */}
       <motion.div
