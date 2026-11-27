@@ -1,5 +1,16 @@
 # 📋 CHANGELOG — Portifolio Samuel
 
+## [2026-11-27] - worker ui: linha azul solta no hero curada + contraste AA do CTA; 3 commits + 1 falso positivo provado
+
+- `27f9075` fix(ui) path 4 do `CircuitLines` (único sem `opacity`/`strokeDasharray`) — linha sólida na borda direita inferior.
+- `f645cf6` test(ui) contrato de baixa opacidade + tracejado dos 4 paths (`ProfileSection.circuit-lines.test.tsx`), RED→GREEN provado.
+- `73f1f30` fix(ui) contraste AA do botão "Ver Projetos" no tema light: medido **4.32:1** no browser real (o axe-core não pega porque o fundo é gradiente). Token novo `--accent-readable` em `globals.css` (dark mantém; light = `color-mix` 80% do accent com slate) → **5.22:1**.
+- `70dc20b` test(a11y) `tests/a11y-hero-contrast.spec.ts` mede o contraste in-page nos 2 temas sem fixar cor, com prova RED→GREEN.
+- TypeWriter ("Desenvolvedor…") medido 6.22:1 (light) / 7.69:1 (dark) — o achado multimodal era falso positivo de frame de animação, fica coberto pelo teste.
+- Verificação: build rc=0 · spec nova 2 passed · a11y-contrast-region 2 passed (0 violações) · visual.spec 4 baselines fullPage passed sem regenerar.
+- Push `github` ok; bare local bloqueado pelo repo-guard (pendência registrada).
+- Pitfall: Tailwind 4 devolve `oklab()` no `computedStyle`; parser só-`rgb()` mede preto e gerou 13 falsos positivos no dark.
+
 ## [2026-11-11] - 6 commits: AutoAdsScript no MonetizationProvider + botão de consentimento Aceitar/Accept; push github+origin ok
 
 - `bec7692` AutoAdsScript dentro do provider com teste de regressão; `cab278d` botão de consentimento com rótulo localizado.
