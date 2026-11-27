@@ -13,7 +13,57 @@ const OP_SCRIPT_SRC = "/analytics/op1.js";
 const OP_CLIENT_ID = "a3c3b6a8-a751-461a-88f9-8317f6760360";
 const OP_API_URL = "/api/op";
 
-type OpFn = ((...args: unknown[]) => void) & { q?: unknown[] };
+export type OpFn = ((...args: unknown[]) => void) & { q?: unknown[] };
+
+/** Fila do OpenPanel pronta (init enfileirado) — ver `aoIniciarOp`. */
+let iniciado = false;
+const pendentes: Array<() => void> = [];
+
+/**
+ * Cria o stub de fila do OpenPanel (idempotente, não marca a instância como
+ * iniciada). O script oficial faz `s = e.op.q; t = new l(s.shift()[1])` — ele
+ * ESPERA que cada item da fila seja `[method, ...args]` e chama o stub como
+ * função (`apply`), daí o Proxy: sem o trap `apply` a chamada cai no vazio e o
+ * `s.shift()[1]` do op1.js lança "Cannot read properties of undefined".
+ *
+ * Exportado porque `initEngagement` roda no mount, ANTES do `load` que carrega
+ * o SDK: sem stub, todo evento dessa janela era descartado (medido 26/11/2026
+ * em produção — `web_vital` e `js_error` nunca chegavam ao `/api/op/track`).
+ */
+export function garantirStubOp(): void {
+  if (typeof window === "undefined") return;
+  const w = window as unknown as { op?: OpFn };
+  if (typeof w.op === "function") return;
+  const queue: unknown[][] = [];
+  const stub = new Proxy(function () {} as unknown as OpFn, {
+    apply: (_t, _thisArg, args) => {
+      queue.push(args);
+    },
+    get: (_t, prop) => {
+      if (prop === "q") return queue;
+      return (...fnArgs: unknown[]) => {
+        queue.push([prop as string, ...fnArgs]);
+      };
+    },
+    has: (_t, prop) => prop === "q",
+  });
+  w.op = stub;
+}
+
+/**
+ * Assina o momento em que a fila do OpenPanel está pronta (stub criado + `init`
+ * enfileirado). Quem emite evento antes disso precisa BUFFERIZAR: empurrar
+ * direto no stub sem `init` na frente quebra o op1.js, que faz
+ * `q.shift()[1]` assumindo que o primeiro item é o init (pageerror em todo
+ * visitante e os eventos enfileirados se perdem).
+ */
+export function aoIniciarOp(cb: () => void): void {
+  if (iniciado) {
+    try { cb(); } catch { /* assinante quebrado não derruba o chamador */ }
+    return;
+  }
+  pendentes.push(cb);
+}
 
 /** Injeta o script do OpenPanel dinamicamente (idempotente — não duplica). */
 export function loadOpenpanelScript(): void {
@@ -31,35 +81,9 @@ export function loadOpenpanelScript(): void {
   marca.__opIniciado = true;
 
   const w = window as unknown as { op?: OpFn };
-  if (!w.op) {
-    const queue: unknown[][] = [];
-    // Stub de fila até o op1.js real carregar. O script oficial faz
-    // `s = e.op.q; t = new l(s.shift()[1]); s.forEach(n => ...)`, ou seja:
-    // ele ESPERA que cada item da fila seja [name, args[]] e chama o stub
-    // como função `w.op(name, args)` — logo o Proxy precisa do trap
-    // `apply` (sem ele a chamada cai no vazio, a fila fica vazia e o
-    // `s.shift()[1]` do op1.js lança "Cannot read properties of
-    // undefined (reading '1')" — pageerror em TODO visitante).
-    const stub = new Proxy(function () {} as unknown as OpFn, {
-      apply: (_t, _thisArg, args) => {
-        // Fila no formato [method, ...args]: o op1.js faz
-        // `new l(s.shift()[1])` (init: item[1] = options) e
-        // `t[n[0]](...n.slice(1))` (demais: método + args) — os
-        // argumentos crus da chamada já são exatamente esse formato.
-        queue.push(args);
-      },
-      get: (_t, prop) => {
-        if (prop === "q") return queue;
-        return (...fnArgs: unknown[]) => {
-          queue.push([prop as string, ...fnArgs]);
-        };
-      },
-      has: (_t, prop) => prop === "q",
-    });
-    w.op = stub;
-  }
+  garantirStubOp();
 
-  w.op("init", {
+  w.op?.("init", {
     apiUrl: OP_API_URL,
     clientId: OP_CLIENT_ID,
     // Desligado 13/11/2026: gerava um `screen_view` por navegação, sem `path` e
@@ -69,6 +93,13 @@ export function loadOpenpanelScript(): void {
     trackOutgoingLinks: true,
     trackAttributes: true,
   });
+
+  // A fila do stub agora é válida (o `init` é o primeiro item, como o op1.js
+  // espera). Quem bufferizou evento antes disso pode despejar com segurança.
+  iniciado = true;
+  for (const cb of pendentes.splice(0)) {
+    try { cb(); } catch { /* um assinante quebrado não impede os outros */ }
+  }
 
   // NÃO emitir `page_view` daqui (medido 13/11/2026).
   //

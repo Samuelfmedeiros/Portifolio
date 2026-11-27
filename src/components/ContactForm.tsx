@@ -42,7 +42,15 @@ export function ContactForm() {
   const MAX_MESSAGE_LENGTH = 500;
   const messageLength = content.length;
   const isMessageTooLong = messageLength > MAX_MESSAGE_LENGTH;
-  const isFormValid = name.trim() && email.trim() && content.trim() && !isMessageTooLong && lgpdConsent;
+  // lgpdConsent é boolean: o && devolve "" quando vazio, e !"" é false — o botão
+  // ficava habilitado ao desmarcar o consentimento depois de preencher tudo.
+  // Boolean() força true/false real em todos os operandos.
+  const isFormValid =
+    Boolean(name.trim()) &&
+    Boolean(email.trim()) &&
+    Boolean(content.trim()) &&
+    !isMessageTooLong &&
+    Boolean(lgpdConsent);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -303,6 +311,8 @@ export function ContactForm() {
 
             <button
               type="submit"
+              data-analytics-id="contact.submit"
+              data-analytics-label={t("contact.form.submit")}
               disabled={status === "sending" || !isFormValid || rateLimitCountdown > 0}
               aria-busy={status === "sending"}
               className={`w-full glass border-[var(--accent)]/30 rounded-lg py-3 font-mono text-sm text-[var(--accent)] transition-colors flex items-center justify-center gap-2 ${

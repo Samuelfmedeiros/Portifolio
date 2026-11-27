@@ -1,0 +1,9 @@
+{
+  "name": "portifolio",
+  "roots": ["src"],
+  "exts": [".ts", ".tsx"],
+  "rules": [
+    {"id": "lib-nao-importa-ui", "from": "^src/lib/", "forbid": "^@/(components|app)/"}
+  ],
+  "allowlist": []
+}

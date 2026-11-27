@@ -39,6 +39,7 @@ export const LanguageToggle = memo(function LanguageToggle() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full min-w-[36px] flex items-center justify-center"
+        data-analytics-id="nav.lang"
         aria-label={ariaLabel}
       >
         <AnimatePresence mode="wait">

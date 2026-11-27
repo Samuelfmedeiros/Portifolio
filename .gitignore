@@ -94,3 +94,6 @@ scripts/_cv_build/
 
 # saida de reporter JSON do vitest (artefato local)
 .vitest/
+
+# specs de diagnostico descartaveis (ronda de gaps visuais 26/11) — nunca versionar
+tests/_diag-ui-gaps*.spec.ts

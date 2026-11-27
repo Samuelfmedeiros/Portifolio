@@ -12,6 +12,9 @@ interface GlassCardProps {
   tabIndex?: number;
   onClick?: (e: React.MouseEvent) => void;
   onKeyDown?: (e: React.KeyboardEvent) => void;
+  /** Marca o card para o evento `ui_click` do engajamento (ver src/lib/engagement.ts). */
+  "data-analytics-id"?: string;
+  "data-analytics-label"?: string;
 }
 
 export const GlassCard = forwardRef<HTMLDivElement, GlassCardProps>(

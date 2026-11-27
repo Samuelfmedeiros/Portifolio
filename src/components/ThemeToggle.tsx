@@ -35,6 +35,8 @@ export const ThemeToggle = memo(function ThemeToggle() {
         animate={{ rotate: theme === "dark" ? 0 : 180 }}
         transition={{ duration: 0.4, ease: "easeInOut" }}
         className="glass p-2 rounded-full"
+        data-analytics-id="nav.theme"
+        data-analytics-label={theme === "dark" ? "Tema: claro" : "Tema: escuro"}
         aria-label={theme === "dark" ? "Ativar modo claro" : "Ativar modo escuro"}
       >
         <AnimatePresence mode="wait">

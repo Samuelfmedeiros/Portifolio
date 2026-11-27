@@ -14,6 +14,16 @@ const ROTAS = [
 ];
 
 test.beforeEach(async ({ page }) => {
+  // 26/11/2026: a baseline mede o LAYOUT da página, não a barra de cookies.
+  // Sem consentimento decidido, a barra entra no DOM durante o scroll
+  // progressivo abaixo e publica `padding-bottom` da própria altura no body
+  // (reserva real, `ee4823e`) — o fullPage ficava 131px mais alto que a
+  // baseline e quebrava o VRT por TAMANHO, não por pixel. O contrato da barra
+  // (revelação, reserva e landmark) tem spec própria:
+  // tests/cookie-banner-skills-mobile.spec.ts. Aqui ela fica fora do caminho.
+  await page.addInitScript(() => {
+    window.localStorage.setItem('mc-analytics-consent', 'declined');
+  });
   // desliga animações de verdade (Framer Motion respeita prefers-reduced-motion)
   await page.emulateMedia({ reducedMotion: 'reduce' });
 });
@@ -75,6 +85,10 @@ for (const r of ROTAS) {
     await page.evaluate(() => {
       const blog = document.querySelector('#blog');
       if (blog instanceof HTMLElement) blog.style.display = 'none';
+      // O buraco negro da Jornada anima em <canvas>: `animations: 'disabled'` só
+      // congela CSS/WAAPI, não rAF. Pixels do disco variariam a cada rodada.
+      const vortex = document.querySelector('[data-testid="black-hole-vortex"]');
+      if (vortex instanceof HTMLElement) vortex.style.display = 'none';
     });
     await page.waitForTimeout(200);
     await expect(page).toHaveScreenshot(`${r.nome}.png`, {

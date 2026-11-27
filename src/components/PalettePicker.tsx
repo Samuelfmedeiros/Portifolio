@@ -22,6 +22,8 @@ export const PalettePicker = memo(function PalettePicker() {
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.95 }}
         className="glass p-2 rounded-full"
+        data-analytics-id="nav.palette"
+        data-analytics-label={t("palette.toggle", "Trocar paleta de cores")}
         aria-label={t("palette.toggle", "Trocar paleta de cores")}
         title={t("palette.toggle", "Trocar paleta de cores")}
         onClick={() => { setOpen((v) => !v); track({ type: "external_link", url: "palette", label: "Abrir paleta" }); }}

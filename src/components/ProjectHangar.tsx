@@ -146,6 +146,8 @@ function ProjectCard({ repo, index: i, onSelect }: { repo: Repo; index: number; 
         delay={0}
         onClick={handleClick}
         className={`group relative h-full flex flex-col overflow-hidden cursor-pointer transition-all duration-300 hover:scale-[1.03]`}
+        data-analytics-id={`project.open.${repo.name.toLowerCase()}`}
+        data-analytics-label={repo.name}
         tabIndex={0}
         onKeyDown={(e: React.KeyboardEvent) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); handleClick(); } }}
       >

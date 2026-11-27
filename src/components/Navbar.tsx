@@ -13,7 +13,6 @@ const NAV_ITEMS = [
   { href: "#projects", key: "nav.projects", icon: "" },
   { href: "#blog", key: "nav.blog", icon: "" },
   { href: "#contact", key: "nav.contact", icon: "" },
-  { href: "#games", key: "nav.games", icon: "" },
 ];
 
 import { useAnalytics } from "@/hooks/useAnalytics";
@@ -289,6 +288,8 @@ export const Navbar = memo(function Navbar() {
                   <motion.a
                     href={item.href}
                     onClick={(e) => handleNavClick(e, item.href)}
+                    data-analytics-id={`nav.${item.href.replace("#", "")}`}
+                    data-analytics-label={t(item.key)}
                     className={`whitespace-nowrap rounded-full px-3.5 py-1.5 text-sm font-medium border backdrop-blur-md transition-all ${
                       isActive
                         ? "bg-[var(--accent)] text-[var(--bg-primary)] border-[var(--accent)] shadow-[0_0_18px_-4px_var(--accent)]"
@@ -337,6 +338,8 @@ export const Navbar = memo(function Navbar() {
                 <motion.a
                   href={item.href}
                   onClick={(e) => handleNavClick(e, item.href)}
+                  data-analytics-id={`nav.mobile.${item.href.replace("#", "")}`}
+                  data-analytics-label={t(item.key)}
                   className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-[11px] font-medium border backdrop-blur-md transition-all whitespace-nowrap ${
                     isActive
                       ? "bg-[var(--accent)] text-[var(--bg-primary)] border-[var(--accent)]"

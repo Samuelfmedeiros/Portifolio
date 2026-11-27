@@ -11,6 +11,7 @@ import {
 import { GlassCard } from "./GlassCard";
 import { TypeWriter } from "./TypeWriter";
 import { DownloadModal } from "./DownloadModal";
+import { BlackHoleVortex } from "./BlackHoleVortex";
 import { useAnalytics } from "@/hooks/useAnalytics";
 import { useLanguage } from "@/lib/i18n";
 import { getAbout, getTimeline, getSkills, type TimelineItem } from "@/lib/profileData";
@@ -726,6 +727,9 @@ export function ProfileSection() {
         <CircuitLines />
       </div>
 
+      {/* L2c: Buraco negro — vortex de fundo na base da Jornada (parallax + paleta) */}
+      <BlackHoleVortex progress={scrollYProgress} />
+
       {/* L3: Hero content — parallax mais rápido, fade out */}
       <motion.div
         style={{ y: heroY, opacity: heroOpacity, willChange: "transform, opacity" }}
@@ -790,6 +794,8 @@ export function ProfileSection() {
           >
             <a
               href="#projects"
+              data-analytics-id="hero.projects"
+              data-analytics-label={t("hero.btn.projects")}
               className="group relative inline-flex items-center justify-center px-8 py-4 rounded-xl font-sans text-base font-bold overflow-hidden
                 bg-gradient-to-r from-[var(--accent)]/20 to-[var(--accent)]/5
                 border-2 border-[var(--accent)]/50 hover:border-[var(--accent)]
@@ -807,6 +813,8 @@ export function ProfileSection() {
             </a>
             <button
               onClick={() => setShowDownloadModal(true)}
+              data-analytics-id="hero.cv"
+              data-analytics-label={t("hero.btn.cv")}
               className="group relative inline-flex items-center justify-center px-6 py-3 rounded-xl font-sans text-sm font-semibold overflow-hidden
                 bg-gradient-to-br from-[var(--accent)] via-[var(--accent)]/90 to-[var(--accent-alt)]/40
                 text-black
@@ -843,7 +851,14 @@ export function ProfileSection() {
             onClick={() => setShowBio(!showBio)}
             className="w-full text-center focus:outline-none group cursor-pointer"
             aria-expanded={showBio}
-            aria-label={t("profile.about.aria", "Sobre mim")}
+            // WCAG 2.5.3 (label-content-name-mismatch): o nome acessível tem de
+            // CONTER o texto visível — "SOBRE" na tela, "Sobre mim" no nome
+            // reprovava no axe exatamente como o LanguageToggle em 23/11.
+            aria-label={`${t("profile.about.heading", "SOBRE")} — ${t("profile.about.aria", "Sobre mim")}`}
+            // Liga o gatilho à região que ele controla: sem aria-controls, o
+            // leitor de tela anuncia "expandido" sem dizer O QUÊ.
+            aria-controls="profile-about-region"
+            id="profile-about-trigger"
           >
             <div className="flex items-center justify-center gap-3">
               <h2 className="font-mono text-sm tracking-[0.3em] text-[var(--accent)]">{t("profile.about.heading", "SOBRE")}</h2>
@@ -868,8 +883,9 @@ export function ProfileSection() {
               transition={{ duration: 0.35, ease: [0.4, 0, 0.2, 1] }}
               className="overflow-hidden"
               role="region"
+              id="profile-about-region"
               aria-live="polite"
-              aria-label={t("profile.about.aria", "Sobre mim")}
+              aria-label={`${t("profile.about.heading", "SOBRE")} — ${t("profile.about.aria", "Sobre mim")}`}
             >
               <div className="space-y-4 text-sm text-[var(--text-secondary)] leading-relaxed pt-4 mt-3 border-t border-[var(--border)]/30">
                 {about.paragraphs.map((para, i) => (

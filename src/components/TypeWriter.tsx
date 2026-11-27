@@ -81,7 +81,12 @@ export function TypeWriter({
       aria-label={phrases[currentPhraseIndex]}
     >
       {displayedText}
+      {/* Cursor de digitação: puramente decorativo. Sem aria-hidden, leitores de
+          tela anunciam o pipe ("|") como conteúdo do subtítulo — o achado visual
+          de 26/11 também confundiu o cursor com placeholder de edição. */}
       <motion.span
+        aria-hidden="true"
+        data-testid="typewriter-caret"
         animate={prefersReducedMotion ? { opacity: 1 } : { opacity: [1, 0] }}
         transition={{ duration: 0.6, repeat: Infinity, repeatType: "reverse" }}
         className="inline-block w-[2px] h-[1em] bg-[var(--accent)] ml-0.5 align-middle"

@@ -120,6 +120,11 @@ body {
   background-color: var(--bg-primary);
   color: var(--text-primary);
   transition: background-color 0.3s ease, color 0.3s ease;
+  /* Banner de consentimento (barra fixa no rodapé): enquanto ele está na tela
+     o documento reserva a altura REAL dela no fim. `--cookie-banner-h` é
+     publicada por CookieBanner.tsx (medida por ResizeObserver) e removida no
+     unmount. Sem isso o último bloco do footer ficava embaixo da barra. */
+  padding-bottom: var(--cookie-banner-h, 0px);
 }
 
 /* Theme transition for all themed elements */
