@@ -85,10 +85,6 @@ for (const r of ROTAS) {
     await page.evaluate(() => {
       const blog = document.querySelector('#blog');
       if (blog instanceof HTMLElement) blog.style.display = 'none';
-      // O buraco negro da Jornada anima em <canvas>: `animations: 'disabled'` só
-      // congela CSS/WAAPI, não rAF. Pixels do disco variariam a cada rodada.
-      const vortex = document.querySelector('[data-testid="black-hole-vortex"]');
-      if (vortex instanceof HTMLElement) vortex.style.display = 'none';
     });
     await page.waitForTimeout(200);
     await expect(page).toHaveScreenshot(`${r.nome}.png`, {
