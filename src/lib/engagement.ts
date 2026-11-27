@@ -59,7 +59,7 @@ export function shouldSend(key: string): boolean {
   try {
     return sessionStorage.getItem(key) !== '1';
   } catch {
-    return null as unknown as boolean; // sem storage: envia (melhor perder dedupe que o dado)
+    return true; // sem storage: envia (melhor perder dedupe que o dado)
   }
 }
 
