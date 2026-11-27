@@ -1,0 +1,21 @@
+name: Design Gate (antes do código)
+
+on:
+  push:
+    branches: [master, main]
+  pull_request:
+    branches: [master, main]
+
+jobs:
+  gate:
+    name: Gate de decisão de design
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1 (pin imutavel)
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@6d4fd22b20465ccc0f7354476588e8df7c9ca0e0 # v7 (pin imutavel)
+        with:
+          python-version: "3.11"
+      - name: Rodar gate
+        run: python3 .ci/design-guard.py --config .ci/design.json --json

@@ -1,0 +1,17 @@
+{
+  "name": "portifolio",
+  "base": "origin/master",
+  "ui_paths": [
+    "^src/(components|app)/",
+    "^src/.*\\.(tsx|ts)$",
+    "^src/.*\\.css$"
+  ],
+  "record": "docs/DECISAO_DE_DESIGN.md",
+  "min_variants": 2,
+  "required_sections": [
+    "antes",
+    "depois",
+    "variante a",
+    "variante b"
+  ]
+}
