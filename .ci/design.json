@@ -1,6 +1,6 @@
 {
   "name": "portifolio",
-  "base": "origin/master",
+  "base": "47ee0199280fbea9fd6983ccc32f93223621ba29",
   "ui_paths": [
     "^src/(components|app)/",
     "^src/.*\\.(tsx|ts)$",
